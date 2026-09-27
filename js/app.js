@@ -1,0 +1,514 @@
+/* AlimenCal – UI-Logik (Tabs, i18n, dynamische Formulare, Berechnung) */
+(function () {
+  'use strict';
+
+  var LS_LANG = 'alimencal.lang';
+  var LS_CFG = 'alimencal.config';
+  var DEFAULT_LANG = 'de';
+  var LANGS = ['de', 'fr', 'it', 'en'];
+
+  var state = {
+    lang: DEFAULT_LANG,
+    cfg: null,
+    children: []
+  };
+
+  function clone(obj) { return JSON.parse(JSON.stringify(obj)); }
+
+  function getLang() {
+    var stored = null;
+    try { stored = localStorage.getItem(LS_LANG); } catch (e) {}
+    return LANGS.indexOf(stored) >= 0 ? stored : DEFAULT_LANG;
+  }
+
+  function getCfg() {
+    try {
+      var raw = localStorage.getItem(LS_CFG);
+      if (raw) {
+        var parsed = JSON.parse(raw);
+        var base = clone(AlimenCal.config);
+        for (var k in parsed) {
+          if (Object.prototype.hasOwnProperty.call(parsed, k)) {
+            base[k] = parsed[k];
+          }
+        }
+        return base;
+      }
+    } catch (e) {}
+    return clone(AlimenCal.config);
+  }
+
+  function saveCfg(cfg) {
+    try { localStorage.setItem(LS_CFG, JSON.stringify(cfg)); } catch (e) {}
+  }
+
+  function t() {
+    var dict = AlimenCal.i18n[state.lang] || AlimenCal.i18n[DEFAULT_LANG];
+    var node = dict;
+    for (var i = 0; i < arguments.length; i++) {
+      if (node == null) { return ''; }
+      node = node[arguments[i]];
+    }
+    return node != null ? String(node) : '';
+  }
+
+  function fmt(x) {
+    if (x == null || !isFinite(x)) { return '–'; }
+    return x.toLocaleString('de-CH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  /* ------------------------------------------------------------- */
+
+  function applyI18n() {
+    var dict = AlimenCal.i18n[state.lang] || AlimenCal.i18n[DEFAULT_LANG];
+    document.documentElement.lang = dict.htmlLang;
+    document.title = t('title');
+    document.getElementById('app-title').textContent = 'AlimenCal';
+    document.getElementById('app-subtitle').textContent = t('subtitle');
+    document.getElementById('disclaimer').textContent = t('disclaimerShort');
+
+    document.querySelector('.tab[data-tab="children"]').textContent = t('nav', 'children');
+    document.querySelector('.tab[data-tab="spousal"]').textContent = t('nav', 'spousal');
+    document.querySelector('.tab[data-tab="settings"]').textContent = t('nav', 'settings');
+    document.querySelector('.tab[data-tab="about"]').textContent = t('nav', 'about');
+
+    document.getElementById('children-heading').textContent = t('children', 'heading');
+    document.getElementById('children-intro').textContent = t('children', 'intro');
+    document.getElementById('pa-legend').textContent = t('common', 'parentA');
+    document.getElementById('pb-legend').textContent = t('common', 'parentB');
+    document.getElementById('add-child').textContent = '+' + ' ' + t('common', 'addChild');
+    document.getElementById('calc-children').textContent = t('common', 'calculate');
+    document.getElementById('reset-children').textContent = t('common', 'reset');
+    document.getElementById('children-result-heading').textContent = t('children', 'resultsHeading');
+    document.getElementById('children-care-hint').textContent = t('children', 'careHint');
+
+    document.getElementById('spousal-heading').textContent = t('spousal', 'heading');
+    document.getElementById('spousal-intro').textContent = t('spousal', 'intro');
+    document.getElementById('spousal-enable-label').textContent = t('spousal', 'enable');
+    document.getElementById('applicant-legend').textContent = t('spousal', 'bedarf');
+    document.getElementById('respondent-legend').textContent = t('spousal', 'capacity');
+    document.getElementById('calc-spousal').textContent = t('common', 'calculate');
+    document.getElementById('spousal-result-heading').textContent = t('spousal', 'resultsHeading');
+
+    document.getElementById('settings-heading').textContent = t('settings', 'heading');
+    document.getElementById('settings-intro').textContent = t('settings', 'intro');
+    document.getElementById('cfg-table-legend').textContent = t('settings', 'childNeedTable');
+    document.getElementById('cfg-add-row').textContent = t('settings', 'addRow');
+    document.getElementById('cfg-save').textContent = t('settings', 'save');
+    document.getElementById('cfg-restore').textContent = t('settings', 'restoreDefaults');
+    document.getElementById('cfg-export').textContent = t('settings', 'exportJson');
+    document.getElementById('cfg-import-label').textContent = t('settings', 'importJson');
+
+    document.getElementById('about-heading').textContent = t('about', 'heading');
+    document.getElementById('about-body1').textContent = t('about', 'body1');
+    document.getElementById('about-body2').textContent = t('about', 'body2');
+    document.getElementById('about-body3').textContent = t('about', 'body3');
+
+    var nodes = document.querySelectorAll('[data-i18n]');
+    for (var i = 0; i < nodes.length; i++) {
+      var path = nodes[i].getAttribute('data-i18n').split('.');
+      nodes[i].textContent = t.apply(null, path);
+    }
+
+    renderChildrenList();
+  }
+
+  /* ------------------------------------------------------------- */
+
+  function childTemplate() {
+    return {
+      age: 8,
+      ownIncome: 0,
+      childAllowance: 0,
+      kkPremium: 0,
+      externalCareCosts: 0,
+      careShareParentA: 0,
+      careShareParentB: 100
+    };
+  }
+
+  function addChildRow() {
+    state.children.push(childTemplate());
+    renderChildrenList();
+  }
+
+  function removeChildRow(idx) {
+    state.children.splice(idx, 1);
+    renderChildrenList();
+  }
+
+  function collectChildrenInputs() {
+    var rows = document.querySelectorAll('#children-list .child-row');
+    for (var i = 0; i < rows.length; i++) {
+      var row = rows[i];
+      state.children[i].age = parseInt(row.querySelector('.f-age').value, 10) || 0;
+      state.children[i].ownIncome = parseFloat(row.querySelector('.f-own').value) || 0;
+      state.children[i].childAllowance = parseFloat(row.querySelector('.f-allow').value) || 0;
+      state.children[i].kkPremium = parseFloat(row.querySelector('.f-kk').value) || 0;
+      state.children[i].externalCareCosts = parseFloat(row.querySelector('.f-care').value) || 0;
+      state.children[i].careShareParentA = (parseFloat(row.querySelector('.f-shareA').value) || 0) / 100;
+      state.children[i].careShareParentB = (parseFloat(row.querySelector('.f-shareB').value) || 0) / 100;
+    }
+  }
+
+  function renderChildrenList() {
+    var host = document.getElementById('children-list');
+    host.innerHTML = '';
+    if (!state.children.length) {
+      return;
+    }
+    for (var i = 0; i < state.children.length; i++) {
+      host.appendChild(buildChildRow(i, state.children[i]));
+    }
+  }
+
+  function inp(cls, val, opts) {
+    var input = document.createElement('input');
+    input.type = 'number';
+    input.className = cls;
+    input.value = val;
+    input.min = '0';
+    return input;
+  }
+
+  function field(labelText, control) {
+    var label = document.createElement('label');
+    var span = document.createElement('span');
+    span.textContent = labelText;
+    label.appendChild(span);
+    label.appendChild(control);
+    return label;
+  }
+
+  function buildChildRow(idx, child) {
+    var row = document.createElement('div');
+    row.className = 'child-row';
+
+    var head = document.createElement('div');
+    head.className = 'child-head';
+    var title = document.createElement('span');
+    title.textContent = t('children', 'childLabel').replace('{n}', String(idx + 1));
+    head.appendChild(title);
+
+    var removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.className = 'danger';
+    removeBtn.textContent = t('common', 'removeChild');
+    removeBtn.addEventListener('click', (function (i) {
+      return function () { removeChildRow(i); };
+    })(idx));
+    head.appendChild(removeBtn);
+    row.appendChild(head);
+
+    var grid = document.createElement('div');
+    grid.className = 'child-grid';
+
+    grid.appendChild(field(t('common', 'age'), inp('f-age', child.age)));
+    grid.appendChild(field(t('common', 'ownIncome'), inp('f-own', child.ownIncome)));
+    grid.appendChild(field(t('common', 'childAllowance'), inp('f-allow', child.childAllowance)));
+    grid.appendChild(field(t('common', 'kkPremium'), inp('f-kk', child.kkPremium)));
+    grid.appendChild(field(t('common', 'externalCareCosts'), inp('f-care', child.externalCareCosts)));
+
+    var shareWrap = document.createElement('div');
+    shareWrap.appendChild(field(t('children', 'careShareA'), inp('f-shareA', Math.round(child.careShareParentA * 100))));
+    shareWrap.appendChild(field(t('children', 'careShareB'), inp('f-shareB', Math.round(child.careShareParentB * 100))));
+    grid.appendChild(shareWrap);
+
+    row.appendChild(grid);
+    return row;
+  }
+
+  /* ------------------------------------------------------------- */
+
+  function calculateChildren() {
+    collectChildrenInputs();
+
+    var input = {
+      parents: {
+        a: {
+          income: parseFloat(document.getElementById('pa-income').value) || 0,
+          existenzminimum: parseFloat(document.getElementById('pa-em').value),
+          employed: document.getElementById('pa-employed').checked
+        },
+        b: {
+          income: parseFloat(document.getElementById('pb-income').value) || 0,
+          existenzminimum: parseFloat(document.getElementById('pb-em').value),
+          employed: document.getElementById('pb-employed').checked
+        }
+      },
+      children: state.children
+    };
+
+    var result = AlimenCal.calculator.calculateChildSupport(input, state.cfg);
+    renderChildrenResult(result);
+  }
+
+  function renderChildrenResult(result) {
+    var box = document.getElementById('children-result');
+    box.hidden = false;
+
+    var thead = document.getElementById('children-thead');
+    thead.innerHTML = '';
+    var trh = document.createElement('tr');
+    [
+      t('children', 'tableChild'),
+      t('children', 'tableBasicNeed'),
+      t('children', 'tableDirect'),
+      t('children', 'tableChildIncome'),
+      t('children', 'tableBarTotal'),
+      t('children', 'tableBarA'),
+      t('children', 'tableBarB'),
+      t('children', 'tableManko'),
+      t('children', 'tableCareNet'),
+      t('children', 'tableTotalA'),
+      t('children', 'tableTotalB')
+    ].forEach(function (h) {
+      var th = document.createElement('th');
+      th.textContent = h;
+      trh.appendChild(th);
+    });
+    thead.appendChild(trh);
+
+    var tbody = document.getElementById('children-tbody');
+    tbody.innerHTML = '';
+    result.perChild.forEach(function (c) {
+      var tr = document.createElement('tr');
+      [
+        t('children', 'childLabel').replace('{n}', String(c.index + 1)) + ' (' + c.age + ')',
+        fmt(c.basicNeed),
+        fmt(c.directCosts),
+        fmt(c.childIncome),
+        fmt(c.barTotal),
+        fmt(c.barFromA),
+        fmt(c.barFromB),
+        c.barManko > 0 ? fmt(c.barManko) : '–',
+        (c.careNetFromAToB > 0 ? fmt(c.careNetFromAToB) + ' A→B' : '') +
+          (c.careNetFromBToA > 0 ? fmt(c.careNetFromBToA) + ' B→A' : '') || '–',
+        fmt(c.totalFromA),
+        fmt(c.totalFromB)
+      ].forEach(function (v) {
+        var td = document.createElement('td');
+        td.textContent = v;
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+
+    var totals = result.totals;
+    document.getElementById('children-totals').textContent =
+      t('children', 'totalA') + ': CHF ' + fmt(totals.totalA) + ' | ' +
+      t('children', 'totalB') + ': CHF ' + fmt(totals.totalB);
+
+    var mankoEl = document.getElementById('children-manko');
+    if (result.mangellage) {
+      mankoEl.textContent = t('children', 'mangellage') + ' (' +
+        t('children', 'totalManko') + ': CHF ' + fmt(totals.totalManko) + ')';
+      mankoEl.hidden = false;
+    } else {
+      mankoEl.hidden = true;
+    }
+  }
+
+  /* ------------------------------------------------------------- */
+
+  function calculateSpousal() {
+    var input = {
+      enabled: true,
+      applicant: {
+        income: parseFloat(document.getElementById('sp-app-income').value) || 0,
+        existenzminimum: parseFloat(document.getElementById('sp-app-em').value),
+        targetStandard: parseFloat(document.getElementById('sp-app-standard').value),
+        extraCosts: parseFloat(document.getElementById('sp-app-extra').value) || 0,
+        employed: true
+      },
+      respondent: {
+        income: parseFloat(document.getElementById('sp-res-income').value) || 0,
+        existenzminimum: parseFloat(document.getElementById('sp-res-em').value),
+        employed: true
+      },
+      childSupportPaidByRespondent: parseFloat(document.getElementById('sp-res-childpaid').value) || 0
+    };
+
+    var result = AlimenCal.calculator.calculateSpousalSupport(input, state.cfg);
+    renderSpousalResult(result);
+  }
+
+  function renderSpousalResult(result) {
+    document.getElementById('spousal-result').hidden = false;
+    document.getElementById('spousal-support').textContent =
+      t('spousal', 'support') + ': CHF ' + fmt(result.support) + ' / ' + t('common', 'perMonth');
+    document.getElementById('spousal-method').textContent =
+      t('spousal', 'method') + ': ' +
+      (result.method === 'surplus' ? t('spousal', 'methodSurplus') : t('spousal', 'methodManko'));
+    document.getElementById('spousal-details').textContent =
+      t('spousal', 'bedarf') + ': CHF ' + fmt(result.applicant.bedarf) + ' | ' +
+      t('spousal', 'capacity') + ': CHF ' + fmt(result.respondent.capacity);
+
+    var mankoEl = document.getElementById('spousal-manko');
+    if (result.mangellage && result.mankoBedarf > 0) {
+      mankoEl.textContent = t('spousal', 'mankoBedarf') + ': CHF ' + fmt(result.mankoBedarf);
+      mankoEl.hidden = false;
+    } else {
+      mankoEl.hidden = true;
+    }
+  }
+
+  /* ------------------------------------------------------------- */
+
+  function renderCfgTable() {
+    var tbody = document.getElementById('cfg-need-tbody');
+    tbody.innerHTML = '';
+    var table = state.cfg.childNeedTable;
+    for (var i = 0; i < table.length; i++) {
+      (function (i) {
+        var tr = document.createElement('tr');
+        ['fromAge', 'toAge', 'basicNeed', 'careSupport'].forEach(function (key) {
+          var td = document.createElement('td');
+          var input = document.createElement('input');
+          input.type = 'number';
+          input.min = '0';
+          input.value = table[i][key];
+          input.addEventListener('change', function () {
+            table[i][key] = parseFloat(input.value) || 0;
+          });
+          td.appendChild(input);
+          tr.appendChild(td);
+        });
+        var tdBtn = document.createElement('td');
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'danger';
+        btn.textContent = t('settings', 'removeRow');
+        btn.addEventListener('click', function () {
+          state.cfg.childNeedTable.splice(i, 1);
+          renderCfgTable();
+        });
+        tdBtn.appendChild(btn);
+        tr.appendChild(tdBtn);
+        tbody.appendChild(tr);
+      })(i);
+    }
+  }
+
+  function fillCfgForm() {
+    document.getElementById('cfg-em-employed').value = state.cfg.defaultExistenzminimumEmployed;
+    document.getElementById('cfg-em-notemployed').value = state.cfg.defaultExistenzminimumNotEmployed;
+    document.getElementById('cfg-spousal-standard').value = state.cfg.defaultSpousalStandard;
+    document.getElementById('cfg-fallback-child').value = state.cfg.fallbackChildBasicNeed;
+    renderCfgTable();
+  }
+
+  function collectCfgForm() {
+    state.cfg.defaultExistenzminimumEmployed = parseFloat(document.getElementById('cfg-em-employed').value) || 0;
+    state.cfg.defaultExistenzminimumNotEmployed = parseFloat(document.getElementById('cfg-em-notemployed').value) || 0;
+    state.cfg.defaultSpousalStandard = parseFloat(document.getElementById('cfg-spousal-standard').value) || 0;
+    state.cfg.fallbackChildBasicNeed = parseFloat(document.getElementById('cfg-fallback-child').value) || 0;
+  }
+
+  /* ------------------------------------------------------------- */
+
+  function switchTab(name) {
+    var tabs = document.querySelectorAll('.tab');
+    for (var i = 0; i < tabs.length; i++) {
+      tabs[i].classList.toggle('active', tabs[i].getAttribute('data-tab') === name);
+    }
+    var panels = document.querySelectorAll('.tabpanel');
+    for (var j = 0; j < panels.length; j++) {
+      panels[j].classList.toggle('active', panels[j].id === 'tab-' + name);
+    }
+  }
+
+  function init() {
+    state.lang = getLang();
+    state.cfg = getCfg();
+    document.getElementById('lang-select').value = state.lang;
+
+    applyI18n();
+    fillCfgForm();
+    addChildRow();
+
+    document.getElementById('lang-select').addEventListener('change', function () {
+      state.lang = this.value;
+      try { localStorage.setItem(LS_LANG, state.lang); } catch (e) {}
+      applyI18n();
+    });
+
+    var tabs = document.querySelectorAll('.tab');
+    for (var i = 0; i < tabs.length; i++) {
+      (function (btn) {
+        btn.addEventListener('click', function () {
+          switchTab(btn.getAttribute('data-tab'));
+        });
+      })(tabs[i]);
+    }
+
+    document.getElementById('add-child').addEventListener('click', addChildRow);
+    document.getElementById('calc-children').addEventListener('click', calculateChildren);
+    document.getElementById('reset-children').addEventListener('click', function () {
+      state.children = [];
+      renderChildrenList();
+      document.getElementById('children-result').hidden = true;
+    });
+
+    document.getElementById('spousal-enabled').addEventListener('change', function () {
+      document.getElementById('spousal-fields').style.display = this.checked ? '' : 'none';
+    });
+    document.getElementById('calc-spousal').addEventListener('click', calculateSpousal);
+
+    document.getElementById('cfg-save').addEventListener('click', function () {
+      collectCfgForm();
+      saveCfg(state.cfg);
+      document.getElementById('cfg-status').textContent = t('settings', 'saved');
+    });
+    document.getElementById('cfg-restore').addEventListener('click', function () {
+      state.cfg = clone(AlimenCal.config);
+      saveCfg(state.cfg);
+      fillCfgForm();
+      document.getElementById('cfg-status').textContent = t('settings', 'saved');
+    });
+    document.getElementById('cfg-add-row').addEventListener('click', function () {
+      state.cfg.childNeedTable.push({ fromAge: 0, toAge: 6, basicNeed: 500, careSupport: 1100 });
+      renderCfgTable();
+    });
+    document.getElementById('cfg-export').addEventListener('click', function () {
+      collectCfgForm();
+      var blob = new Blob([JSON.stringify(state.cfg, null, 2)], { type: 'application/json' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'alimencal-config.json';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
+    document.getElementById('cfg-import').addEventListener('change', function () {
+      var file = this.files && this.files[0];
+      if (!file) { return; }
+      var reader = new FileReader();
+      var self = this;
+      reader.onload = function () {
+        try {
+          var parsed = JSON.parse(reader.result);
+          var base = clone(AlimenCal.config);
+          for (var k in parsed) {
+            if (Object.prototype.hasOwnProperty.call(parsed, k)) {
+              base[k] = parsed[k];
+            }
+          }
+          state.cfg = base;
+          saveCfg(state.cfg);
+          fillCfgForm();
+          document.getElementById('cfg-status').textContent = t('settings', 'saved');
+        } catch (e) {
+          document.getElementById('cfg-status').textContent = t('settings', 'importError');
+        }
+      };
+      reader.readAsText(file);
+      self.value = '';
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();

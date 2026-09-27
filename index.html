@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AlimenCal – Unterhaltsrechner</title>
+  <meta name="description" content="AlimenCal – Orientierungswerkzeug für Kindes- und Ehegattenunterhalt in der Schweiz.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1 id="app-title">AlimenCal</h1>
+      <p id="app-subtitle" class="subtitle"></p>
+      <label class="lang-switch">
+        <span>Language:</span>
+        <select id="lang-select">
+          <option value="de">Deutsch</option>
+          <option value="fr">Français</option>
+          <option value="it">Italiano</option>
+          <option value="en">English</option>
+        </select>
+      </label>
+    </div>
+  </header>
+
+  <nav class="tabs wrap" role="tablist">
+    <button class="tab active" data-tab="children" role="tab"></button>
+    <button class="tab" data-tab="spousal" role="tab"></button>
+    <button class="tab" data-tab="settings" role="tab"></button>
+    <button class="tab" data-tab="about" role="tab"></button>
+  </nav>
+
+  <main class="wrap">
+    <p id="disclaimer" class="disclaimer"></p>
+
+    <section id="tab-children" class="tabpanel active">
+      <h2 id="children-heading"></h2>
+      <p id="children-intro" class="intro"></p>
+
+      <div class="grid parents">
+        <fieldset class="card">
+          <legend id="pa-legend"></legend>
+          <label><span data-i18n="common.income"></span><input type="number" id="pa-income" min="0" step="50"></label>
+          <label><span data-i18n="common.existenzminimum"></span><input type="number" id="pa-em" min="0" step="50" placeholder=""></label>
+          <label class="checkbox"><input type="checkbox" id="pa-employed" checked><span data-i18n="common.employed"></span></label>
+        </fieldset>
+        <fieldset class="card">
+          <legend id="pb-legend"></legend>
+          <label><span data-i18n="common.income"></span><input type="number" id="pb-income" min="0" step="50"></label>
+          <label><span data-i18n="common.existenzminimum"></span><input type="number" id="pb-em" min="0" step="50" placeholder=""></label>
+          <label class="checkbox"><input type="checkbox" id="pb-employed" checked><span data-i18n="common.employed"></span></label>
+        </fieldset>
+      </div>
+
+      <div id="children-list"></div>
+      <button id="add-child" class="secondary"></button>
+
+      <div class="actions">
+        <button id="calc-children" class="primary"></button>
+        <button id="reset-children" class="ghost"></button>
+      </div>
+
+      <div id="children-result" class="result" hidden>
+        <h3 id="children-result-heading"></h3>
+        <table class="result-table">
+          <thead id="children-thead"></thead>
+          <tbody id="children-tbody"></tbody>
+        </table>
+        <p id="children-totals" class="totals"></p>
+        <p id="children-manko" class="manko warn" hidden></p>
+        <p class="hint" id="children-care-hint"></p>
+      </div>
+    </section>
+
+    <section id="tab-spousal" class="tabpanel">
+      <h2 id="spousal-heading"></h2>
+      <p id="spousal-intro" class="intro"></p>
+
+      <label class="checkbox enable">
+        <input type="checkbox" id="spousal-enabled">
+        <span id="spousal-enable-label"></span>
+      </label>
+
+      <div id="spousal-fields">
+        <div class="grid">
+          <fieldset class="card">
+            <legend id="applicant-legend"></legend>
+            <label><span data-i18n="spousal.applicantIncome"></span><input type="number" id="sp-app-income" min="0" step="50"></label>
+            <label><span data-i18n="spousal.applicantExistenzminimum"></span><input type="number" id="sp-app-em" min="0" step="50"></label>
+            <label><span data-i18n="spousal.targetStandard"></span><input type="number" id="sp-app-standard" min="0" step="50"></label>
+            <label><span data-i18n="spousal.extraCosts"></span><input type="number" id="sp-app-extra" min="0" step="50"></label>
+          </fieldset>
+          <fieldset class="card">
+            <legend id="respondent-legend"></legend>
+            <label><span data-i18n="spousal.respondentIncome"></span><input type="number" id="sp-res-income" min="0" step="50"></label>
+            <label><span data-i18n="spousal.respondentExistenzminimum"></span><input type="number" id="sp-res-em" min="0" step="50"></label>
+            <label><span data-i18n="spousal.childSupportPaid"></span><input type="number" id="sp-res-childpaid" min="0" step="50"></label>
+          </fieldset>
+        </div>
+        <div class="actions">
+          <button id="calc-spousal" class="primary"></button>
+        </div>
+        <div id="spousal-result" class="result" hidden>
+          <h3 id="spousal-result-heading"></h3>
+          <p id="spousal-support" class="big"></p>
+          <p id="spousal-method" class="hint"></p>
+          <p id="spousal-details" class="totals"></p>
+          <p id="spousal-manko" class="manko warn" hidden></p>
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-settings" class="tabpanel">
+      <h2 id="settings-heading"></h2>
+      <p id="settings-intro" class="intro"></p>
+
+      <div class="grid">
+        <fieldset class="card">
+          <legend>Existenzminimum</legend>
+          <label><span data-i18n="settings.emEmployed"></span><input type="number" id="cfg-em-employed" min="0" step="50"></label>
+          <label><span data-i18n="settings.emNotEmployed"></span><input type="number" id="cfg-em-notemployed" min="0" step="50"></label>
+          <label><span data-i18n="settings.spousalDefault"></span><input type="number" id="cfg-spousal-standard" min="0" step="50"></label>
+          <label><span data-i18n="settings.fallbackChildBasicNeed"></span><input type="number" id="cfg-fallback-child" min="0" step="50"></label>
+        </fieldset>
+
+        <fieldset class="card">
+          <legend id="cfg-table-legend"></legend>
+          <table class="cfg-table" id="cfg-need-table">
+            <thead>
+              <tr>
+                <th data-i18n="settings.fromAge"></th>
+                <th data-i18n="settings.toAge"></th>
+                <th data-i18n="settings.basicNeed"></th>
+                <th data-i18n="settings.careSupport"></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="cfg-need-tbody"></tbody>
+          </table>
+          <button id="cfg-add-row" class="secondary"></button>
+        </fieldset>
+      </div>
+
+      <div class="actions">
+        <button id="cfg-save" class="primary"></button>
+        <button id="cfg-restore" class="ghost"></button>
+        <button id="cfg-export" class="secondary"></button>
+        <label class="file-label">
+          <span id="cfg-import-label"></span>
+          <input type="file" id="cfg-import" accept="application/json,.json">
+        </label>
+      </div>
+      <p id="cfg-status" class="hint"></p>
+    </section>
+
+    <section id="tab-about" class="tabpanel">
+      <h2 id="about-heading"></h2>
+      <p id="about-body1" class="intro"></p>
+      <p id="about-body2" class="intro"></p>
+      <p id="about-body3" class="intro"></p>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    <p class="footer-note">AlimenCal © 2025 – Orientation tool, no legal advice.</p>
+  </footer>
+
+  <script src="js/i18n/de.js"></script>
+  <script src="js/i18n/fr.js"></script>
+  <script src="js/i18n/it.js"></script>
+  <script src="js/i18n/en.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/calculator.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
