@@ -100,6 +100,13 @@ AlimenCal.i18n.it = {
     exportPlaceholder: 'Scegli un file',
     importError: 'File JSON non valido.',
     spousalDefault: 'Tenore di vita standard (CHF/mese)',
+    preset: 'Preset cantonale',
+    presetDefault: 'Valore predefinito (tabella zurighese dei costi dei figli 2025)',
+    presetSource: 'Fonte',
+    presetNotes: 'Note',
+    presetVerification: 'Checklist di verifica',
+    presetApplied: 'Preset applicato',
+    presetReset: 'Ripristinato ai valori predefiniti',
     fallbackChildBasicNeed: 'Bisogno base di riserva (CHF/mese)'
   },
   about: {

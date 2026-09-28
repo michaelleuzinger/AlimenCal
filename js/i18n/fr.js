@@ -100,6 +100,13 @@ AlimenCal.i18n.fr = {
     exportPlaceholder: 'Choisir un fichier',
     importError: 'Fichier JSON invalide.',
     spousalDefault: 'Niveau de vie standard (CHF/mois)',
+    preset: 'Préréglage cantonal',
+    presetDefault: 'Valeur par défaut (table zurichoise des coûts de l\u2019enfant 2025)',
+    presetSource: 'Source',
+    presetNotes: 'Remarques',
+    presetVerification: 'Liste de contrôle de vérification',
+    presetApplied: 'Préréglage appliqué',
+    presetReset: 'Réinitialisé aux valeurs par défaut',
     fallbackChildBasicNeed: 'Besoin de base de remplacement (CHF/mois)'
   },
   about: {

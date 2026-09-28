@@ -100,6 +100,13 @@ AlimenCal.i18n.de = {
     exportPlaceholder: 'Wählen Sie eine Datei',
     importError: 'Ungültige JSON-Datei.',
     spousalDefault: 'Standard Lebensstandard (CHF/Monat)',
+    preset: 'Kantonales Preset',
+    presetDefault: 'App-Default (Zürcher Kinderkosten-Tabelle 2025)',
+    presetSource: 'Quelle',
+    presetNotes: 'Hinweise',
+    presetVerification: 'Verifikations-Checkliste',
+    presetApplied: 'Preset angewendet',
+    presetReset: 'Zurückgesetzt auf App-Default',
     fallbackChildBasicNeed: 'Fallback Grundbedarf (CHF/Monat)'
   },
   about: {

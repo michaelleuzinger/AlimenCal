@@ -191,6 +191,11 @@ button.danger { background: transparent; color: var(--warn); text-decoration: un
   font-size: 0.9rem;
 }
 
+.preset-card { margin-bottom: 1rem; }
+.preset-meta h4 { margin: 0.7rem 0 0.25rem; font-size: 0.9rem; }
+.hint-list { margin: 0.2rem 0 0; padding-left: 1.2rem; }
+.hint-list li { color: var(--muted); font-size: 0.85rem; margin-bottom: 0.25rem; }
+
 .cfg-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
 .cfg-table th, .cfg-table td { padding: 0.3rem 0.4rem; text-align: right; }
 .cfg-table th:first-child, .cfg-table td:first-child { text-align: left; }

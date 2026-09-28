@@ -4,6 +4,7 @@
 
   var LS_LANG = 'alimencal.lang';
   var LS_CFG = 'alimencal.config';
+  var LS_PRESET = 'alimencal.preset';
   var DEFAULT_LANG = 'de';
   var LANGS = ['de', 'fr', 'it', 'en'];
 
@@ -59,6 +60,129 @@
 
   /* ------------------------------------------------------------- */
 
+  function presetValues(preset) {
+    var values = clone(preset);
+    delete values.meta;
+    return values;
+  }
+
+  function applyPreset(preset, persist) {
+    state.cfg = clone(AlimenCal.config);
+    var values = presetValues(preset);
+    for (var k in values) {
+      if (Object.prototype.hasOwnProperty.call(values, k)) {
+        state.cfg[k] = values[k];
+      }
+    }
+    if (persist !== false) {
+      saveCfg(state.cfg);
+      try { localStorage.setItem(LS_PRESET, preset.meta.id); } catch (e) {}
+    }
+    fillCfgForm();
+    renderPresetMeta(preset);
+  }
+
+  function renderPresetMeta(preset) {
+    var meta = preset && preset.meta;
+    var box = document.getElementById('preset-meta');
+    if (!meta) {
+      box.hidden = true;
+      return;
+    }
+    box.hidden = false;
+    document.getElementById('preset-source').textContent =
+      t('settings', 'presetSource') + ': ' + (meta.source || '–');
+    if (meta.url) {
+      document.getElementById('preset-source').textContent += ' (' + meta.url + ')';
+    }
+    fillList('preset-notes', meta.notes);
+    fillList('preset-verification', meta.verification);
+  }
+
+  function fillList(id, items) {
+    var ul = document.getElementById(id);
+    ul.innerHTML = '';
+    (items || []).forEach(function (item) {
+      var li = document.createElement('li');
+      li.textContent = item;
+      ul.appendChild(li);
+    });
+  }
+
+  function refreshPresetOptionLabels() {
+    var select = document.getElementById('preset-select');
+    var options = select.options;
+    for (var i = 0; i < options.length; i++) {
+      if (options[i].value === '__default__') {
+        options[i].textContent = t('settings', 'presetDefault');
+      } else {
+        var preset = (AlimenCal.presets || []).filter(function (p) {
+          return p.meta.id === options[i].value;
+        })[0];
+        if (preset) {
+          options[i].textContent = preset.meta.name;
+        }
+      }
+    }
+  }
+
+  function initPresetSelect() {
+    var select = document.getElementById('preset-select');
+    select.innerHTML = '';
+
+    var optDefault = document.createElement('option');
+    optDefault.value = '__default__';
+    optDefault.textContent = t('settings', 'presetDefault');
+    select.appendChild(optDefault);
+
+    (AlimenCal.presets || []).forEach(function (preset) {
+      var opt = document.createElement('option');
+      opt.value = preset.meta.id;
+      opt.textContent = preset.meta.name;
+      select.appendChild(opt);
+    });
+
+    var stored = null;
+    try { stored = localStorage.getItem(LS_PRESET); } catch (e) {}
+
+    select.addEventListener('change', function () {
+      var id = select.value;
+      if (id === '__default__') {
+        state.cfg = clone(AlimenCal.config);
+        saveCfg(state.cfg);
+        try { localStorage.removeItem(LS_PRESET); } catch (e) {}
+        fillCfgForm();
+        renderPresetMeta(null);
+        document.getElementById('cfg-status').textContent = t('settings', 'presetReset');
+        return;
+      }
+      var preset = (AlimenCal.presets || []).filter(function (p) {
+        return p.meta.id === id;
+      })[0];
+      if (preset) {
+        applyPreset(preset);
+        document.getElementById('cfg-status').textContent =
+          t('settings', 'presetApplied') + ': ' + preset.meta.name;
+      }
+    });
+
+    if (stored && stored !== '__default__') {
+      var preset = (AlimenCal.presets || []).filter(function (p) {
+        return p.meta.id === stored;
+      })[0];
+      if (preset) {
+        select.value = stored;
+        applyPreset(preset, false);
+      } else {
+        select.value = '__default__';
+        renderPresetMeta(null);
+      }
+    } else {
+      select.value = '__default__';
+      renderPresetMeta(null);
+    }
+  }
+
   function applyI18n() {
     var dict = AlimenCal.i18n[state.lang] || AlimenCal.i18n[DEFAULT_LANG];
     document.documentElement.lang = dict.htmlLang;
@@ -98,6 +222,10 @@
     document.getElementById('cfg-restore').textContent = t('settings', 'restoreDefaults');
     document.getElementById('cfg-export').textContent = t('settings', 'exportJson');
     document.getElementById('cfg-import-label').textContent = t('settings', 'importJson');
+    document.getElementById('preset-label').textContent = t('settings', 'preset');
+    document.getElementById('preset-notes-heading').textContent = t('settings', 'presetNotes');
+    document.getElementById('preset-verification-heading').textContent = t('settings', 'presetVerification');
+    refreshPresetOptionLabels();
 
     document.getElementById('about-heading').textContent = t('about', 'heading');
     document.getElementById('about-body1').textContent = t('about', 'body1');
@@ -424,6 +552,7 @@
     document.getElementById('lang-select').value = state.lang;
 
     applyI18n();
+    initPresetSelect();
     fillCfgForm();
     addChildRow();
 
@@ -463,6 +592,9 @@
     document.getElementById('cfg-restore').addEventListener('click', function () {
       state.cfg = clone(AlimenCal.config);
       saveCfg(state.cfg);
+      try { localStorage.removeItem(LS_PRESET); } catch (e) {}
+      document.getElementById('preset-select').value = '__default__';
+      renderPresetMeta(null);
       fillCfgForm();
       document.getElementById('cfg-status').textContent = t('settings', 'saved');
     });

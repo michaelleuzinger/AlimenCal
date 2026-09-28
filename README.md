@@ -19,10 +19,20 @@
 3. Tab **Ehegattenunterhalt**: falls gewünscht aktivieren, Angaben zu gebührlichem Lebensstandard, Mehrkosten und Leistungsfähigkeit erfassen.
 4. Tab **Richtwerte**: kantonale Werte anpassen, speichern, exportieren/importieren.
 
+## Kantonale Presets
+
+Unter `presets/` liegen kantonsbezogene Richtwertsätze als JSON, auswählbar im Tab **Richtwerte**:
+
+- `zuerich-2025.json` – Zürcher Kinderkosten-Tabelle vom 1. März 2025 (Referenz, identisch mit App-Default)
+- `schaffhausen-offen.json` – **Platzhalter mit Verifikations-Checkliste**: Der Kanton Schaffhausen hat keine publizierte Tabelle; die effektiven Ansätze von KESB/Kantonsgericht Schaffhausen MÜSSEN vor Verwendung erhoben und eingetragen werden (die Checkliste nennt KESB-Kontakt, Gebühren, Quellen).
+
+Jedes Preset enthält `meta` (Name, Kanton, Quelle, URL, Hinweise, Verifikations-Checkliste) und die Wertfelder. `js/presets.js` hält eine eingebettete Kopie bereit, damit die App auch ohne Webserver via `file://` funktioniert; `tests/presets.test.js` prüft die Konsistenz zwischen beiden.
+
 ## Tests
 
 ```bash
-node tests/calculator.test.js
+node tests/calculator.test.js   # Berechnungskern (46 Tests)
+node tests/presets.test.js      # Presets: JSON-Gültigkeit, Konsistenz JS/JSON, Plausibilität (29 Tests)
 ```
 
 Prüft u. a.: Grundbedarfstabellen, Aufteilung nach wirtschaftlicher Leistungsfähigkeit, netto-Verrechnung des Betreuungsunterhalts (kein Saldo bei 50/50), Mangellagen-Deckelung auf das frei verfügbare Einkommen, Mehrkindberechnungen sowie die Überschuss- und Mankomethode des Ehegattenunterhalts.
@@ -33,7 +43,9 @@ Prüft u. a.: Grundbedarfstabellen, Aufteilung nach wirtschaftlicher Leistungsf�
 index.html          UI (Tabs: Kindesunterhalt, Ehegattenunterhalt, Richtwerte, Über)
 css/style.css       Styles
 js/calculator.js    Berechnungskern (DOM-frei, auch in Node.js lauffähig)
-js/config.js        Default-Richtwerte
+js/config.js        Default-Richtwerte (Zürcher Kinderkosten-Tabelle 1.3.2025)
+js/presets.js       Eingebettete Kopie der kantonalen Presets (file://-fähig)
+presets/*.json      Kantonale Richtwertsätze inkl. Quellen und Checklisten
 js/app.js           UI-Logik, i18n-Anwendung, localStorage, Import/Export
 js/i18n/{de,fr,it,en}.js  Sprachdateien
 tests/calculator.test.js  Unit-Tests (node)

@@ -115,6 +115,20 @@
       <h2 id="settings-heading"></h2>
       <p id="settings-intro" class="intro"></p>
 
+      <div class="card preset-card">
+        <label>
+          <span id="preset-label"></span>
+          <select id="preset-select"></select>
+        </label>
+        <div id="preset-meta" class="preset-meta" hidden>
+          <p id="preset-source" class="hint"></p>
+          <h4 id="preset-notes-heading"></h4>
+          <ul id="preset-notes" class="hint-list"></ul>
+          <h4 id="preset-verification-heading"></h4>
+          <ul id="preset-verification" class="hint-list"></ul>
+        </div>
+      </div>
+
       <div class="grid">
         <fieldset class="card">
           <legend>Existenzminimum</legend>
@@ -171,6 +185,7 @@
   <script src="js/i18n/it.js"></script>
   <script src="js/i18n/en.js"></script>
   <script src="js/config.js"></script>
+  <script src="js/presets.js"></script>
   <script src="js/calculator.js"></script>
   <script src="js/app.js"></script>
 </body>

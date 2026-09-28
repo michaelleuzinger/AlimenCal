@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "id": "zuerich-2025",
+    "name": "Kanton Zürich – Kinderkosten-Tabelle 2025",
+    "canton": "ZH",
+    "validFrom": "2025-03-01",
+    "source": "Zürcher Kinderkosten-Tabelle vom 1. März 2025, Amt für Jugend und Berufsberatung des Kantons Zürich",
+    "url": "https://www.zh.ch/content/dam/zhweb/bilder-dokumente/themen/familie/sorgerecht-unterhalt/zuercher_kinderkosten_tabelle.pdf",
+    "notes": [
+      "Grundbedarf = Gesamtkosten Einzelkind lt. Tabelle (1440/1575/1920) minus enthaltener durchschnittlicher Kinder-Krankenkassenprämie von CHF 130; die effektive Prämie wird in der App separat erfasst.",
+      "Die Tabelle kann über das 18. Altersjahr bis zum 21. Altersjahr angewendet werden, wenn der junge Erwachsene im Haushalt eines Elternteils lebt.",
+      "Per 2026 wird die Zürcher Kinderkosten-Tabelle nicht mehr weitergeführt; seit BGE 147 III 265 ist die zweistufig-konkrete Methode verbindlich, pauschalierende Tabellen sind unzulässig. Werte dienen als Vergleichsmasse.",
+      "Betreuungsunterhalts-Richtwerte sind Orientierungswerte (nicht Teil der amtlichen Tabelle); kantonale Praxis ist massgebend."
+    ],
+    "verification": [
+      "Krankenkassenprämie des Kindes effektiv erfassen (Default-Abzug CHF 130 ist bereits berücksichtigt)",
+      "Drittbetreuungskosten separat erfassen (nicht in der Tabelle enthalten)",
+      "Bei Mehrkindhaushalten: Tabelle weist reduzierte Werte für 1 von 2 bzw. 1 von 3 Kindern aus (1150/1355/1710 bzw. 1015/1245/1620) – ggf. manuell anpassen"
+    ]
+  },
+  "defaultExistenzminimumEmployed": 2200,
+  "defaultExistenzminimumNotEmployed": 2000,
+  "childNeedTable": [
+    { "fromAge": 0, "toAge": 6, "basicNeed": 1310, "careSupport": 1100 },
+    { "fromAge": 7, "toAge": 12, "basicNeed": 1445, "careSupport": 900 },
+    { "fromAge": 13, "toAge": 17, "basicNeed": 1790, "careSupport": 700 },
+    { "fromAge": 18, "toAge": 99, "basicNeed": 1790, "careSupport": 0 }
+  ],
+  "careSupportMaxAge": 17,
+  "fallbackChildBasicNeed": 1310,
+  "defaultSpousalStandard": 4000
+}
