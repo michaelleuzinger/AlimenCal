@@ -16,7 +16,8 @@ AlimenCal.i18n.fr = {
     themes: 'Thèmes',
     share: 'Échange',
     about: 'À propos',
-    settingsMenu: 'Paramètres et informations'
+    settingsMenu: 'Paramètres et informations',
+    language: 'Langue'
   },
   common: {
     parentA: 'Parent A',

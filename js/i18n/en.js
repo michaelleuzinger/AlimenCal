@@ -16,7 +16,8 @@ AlimenCal.i18n.en = {
     themes: 'Themes',
     share: 'Exchange',
     about: 'About',
-    settingsMenu: 'Settings and information'
+    settingsMenu: 'Settings and information',
+    language: 'Language'
   },
   common: {
     parentA: 'Parent A',

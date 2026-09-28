@@ -16,9 +16,9 @@ Beispiel einer fremdsprachigen Ansicht (Français):
 
 ![Pension alimentaire (FR)](../screenshots/08-pension-enfants-fr.png)
 
-Oben rechts kann die Sprache gewählt werden: **Deutsch, Français, Italiano,
-English**. Die Auswahl wird im Browser gespeichert (`localStorage`) und beim
-nächsten Öffnen wiederhergestellt.
+Die Sprache wird im Zahnrad-Menü oben rechts gewählt: **Deutsch, Français,
+Italiano, English**. Die Auswahl wird im Browser gespeichert (`localStorage`)
+und beim nächsten Öffnen wiederhergestellt.
 
 ## Tabs im Überblick
 
