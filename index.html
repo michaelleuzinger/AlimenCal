@@ -27,6 +27,7 @@
   <nav class="tabs wrap" role="tablist">
     <button class="tab active" data-tab="children" role="tab"></button>
     <button class="tab" data-tab="spousal" role="tab"></button>
+    <button class="tab" data-tab="costsplit" role="tab"></button>
     <button class="tab" data-tab="settings" role="tab"></button>
     <button class="tab" data-tab="about" role="tab"></button>
   </nav>
@@ -111,6 +112,53 @@
       </div>
     </section>
 
+    <section id="tab-costsplit" class="tabpanel">
+      <h2 id="costsplit-heading"></h2>
+      <p id="costsplit-intro" class="intro"></p>
+
+      <div class="card">
+        <div class="costsplit-top">
+          <label class="date-label">
+            <span id="costsplit-date-label"></span>
+            <input type="date" id="costsplit-date">
+          </label>
+          <label class="date-label">
+            <span id="costsplit-owner-label"></span>
+            <select id="costsplit-owner">
+              <option value="A"></option>
+              <option value="B"></option>
+            </select>
+          </label>
+          <label class="file-label">
+            <span id="costsplit-upload-label"></span>
+            <input type="file" id="costsplit-file" accept=".csv,text/csv,text/plain">
+          </label>
+        </div>
+        <p id="costsplit-upload-hint" class="hint"></p>
+      </div>
+
+      <div id="costsplit-error" class="manko warn" hidden></div>
+
+      <div id="costsplit-section" hidden>
+        <div class="actions">
+          <button id="costsplit-set-all-split" class="secondary"></button>
+          <button id="costsplit-set-all-ignore" class="secondary"></button>
+        </div>
+        <div class="costsplit-legend"></div>
+        <table class="result-table costsplit-table">
+          <thead id="costsplit-thead"></thead>
+          <tbody id="costsplit-tbody"></tbody>
+        </table>
+
+        <div class="result">
+          <h3 id="costsplit-result-heading"></h3>
+          <p id="costsplit-totals" class="totals"></p>
+          <p id="costsplit-balance" class="big"></p>
+          <p id="costsplit-counts" class="hint"></p>
+        </div>
+      </div>
+    </section>
+
     <section id="tab-settings" class="tabpanel">
       <h2 id="settings-heading"></h2>
       <p id="settings-intro" class="intro"></p>
@@ -187,6 +235,7 @@
   <script src="js/config.js"></script>
   <script src="js/presets.js"></script>
   <script src="js/calculator.js"></script>
+  <script src="js/costsplit.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

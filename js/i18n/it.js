@@ -12,6 +12,7 @@ AlimenCal.i18n.it = {
     children: 'Alimenti per figli',
     spousal: 'Alimenti per il coniuge',
     settings: 'Valori di riferimento',
+    costsplit: 'Separazione dei costi',
     about: 'Informazioni'
   },
   common: {
@@ -114,5 +115,33 @@ AlimenCal.i18n.it = {
     body1: 'AlimenCal è uno strumento per un primo orientamento sulle questioni di mantenimento in caso di separazione e divorzio in Svizzera. Implementa la struttura del diritto degli alimenti per figli riveduto (in vigore dal 1° gennaio 2017) e il metodo in due fasi per gli alimenti coniugali.',
     body2: 'Basi giuridiche: art. 276, 285 seg. CC (alimenti per figli incl. contributo di cura); art. 176 CC (separazione di fatto); art. 125 CC (alimenti dopo il divorzio); DTF 140 III 337 (metodo individuale); DTF 135 III 66 (ripartizione del deficit); DTF 147 III 249 (criteri del matrimonio determinante).',
     body3: 'Non sostituisce una consulenza legale. La determinazione concreta spetta ai tribunali e all\u2019APEA; i valori variano a seconda del cantone e del caso concreto.'
+  },
+
+costsplit: {
+    heading: 'Separazione dei costi da una data specifica',
+    intro: 'Per le coppie che desiderano gestire separatamente i costi correnti prima del divorzio: definite una data di riferimento e caricate gli estratti bancari (CSV). Ogni transazione può essere ignorata, suddivisa proporzionalmente (quota configurabile) o assegnata interamente a una parte. Le transazioni precedenti alla data sono disattivate e non considerate.',
+    dateLabel: 'Data di riferimento (separare i costi da questa data)',
+    uploadLabel: 'Carica un estratto bancario (CSV)',
+    uploadHint: 'Supporta i formati bancari più comuni con rilevamento automatico delle colonne (data, descrizione, importo o addebito/accredito separati). Tutti i dati restano localmente nel browser.',
+    parseError: 'L\u2019estratto bancario non ha potuto essere letto. Verificate che il file contenga una riga di intestazione con le colonne data e importo.',
+    colDate: 'Data',
+    colDescription: 'Descrizione',
+    colAmount: 'Importo',
+    colMode: 'Assegnazione',
+    colShare: 'Quota',
+    modeIgnore: 'Ignora',
+    modeSplit: 'Suddividi',
+    modePartyA: 'La parte A si assume',
+    modePartyB: 'La parte B si assume',
+    shareOfA: '(quota A)',
+    setAllSplit: 'Suddividi tutto 50/50',
+    setAllIgnore: 'Ignora tutto',
+    resultHeading: 'Compensazione',
+    totalConsidered: 'Totale considerato',
+    balance: 'Saldo',
+    accountOwner: 'Il conto bancario appartiene a',
+    owes: '{0} deve CHF {2} a {1}',
+    balanced: 'in pareggio',
+    counts: 'Considerate: {0} | Non categorizzate: {1} | Prima della data: {2}'
   }
 };

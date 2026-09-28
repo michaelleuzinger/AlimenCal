@@ -12,6 +12,7 @@ AlimenCal.i18n.de = {
     children: 'Kindesunterhalt',
     spousal: 'Ehegattenunterhalt',
     settings: 'Richtwerte',
+    costsplit: 'Kostentrennung',
     about: 'Über'
   },
   common: {
@@ -114,5 +115,33 @@ AlimenCal.i18n.de = {
     body1: 'AlimenCal ist ein Werkzeug zur ersten Orientierung über Unterhaltsfragen bei Trennung und Scheidung in der Schweiz. Es implementiert die Struktur des revidierten Kindesunterhaltsrechts (in Kraft seit 1. Januar 2017) und die zweistufige Methode der Ehegattenunterhaltsberechnung.',
     body2: 'Rechtsgrundlagen: Art. 276, 285 f. ZGB (Kindesunterhalt inkl. Betreuungsunterhalt); Art. 176 ZGB (Unterhalt bei Getrenntleben); Art. 125 ZGB (nachehelicher Unterhalt); BGE 140 III 337 (Individualmethode); BGE 135 III 66 (Mankoverteilung); BGE 147 III 249 (Kriterien lebensprägende Ehe).',
     body3: 'Kein Ersatz für eine Rechtsberatung. Die konkrete Bemessung obliegt den Gerichten und der KESB; Richtwerte variieren je nach Kanton und Einzelfall.'
+  },
+
+costsplit: {
+    heading: 'Kostentrennung ab Stichtag',
+    intro: 'Für Paare, die ihre laufenden Kosten schon vor der Scheidung separat abrechnen möchten: Definieren Sie ein Stichtagsdatum und laden Sie Bankexporte (CSV) hoch. Jede Transaktion kann ignoriert, anteilsmässig aufgeteilt (konfigurierbarer Anteil) oder vollständig einer Partei zugewiesen werden. Transaktionen vor dem Stichtag werden ausgegraut und nicht gewertet.',
+    dateLabel: 'Stichtag (Kosten ab diesem Datum trennen)',
+    uploadLabel: 'Bankexport hochladen (CSV)',
+    uploadHint: 'Unterstützt gängige Bankformate mit automatischer Spaltenerkennung (Datum, Beschreibung, Betrag oder separate Belastung/Gutschrift). Alle Daten bleiben lokal im Browser.',
+    parseError: 'Der Bankexport konnte nicht gelesen werden. Bitte prüfen Sie, ob die Datei eine Kopfzeile mit Datum- und Betragsspalte enthält.',
+    colDate: 'Datum',
+    colDescription: 'Beschreibung',
+    colAmount: 'Betrag',
+    colMode: 'Zuordnung',
+    colShare: 'Anteil',
+    modeIgnore: 'Ignorieren',
+    modeSplit: 'Aufteilen',
+    modePartyA: 'Partei A übernimmt',
+    modePartyB: 'Partei B übernimmt',
+    shareOfA: '(Anteil A)',
+    setAllSplit: 'Alle 50/50 aufteilen',
+    setAllIgnore: 'Alle ignorieren',
+    resultHeading: 'Ausgleich',
+    totalConsidered: 'Total gewertet',
+    balance: 'Saldo',
+    accountOwner: 'Bankkonto gehört',
+    owes: '{0} schuldet {1} CHF {2}',
+    balanced: 'ausgeglichen',
+    counts: 'Gewertet: {0} | Nicht kategorisiert: {1} | Vor Stichtag: {2}'
   }
 };

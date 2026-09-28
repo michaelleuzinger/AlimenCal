@@ -19,6 +19,18 @@
 3. Tab **Ehegattenunterhalt**: falls gewünscht aktivieren, Angaben zu gebührlichem Lebensstandard, Mehrkosten und Leistungsfähigkeit erfassen.
 4. Tab **Richtwerte**: kantonale Werte anpassen, speichern, exportieren/importieren.
 
+## Kostentrennung vor der Scheidung
+
+Für Paare, die ihre laufenden Kosten schon vor der Scheidung separat ab rechnen wollen, bietet der Tab **Kostentrennung**:
+
+1. **Stichtagsdatum** wählen – Transaktionen vor diesem Datum werden ausgegraut und nicht gewertet.
+2. **Bankexport hochladen** (CSV): automatische Erkennung von Trennzeichen und Spalten (Datum/Beschreibung/Betrag, auch separate Belastung/Gutschrift-Spalten, CH- und ISO-Datumsformate, Apostroph- und Komma-Notation bei Beträgen).
+3. **Kontoinhaber** angeben (das Bankkonto gehört Partei A oder B) – daraus ergibt sich der Ausgleichssinn.
+4. **Je Transaktion entscheiden**: ignorieren, anteilsmässig aufteilen (Anteil in %, je Transaktion konfigurierbar) oder voll von Partei A bzw. B übernehmen. Sammelaktionen («alle 50/50», «alle ignorieren») erleichtern die Erstzuordnung.
+5. **Ausgleich**: Die App berechnet, welche Partei der anderen wie viel schuldet (basierend darauf, dass der Kontoinhaber alle Zahlungen geleistet hat).
+
+Alle Daten bleiben lokal im Browser – Bankexporte werden nicht übertragen.
+
 ## Kantonale Presets
 
 Unter `presets/` liegen kantonsbezogene Richtwertsätze als JSON, auswählbar im Tab **Richtwerte**:
@@ -33,6 +45,7 @@ Jedes Preset enthält `meta` (Name, Kanton, Quelle, URL, Hinweise, Verifikations
 ```bash
 node tests/calculator.test.js   # Berechnungskern (46 Tests)
 node tests/presets.test.js      # Presets: JSON-Gültigkeit, Konsistenz JS/JSON, Plausibilität (29 Tests)
+node tests/costsplit.test.js    # Kostentrennung: CSV-Parsing, Zuordnung, Ausgleich (42 Tests)
 ```
 
 Prüft u. a.: Grundbedarfstabellen, Aufteilung nach wirtschaftlicher Leistungsfähigkeit, netto-Verrechnung des Betreuungsunterhalts (kein Saldo bei 50/50), Mangellagen-Deckelung auf das frei verfügbare Einkommen, Mehrkindberechnungen sowie die Überschuss- und Mankomethode des Ehegattenunterhalts.
@@ -43,6 +56,7 @@ Prüft u. a.: Grundbedarfstabellen, Aufteilung nach wirtschaftlicher Leistungsf�
 index.html          UI (Tabs: Kindesunterhalt, Ehegattenunterhalt, Richtwerte, Über)
 css/style.css       Styles
 js/calculator.js    Berechnungskern (DOM-frei, auch in Node.js lauffähig)
+js/costsplit.js     Kostentrennung: CSV-Import, Zuordnung, Ausgleich (DOM-frei)
 js/config.js        Default-Richtwerte (Zürcher Kinderkosten-Tabelle 1.3.2025)
 js/presets.js       Eingebettete Kopie der kantonalen Presets (file://-fähig)
 presets/*.json      Kantonale Richtwertsätze inkl. Quellen und Checklisten

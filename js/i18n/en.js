@@ -12,6 +12,7 @@ AlimenCal.i18n.en = {
     children: 'Child maintenance',
     spousal: 'Spousal maintenance',
     settings: 'Reference values',
+    costsplit: 'Cost separation',
     about: 'About'
   },
   common: {
@@ -114,5 +115,33 @@ AlimenCal.i18n.en = {
     body1: 'AlimenCal is a tool for a first orientation on maintenance questions in the event of separation and divorce in Switzerland. It implements the structure of the revised child maintenance law (in force since 1 January 2017) and the two-step method for spousal maintenance.',
     body2: 'Legal bases: Art. 276, 285 f. CC (child maintenance incl. care maintenance); Art. 176 CC (separation); Art. 125 CC (post-divorce maintenance); BGE 140 III 337 (individual method); BGE 135 III 66 (shortfall distribution); BGE 147 III 249 (criteria for marital standard).',
     body3: 'Not a substitute for legal advice. The concrete assessment lies with the courts and the KESB; reference values vary by canton and individual case.'
+  },
+
+costsplit: {
+    heading: 'Cost separation from a cut-off date',
+    intro: 'For couples who want to settle their running costs separately before the divorce: define a cut-off date and upload bank exports (CSV). Each transaction can be ignored, split proportionally (configurable share) or fully assigned to one party. Transactions before the cut-off date are greyed out and not counted.',
+    dateLabel: 'Cut-off date (separate costs from this date)',
+    uploadLabel: 'Upload bank export (CSV)',
+    uploadHint: 'Supports common bank formats with automatic column detection (date, description, amount or separate debit/credit). All data stays local in your browser.',
+    parseError: 'The bank export could not be read. Please check that the file contains a header row with date and amount columns.',
+    colDate: 'Date',
+    colDescription: 'Description',
+    colAmount: 'Amount',
+    colMode: 'Assignment',
+    colShare: 'Share',
+    modeIgnore: 'Ignore',
+    modeSplit: 'Split',
+    modePartyA: 'Party A takes full',
+    modePartyB: 'Party B takes full',
+    shareOfA: '(share A)',
+    setAllSplit: 'Split all 50/50',
+    setAllIgnore: 'Ignore all',
+    resultHeading: 'Settlement',
+    totalConsidered: 'Total counted',
+    balance: 'Balance',
+    accountOwner: 'Bank account belongs to',
+    owes: '{0} owes {1} CHF {2}',
+    balanced: 'balanced',
+    counts: 'Counted: {0} | Uncategorised: {1} | Before cut-off: {2}'
   }
 };

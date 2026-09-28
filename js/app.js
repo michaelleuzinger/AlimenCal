@@ -11,7 +11,11 @@
   var state = {
     lang: DEFAULT_LANG,
     cfg: null,
-    children: []
+    children: [],
+    costsplit: {
+      transactions: [],
+      decisions: {}
+    }
   };
 
   function clone(obj) { return JSON.parse(JSON.stringify(obj)); }
@@ -45,12 +49,21 @@
 
   function t() {
     var dict = AlimenCal.i18n[state.lang] || AlimenCal.i18n[DEFAULT_LANG];
-    var node = dict;
-    for (var i = 0; i < arguments.length; i++) {
-      if (node == null) { return ''; }
-      node = node[arguments[i]];
+    var args = Array.prototype.slice.call(arguments);
+    var subs = [];
+    if (Array.isArray(args[args.length - 1])) {
+      subs = args.pop();
     }
-    return node != null ? String(node) : '';
+    var node = dict;
+    for (var i = 0; i < args.length; i++) {
+      if (node == null) { return ''; }
+      node = node[args[i]];
+    }
+    var str = node != null ? String(node) : '';
+    subs.forEach(function (sub, idx) {
+      str = str.split('{' + idx + '}').join(sub);
+    });
+    return str;
   }
 
   function fmt(x) {
@@ -193,8 +206,33 @@
 
     document.querySelector('.tab[data-tab="children"]').textContent = t('nav', 'children');
     document.querySelector('.tab[data-tab="spousal"]').textContent = t('nav', 'spousal');
+    document.querySelector('.tab[data-tab="costsplit"]').textContent = t('nav', 'costsplit');
     document.querySelector('.tab[data-tab="settings"]').textContent = t('nav', 'settings');
     document.querySelector('.tab[data-tab="about"]').textContent = t('nav', 'about');
+
+    var ownerSelect = document.getElementById('costsplit-owner');
+    var ownerVal = ownerSelect.value;
+    ownerSelect.innerHTML = '';
+    [{ v: 'A', label: t('common', 'parentA') }, { v: 'B', label: t('common', 'parentB') }].forEach(function (o) {
+      var opt = document.createElement('option');
+      opt.value = o.v;
+      opt.textContent = o.label;
+      ownerSelect.appendChild(opt);
+    });
+    ownerSelect.value = ownerVal || 'A';
+
+    document.getElementById('costsplit-heading').textContent = t('costsplit', 'heading');
+    document.getElementById('costsplit-intro').textContent = t('costsplit', 'intro');
+    document.getElementById('costsplit-date-label').textContent = t('costsplit', 'dateLabel');
+    document.getElementById('costsplit-owner-label').textContent = t('costsplit', 'accountOwner');
+    document.getElementById('costsplit-upload-label').textContent = t('costsplit', 'uploadLabel');
+    document.getElementById('costsplit-upload-hint').textContent = t('costsplit', 'uploadHint');
+    document.getElementById('costsplit-set-all-split').textContent = t('costsplit', 'setAllSplit');
+    document.getElementById('costsplit-set-all-ignore').textContent = t('costsplit', 'setAllIgnore');
+    document.getElementById('costsplit-result-heading').textContent = t('costsplit', 'resultHeading');
+    if (state.costsplit.transactions.length) {
+      renderCostsplitTable();
+    }
 
     document.getElementById('children-heading').textContent = t('children', 'heading');
     document.getElementById('children-intro').textContent = t('children', 'intro');
@@ -533,6 +571,155 @@
     state.cfg.fallbackChildBasicNeed = parseFloat(document.getElementById('cfg-fallback-child').value) || 0;
   }
 
+  /* ------------------------------------------------------------- *
+   *  Kostentrennung                                                   *
+   * ------------------------------------------------------------- */
+
+  function renderCostsplitTable() {
+    var thead = document.getElementById('costsplit-thead');
+    var tbody = document.getElementById('costsplit-tbody');
+    thead.innerHTML = '';
+    tbody.innerHTML = '';
+
+    var trh = document.createElement('tr');
+    [
+      t('costsplit', 'colDate'),
+      t('costsplit', 'colDescription'),
+      t('costsplit', 'colAmount'),
+      t('costsplit', 'colMode'),
+      t('costsplit', 'colShare')
+    ].forEach(function (h) {
+      var th = document.createElement('th');
+      th.textContent = h;
+      trh.appendChild(th);
+    });
+    thead.appendChild(trh);
+
+    var fromDate = document.getElementById('costsplit-date').value || null;
+
+    state.costsplit.transactions.forEach(function (tx) {
+      var isBefore = fromDate && tx.date < fromDate;
+      var decision = state.costsplit.decisions[tx.id] || { mode: 'ignore' };
+
+      var tr = document.createElement('tr');
+      if (isBefore) {
+        tr.className = 'muted-row';
+      }
+
+      var tdDate = document.createElement('td');
+      tdDate.textContent = tx.date;
+      tr.appendChild(tdDate);
+
+      var tdDesc = document.createElement('td');
+      tdDesc.textContent = tx.description;
+      tr.appendChild(tdDesc);
+
+      var tdAmount = document.createElement('td');
+      tdAmount.className = 'num';
+      tdAmount.textContent = fmt(tx.amount);
+      tr.appendChild(tdAmount);
+
+      var tdMode = document.createElement('td');
+      var select = document.createElement('select');
+      [
+        { value: 'ignore', label: t('costsplit', 'modeIgnore') },
+        { value: 'split', label: t('costsplit', 'modeSplit') },
+        { value: 'partyA', label: t('costsplit', 'modePartyA') },
+        { value: 'partyB', label: t('costsplit', 'modePartyB') }
+      ].forEach(function (opt) {
+        var o = document.createElement('option');
+        o.value = opt.value;
+        o.textContent = opt.label;
+        select.appendChild(o);
+      });
+      select.value = decision.mode || 'ignore';
+      select.addEventListener('change', (function (id) {
+        return function () {
+          var d = state.costsplit.decisions[id] || { mode: 'ignore', shareA: 0.5 };
+          d.mode = select.value;
+          state.costsplit.decisions[id] = d;
+          renderCostsplitResult();
+        };
+      })(tx.id));
+      tdMode.appendChild(select);
+      tr.appendChild(tdMode);
+
+      var tdShare = document.createElement('td');
+      var share = document.createElement('input');
+      share.type = 'number';
+      share.className = 'share-input';
+      share.min = '0';
+      share.max = '100';
+      share.step = '5';
+      share.value = Math.round((decision.shareA != null ? decision.shareA : 0.5) * 100);
+      share.disabled = decision.mode !== 'split';
+      share.addEventListener('input', (function (id) {
+        return function () {
+          var d = state.costsplit.decisions[id] || { mode: 'split' };
+          d.shareA = (parseFloat(share.value) || 0) / 100;
+          state.costsplit.decisions[id] = d;
+          renderCostsplitResult();
+        };
+      })(tx.id));
+      var pct = document.createElement('span');
+      pct.textContent = ' % ' + t('costsplit', 'shareOfA');
+      tdShare.appendChild(share);
+      tdShare.appendChild(pct);
+      tr.appendChild(tdShare);
+
+      tbody.appendChild(tr);
+    });
+
+    renderCostsplitResult();
+  }
+
+  function renderCostsplitResult() {
+    var fromDate = document.getElementById('costsplit-date').value || null;
+    var totals = AlimenCal.costsplit.computeSplit(
+      state.costsplit.transactions,
+      state.costsplit.decisions,
+      fromDate
+    );
+
+    document.getElementById('costsplit-totals').textContent =
+      t('common', 'parentA') + ': CHF ' + fmt(totals.sumA) + ' | ' +
+      t('common', 'parentB') + ': CHF ' + fmt(totals.sumB) + ' | ' +
+      t('costsplit', 'totalConsidered') + ': CHF ' + fmt(totals.total);
+
+    var ownerIsA = document.getElementById('costsplit-owner').value !== 'B';
+    var settlement = AlimenCal.costsplit.computeSettlement(totals, ownerIsA);
+    document.getElementById('costsplit-balance').textContent =
+      settlement.amount > 0 && settlement.from && settlement.to
+        ? t('costsplit', 'owes', [
+            settlement.from === 'A' ? t('common', 'parentA') : t('common', 'parentB'),
+            settlement.to === 'A' ? t('common', 'parentA') : t('common', 'parentB'),
+            fmt(settlement.amount)
+          ])
+        : t('costsplit', 'balanced');
+
+    document.getElementById('costsplit-counts').textContent =
+      t('costsplit', 'counts', [String(totals.countConsidered), String(totals.countIgnored), String(totals.countBeforeDate)]);
+  }
+
+  function handleCostsplitFile(file) {
+    var reader = new FileReader();
+    reader.onload = function () {
+      var parsed = AlimenCal.costsplit.parseBankCsv(reader.result);
+      if (!parsed.transactions.length) {
+        var err = document.getElementById('costsplit-error');
+        err.textContent = t('costsplit', 'parseError');
+        err.hidden = false;
+        return;
+      }
+      document.getElementById('costsplit-error').hidden = true;
+      state.costsplit.transactions = parsed.transactions;
+      state.costsplit.decisions = {};
+      document.getElementById('costsplit-section').hidden = false;
+      renderCostsplitTable();
+    };
+    reader.readAsText(file);
+  }
+
   /* ------------------------------------------------------------- */
 
   function switchTab(name) {
@@ -611,6 +798,34 @@
       a.click();
       URL.revokeObjectURL(a.href);
     });
+    document.getElementById('costsplit-file').addEventListener('change', function () {
+      var file = this.files && this.files[0];
+      if (file) { handleCostsplitFile(file); }
+      this.value = '';
+    });
+    document.getElementById('costsplit-owner').addEventListener('change', function () {
+      if (state.costsplit.transactions.length) {
+        renderCostsplitTable();
+      }
+    });
+    document.getElementById('costsplit-date').addEventListener('change', function () {
+      if (state.costsplit.transactions.length) {
+        renderCostsplitTable();
+      }
+    });
+    document.getElementById('costsplit-set-all-split').addEventListener('click', function () {
+      state.costsplit.transactions.forEach(function (tx) {
+        state.costsplit.decisions[tx.id] = { mode: 'split', shareA: 0.5 };
+      });
+      renderCostsplitTable();
+    });
+    document.getElementById('costsplit-set-all-ignore').addEventListener('click', function () {
+      state.costsplit.transactions.forEach(function (tx) {
+        state.costsplit.decisions[tx.id] = { mode: 'ignore', shareA: 0.5 };
+      });
+      renderCostsplitTable();
+    });
+
     document.getElementById('cfg-import').addEventListener('change', function () {
       var file = this.files && this.files[0];
       if (!file) { return; }

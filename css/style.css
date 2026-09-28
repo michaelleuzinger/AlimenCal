@@ -202,3 +202,14 @@ button.danger { background: transparent; color: var(--warn); text-decoration: un
 .cfg-table input { width: 100%; padding: 0.35rem 0.45rem; border: 1px solid var(--line); border-radius: 6px; }
 
 footer { padding: 1.5rem 0 2.5rem; color: var(--muted); font-size: 0.85rem; }
+
+/* Kostentrennung */
+.costsplit-top { display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-end; }
+.date-label span { display: block; font-size: 0.88rem; color: var(--muted); margin-bottom: 0.2rem; }
+.date-label input { padding: 0.45rem 0.6rem; border: 1px solid var(--line); border-radius: 6px; font-size: 1rem; background: #fbfcfd; }
+.costsplit-table td, .costsplit-table th { text-align: left; }
+.costsplit-table .num { text-align: right; white-space: nowrap; }
+.costsplit-table .muted-row td { color: var(--muted); }
+.costsplit-table select, .costsplit-table input[type="number"] { padding: 0.3rem 0.4rem; border: 1px solid var(--line); border-radius: 6px; font-size: 0.9rem; }
+.costsplit-table .share-input { width: 5rem; }
+.costsplit-legend { font-size: 0.82rem; color: var(--muted); margin: 0.4rem 0; }

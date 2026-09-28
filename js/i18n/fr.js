@@ -12,6 +12,7 @@ AlimenCal.i18n.fr = {
     children: 'Pension pour enfants',
     spousal: 'Pension conjugale',
     settings: 'Valeurs de référence',
+    costsplit: 'Séparation des coûts',
     about: 'À propos'
   },
   common: {
@@ -114,5 +115,33 @@ AlimenCal.i18n.fr = {
     body1: 'AlimenCal est un outil de première orientation sur les questions d\u2019entretien lors d\u2019une séparation ou d\u2019un divorce en Suisse. Il implémente la structure du droit révisé de la pension pour enfants (en vigueur depuis le 1er janvier 2017) et la méthode en deux étapes pour la pension conjugale.',
     body2: 'Bases juridiques : art. 276, 285 ss CC (pension pour enfants y c. contribution d\u2019entretien) ; art. 176 CC (séparation de fait) ; art. 125 CC (pension après divorce) ; ATF 140 III 337 (méthode individuelle) ; ATF 135 III 66 (répartition du déficit) ; ATF 147 III 249 (critères du mariage déterminant).',
     body3: 'Ne remplace pas un conseil juridique. La fixation concrète appartient aux tribunaux et à l\u2019APEA ; les valeurs varient selon le canton et le cas individuel.'
+  },
+
+costsplit: {
+    heading: 'Séparation des coûts dès une date donnée',
+    intro: 'Pour les couples qui souhaitent répartir leurs coûts courants séparément avant le divorce : définissez une date de référence et importez des extraits bancaires (CSV). Chaque transaction peut être ignorée, répartie proportionnellement (part configurable) ou entièrement attribuée à une partie. Les transactions antérieures à la date sont grisées et non prises en compte.',
+    dateLabel: 'Date de référence (séparer les coûts dès cette date)',
+    uploadLabel: 'Importer un extrait bancaire (CSV)',
+    uploadHint: 'Prend en charge les formats bancaires courants avec détection automatique des colonnes (date, description, montant ou débit/crédit séparés). Toutes les données restent localement dans le navigateur.',
+    parseError: 'L\u2019extrait bancaire n\u2019a pas pu être lu. Vérifiez que le fichier contient une ligne d\u2019en-tête avec les colonnes date et montant.',
+    colDate: 'Date',
+    colDescription: 'Description',
+    colAmount: 'Montant',
+    colMode: 'Attribution',
+    colShare: 'Part',
+    modeIgnore: 'Ignorer',
+    modeSplit: 'Répartir',
+    modePartyA: 'Partie A prend en charge',
+    modePartyB: 'Partie B prend en charge',
+    shareOfA: '(part A)',
+    setAllSplit: 'Tout répartir 50/50',
+    setAllIgnore: 'Tout ignorer',
+    resultHeading: 'Compensation',
+    totalConsidered: 'Total pris en compte',
+    balance: 'Solde',
+    accountOwner: 'Le compte bancaire appartient à',
+    owes: '{0} doit CHF {2} à {1}',
+    balanced: 'équilibré',
+    counts: 'Pris en compte : {0} | Non catégorisé : {1} | Avant la date : {2}'
   }
 };
