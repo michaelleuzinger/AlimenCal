@@ -34,6 +34,7 @@ header {
   background: var(--accent);
   color: var(--accent-ink);
   padding: 1.5rem 0 1.2rem;
+  position: relative;
 }
 header h1 { margin: 0; font-size: 1.6rem; letter-spacing: 0.5px; }
 .subtitle { margin: 0.3rem 0 0; opacity: 0.92; font-weight: 300; }
@@ -57,15 +58,20 @@ header h1 { margin: 0; font-size: 1.6rem; letter-spacing: 0.5px; }
   margin-top: 1rem;
   flex-wrap: wrap;
 }
-/* Kopf-Aktionen: Sprachwahl + Einstellungen-Menue (Zahnrad) */
-.header-actions { position: relative; display: inline-flex; align-items: flex-start; gap: 0.75rem; }
-.settings-btn { width: 2.1rem; height: 2.1rem; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--line); border-radius: 8px; background: var(--card); cursor: pointer; padding: 0; }
+/* Kopf-Aktionen: Zahnrad oben rechts + Sprachwahl */
+.header-actions { position: absolute; top: 1rem; right: 1rem; display: flex; align-items: center; gap: 0.75rem; }
+.header-actions .lang-switch { margin-top: 0; }
+.settings-btn { width: 2.1rem; height: 2.1rem; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--accent-ink); border-radius: 8px; background: transparent; color: var(--accent-ink); cursor: pointer; padding: 0; }
 .settings-btn svg { width: 1.2rem; height: 1.2rem; display: block; }
-.settings-btn:hover, .settings-btn[aria-expanded="true"] { border-color: var(--accent); }
+.settings-btn:hover, .settings-btn[aria-expanded="true"] { background: var(--accent-ink); color: var(--accent); }
 .settings-menu { position: absolute; top: calc(100% + 0.35rem); right: 0; min-width: 11rem; background: var(--card); border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,0.18); padding: 0.35rem; z-index: 50; }
 .settings-menu[hidden] { display: none; }
 .settings-menu .tab { display: block; width: 100%; text-align: left; border: none; background: transparent; border-radius: 6px; padding: 0.45rem 0.6rem; font-size: 0.92rem; cursor: pointer; color: var(--ink); }
 .settings-menu .tab:hover, .settings-menu .tab.active { background: var(--accent); color: var(--accent-ink); }
+@media (max-width: 560px) {
+  .header-actions { position: static; margin-top: 0.9rem; }
+  .header-actions .lang-switch { margin-top: 0; }
+}
 .tab {
   border: 1px solid var(--line);
   background: var(--card);

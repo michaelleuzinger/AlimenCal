@@ -135,7 +135,7 @@ Ehegattenunterhalts sowie CSV-Parsing und Ausgleichslogik der Kostentrennung.
 ## Struktur
 
 ```
-index.html          UI (Tab-Navigation mit Funktionen: Kindesunterhalt, Ehegattenunterhalt, Kostentrennung, Austausch; Richtwerte/Themes/Über über Zahnrad-Menü im Kopf)
+index.html          UI (Tab-Navigation mit Funktionen: Kindesunterhalt, Ehegattenunterhalt, Kostentrennung, Austausch; Richtwerte/Themes/Über über Zahnrad-Menü oben rechts im Kopf, zusammen mit der Sprachwahl)
 css/style.css       Styles
 js/calculator.js    Berechnungskern (DOM-frei, auch in Node.js lauffähig)
 js/costsplit.js     Kostentrennung: CSV-Import, Zuordnung, Ausgleich (DOM-frei)

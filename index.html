@@ -10,10 +10,14 @@
 <body>
   <header>
     <div class="wrap">
-      <h1 id="app-title">AlimenCal</h1>
-      <p id="app-subtitle" class="subtitle"></p>
       <div class="header-actions">
-      <label class="lang-switch">
+        <button type="button" id="settings-btn" class="settings-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="settings-menu"></button>
+        <div id="settings-menu" class="settings-menu" role="menu" hidden>
+          <button type="button" class="tab settings-menu-item" data-tab="settings" role="menuitem"></button>
+          <button type="button" class="tab settings-menu-item" data-tab="themes" role="menuitem"></button>
+          <button type="button" class="tab settings-menu-item" data-tab="about" role="menuitem"></button>
+        </div>
+        <label class="lang-switch">
         <span>Language:</span>
         <select id="lang-select">
           <option value="de">Deutsch</option>
@@ -22,13 +26,9 @@
           <option value="en">English</option>
         </select>
       </label>
-      <button type="button" id="settings-btn" class="settings-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="settings-menu"></button>
-      <div id="settings-menu" class="settings-menu" role="menu" hidden>
-        <button type="button" class="tab settings-menu-item" data-tab="settings" role="menuitem"></button>
-        <button type="button" class="tab settings-menu-item" data-tab="themes" role="menuitem"></button>
-        <button type="button" class="tab settings-menu-item" data-tab="about" role="menuitem"></button>
       </div>
-      </div>
+      <h1 id="app-title">AlimenCal</h1>
+      <p id="app-subtitle" class="subtitle"></p>
     </div>
   </header>
 
