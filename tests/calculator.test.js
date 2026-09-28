@@ -10,14 +10,16 @@ var assert = require('assert');
 var CFG = {
   defaultExistenzminimumEmployed: 2200,
   defaultExistenzminimumNotEmployed: 2000,
+  // Quelle: Zürcher Kinderkosten-Tabelle 1.3.2025, Einzelkind, Gesamtkosten
+  // minus enthaltener Durchschnittsprämie von CHF 130 (separat erfasst).
   childNeedTable: [
-    { fromAge: 0, toAge: 6, basicNeed: 500, careSupport: 1100 },
-    { fromAge: 7, toAge: 12, basicNeed: 640, careSupport: 900 },
-    { fromAge: 13, toAge: 17, basicNeed: 720, careSupport: 700 },
-    { fromAge: 18, toAge: 99, basicNeed: 900, careSupport: 0 }
+    { fromAge: 0, toAge: 6, basicNeed: 1310, careSupport: 1100 },
+    { fromAge: 7, toAge: 12, basicNeed: 1445, careSupport: 900 },
+    { fromAge: 13, toAge: 17, basicNeed: 1790, careSupport: 700 },
+    { fromAge: 18, toAge: 99, basicNeed: 1790, careSupport: 0 }
   ],
   careSupportMaxAge: 17,
-  fallbackChildBasicNeed: 600,
+  fallbackChildBasicNeed: 1310,
   defaultSpousalStandard: 4000
 };
 
@@ -50,10 +52,10 @@ ok('Leere Betreuungsanteile => 50/50', close(sharesEmpty.a, 0.5));
 var sharesSum2 = calc.normalizeCareShares({ careShareParentA: 80, careShareParentB: 80 });
 ok('Summe >100% wird skaliert', close(sharesSum2.a, 0.5) && close(sharesSum2.b, 0.5));
 
-ok('Grundbedarf Kind 8 Jahre = 640', calc.childBasicNeed({ age: 8 }, CFG) === 640);
-ok('Grundbedarf Kind 3 Jahre = 500', calc.childBasicNeed({ age: 3 }, CFG) === 500);
-ok('Grundbedarf Kind 17 Jahre = 720', calc.childBasicNeed({ age: 17 }, CFG) === 720);
-ok('Grundbedarf Kind 18 Jahre = 900', calc.childBasicNeed({ age: 18 }, CFG) === 900);
+ok('Grundbedarf Kind 8 Jahre = 1445', calc.childBasicNeed({ age: 8 }, CFG) === 1445);
+ok('Grundbedarf Kind 3 Jahre = 1310', calc.childBasicNeed({ age: 3 }, CFG) === 1310);
+ok('Grundbedarf Kind 17 Jahre = 1790', calc.childBasicNeed({ age: 17 }, CFG) === 1790);
+ok('Grundbedarf Kind 18 Jahre = 1790', calc.childBasicNeed({ age: 18 }, CFG) === 1790);
 ok('Betreuungsunterhalt-Richtwert Kind 8 = 900',
   calc.childCareSupportRichtwert({ age: 8 }, CFG) === 900);
 ok('Betreuungsunterhalt ab 18 = 0', calc.childCareSupportRichtwert({ age: 19 }, CFG) === 0);
@@ -65,9 +67,9 @@ ok('Betreuungsunterhalt ab 18 = 0', calc.childCareSupportRichtwert({ age: 19 }, 
  * Elternteil B: Einkommen 3000, Existenzminimum 2200 -> verfügbar 800
  * Kind 8 Jahre, 100% Betreuung bei B, keine direkten Kosten, keine Zulage.
  *
- * Grundbedarf 640; Aufteilung nach verfügbarem Einkommen:
+ * Grundbedarf 1445; Aufteilung nach verfügbarem Einkommen:
  *   Anteil A = 3800/4600 = 0.826..., Anteil B = 800/4600
- * Barunterhalt A ~ 528.70, B ~ 111.30
+ * Barunterhalt A ~ 1192.83, B ~ 252.17
  * Betreuungsunterhalt: Richtwert 900, B betreut 100% => A zahlt netto 900 an B.
  */
 
@@ -85,9 +87,9 @@ var inputStd = {
 var resStd = calc.calculateChildSupport(inputStd, CFG);
 var childStd = resStd.perChild[0];
 
-ok('Standardfall: Barunterhalt total = 640', close(childStd.barTotal, 640));
+ok('Standardfall: Barunterhalt total = 1445', close(childStd.barTotal, 1445));
 ok('Standardfall: barFromA + barFromB = barTotal',
-  close(childStd.barFromA + childStd.barFromB, 640));
+  close(childStd.barFromA + childStd.barFromB, 1445));
 ok('Standardfall: Anteil A > Anteil B (Leistungsfähigkeit)',
   childStd.barFromA > childStd.barFromB);
 ok('Standardfall: Betreuungsunterhalt A->B = 900',
@@ -95,7 +97,7 @@ ok('Standardfall: Betreuungsunterhalt A->B = 900',
 ok('Standardfall: Total A = Bar A + Betreuung A',
   close(childStd.totalFromA, childStd.barFromA + 900));
 ok('Standardfall: keine Mangellage', !resStd.mangellage);
-ok('Standardfall: Total A ~ 1428.70', close(childStd.totalFromA, 640 * (3800 / 4600) + 900, 0.05));
+ok('Standardfall: Total A ~ 2092.83', close(childStd.totalFromA, 1445 * (3800 / 4600) + 900, 0.05));
 
 /* ---------- Kindeseinkommen und direkte Kosten ---------- */
 
@@ -113,22 +115,22 @@ var inputCosts = {
 var resCosts = calc.calculateChildSupport(inputCosts, CFG);
 var childCosts = resCosts.perChild[0];
 
-// Grundbedarf 500 + direkte Kosten 550 - Zulage 250 = 800
-ok('Direkte Kosten: Grundbedarf = 500', close(childCosts.basicNeed, 500));
+// Grundbedarf 1310 + direkte Kosten 550 - Zulage 250 = 1610
+ok('Direkte Kosten: Grundbedarf = 1310', close(childCosts.basicNeed, 1310));
 ok('Direkte Kosten: direkte Kosten = 550', close(childCosts.directCosts, 550));
-ok('Direkte Kosten: Barunterhalt total = 800', close(childCosts.barTotal, 800));
+ok('Direkte Kosten: Barunterhalt total = 1610', close(childCosts.barTotal, 1610));
 ok('Direkte Kosten: 50/50-Betreuung => kein netto Betreuungsunterhalt',
   close(childCosts.careNetFromAToB, 0) && close(childCosts.careNetFromBToA, 0));
 ok('Direkte Kosten: Aufteilung nach Leistungsfähigkeit (7800/13600 bzw. 5800/13600)',
-  close(childCosts.barFromA, 800 * (7800 / 13600), 0.05) &&
-  close(childCosts.barFromB, 800 * (5800 / 13600), 0.05));
+  close(childCosts.barFromA, 1610 * (7800 / 13600), 0.05) &&
+  close(childCosts.barFromB, 1610 * (5800 / 13600), 0.05));
 
 /* ---------- Mangellage ---------- */
 
 /*
  * A: Einkommen 2600, Existenzminimum 2200 -> verfügbar 400
  * B: Einkommen 2300, Existenzminimum 2200 -> verfügbar 100
- * Kind 8 Jahre, B betreut 100%: Bar 640, Betreuungsunterhalt 900.
+ * Kind 8 Jahre, B betreut 100%: Bar 1445, Betreuungsunterhalt 900.
  * Verfügbares Einkommen deckt weder Bar noch Betreuung -> Manko.
  */
 
@@ -151,8 +153,8 @@ ok('Mangellage: A zahlt maximal verfügbares Einkommen',
   close(childManko.barFromA + childManko.careNetFromAToB, 400, 0.01));
 ok('Mangellage: B zahlt maximal verfügbares Einkommen',
   close(childManko.barFromB + childManko.careNetFromBToA, 100, 0.01));
-ok('Mangellage: Manko total = 1540 - 500 = 1040',
-  close(resManko.totals.totalManko, 640 + 900 - 400 - 100, 0.02));
+ok('Mangellage: Manko total = 2345 - 500 = 1845',
+  close(resManko.totals.totalManko, 1445 + 900 - 400 - 100, 0.02));
 
 /* ---------- Mehrere Kinder ---------- */
 
@@ -172,8 +174,8 @@ var inputMulti = {
 var resMulti = calc.calculateChildSupport(inputMulti, CFG);
 
 ok('Mehrere Kinder: zwei Resultate', resMulti.perChild.length === 2);
-ok('Mehrere Kinder: Grundbedarf 500/640',
-  close(resMulti.perChild[0].basicNeed, 500) && close(resMulti.perChild[1].basicNeed, 640));
+ok('Mehrere Kinder: Grundbedarf 1310/1445',
+  close(resMulti.perChild[0].basicNeed, 1310) && close(resMulti.perChild[1].basicNeed, 1445));
 ok('Mehrere Kinder: Totale konsistent',
   close(resMulti.totals.totalA,
     resMulti.perChild[0].totalFromA + resMulti.perChild[1].totalFromA, 0.02));
@@ -197,7 +199,7 @@ ok('Default-Existenzminimum erwerbstätig = 2200',
 ok('Default-Existenzminimum nicht erwerbstätig = 2000',
   close(resDefault.budgets.b.existenzminimum, 2000));
 ok('Bei nur einem leistungsfähigen Elternteil trägt dieser den Barunterhalt',
-  close(resDefault.perChild[0].barFromA, 640, 0.01));
+  close(resDefault.perChild[0].barFromA, 1445, 0.01));
 
 /* ---------- Ehegattenunterhalt: Überschussfall ---------- */
 
