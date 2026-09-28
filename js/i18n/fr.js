@@ -180,7 +180,7 @@ costsplit: {
     totalConsidered: 'Total pris en compte',
     balance: 'Solde',
     accountOwner: 'Le compte bancaire appartient à',
-    owes: '{0} doit CHF {2} à {1}',
+    owes: '{0} règle le solde de CHF {2} à {1}',
     partyA: 'Partie A',
     partyB: 'Partie B',
     balanced: 'équilibré',

@@ -89,7 +89,7 @@ Kurz:
 4. Je Transaktion entscheiden: **ignorieren**, **anteilsmässig aufteilen**
    (Anteil je Transaktion konfigurierbar) oder **voll von Partei A bzw. B
    übernehmen**. Sammelaktionen erleichtern die Erstzuordnung.
-5. **Ausgleich**: Die App zeigt, welche Partei der anderen wie viel schuldet.
+5. **Ausgleich**: Die App zeigt, welche Partei der anderen einen Ausgleichsbetrag bezahlt.
 
 ## Tab «Richtwerte»
 

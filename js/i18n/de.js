@@ -64,7 +64,7 @@ AlimenCal.i18n.de = {
     totalB: 'Total Elternteil B',
     totalManko: 'Manko total (Unterdeckung)',
     mangellage: 'Es liegt eine Mangellage vor: Der gebührende Unterhalt kann nicht vollumfänglich gedeckt werden. Das Manko kann bei erheblicher Verbesserung der Verhältnisse nachgefordert werden (vgl. KESB-Praxis).',
-    careHint: 'Betreuungsunterhalt wird nur für Betreuung während der ordentlichen Arbeitszeit geschuldet – Wochenend- und Abendbetreuung genügt nicht.',
+    careHint: 'Betreuungsunterhalt wird nur für Betreuung während der ordentlichen Arbeitszeit fällig – Wochenend- und Abendbetreuung genügt nicht.',
     childLabel: 'Kind {n}'
   },
   spousal: {
@@ -180,7 +180,7 @@ costsplit: {
     totalConsidered: 'Total gewertet',
     balance: 'Saldo',
     accountOwner: 'Bankkonto gehört',
-    owes: '{0} schuldet {1} CHF {2}',
+    owes: '{0} gleicht den Ausgleich von CHF {2} an {1} aus',
     partyA: 'Partei A',
     partyB: 'Partei B',
     balanced: 'ausgeglichen',

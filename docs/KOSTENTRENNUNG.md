@@ -10,7 +10,7 @@ zu separieren, erlaubt dieses Modul einen einfachen Ausgleich: Es wird ein
 Stichtag definiert, ab dem die Kosten getrennt gewertet werden. Ein
 Bankexport (CSV) dient als Belegliste; jede Transaktion wird einer Partei
 zugeordnet (ignorieren, anteilsmässig, voll). Die App berechnet, welche Partei
-der anderen wie viel schuldet.
+der anderen einen Ausgleichsbetrag bezahlt.
 
 Alle Daten bleiben lokal im Browser – Bankexporte werden **nicht** übertragen.
 
@@ -40,7 +40,7 @@ Unterstützt werden gängige Schweizer Bankexporte:
 
 Das Bankkonto gehört **Partei A** oder **Partei B**. Daraus ergibt sich der
 Ausgleichssinn: Der Kontoinhaber hat alle Zahlungen von diesem Konto geleistet;
-die andere Partei schuldet ihm ihren Anteil – umgekehrt bei Erträgen.
+die andere Partei bezahlt ihm ihren Anteil – umgekehrt bei Erträgen.
 
 ### 4. Je Transaktion entscheiden
 
@@ -64,7 +64,7 @@ Gezahlt hat alles: der Kontoinhaber
 
 - Haben beide gleich viel zu tragen, ist der Stand **ausgeglichen**.
 - Andernfalls errechnet die App den Ausgleichsbetrag: Die Partei mit dem
-  kleineren Anteil schuldet der anderen Partei die Differenz.
+  kleineren Anteil bezahlt der anderen Partei die Differenz.
 - **Erträge** (Gutschriften, positive Beträge) werden gegengleich
   behandelt: Wer einen Ertrag voll übernimmt, erhält ihn gutgeschrieben;
   der Ausgleichssinn kehrt sich entsprechend um.

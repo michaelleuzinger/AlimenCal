@@ -173,7 +173,7 @@ var decisionsE2E = {
 };
 var totalsE2E = cs.computeSplit(parsedE2E.transactions, decisionsE2E, null);
 var settlementE2E = cs.computeSettlement(totalsE2E, true);
-// Konto A: A-Anteil 750; B schuldet A: Miete-Anteil 750 + Restaurant 100 = 850
+// Konto A: A-Anteil 750; B zahlt an A den Ausgleich: Miete-Anteil 750 + Restaurant 100 = 850
 ok('E2E Ausgleich: B zahlt A 850',
   settlementE2E.from === 'B' && settlementE2E.to === 'A' &&
   close(settlementE2E.amount, 850));

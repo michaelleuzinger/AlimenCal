@@ -180,7 +180,7 @@ costsplit: {
     totalConsidered: 'Total counted',
     balance: 'Balance',
     accountOwner: 'Bank account belongs to',
-    owes: '{0} owes {1} CHF {2}',
+    owes: '{0} settles the balance of CHF {2} with {1}',
     partyA: 'Party A',
     partyB: 'Party B',
     balanced: 'balanced',
