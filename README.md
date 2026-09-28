@@ -92,12 +92,13 @@ Tab-Abschnitt eingebettet. Inventar (Regeln in [AGENTS.md](AGENTS.md)):
 |---|---|
 | `screenshots/01-kindesunterhalt-de.png` | Kindesunterhalt inkl. Aufwandsmodus und Resultat (Deutsch); Hero-Shot README + Handbuch |
 | `screenshots/02-ehegattenunterhalt-de.png` | Ehegattenunterhalt mit Bedarf/Leistungsfähigkeit und Resultat (Deutsch) |
-| `screenshots/03-richtwerte-de.png` | Richtwerte mit Preset-Auswahl und Wertetabelle (Deutsch) |
-| `screenshots/04-kostentrennung-de.png` | Kostentrennung mit anonymisiertem Bankexport, Zuordnungen und Ausgleich (Deutsch) |
-| `screenshots/05-themes-classic-de.png` | Themes mit Theme-Editor, Classic (Deutsch) |
-| `screenshots/06-themes-dark-de.png` | Themes, Dark-Theme (Duplikat von 05, legitimiert: dokumentiertes Feature) |
-| `screenshots/07-austausch-de.png` | Austausch-Tab mit Export/Import (Deutsch) |
-| `screenshots/08-pension-enfants-fr.png` | Pension alimentaire (Français); einzige fremdsprachige Ansicht als Beleg der Mehrsprachigkeit |
+| `screenshots/03-kostentrennung-de.png` | Kostentrennung mit anonymisiertem Bankexport, Zuordnungen und Ausgleich (Deutsch) |
+| `screenshots/04-austausch-de.png` | Austausch-Tab mit Export/Import (Deutsch) |
+| `screenshots/05-einstellungen-menue-de.png` | Zahnrad-Menü geöffnet: Einstellungen/Info-Einträge und Sprachwahl (Deutsch) |
+| `screenshots/06-richtwerte-de.png` | Richtwerte mit Preset-Auswahl und Wertetabelle (Deutsch) |
+| `screenshots/07-themes-classic-de.png` | Themes mit Theme-Editor, Classic (Deutsch) |
+| `screenshots/08-themes-dark-de.png` | Themes, Dark-Theme (Duplikat von 07, legitimiert: dokumentiertes Feature) |
+| `screenshots/09-pension-enfants-fr.png` | Pension alimentaire (Français); einzige fremdsprachige Ansicht als Beleg der Mehrsprachigkeit |
 
 ## Kantonale Presets
 

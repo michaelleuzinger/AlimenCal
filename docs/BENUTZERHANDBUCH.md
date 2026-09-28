@@ -14,7 +14,7 @@ keine Installation und keine Abhängigkeiten.
 
 Beispiel einer fremdsprachigen Ansicht (Français):
 
-![Pension alimentaire (FR)](../screenshots/08-pension-enfants-fr.png)
+![Pension alimentaire (FR)](../screenshots/09-pension-enfants-fr.png)
 
 Die Sprache wird im Zahnrad-Menü oben rechts gewählt: **Deutsch, Français,
 Italiano, English**. Die Auswahl wird im Browser gespeichert (`localStorage`)
@@ -38,6 +38,8 @@ ausserhalb des Menüs oder mit der Escape-Taste.
 | Austausch | Eigene Daten exportieren, Datei der anderen Partei importieren |
 
 **Einstellungen & Info (Zahnrad-Menü im Kopf):**
+
+![Einstellungen-Menü (DE)](../screenshots/05-einstellungen-menue-de.png)
 
 | Tab | Zweck |
 |---|---|
@@ -88,7 +90,7 @@ Hinweise:
 
 ## Tab «Kostentrennung»
 
-![Kostentrennung (DE)](../screenshots/04-kostentrennung-de.png)
+![Kostentrennung (DE)](../screenshots/03-kostentrennung-de.png)
 
 Für Paare, die ihre laufenden Kosten schon **vor** der Scheidung separat
 abrechnen wollen – ausführlich beschrieben in
@@ -107,7 +109,7 @@ Kurz:
 
 ## Tab «Richtwerte»
 
-![Richtwerte (DE)](../screenshots/03-richtwerte-de.png)
+![Richtwerte (DE)](../screenshots/06-richtwerte-de.png)
 
 - Alle Richtwerte (Existenzminima, Grundbedarfe, Betreuungsunterhalt) sind
   hier sichtbar und anpassbar – vgl. die Default-Quellen im README.
@@ -121,7 +123,7 @@ Kurz:
 
 ## Tab «Austausch» (zwei Parteien, zwei PCs)
 
-![Austausch (DE)](../screenshots/07-austausch-de.png)
+![Austausch (DE)](../screenshots/04-austausch-de.png)
 
 Arbeiten die Parteien **nicht am selben PC**, trägt jede Partei nur ihre
 eigenen Angaben ein und stellt sie der anderen Partei als Datei zu (z. B. per
@@ -154,9 +156,9 @@ B importiert, rechnet).
 
 ## Tab «Themes»
 
-![Themes Classic (DE)](../screenshots/05-themes-classic-de.png)
+![Themes Classic (DE)](../screenshots/07-themes-classic-de.png)
 
-![Themes Dark (DE)](../screenshots/06-themes-dark-de.png)
+![Themes Dark (DE)](../screenshots/08-themes-dark-de.png)
 
 - **Vordefinierte Themes**: Classic (Default), Dark, High Contrast (barrierefrei,
   für Sehbehinderte geeignet), Warm und Blue – Auswahl wirkt sofort.

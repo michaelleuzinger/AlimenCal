@@ -39,12 +39,13 @@ const LANGS = ['de', 'fr'];
 const VIEWS = [
   { n: 1, name: 'kindesunterhalt', langs: ['de'], setup: setupChildren },
   { n: 2, name: 'ehegattenunterhalt', langs: ['de'], setup: setupSpousal },
-  { n: 3, name: 'richtwerte', langs: ['de'], setup: setupSettings },
-  { n: 4, name: 'kostentrennung', langs: ['de'], setup: setupCostsplit },
-  { n: 5, name: 'themes-classic', langs: ['de'], setup: setupThemesClassic },
-  { n: 6, name: 'themes-dark', langs: ['de'], setup: setupThemesDark },
-  { n: 7, name: 'austausch', langs: ['de'], setup: setupShare },
-  { n: 8, name: 'pension-enfants', langs: ['fr'], setup: setupChildren }
+  { n: 3, name: 'kostentrennung', langs: ['de'], setup: setupCostsplit },
+  { n: 4, name: 'austausch', langs: ['de'], setup: setupShare },
+  { n: 5, name: 'einstellungen-menue', langs: ['de'], setup: setupSettingsMenu },
+  { n: 6, name: 'richtwerte', langs: ['de'], setup: setupSettings },
+  { n: 7, name: 'themes-classic', langs: ['de'], setup: setupThemesClassic },
+  { n: 8, name: 'themes-dark', langs: ['de'], setup: setupThemesDark },
+  { n: 9, name: 'pension-enfants', langs: ['fr'], setup: setupChildren }
 ];
 
 /* ---------- Beispieldaten (anonymisiert, keine echten Personen) ---------- */
@@ -137,6 +138,10 @@ async function setupSpousal(page) {
   await fill(page, '#sp-res-childpaid', '1200');
   await page.evaluate(() => document.getElementById('calc-spousal').click());
   await sleep(200);
+}
+
+async function setupSettingsMenu(page) {
+  await page.evaluate(() => document.getElementById('settings-btn').click());
 }
 
 async function setupSettings(page) {
