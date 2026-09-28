@@ -36,7 +36,7 @@ Unterhaltsfragen bei Trennung und Scheidung in der Schweiz:
   Bankexport und Zuordnungen) werden automatisch gespeichert und nach einem
   Browser-Neustart wiederhergestellt – keine Daten gehen verloren
 - **Austausch zwischen Parteien**: Jede Partei erfasst nur ihre eigenen Daten
-  auf ihrem PC, exportiert sie als JSON-Datei und stellt sie der Gegenpartei
+  auf ihrem PC, exportiert sie als JSON-Datei und stellt sie der anderen Partei
   zu; der Import übernimmt nur die enthaltenen Abschnitte (Merge) – eigene
   Eingaben bleiben unverändert
 - **Mangellagen-Erkennung**: Unterdeckung (Manko) wird ausgewiesen, inklusive
@@ -61,7 +61,7 @@ Unterhaltsfragen bei Trennung und Scheidung in der Schweiz:
 6. Tab **Richtwerte**: kantonale Werte anpassen, speichern,
    exportieren/importieren, Presets laden.
 7. Tab **Austausch**: eigene Daten als JSON exportieren, Datei der
-   Gegenpartei importieren (Merge).
+   anderen Partei importieren (Merge).
 
 Ausführliche Anleitung: [docs/BENUTZERHANDBUCH.md](docs/BENUTZERHANDBUCH.md)
 

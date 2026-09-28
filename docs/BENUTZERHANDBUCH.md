@@ -28,7 +28,7 @@ nächsten Öffnen wiederhergestellt.
 | Ehegattenunterhalt | Bedarf/Leistungsfähigkeit und allfälliger Beitrag (Art. 176 / Art. 125 ZGB) |
 | Kostentrennung | Laufende Kosten ab einem Stichtag separat abrechnen (Bankexport) |
 | Themes | Vordefinierte Designs wählen, Farben im Theme-Editor anpassen |
-| Austausch | Eigene Daten exportieren, Datei der Gegenpartei importieren |
+| Austausch | Eigene Daten exportieren, Datei der anderen Partei importieren |
 | Richtwerte | Richtwerte einsehen, anpassen, speichern, exportieren/importieren, kantionale Presets laden |
 
 ## Tab «Kindesunterhalt»
@@ -110,17 +110,17 @@ Kurz:
 ![Austausch (DE)](../screenshots/07-austausch-de.png)
 
 Arbeiten die Parteien **nicht am selben PC**, trägt jede Partei nur ihre
-eigenen Angaben ein und stellt sie der Gegenseite als Datei zu (z. B. per
+eigenen Angaben ein und stellt sie der anderen Partei als Datei zu (z. B. per
 E-Mail oder über die Anwältin/den Anwalt):
 
 1. **Eigene Daten erfassen** – z. B. Partei A ihre Einkommenskarte im Tab
-   «Kindesunterhalt», die Gegenpartei analog die ihre.
+   «Kindesunterhalt», die andere Partei analog die ihre.
 2. **Exportieren**: Im Tab «Austausch» die gewünschten Abschnitte anwählen
-   (Empfehlung: nur die eigenen – nicht die der Gegenseite) und
+   (Empfehlung: nur die eigenen – nicht die der anderen Partei) und
    «Exportieren (JSON)» klicken. Es entsteht eine Datei `alimencal-case.json`.
 3. **Datei übermitteln** – über einen vertraulichen Kanal. Die Datei enthält
    die Daten im Klartext (keine Verschlüsselung!).
-4. **Importieren**: Die Gegenpartei wählt die erhaltene Datei im Tab
+4. **Importieren**: Die andere Partei wählt die erhaltene Datei im Tab
    «Austausch». Nur die in der Datei enthaltenen, gültigen Abschnitte
    ersetzen die entsprechenden Felder – **alle eigenen Eingaben bleiben
    unverändert**.
