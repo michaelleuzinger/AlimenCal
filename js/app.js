@@ -5,6 +5,13 @@
   var LS_LANG = 'alimencal.lang';
   var LS_CFG = 'alimencal.config';
   var LS_PRESET = 'alimencal.preset';
+  var LS_FORM = 'alimencal.form';
+  var FORM_FIELD_IDS = [
+    'pa-income', 'pa-em', 'pa-employed', 'pb-income', 'pb-em', 'pb-employed',
+    'spousal-enabled', 'sp-app-income', 'sp-app-em', 'sp-app-standard',
+    'sp-app-extra', 'sp-res-income', 'sp-res-em', 'sp-res-childpaid',
+    'costsplit-date', 'costsplit-owner'
+  ];
   var DEFAULT_LANG = 'de';
   var LANGS = ['de', 'fr', 'it', 'en'];
 
@@ -720,6 +727,60 @@
     reader.readAsText(file);
   }
 
+  /* ------------------------------------------------------------- *
+   *  Automatische Persistenz aller Eingaben (localStorage):
+   *  Formularfelder, Kinderliste, Kostentrennung (Transaktionen und
+   *  Zuordnungen) werden bei jeder Aenderung und beim Schliessen des
+   *  Browsers gespeichert und beim naechsten Start wiederhergestellt.
+   * ------------------------------------------------------------- */
+  function collectFormState() {
+    collectChildrenInputs();
+    var form = {};
+    FORM_FIELD_IDS.forEach(function (id) {
+      var el = document.getElementById(id);
+      if (!el) { return; }
+      if (el.type === 'checkbox') { form[id] = el.checked; }
+      else { form[id] = el.value; }
+    });
+    form.__children = state.children;
+    form.__costsplit = state.costsplit;
+    return form;
+  }
+
+  function saveForm() {
+    try { localStorage.setItem(LS_FORM, JSON.stringify(collectFormState())); } catch (e) {}
+  }
+
+  function scheduleSaveForm() {
+    saveForm();
+  }
+
+  function restoreForm() {
+    var raw = null;
+    try { raw = localStorage.getItem(LS_FORM); } catch (e) {}
+    if (!raw) { return; }
+    var form;
+    try { form = JSON.parse(raw); } catch (e) { return; }
+    FORM_FIELD_IDS.forEach(function (id) {
+      var el = document.getElementById(id);
+      if (!el || !(id in form)) { return; }
+      if (el.type === 'checkbox') { el.checked = !!form[id]; }
+      else { el.value = form[id]; }
+    });
+    if (document.getElementById('spousal-enabled').checked) {
+      document.getElementById('spousal-fields').style.display = '';
+    }
+    if (Array.isArray(form.__children) && form.__children.length) {
+      state.children = form.__children;
+      renderChildrenList();
+    }
+    if (form.__costsplit && Array.isArray(form.__costsplit.transactions) && form.__costsplit.transactions.length) {
+      state.costsplit = form.__costsplit;
+      document.getElementById('costsplit-section').hidden = false;
+      renderCostsplitTable();
+    }
+  }
+
   /* ------------------------------------------------------------- */
 
   function switchTab(name) {
@@ -742,6 +803,15 @@
     initPresetSelect();
     fillCfgForm();
     addChildRow();
+    restoreForm();
+    document.addEventListener('input', scheduleSaveForm);
+    document.addEventListener('change', scheduleSaveForm);
+    document.addEventListener('click', scheduleSaveForm);
+    window.addEventListener('beforeunload', saveForm);
+    window.addEventListener('pagehide', saveForm);
+    document.addEventListener('visibilitychange', function () {
+      if (document.visibilityState === 'hidden') { saveForm(); }
+    });
 
     document.getElementById('lang-select').addEventListener('change', function () {
       state.lang = this.value;

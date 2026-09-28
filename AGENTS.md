@@ -28,6 +28,17 @@ unvollständig und darf nicht gemergt werden.
 
 - **Screenshots**: Sichtbare UI-Änderungen erfordern erneuerte Screenshots
   der betroffenen Ansichten (alle vier Sprachen, wenn Sprachtexte betroffen sind).
+- **Screenshot-Erstellung**: Die App hat einen integrierten Screenshot-Modus
+  (`?screenshot=1` als URL-Parameter bzw. Button im Tab «Über»):
+  - Ausführen: `node tools/make-screenshots.js` (nutzt Puppeteer/Headless-Chromium,
+    Installation von Puppeteer ausserhalb des Repos: `npm i puppeteer`)
+  - Erzeugt automatisch die PNGs unter `screenshots/` (eine Datei je Ansicht
+    und Sprache, fortlaufend nummeriert, Sprache im Suffix, z. B.
+    `01-kindesunterhalt-de.png`, `07-kostentrennung-de.png`)
+  - Bei jeder sichtbaren UI-Änderung neu ausführen und die erzeugten PNGs
+    committen; README-Tabelle «Screenshots» ggf. ergänzen/aktualisieren
+  - Neue Tabs oder sichtbare neue Funktionen erhalten i. d. R. einen eigenen
+    Screenshot (nächste freie Nummer, betroffene Sprachen)
 - **Tests**: Neue Funktionalität erhält Unit-Tests; wird die Anzahl/geprüfte
   Fälle geändert, sind die Test-Zahlen im README zu aktualisieren.
 - **Roadmap**: Erledigte Punkte im README werden abgehakt, neue geplante
