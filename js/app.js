@@ -337,7 +337,8 @@
     for (var i = 0; i < rows.length; i++) {
       var row = rows[i];
       state.children[i].costMode = row.querySelector('.f-mode').value === 'effective' ? 'effective' : 'pauschal';
-      state.children[i].effectiveCosts = parseFloat(row.querySelector('.f-eff').value) || 0;
+      var effEl = row.querySelector('.f-eff');
+      state.children[i].effectiveCosts = effEl ? (parseFloat(effEl.value) || 0) : 0;
       state.children[i].age = parseInt(row.querySelector('.f-age').value, 10) || 0;
       state.children[i].ownIncome = parseFloat(row.querySelector('.f-own').value) || 0;
       state.children[i].childAllowance = parseFloat(row.querySelector('.f-allow').value) || 0;
@@ -359,7 +360,7 @@
     }
   }
 
-  function modeSelect(cls, value) {
+  function modeSelect(cls, value, idx) {
     var select = document.createElement('select');
     select.className = cls;
     [
@@ -373,6 +374,7 @@
     });
     select.value = value === 'effective' ? 'effective' : 'pauschal';
     select.addEventListener('change', function () {
+      state.children[idx].costMode = select.value === 'effective' ? 'effective' : 'pauschal';
       renderChildrenList();
       saveForm();
     });
@@ -422,7 +424,7 @@
     var grid = document.createElement('div');
     grid.className = 'child-grid';
 
-    grid.appendChild(field(t('children', 'costMode'), modeSelect('f-mode', mode)));
+    grid.appendChild(field(t('children', 'costMode'), modeSelect('f-mode', mode, idx)));
     if (mode === 'effective') {
       grid.appendChild(field(t('children', 'effectiveCosts'), inp('f-eff', child.effectiveCosts)));
     }

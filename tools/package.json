@@ -1,0 +1,7 @@
+{
+  "name": "alimencal-screenshots",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Screenshot-Generator (Puppeteer wird bewusst NICHT im Repo installiert; vgl. AGENTS.md: npm i puppeteer)",
+  "dependencies": {}
+}

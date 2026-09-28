@@ -147,6 +147,7 @@ js/i18n/{de,fr,it,en}.js  Sprachdateien
 AGENTS.md           Verbindliche Arbeitsregeln (Doku-in-Sync-Regel, Checklisten)
 docs/               Benutzerhandbuch, Berechnungslogik, Kostentrennung, Rechtliches
 screenshots/        Screenshots der App in vier Sprachen
+tools/              make-screenshots.js: Screenshot-Generator (Puppeteer, s. AGENTS.md)
 tests/              Unit-Tests (node)
 ```
 
