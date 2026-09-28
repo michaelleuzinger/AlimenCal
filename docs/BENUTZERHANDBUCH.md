@@ -22,14 +22,26 @@ nächsten Öffnen wiederhergestellt.
 
 ## Tabs im Überblick
 
+Die Navigation ist zweigeteilt: Die obere Reihe enthält die **Funktionen**
+(Berechnungen und Austausch), die darunterliegende Reihe die
+**Einstellungen und Informationen**.
+
+**Funktionen (obere Navigation):**
+
 | Tab | Zweck |
 |---|---|
 | Kindesunterhalt | Barunterhalt und Betreuungsunterhalt pro Kind berechnen |
 | Ehegattenunterhalt | Bedarf/Leistungsfähigkeit und allfälliger Beitrag (Art. 176 / Art. 125 ZGB) |
 | Kostentrennung | Laufende Kosten ab einem Stichtag separat abrechnen (Bankexport) |
-| Themes | Vordefinierte Designs wählen, Farben im Theme-Editor anpassen |
 | Austausch | Eigene Daten exportieren, Datei der anderen Partei importieren |
+
+**Einstellungen & Info (untere Navigation):**
+
+| Tab | Zweck |
+|---|---|
 | Richtwerte | Richtwerte einsehen, anpassen, speichern, exportieren/importieren, kantionale Presets laden |
+| Themes | Vordefinierte Designs wählen, Farben im Theme-Editor anpassen |
+| Über | Informationen zur App, Rechtsgrundlagen und Disclaimer |
 
 ## Tab «Kindesunterhalt»
 
