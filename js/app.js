@@ -217,6 +217,7 @@
     document.querySelector('.tab[data-tab="spousal"]').textContent = t('nav', 'spousal');
     document.querySelector('.tab[data-tab="costsplit"]').textContent = t('nav', 'costsplit');
     document.querySelector('.tab[data-tab="themes"]').textContent = t('nav', 'themes');
+    document.querySelector('.tab[data-tab="share"]').textContent = t('nav', 'share');
     document.querySelector('.tab[data-tab="settings"]').textContent = t('nav', 'settings');
     document.querySelector('.tab[data-tab="about"]').textContent = t('nav', 'about');
 
@@ -262,6 +263,15 @@
     document.getElementById('calc-spousal').textContent = t('common', 'calculate');
     document.getElementById('spousal-result-heading').textContent = t('spousal', 'resultsHeading');
 
+    document.getElementById('share-heading').textContent = t('share', 'heading');
+    document.getElementById('share-intro').textContent = t('share', 'intro');
+    document.getElementById('share-export-heading').textContent = t('share', 'exportHeading');
+    document.getElementById('share-export-hint').textContent = t('share', 'exportHint');
+    document.getElementById('share-export').textContent = t('share', 'exportButton');
+    document.getElementById('share-import-heading').textContent = t('share', 'importHeading');
+    document.getElementById('share-import-hint').textContent = t('share', 'importHint');
+    document.getElementById('share-import-label').textContent = t('share', 'importLabel');
+    renderShareSectionCheckboxes();
     document.getElementById('themes-heading').textContent = t('themes', 'heading');
     document.getElementById('themes-intro').textContent = t('themes', 'intro');
     document.getElementById('theme-select-label').textContent = t('themes', 'select');
@@ -849,6 +859,144 @@
   }
 
   /* ------------------------------------------------------------- *
+   *  Austausch zwischen den Parteien (Export/Import, Merge).
+   * ------------------------------------------------------------- */
+  var SHARE_SECTION_KEYS = [
+    { key: 'parentA', labelKey: 'sectionParentA' },
+    { key: 'parentB', labelKey: 'sectionParentB' },
+    { key: 'children', labelKey: 'sectionChildren' },
+    { key: 'spousalApplicant', labelKey: 'sectionSpousalApplicant' },
+    { key: 'spousalRespondent', labelKey: 'sectionSpousalRespondent' },
+    { key: 'spousalEnabled', labelKey: 'sectionSpousalEnabled' },
+    { key: 'costsplit', labelKey: 'sectionCostsplit' }
+  ];
+
+  function collectCurrentSections() {
+    collectChildrenInputs();
+    return {
+      parentA: {
+        income: parseFloat(document.getElementById('pa-income').value) || 0,
+        existenzminimum: document.getElementById('pa-em').value,
+        employed: document.getElementById('pa-employed').checked
+      },
+      parentB: {
+        income: parseFloat(document.getElementById('pb-income').value) || 0,
+        existenzminimum: document.getElementById('pb-em').value,
+        employed: document.getElementById('pb-employed').checked
+      },
+      children: state.children,
+      spousalApplicant: {
+        income: parseFloat(document.getElementById('sp-app-income').value) || 0,
+        existenzminimum: document.getElementById('sp-app-em').value,
+        targetStandard: parseFloat(document.getElementById('sp-app-standard').value) || 0,
+        extraCosts: parseFloat(document.getElementById('sp-app-extra').value) || 0
+      },
+      spousalRespondent: {
+        income: parseFloat(document.getElementById('sp-res-income').value) || 0,
+        existenzminimum: document.getElementById('sp-res-em').value,
+        childSupportPaid: parseFloat(document.getElementById('sp-res-childpaid').value) || 0
+      },
+      spousalEnabled: document.getElementById('spousal-enabled').checked,
+      costsplit: state.costsplit
+    };
+  }
+
+  function renderShareSectionCheckboxes() {
+    var host = document.getElementById('share-export-checkboxes');
+    if (!host) { return; }
+    host.innerHTML = '';
+    SHARE_SECTION_KEYS.forEach(function (section) {
+      var wrap = document.createElement('label');
+      wrap.className = 'checkbox';
+      var cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.value = section.key;
+      cb.checked = section.key === 'parentA' || section.key === 'parentB';
+      var span = document.createElement('span');
+      span.textContent = t('share', section.labelKey);
+      wrap.appendChild(cb);
+      wrap.appendChild(span);
+      host.appendChild(wrap);
+    });
+  }
+
+  function doShareExport() {
+    var checked = Array.prototype.slice.call(
+      document.querySelectorAll('#share-export-checkboxes input:checked')
+    ).map(function (el) { return el.value; });
+    var current = collectCurrentSections();
+    var sections = {};
+    checked.forEach(function (key) { sections[key] = current[key]; });
+    var file = AlimenCal.casedata.buildFile(sections);
+    var blob = new Blob([JSON.stringify(file, null, 2)], { type: 'application/json' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'alimencal-case.json';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+
+  function applySectionsToForm(sections) {
+    if (sections.parentA) {
+      document.getElementById('pa-income').value = sections.parentA.income;
+      document.getElementById('pa-em').value = sections.parentA.existenzminimum;
+      document.getElementById('pa-employed').checked = sections.parentA.employed;
+    }
+    if (sections.parentB) {
+      document.getElementById('pb-income').value = sections.parentB.income;
+      document.getElementById('pb-em').value = sections.parentB.existenzminimum;
+      document.getElementById('pb-employed').checked = sections.parentB.employed;
+    }
+    if (sections.children) {
+      state.children = sections.children;
+      renderChildrenList();
+    }
+    if (sections.spousalApplicant) {
+      document.getElementById('sp-app-income').value = sections.spousalApplicant.income;
+      document.getElementById('sp-app-em').value = sections.spousalApplicant.existenzminimum;
+      document.getElementById('sp-app-standard').value = sections.spousalApplicant.targetStandard;
+      document.getElementById('sp-app-extra').value = sections.spousalApplicant.extraCosts;
+    }
+    if (sections.spousalRespondent) {
+      document.getElementById('sp-res-income').value = sections.spousalRespondent.income;
+      document.getElementById('sp-res-em').value = sections.spousalRespondent.existenzminimum;
+      document.getElementById('sp-res-childpaid').value = sections.spousalRespondent.childSupportPaid;
+    }
+    if (Object.prototype.hasOwnProperty.call(sections, 'spousalEnabled')) {
+      document.getElementById('spousal-enabled').checked = sections.spousalEnabled;
+      document.getElementById('spousal-fields').style.display = sections.spousalEnabled ? '' : 'none';
+    }
+    if (sections.costsplit) {
+      state.costsplit = sections.costsplit;
+      document.getElementById('costsplit-section').hidden = !sections.costsplit.transactions.length;
+      renderCostsplitTable();
+    }
+    saveForm();
+  }
+
+  function handleShareImport(file) {
+    var reader = new FileReader();
+    reader.onload = function () {
+      var raw;
+      try { raw = JSON.parse(reader.result); } catch (e) { raw = null; }
+      var result = raw ? AlimenCal.casedata.sanitizeCase(raw) : null;
+      var status = document.getElementById('share-import-status');
+      if (!result || !result.valid) {
+        status.textContent = t('share', 'importInvalid');
+        return;
+      }
+      applySectionsToForm(result.sections);
+      var partial = result.invalid.length
+        ? t('share', 'importPartial', [result.invalid.join(', ')])
+        : '';
+      status.textContent = t('share', 'importOk', [
+        String(Object.keys(result.sections).length), partial
+      ]);
+    };
+    reader.readAsText(file);
+  }
+
+  /* ------------------------------------------------------------- *
    *  Automatische Persistenz aller Eingaben (localStorage):
    *  Formularfelder, Kinderliste, Kostentrennung (Transaktionen und
    *  Zuordnungen) werden bei jeder Aenderung und beim Schliessen des
@@ -938,6 +1086,12 @@
       if (document.visibilityState === 'hidden') { saveForm(); }
     });
 
+    document.getElementById('share-export').addEventListener('click', doShareExport);
+    document.getElementById('share-import').addEventListener('change', function () {
+      var file = this.files && this.files[0];
+      if (file) { handleShareImport(file); }
+      this.value = '';
+    });
     document.getElementById('theme-reset').addEventListener('click', function () {
       var id = 'classic';
       var preset = getPresetById(id) || AlimenCal.themes.PRESETS[0];

@@ -14,6 +14,7 @@ AlimenCal.i18n.fr = {
     settings: 'Valeurs de référence',
     costsplit: 'Séparation des coûts',
     themes: 'Thèmes',
+    share: 'Échange',
     about: 'À propos'
   },
   common: {
@@ -129,6 +130,27 @@ AlimenCal.i18n.fr = {
     editor: 'Ouvrir l’éditeur',
     custom: 'Personnalisé (adapté)',
     presetLabel: 'Thème prédéfini'
+  },
+  share: {
+    heading: 'Échange entre les parties',
+    intro: 'Si les parties travaillent sur des PC distincts, chacune peut saisir uniquement ses propres données, les exporter dans un fichier et le transmettre à l’autre partie (par ex. par e-mail ou via l’avocat). L’autre partie importe le fichier ; seules les sections contenues sont reprises, tout le reste reste inchangé.',
+    exportHeading: 'Exporter mes données',
+    exportHint: 'Choisissez les sections à inclure dans le fichier. Recommandation : uniquement vos propres données (pas celles de la partie adverse).',
+    exportButton: 'Exporter (JSON)',
+    importHeading: 'Importer le fichier de la partie adverse',
+    importHint: 'Le fichier est lu et vérifié localement. Seules les sections valides contenues remplacent les champs correspondants ; toutes les autres saisies restent inchangées.',
+    importLabel: 'Choisir un fichier JSON',
+    importOk: 'Importation réussie : {0} section(s) reprise(s){1}',
+    importInvalid: 'Importation refusée : le fichier n’est pas un dossier AlimenCal valide ou ne contient aucune section valide.',
+    importPartial: ', sections non valides ignorées : {0}',
+    sectionParentA: 'Partie A : revenu, minimum d’existence, activité',
+    sectionParentB: 'Partie B : revenu, minimum d’existence, activité',
+    sectionChildren: 'Enfants (toutes les données)',
+    sectionSpousalApplicant: 'Contribution entre époux : demandeur/e',
+    sectionSpousalRespondent: 'Contribution entre époux : débiteur/trice',
+    sectionSpousalEnabled: 'Contribution entre époux activée (indicateur)',
+    sectionCostsplit: 'Séparation des coûts (export bancaire, affectations)',
+    privacyHint: 'Le fichier exporté contient les données sélectionnées en clair. Ne transmettez les données sensibles (revenus, transactions) que par des canaux confidentiels.'
   },
 costsplit: {
     heading: 'Séparation des coûts dès une date donnée',

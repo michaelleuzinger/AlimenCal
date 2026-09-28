@@ -29,6 +29,7 @@
     <button class="tab" data-tab="spousal" role="tab"></button>
     <button class="tab" data-tab="costsplit" role="tab"></button>
     <button class="tab" data-tab="themes" role="tab"></button>
+    <button class="tab" data-tab="share" role="tab"></button>
     <button class="tab" data-tab="settings" role="tab"></button>
     <button class="tab" data-tab="about" role="tab"></button>
   </nav>
@@ -160,6 +161,27 @@
       </div>
     </section>
 
+    <section id="tab-share" class="tabpanel">
+      <h2 id="share-heading"></h2>
+      <p id="share-intro" class="intro"></p>
+      <div class="card preset-card">
+        <h3 id="share-export-heading"></h3>
+        <p id="share-export-hint" class="hint"></p>
+        <div id="share-export-checkboxes"></div>
+        <div class="actions">
+          <button id="share-export" class="primary"></button>
+        </div>
+      </div>
+      <div class="card preset-card">
+        <h3 id="share-import-heading"></h3>
+        <p id="share-import-hint" class="hint"></p>
+        <label class="file-label">
+          <span id="share-import-label"></span>
+          <input type="file" id="share-import" accept="application/json,.json">
+        </label>
+        <p id="share-import-status" class="hint"></p>
+      </div>
+    </section>
     <section id="tab-themes" class="tabpanel">
       <h2 id="themes-heading"></h2>
       <p id="themes-intro" class="intro"></p>
@@ -254,6 +276,7 @@
   <script src="js/i18n/en.js"></script>
   <script src="js/config.js"></script>
   <script src="js/themes.js"></script>
+  <script src="js/casedata.js"></script>
   <script src="js/presets.js"></script>
   <script src="js/calculator.js"></script>
   <script src="js/costsplit.js"></script>

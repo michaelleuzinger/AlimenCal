@@ -14,6 +14,7 @@ AlimenCal.i18n.en = {
     settings: 'Reference values',
     costsplit: 'Cost separation',
     themes: 'Themes',
+    share: 'Exchange',
     about: 'About'
   },
   common: {
@@ -129,6 +130,27 @@ AlimenCal.i18n.en = {
     editor: 'Open editor',
     custom: 'Custom (adjusted)',
     presetLabel: 'Predefined theme'
+  },
+  share: {
+    heading: 'Exchange between the parties',
+    intro: 'If the parties work on separate PCs, each party can enter only their own data, export it as a file and send it to the other party (e.g. via e-mail or through the lawyer). The other party imports the file; only the contained sections are applied, everything else remains unchanged.',
+    exportHeading: 'Export my data',
+    exportHint: 'Choose which sections to include in the file. Recommendation: only your own data (not the other party’s).',
+    exportButton: 'Export (JSON)',
+    importHeading: 'Import the other party’s file',
+    importHint: 'The file is read and validated locally. Only valid, contained sections replace the corresponding fields; all other entries remain unchanged.',
+    importLabel: 'Choose a JSON file',
+    importOk: 'Import successful: {0} section(s) applied{1}',
+    importInvalid: 'Import rejected: the file is not a valid AlimenCal case file or contains no valid sections.',
+    importPartial: ', invalid sections skipped: {0}',
+    sectionParentA: 'Party A: income, minimum existence, employment',
+    sectionParentB: 'Party B: income, minimum existence, employment',
+    sectionChildren: 'Children (all data)',
+    sectionSpousalApplicant: 'Spousal support: applicant',
+    sectionSpousalRespondent: 'Spousal support: payer',
+    sectionSpousalEnabled: 'Spousal support enabled (flag)',
+    sectionCostsplit: 'Cost separation (bank export, allocations)',
+    privacyHint: 'The exported file contains the selected data in plain text. Only transmit sensitive data (income, bank transactions) through confidential channels.'
   },
 costsplit: {
     heading: 'Cost separation from a cut-off date',

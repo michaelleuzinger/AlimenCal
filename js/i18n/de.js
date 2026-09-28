@@ -14,6 +14,7 @@ AlimenCal.i18n.de = {
     settings: 'Richtwerte',
     costsplit: 'Kostentrennung',
     themes: 'Themes',
+    share: 'Austausch',
     about: 'Über'
   },
   common: {
@@ -129,6 +130,27 @@ AlimenCal.i18n.de = {
     editor: 'Editor öffnen',
     custom: 'Benutzerdefiniert (angepasst)',
     presetLabel: 'Vordefiniertes Theme'
+  },
+  share: {
+    heading: 'Austausch zwischen den Parteien',
+    intro: 'Arbeiten die Parteien an verschiedenen PCs, kann jede Partei nur ihre eigenen Angaben erfassen, diese als Datei exportieren und der anderen Partei (z. B. via E-Mail oder über die Anwältin) zustellen. Die Gegenseite importiert die Datei; nur die enthaltenen Abschnitte werden übernommen, alles andere bleibt unverändert.',
+    exportHeading: 'Meine Daten exportieren',
+    exportHint: 'Wählen Sie, welche Abschnitte in die Datei sollen. Empfehlung: nur die eigenen Angaben (nicht die der Gegenseite).',
+    exportButton: 'Exportieren (JSON)',
+    importHeading: 'Datei der Gegenpartei importieren',
+    importHint: 'Die Datei wird lokal gelesen und geprüft. Nur gültige, enthaltene Abschnitte ersetzen die entsprechenden Felder; alle anderen Eingaben bleiben unverändert.',
+    importLabel: 'JSON-Datei wählen',
+    importOk: 'Import erfolgreich: {0} Abschnitt(e) übernommen{1}',
+    importInvalid: 'Import abgelehnt: Datei ist keine gültige AlimenCal-Falldatei oder enthält keine gültigen Abschnitte.',
+    importPartial: ', ungültig übersprungen: {0}',
+    sectionParentA: 'Partei A: Einkommen, Existenzminimum, Erwerbstätigkeit',
+    sectionParentB: 'Partei B: Einkommen, Existenzminimum, Erwerbstätigkeit',
+    sectionChildren: 'Kinder (alle Angaben)',
+    sectionSpousalApplicant: 'Ehegattenunterhalt: Antragsteller/in',
+    sectionSpousalRespondent: 'Ehegattenunterhalt: Zahlungspflichtige/r',
+    sectionSpousalEnabled: 'Ehegattenunterhalt aktiviert (Flag)',
+    sectionCostsplit: 'Kostentrennung (Bankexport, Zuordnungen)',
+    privacyHint: 'Die exportierte Datei enthält die ausgewählten Daten im Klartext. Sensible Angaben (Einkommen, Banktransaktionen) nur über vertrauliche Kanäle übermitteln.'
   },
 costsplit: {
     heading: 'Kostentrennung ab Stichtag',

@@ -14,6 +14,7 @@ AlimenCal.i18n.it = {
     settings: 'Valori di riferimento',
     costsplit: 'Separazione dei costi',
     themes: 'Temi',
+    share: 'Scambio',
     about: 'Informazioni'
   },
   common: {
@@ -129,6 +130,27 @@ AlimenCal.i18n.it = {
     editor: 'Apri l’editor',
     custom: 'Personalizzato (adattato)',
     presetLabel: 'Tema predefinito'
+  },
+  share: {
+    heading: 'Scambio tra le parti',
+    intro: 'Se le parti lavorano su PC diversi, ciascuna può inserire solo i propri dati, esportarli in un file e trasmetterlo all’altra parte (ad es. via e-mail o tramite l’avvocato). L’altra parte importa il file; solo le sezioni contenute vengono recepite, tutto il resto rimane invariato.',
+    exportHeading: 'Esportare i miei dati',
+    exportHint: 'Scegli quali sezioni includere nel file. Consiglio: solo i propri dati (non quelli della controparte).',
+    exportButton: 'Esporta (JSON)',
+    importHeading: 'Importare il file della controparte',
+    importHint: 'Il file viene letto e verificato localmente. Solo le sezioni valide contenute sostituiscono i campi corrispondenti; tutte le altre voci rimangono invariate.',
+    importLabel: 'Scegli un file JSON',
+    importOk: 'Importazione riuscita: {0} sezione/i recepita/e{1}',
+    importInvalid: 'Importazione rifiutata: il file non è un fascicolo AlimenCal valido o non contiene sezioni valide.',
+    importPartial: ', sezioni non valide ignorate: {0}',
+    sectionParentA: 'Parte A: reddito, minimo vitale, attività',
+    sectionParentB: 'Parte B: reddito, minimo vitale, attività',
+    sectionChildren: 'Figli (tutti i dati)',
+    sectionSpousalApplicant: 'Contributo coniugale: richiedente',
+    sectionSpousalRespondent: 'Contributo coniugale: debitore/debitrice',
+    sectionSpousalEnabled: 'Contributo coniugale attivato (flag)',
+    sectionCostsplit: 'Separazione dei costi (esportazione bancaria, assegnazioni)',
+    privacyHint: 'Il file esportato contiene i dati selezionati in chiaro. Trasmettere i dati sensibili (redditi, transazioni) solo tramite canali riservati.'
   },
 costsplit: {
     heading: 'Separazione dei costi da una data specifica',

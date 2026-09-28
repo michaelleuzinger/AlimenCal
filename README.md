@@ -34,6 +34,10 @@ Unterhaltsfragen bei Trennung und Scheidung in der Schweiz:
 - **Persistenz**: alle Eingaben (inkl. Kinderliste, Kostentrennung mit
   Bankexport und Zuordnungen) werden automatisch gespeichert und nach einem
   Browser-Neustart wiederhergestellt – keine Daten gehen verloren
+- **Austausch zwischen Parteien**: Jede Partei erfasst nur ihre eigenen Daten
+  auf ihrem PC, exportiert sie als JSON-Datei und stellt sie der Gegenpartei
+  zu; der Import übernimmt nur die enthaltenen Abschnitte (Merge) – eigene
+  Eingaben bleiben unverändert
 - **Mangellagen-Erkennung**: Unterdeckung (Manko) wird ausgewiesen, inklusive
   Hinweis auf die Nachforderungspraxis
 - **Kein Server, keine Abhängigkeiten**: reine statische Web-App
@@ -54,6 +58,8 @@ Unterhaltsfragen bei Trennung und Scheidung in der Schweiz:
 5. Tab **Themes**: Design wählen oder im Theme-Editor Farben anpassen.
 6. Tab **Richtwerte**: kantonale Werte anpassen, speichern,
    exportieren/importieren, Presets laden.
+7. Tab **Austausch**: eigene Daten als JSON exportieren, Datei der
+   Gegenpartei importieren (Merge).
 
 Ausführliche Anleitung: [docs/BENUTZERHANDBUCH.md](docs/BENUTZERHANDBUCH.md)
 
@@ -86,6 +92,7 @@ gilt als unvollständig. Details, Zuordnungstabelle und Merge-Checkliste:
 | `screenshots/07-kostentrennung-de.png` | Kostentrennung mit Bankexport (Deutsch) |
 | `screenshots/08-themes-classic-de.png` | Themes mit Theme-Editor, Classic (Deutsch) |
 | `screenshots/09-themes-dark-de.png` | Themes, Dark-Theme (Deutsch) |
+| `screenshots/10-austausch-de.png` | Austausch-Tab mit Export/Import (Deutsch) |
 
 ## Kantonale Presets
 
@@ -111,6 +118,7 @@ node tests/calculator.test.js   # Berechnungskern (46 Tests)
 node tests/presets.test.js      # Presets: JSON-Gültigkeit, Konsistenz JS/JSON (29 Tests)
 node tests/costsplit.test.js    # Kostentrennung: CSV-Parsing, Zuordnung, Ausgleich (42 Tests)
 node tests/themes.test.js       # Themes: Presets, Token, Validierung, Sanitizing (113 Tests)
+node tests/casedata.test.js     # Falldaten-Austausch: Validierung, Merge, Roundtrip (38 Tests)
 ```
 
 Prüft u. a.: Grundbedarfstabellen, Aufteilung nach wirtschaftlicher
@@ -122,11 +130,12 @@ Ehegattenunterhalts sowie CSV-Parsing und Ausgleichslogik der Kostentrennung.
 ## Struktur
 
 ```
-index.html          UI (Tabs: Kindesunterhalt, Ehegattenunterhalt, Kostentrennung, Themes, Richtwerte)
+index.html          UI (Tabs: Kindesunterhalt, Ehegattenunterhalt, Kostentrennung, Themes, Austausch, Richtwerte)
 css/style.css       Styles
 js/calculator.js    Berechnungskern (DOM-frei, auch in Node.js lauffähig)
 js/costsplit.js     Kostentrennung: CSV-Import, Zuordnung, Ausgleich (DOM-frei)
 js/themes.js       Theme-Definitionen und -Validierung (DOM-frei, auch in Node.js lauffähig)
+js/casedata.js     Falldaten-Austausch: Validierung und Merge (DOM-frei)
 js/config.js        Default-Richtwerte (Zürcher Kinderkosten-Tabelle 1.3.2025)
 js/presets.js       Eingebettete Kopie der kantonalen Presets (file://-fähig)
 presets/*.json      Kantonale Richtwertsätze inkl. Quellen und Checklisten
@@ -190,6 +199,7 @@ KESB/Kantonsgericht Schaffhausen) angepasst und verifiziert werden. Details:
 - [x] Kostentrennung vor der Scheidung (Stichtag, Bankexport, Ausgleich)
 - [x] Themes mit Theme-Editor (vordefinierte Designs, freie Farbanpassung)
 - [x] Persistenz aller Eingaben über Browser-Neustarts
+- [x] Austausch zwischen Parteien (Export/Import mit Merge, serverlos)
 - [ ] PDF-Export des Berechnungsblatts
 - [ ] BVG-/Vorsorgeabzüge und steuerliche Saldierung
 - [ ] Alimentenindexierung (Art. 129 ZGB)
