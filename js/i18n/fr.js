@@ -13,6 +13,7 @@ AlimenCal.i18n.fr = {
     spousal: 'Pension conjugale',
     settings: 'Valeurs de référence',
     costsplit: 'Séparation des coûts',
+    themes: 'Thèmes',
     about: 'À propos'
   },
   common: {
@@ -117,6 +118,18 @@ AlimenCal.i18n.fr = {
     body3: 'Ne remplace pas un conseil juridique. La fixation concrète appartient aux tribunaux et à l\u2019APEA ; les valeurs varient selon le canton et le cas individuel.'
   },
 
+  themes: {
+    heading: 'Design / Thèmes',
+    intro: 'Choisissez un thème prédéfini ou adaptez manuellement les couleurs dans l’éditeur de thème. Le choix est enregistré localement dans le navigateur.',
+    select: 'Thème',
+    editorHeading: 'Éditeur de thème',
+    editorHint: 'Chaque couleur et le rayon des coins sont librement modifiables. Les changements sont appliqués immédiatement.',
+    reset: 'Réinitialiser au thème par défaut',
+    saved: 'Thème enregistré.',
+    editor: 'Ouvrir l’éditeur',
+    custom: 'Personnalisé (adapté)',
+    presetLabel: 'Thème prédéfini'
+  },
 costsplit: {
     heading: 'Séparation des coûts dès une date donnée',
     intro: 'Pour les couples qui souhaitent répartir leurs coûts courants séparément avant le divorce : définissez une date de référence et importez des extraits bancaires (CSV). Chaque transaction peut être ignorée, répartie proportionnellement (part configurable) ou entièrement attribuée à une partie. Les transactions antérieures à la date sont grisées et non prises en compte.',

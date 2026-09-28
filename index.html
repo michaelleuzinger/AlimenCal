@@ -28,6 +28,7 @@
     <button class="tab active" data-tab="children" role="tab"></button>
     <button class="tab" data-tab="spousal" role="tab"></button>
     <button class="tab" data-tab="costsplit" role="tab"></button>
+    <button class="tab" data-tab="themes" role="tab"></button>
     <button class="tab" data-tab="settings" role="tab"></button>
     <button class="tab" data-tab="about" role="tab"></button>
   </nav>
@@ -159,6 +160,25 @@
       </div>
     </section>
 
+    <section id="tab-themes" class="tabpanel">
+      <h2 id="themes-heading"></h2>
+      <p id="themes-intro" class="intro"></p>
+      <div class="card preset-card">
+        <label>
+          <span id="theme-select-label"></span>
+          <select id="theme-select"></select>
+        </label>
+      </div>
+      <div class="card preset-card">
+        <h3 id="theme-editor-heading"></h3>
+        <p id="theme-editor-hint" class="hint"></p>
+        <div id="theme-editor-grid" class="theme-grid"></div>
+        <div class="actions">
+          <button id="theme-reset" class="ghost"></button>
+        </div>
+        <p id="theme-status" class="hint"></p>
+      </div>
+    </section>
     <section id="tab-settings" class="tabpanel">
       <h2 id="settings-heading"></h2>
       <p id="settings-intro" class="intro"></p>
@@ -233,6 +253,7 @@
   <script src="js/i18n/it.js"></script>
   <script src="js/i18n/en.js"></script>
   <script src="js/config.js"></script>
+  <script src="js/themes.js"></script>
   <script src="js/presets.js"></script>
   <script src="js/calculator.js"></script>
   <script src="js/costsplit.js"></script>

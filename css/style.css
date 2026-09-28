@@ -6,9 +6,15 @@
   --muted: #5b6b7b;
   --accent: #0f5c5c;
   --accent-dark: #0a4242;
+  --accent-ink: #ffffff;
   --warn: #b3541e;
   --warn-bg: #fdf1e7;
+  --warn-border: #ecc9a9;
   --line: #d8dee6;
+  --input-bg: #fbfcfd;
+  --btn-secondary-bg: #e7ebee;
+  --disclaimer-bg: #fff8e1;
+  --disclaimer-border: #e8d9a0;
   --radius: 10px;
 }
 
@@ -26,7 +32,7 @@ body {
 
 header {
   background: var(--accent);
-  color: #fff;
+  color: var(--accent-ink);
   padding: 1.5rem 0 1.2rem;
 }
 header h1 { margin: 0; font-size: 1.6rem; letter-spacing: 0.5px; }
@@ -62,7 +68,7 @@ header h1 { margin: 0; font-size: 1.6rem; letter-spacing: 0.5px; }
 }
 .tab.active {
   background: var(--accent);
-  color: #fff;
+  color: var(--accent-ink);
   border-color: var(--accent);
 }
 
@@ -73,8 +79,8 @@ h2 { margin-top: 1.2rem; }
 .intro { color: var(--muted); max-width: 70ch; }
 
 .disclaimer {
-  background: #fff8e1;
-  border: 1px solid #e8d9a0;
+  background: var(--disclaimer-bg);
+  border: 1px solid var(--disclaimer-border);
   padding: 0.6rem 0.9rem;
   border-radius: var(--radius);
   margin: 1rem 0;
@@ -106,7 +112,7 @@ input[type="number"] {
   border: 1px solid var(--line);
   border-radius: 6px;
   font-size: 1rem;
-  background: #fbfcfd;
+  background: var(--input-bg);
 }
 
 .checkbox { display: flex; align-items: center; gap: 0.5rem; }
@@ -140,9 +146,9 @@ button {
   font-size: 0.95rem;
   cursor: pointer;
 }
-button.primary { background: var(--accent); color: #fff; }
+button.primary { background: var(--accent); color: var(--accent-ink); }
 button.primary:hover { background: var(--accent-dark); }
-button.secondary { background: #e7ebee; color: var(--ink); }
+button.secondary { background: var(--btn-secondary-bg); color: var(--ink); }
 button.ghost { background: transparent; color: var(--muted); text-decoration: underline; }
 button.danger { background: transparent; color: var(--warn); text-decoration: underline; font-size: 0.85rem; }
 
@@ -150,7 +156,7 @@ button.danger { background: transparent; color: var(--warn); text-decoration: un
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: #e7ebee;
+  background: var(--btn-secondary-bg);
   border-radius: 8px;
   padding: 0.55rem 1.1rem;
   cursor: pointer;
@@ -184,7 +190,7 @@ button.danger { background: transparent; color: var(--warn); text-decoration: un
 
 .warn {
   background: var(--warn-bg);
-  border: 1px solid #ecc9a9;
+  border: 1px solid var(--warn-border);
   color: var(--warn);
   padding: 0.6rem 0.9rem;
   border-radius: 8px;
@@ -213,3 +219,36 @@ footer { padding: 1.5rem 0 2.5rem; color: var(--muted); font-size: 0.85rem; }
 .costsplit-table select, .costsplit-table input[type="number"] { padding: 0.3rem 0.4rem; border: 1px solid var(--line); border-radius: 6px; font-size: 0.9rem; }
 .costsplit-table .share-input { width: 5rem; }
 .costsplit-legend { font-size: 0.82rem; color: var(--muted); margin: 0.4rem 0; }
+
+/* Themes / Theme-Editor */
+.theme-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.6rem 1rem;
+  margin: 0.8rem 0;
+}
+
+.theme-field span {
+  display: block;
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin-bottom: 0.2rem;
+}
+
+.theme-field input[type="color"] {
+  width: 100%;
+  height: 2.2rem;
+  padding: 0.15rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--input-bg);
+  cursor: pointer;
+}
+
+.theme-field input[type="number"] {
+  width: 100%;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--input-bg);
+}

@@ -13,6 +13,7 @@ AlimenCal.i18n.en = {
     spousal: 'Spousal maintenance',
     settings: 'Reference values',
     costsplit: 'Cost separation',
+    themes: 'Themes',
     about: 'About'
   },
   common: {
@@ -117,6 +118,18 @@ AlimenCal.i18n.en = {
     body3: 'Not a substitute for legal advice. The concrete assessment lies with the courts and the KESB; reference values vary by canton and individual case.'
   },
 
+  themes: {
+    heading: 'Design / Themes',
+    intro: 'Choose a predefined theme or adjust colours manually in the theme editor. The selection is stored locally in your browser.',
+    select: 'Theme',
+    editorHeading: 'Theme editor',
+    editorHint: 'Every colour and the corner radius can be adjusted freely. Changes apply immediately.',
+    reset: 'Reset to theme default',
+    saved: 'Theme saved.',
+    editor: 'Open editor',
+    custom: 'Custom (adjusted)',
+    presetLabel: 'Predefined theme'
+  },
 costsplit: {
     heading: 'Cost separation from a cut-off date',
     intro: 'For couples who want to settle their running costs separately before the divorce: define a cut-off date and upload bank exports (CSV). Each transaction can be ignored, split proportionally (configurable share) or fully assigned to one party. Transactions before the cut-off date are greyed out and not counted.',

@@ -23,6 +23,7 @@ nächsten Öffnen wiederhergestellt.
 | Kindesunterhalt | Barunterhalt und Betreuungsunterhalt pro Kind berechnen |
 | Ehegattenunterhalt | Bedarf/Leistungsfähigkeit und allfälliger Beitrag (Art. 176 / Art. 125 ZGB) |
 | Kostentrennung | Laufende Kosten ab einem Stichtag separat abrechnen (Bankexport) |
+| Themes | Vordefinierte Designs wählen, Farben im Theme-Editor anpassen |
 | Richtwerte | Richtwerte einsehen, anpassen, speichern, exportieren/importieren, kantionale Presets laden |
 
 ## Tab «Kindesunterhalt»
@@ -83,6 +84,32 @@ Kurz:
   das mitgelieferte Preset ist ein Platzhalter mit Verifikations-Checkliste
   und **muss** vor Verwendung mit den effektiven Ansätzen von KESB/Kantonsgericht
   Schaffhausen ausgefüllt werden.
+
+## Tab «Themes»
+
+- **Vordefinierte Themes**: Classic (Default), Dark, High Contrast (barrierefrei,
+  für Sehbehinderte geeignet), Warm und Blue – Auswahl wirkt sofort.
+- **Theme-Editor**: Alle 15 Design-Farben und der Eckenradius sind manuell
+  frei anpassbar. Änderungen werden sofort angewendet; die Auswahl springt auf
+  «Benutzerdefiniert».
+- **Zurücksetzen** stellt das Classic-Theme wieder her.
+- Theme-Auswahl und angepasste Werte werden im Browser gespeichert und nach
+einem Neustart wiederhergestellt.
+
+## Persistenz (kein Datenverlust)
+
+Alle Eingaben werden automatisch gespeichert und nach einem Browser-Neustart
+wiederhergestellt:
+
+- Formularfelder (Einkommen, Existenzminima, Ehegattenunterhalt, Stichtag,
+  Kontoinhaber)
+- Kinderliste mit allen Angaben
+- Kostentrennung: Transaktionen aus dem Bankexport inklusive aller Zuordnungen
+  und Anteile
+- Sprache, Richtwerte und gewähltes Theme
+
+Gespeichert wird bei jeder Eingabe sowie beim Verlassen/Neuladen der Seite
+(`beforeunload`, `pagehide`, `visibilitychange`).
 
 ## Datenschutz
 

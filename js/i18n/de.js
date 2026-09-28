@@ -13,6 +13,7 @@ AlimenCal.i18n.de = {
     spousal: 'Ehegattenunterhalt',
     settings: 'Richtwerte',
     costsplit: 'Kostentrennung',
+    themes: 'Themes',
     about: 'Über'
   },
   common: {
@@ -117,6 +118,18 @@ AlimenCal.i18n.de = {
     body3: 'Kein Ersatz für eine Rechtsberatung. Die konkrete Bemessung obliegt den Gerichten und der KESB; Richtwerte variieren je nach Kanton und Einzelfall.'
   },
 
+  themes: {
+    heading: 'Design / Themes',
+    intro: 'Wählen Sie ein vordefiniertes Design oder passen Sie die Farben im Theme-Editor manuell an. Die Auswahl wird lokal im Browser gespeichert.',
+    select: 'Theme',
+    editorHeading: 'Theme-Editor',
+    editorHint: 'Jede Farbe und der Eckenradius sind frei anpassbar. Änderungen werden sofort angewendet.',
+    reset: 'Auf Theme-Standard zurücksetzen',
+    saved: 'Theme gespeichert.',
+    editor: 'Editor öffnen',
+    custom: 'Benutzerdefiniert (angepasst)',
+    presetLabel: 'Vordefiniertes Theme'
+  },
 costsplit: {
     heading: 'Kostentrennung ab Stichtag',
     intro: 'Für Paare, die ihre laufenden Kosten schon vor der Scheidung separat abrechnen möchten: Definieren Sie ein Stichtagsdatum und laden Sie Bankexporte (CSV) hoch. Jede Transaktion kann ignoriert, anteilsmässig aufgeteilt (konfigurierbarer Anteil) oder vollständig einer Partei zugewiesen werden. Transaktionen vor dem Stichtag werden ausgegraut und nicht gewertet.',

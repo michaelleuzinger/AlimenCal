@@ -28,6 +28,12 @@ Unterhaltsfragen bei Trennung und Scheidung in der Schweiz:
   Trennzeichen, Datums- und Betragsformaten; je Transaktion ignorieren,
   anteilsmässig aufteilen (Anteil konfigurierbar) oder voll einer Partei
   zuordnen; Sammelaktionen für die Erstzuordnung
+- **Themes**: vordefinierte Designs (Classic, Dark, High Contrast, Warm, Blue)
+  und ein Theme-Editor, mit dem alle Farben und der Eckenradius frei anpassbar
+  sind; Auswahl wird lokal gespeichert
+- **Persistenz**: alle Eingaben (inkl. Kinderliste, Kostentrennung mit
+  Bankexport und Zuordnungen) werden automatisch gespeichert und nach einem
+  Browser-Neustart wiederhergestellt – keine Daten gehen verloren
 - **Mangellagen-Erkennung**: Unterdeckung (Manko) wird ausgewiesen, inklusive
   Hinweis auf die Nachforderungspraxis
 - **Kein Server, keine Abhängigkeiten**: reine statische Web-App
@@ -45,7 +51,8 @@ Unterhaltsfragen bei Trennung und Scheidung in der Schweiz:
 4. Tab **Kostentrennung**: Stichtag wählen, Bankexport (CSV) hochladen,
    Kontoinhaber angeben, Transaktionen zuordnen – die App errechnet den
    Ausgleich. Details: [docs/KOSTENTRENNUNG.md](docs/KOSTENTRENNUNG.md)
-5. Tab **Richtwerte**: kantonale Werte anpassen, speichern,
+5. Tab **Themes**: Design wählen oder im Theme-Editor Farben anpassen.
+6. Tab **Richtwerte**: kantonale Werte anpassen, speichern,
    exportieren/importieren, Presets laden.
 
 Ausführliche Anleitung: [docs/BENUTZERHANDBUCH.md](docs/BENUTZERHANDBUCH.md)
@@ -77,6 +84,8 @@ gilt als unvollständig. Details, Zuordnungstabelle und Merge-Checkliste:
 | `screenshots/05-informazioni-it.png` | Informazioni (Italiano) |
 | `screenshots/06-child-maintenance-en.png` | Child maintenance (English) |
 | `screenshots/07-kostentrennung-de.png` | Kostentrennung mit Bankexport (Deutsch) |
+| `screenshots/08-themes-classic-de.png` | Themes mit Theme-Editor, Classic (Deutsch) |
+| `screenshots/09-themes-dark-de.png` | Themes, Dark-Theme (Deutsch) |
 
 ## Kantonale Presets
 
@@ -101,6 +110,7 @@ funktioniert; `tests/presets.test.js` prüft die Konsistenz zwischen beiden.
 node tests/calculator.test.js   # Berechnungskern (46 Tests)
 node tests/presets.test.js      # Presets: JSON-Gültigkeit, Konsistenz JS/JSON (29 Tests)
 node tests/costsplit.test.js    # Kostentrennung: CSV-Parsing, Zuordnung, Ausgleich (42 Tests)
+node tests/themes.test.js       # Themes: Presets, Token, Validierung, Sanitizing (113 Tests)
 ```
 
 Prüft u. a.: Grundbedarfstabellen, Aufteilung nach wirtschaftlicher
@@ -112,10 +122,11 @@ Ehegattenunterhalts sowie CSV-Parsing und Ausgleichslogik der Kostentrennung.
 ## Struktur
 
 ```
-index.html          UI (Tabs: Kindesunterhalt, Ehegattenunterhalt, Kostentrennung, Richtwerte)
+index.html          UI (Tabs: Kindesunterhalt, Ehegattenunterhalt, Kostentrennung, Themes, Richtwerte)
 css/style.css       Styles
 js/calculator.js    Berechnungskern (DOM-frei, auch in Node.js lauffähig)
 js/costsplit.js     Kostentrennung: CSV-Import, Zuordnung, Ausgleich (DOM-frei)
+js/themes.js       Theme-Definitionen und -Validierung (DOM-frei, auch in Node.js lauffähig)
 js/config.js        Default-Richtwerte (Zürcher Kinderkosten-Tabelle 1.3.2025)
 js/presets.js       Eingebettete Kopie der kantonalen Presets (file://-fähig)
 presets/*.json      Kantonale Richtwertsätze inkl. Quellen und Checklisten
@@ -177,6 +188,8 @@ KESB/Kantonsgericht Schaffhausen) angepasst und verifiziert werden. Details:
 
 - [x] Kantonal vorkonfigurierte Richtwertsätze (Presets ZH / SH-Platzhalter)
 - [x] Kostentrennung vor der Scheidung (Stichtag, Bankexport, Ausgleich)
+- [x] Themes mit Theme-Editor (vordefinierte Designs, freie Farbanpassung)
+- [x] Persistenz aller Eingaben über Browser-Neustarts
 - [ ] PDF-Export des Berechnungsblatts
 - [ ] BVG-/Vorsorgeabzüge und steuerliche Saldierung
 - [ ] Alimentenindexierung (Art. 129 ZGB)

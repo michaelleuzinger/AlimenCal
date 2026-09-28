@@ -6,6 +6,8 @@
   var LS_CFG = 'alimencal.config';
   var LS_PRESET = 'alimencal.preset';
   var LS_FORM = 'alimencal.form';
+  var LS_THEME = 'alimencal.theme';
+  var LS_THEME_VALUES = 'alimencal.themevalues';
   var FORM_FIELD_IDS = [
     'pa-income', 'pa-em', 'pa-employed', 'pb-income', 'pb-em', 'pb-employed',
     'spousal-enabled', 'sp-app-income', 'sp-app-em', 'sp-app-standard',
@@ -214,6 +216,7 @@
     document.querySelector('.tab[data-tab="children"]').textContent = t('nav', 'children');
     document.querySelector('.tab[data-tab="spousal"]').textContent = t('nav', 'spousal');
     document.querySelector('.tab[data-tab="costsplit"]').textContent = t('nav', 'costsplit');
+    document.querySelector('.tab[data-tab="themes"]').textContent = t('nav', 'themes');
     document.querySelector('.tab[data-tab="settings"]').textContent = t('nav', 'settings');
     document.querySelector('.tab[data-tab="about"]').textContent = t('nav', 'about');
 
@@ -259,6 +262,13 @@
     document.getElementById('calc-spousal').textContent = t('common', 'calculate');
     document.getElementById('spousal-result-heading').textContent = t('spousal', 'resultsHeading');
 
+    document.getElementById('themes-heading').textContent = t('themes', 'heading');
+    document.getElementById('themes-intro').textContent = t('themes', 'intro');
+    document.getElementById('theme-select-label').textContent = t('themes', 'select');
+    document.getElementById('theme-editor-heading').textContent = t('themes', 'editorHeading');
+    document.getElementById('theme-editor-hint').textContent = t('themes', 'editorHint');
+    document.getElementById('theme-reset').textContent = t('themes', 'reset');
+    renderThemeEditor();
     document.getElementById('settings-heading').textContent = t('settings', 'heading');
     document.getElementById('settings-intro').textContent = t('settings', 'intro');
     document.getElementById('cfg-table-legend').textContent = t('settings', 'childNeedTable');
@@ -728,6 +738,117 @@
   }
 
   /* ------------------------------------------------------------- *
+   *  Themes: Auswahl vordefinierter Designs und manueller Editor.
+   * ------------------------------------------------------------- */
+  function getPresetById(id) {
+    return (AlimenCal.themes.PRESETS || []).filter(function (p) { return p.id === id; })[0] || null;
+  }
+
+  function getThemeId() {
+    var stored = null;
+    try { stored = localStorage.getItem(LS_THEME); } catch (e) {}
+    return stored || 'classic';
+  }
+
+  function saveTheme(id, values) {
+    try {
+      localStorage.setItem(LS_THEME, id);
+      if (values) {
+        localStorage.setItem(LS_THEME_VALUES, JSON.stringify(values));
+      } else {
+        localStorage.removeItem(LS_THEME_VALUES);
+      }
+    } catch (e) {}
+  }
+
+  function applyTheme(id, values) {
+    var preset = getPresetById(id);
+    var vals = values || (preset ? preset.values : AlimenCal.themes.PRESETS[0].values);
+    AlimenCal.themes.applyToDocument(vals);
+  }
+
+  function currentThemeValues() {
+    var raw = null;
+    try { raw = localStorage.getItem(LS_THEME_VALUES); } catch (e) {}
+    if (raw) {
+      try { return JSON.parse(raw); } catch (e) {}
+    }
+    var preset = getPresetById(getThemeId()) || AlimenCal.themes.PRESETS[0];
+    return preset.values;
+  }
+
+  function initThemeSelect() {
+    var select = document.getElementById('theme-select');
+    select.innerHTML = '';
+    var customOption = document.createElement('option');
+    customOption.value = '__custom__';
+    customOption.textContent = t('themes', 'custom');
+    select.appendChild(customOption);
+    AlimenCal.themes.PRESETS.forEach(function (preset) {
+      var opt = document.createElement('option');
+      opt.value = preset.id;
+      opt.textContent = preset.name;
+      select.appendChild(opt);
+    });
+    var valuesRaw = null;
+    try { valuesRaw = localStorage.getItem(LS_THEME_VALUES); } catch (e) {}
+    select.value = valuesRaw ? '__custom__' : getThemeId();
+    select.addEventListener('change', function () {
+      var id = select.value;
+      var preset = getPresetById(id);
+      if (preset) {
+        saveTheme(id, null);
+        applyTheme(id, preset.values);
+      }
+      renderThemeEditor();
+      document.getElementById('theme-status').textContent = t('themes', 'saved');
+    });
+    applyTheme(getThemeId(), valuesRaw ? JSON.parse(valuesRaw) : null);
+    renderThemeEditor();
+  }
+
+  function renderThemeEditor() {
+    var grid = document.getElementById('theme-editor-grid');
+    if (!grid) { return; }
+    grid.innerHTML = '';
+    var values = currentThemeValues();
+    AlimenCal.themes.TOKENS.forEach(function (token) {
+      var label = document.createElement('label');
+      label.className = 'theme-field';
+      var span = document.createElement('span');
+      span.textContent = token.label[state.lang] || token.label.en;
+      label.appendChild(span);
+      var input;
+      if (token.type === 'color') {
+        input = document.createElement('input');
+        input.type = 'color';
+        var hex = values[token.key];
+        if (!/^#[0-9a-fA-F]{6}$/.test(hex)) { hex = '#000000'; }
+        input.value = hex;
+      } else {
+        input = document.createElement('input');
+        input.type = 'number';
+        input.min = '0';
+        input.max = '40';
+        input.step = '1';
+        input.value = values[token.key];
+      }
+      input.addEventListener('input', (function (key) {
+        return function () {
+          var v = currentThemeValues();
+          v[key] = input.value;
+          saveTheme('__custom__', v);
+          applyTheme('__custom__', v);
+          var select = document.getElementById('theme-select');
+          if (select) { select.value = '__custom__'; }
+        };
+      })(token.key));
+      label.appendChild(input);
+      grid.appendChild(label);
+    });
+  }
+
+  /* ------------------------------------------------------------- *
    *  Automatische Persistenz aller Eingaben (localStorage):
    *  Formularfelder, Kinderliste, Kostentrennung (Transaktionen und
    *  Zuordnungen) werden bei jeder Aenderung und beim Schliessen des
@@ -799,6 +920,10 @@
     state.cfg = getCfg();
     document.getElementById('lang-select').value = state.lang;
 
+    var storedThemeValues = null;
+    try { storedThemeValues = JSON.parse(localStorage.getItem(LS_THEME_VALUES) || 'null'); } catch (e) {}
+    applyTheme(getThemeId(), storedThemeValues);
+    initThemeSelect();
     applyI18n();
     initPresetSelect();
     fillCfgForm();
@@ -813,6 +938,15 @@
       if (document.visibilityState === 'hidden') { saveForm(); }
     });
 
+    document.getElementById('theme-reset').addEventListener('click', function () {
+      var id = 'classic';
+      var preset = getPresetById(id) || AlimenCal.themes.PRESETS[0];
+      saveTheme(id, null);
+      applyTheme(id, preset.values);
+      document.getElementById('theme-select').value = id;
+      renderThemeEditor();
+      document.getElementById('theme-status').textContent = t('themes', 'saved');
+    });
     document.getElementById('lang-select').addEventListener('change', function () {
       state.lang = this.value;
       try { localStorage.setItem(LS_LANG, state.lang); } catch (e) {}

@@ -13,6 +13,7 @@ AlimenCal.i18n.it = {
     spousal: 'Alimenti per il coniuge',
     settings: 'Valori di riferimento',
     costsplit: 'Separazione dei costi',
+    themes: 'Temi',
     about: 'Informazioni'
   },
   common: {
@@ -117,6 +118,18 @@ AlimenCal.i18n.it = {
     body3: 'Non sostituisce una consulenza legale. La determinazione concreta spetta ai tribunali e all\u2019APEA; i valori variano a seconda del cantone e del caso concreto.'
   },
 
+  themes: {
+    heading: 'Design / Temi',
+    intro: 'Scegli un tema predefinito o adatta manualmente i colori nell’editor dei temi. La scelta viene salvata localmente nel browser.',
+    select: 'Tema',
+    editorHeading: 'Editor dei temi',
+    editorHint: 'Ogni colore e il raggio degli angoli sono liberamente modificabili. Le modifiche vengono applicate immediatamente.',
+    reset: 'Ripristina il tema predefinito',
+    saved: 'Tema salvato.',
+    editor: 'Apri l’editor',
+    custom: 'Personalizzato (adattato)',
+    presetLabel: 'Tema predefinito'
+  },
 costsplit: {
     heading: 'Separazione dei costi da una data specifica',
     intro: 'Per le coppie che desiderano gestire separatamente i costi correnti prima del divorzio: definite una data di riferimento e caricate gli estratti bancari (CSV). Ogni transazione può essere ignorata, suddivisa proporzionalmente (quota configurabile) o assegnata interamente a una parte. Le transazioni precedenti alla data sono disattivate e non considerate.',
