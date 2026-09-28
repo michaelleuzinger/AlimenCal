@@ -22,11 +22,13 @@ nächsten Öffnen wiederhergestellt.
 
 ## Tabs im Überblick
 
-Die Navigation ist zweigeteilt: Die obere Reihe enthält die **Funktionen**
-(Berechnungen und Austausch), die darunterliegende Reihe die
-**Einstellungen und Informationen**.
+Die Hauptnavigation enthält die **Funktionen** (Berechnungen und
+Austausch). Die **Einstellungen und Informationen** sind über den
+Zahnrad-Button („Einstellungen und Informationen“) oben rechts im Kopf
+über ein Dropdown-Menü erreichbar; dieses schliesst bei Auswahl, Klick
+ausserhalb des Menüs oder mit der Escape-Taste.
 
-**Funktionen (obere Navigation):**
+**Funktionen (Hauptnavigation):**
 
 | Tab | Zweck |
 |---|---|
@@ -35,7 +37,7 @@ Die Navigation ist zweigeteilt: Die obere Reihe enthält die **Funktionen**
 | Kostentrennung | Laufende Kosten ab einem Stichtag separat abrechnen (Bankexport) |
 | Austausch | Eigene Daten exportieren, Datei der anderen Partei importieren |
 
-**Einstellungen & Info (untere Navigation):**
+**Einstellungen & Info (Zahnrad-Menü im Kopf):**
 
 | Tab | Zweck |
 |---|---|

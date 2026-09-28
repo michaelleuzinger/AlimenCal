@@ -15,7 +15,8 @@ AlimenCal.i18n.de = {
     costsplit: 'Kostentrennung',
     themes: 'Themes',
     share: 'Austausch',
-    about: 'Über'
+    about: 'Über',
+    settingsMenu: 'Einstellungen und Informationen'
   },
   common: {
     parentA: 'Elternteil A',

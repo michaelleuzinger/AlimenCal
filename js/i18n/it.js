@@ -15,7 +15,8 @@ AlimenCal.i18n.it = {
     costsplit: 'Separazione dei costi',
     themes: 'Temi',
     share: 'Scambio',
-    about: 'Informazioni'
+    about: 'Informazioni',
+    settingsMenu: 'Impostazioni e informazioni'
   },
   common: {
     parentA: 'Genitore A',

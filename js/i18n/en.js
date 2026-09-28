@@ -15,7 +15,8 @@ AlimenCal.i18n.en = {
     costsplit: 'Cost separation',
     themes: 'Themes',
     share: 'Exchange',
-    about: 'About'
+    about: 'About',
+    settingsMenu: 'Settings and information'
   },
   common: {
     parentA: 'Parent A',

@@ -12,6 +12,7 @@
     <div class="wrap">
       <h1 id="app-title">AlimenCal</h1>
       <p id="app-subtitle" class="subtitle"></p>
+      <div class="header-actions">
       <label class="lang-switch">
         <span>Language:</span>
         <select id="lang-select">
@@ -21,6 +22,13 @@
           <option value="en">English</option>
         </select>
       </label>
+      <button type="button" id="settings-btn" class="settings-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="settings-menu"></button>
+      <div id="settings-menu" class="settings-menu" role="menu" hidden>
+        <button type="button" class="tab settings-menu-item" data-tab="settings" role="menuitem"></button>
+        <button type="button" class="tab settings-menu-item" data-tab="themes" role="menuitem"></button>
+        <button type="button" class="tab settings-menu-item" data-tab="about" role="menuitem"></button>
+      </div>
+      </div>
     </div>
   </header>
 
@@ -29,11 +37,6 @@
     <button class="tab" data-tab="spousal" role="tab"></button>
     <button class="tab" data-tab="costsplit" role="tab"></button>
     <button class="tab" data-tab="share" role="tab"></button>
-  </nav>
-  <nav class="tabs wrap tabs-secondary" role="tablist">
-    <button class="tab" data-tab="settings" role="tab"></button>
-    <button class="tab" data-tab="themes" role="tab"></button>
-    <button class="tab" data-tab="about" role="tab"></button>
   </nav>
 
   <main class="wrap">

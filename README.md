@@ -123,7 +123,7 @@ node tests/calculator.test.js   # Berechnungskern (53 Tests)
 node tests/presets.test.js      # Presets: JSON-Gültigkeit, Konsistenz JS/JSON (29 Tests)
 node tests/costsplit.test.js    # Kostentrennung: CSV-Parsing, Zuordnung, Ausgleich (42 Tests)
 node tests/themes.test.js       # Themes: Presets, Token, Validierung, Sanitizing (113 Tests)
-node tests/casedata.test.js     # Falldaten-Austausch: Validierung, Merge, Roundtrip (38 Tests)
+node tests/casedata.test.js     # Falldaten-Austausch: Validierung, Merge, Roundtrip (43 Tests)
 ```
 
 Prüft u. a.: Grundbedarfstabellen, Aufteilung nach wirtschaftlicher
@@ -135,7 +135,7 @@ Ehegattenunterhalts sowie CSV-Parsing und Ausgleichslogik der Kostentrennung.
 ## Struktur
 
 ```
-index.html          UI (Navigation zweigeteilt: Funktionen = Kindesunterhalt, Ehegattenunterhalt, Kostentrennung, Austausch; Einstellungen & Info = Richtwerte, Themes, Über)
+index.html          UI (Tab-Navigation mit Funktionen: Kindesunterhalt, Ehegattenunterhalt, Kostentrennung, Austausch; Richtwerte/Themes/Über über Zahnrad-Menü im Kopf)
 css/style.css       Styles
 js/calculator.js    Berechnungskern (DOM-frei, auch in Node.js lauffähig)
 js/costsplit.js     Kostentrennung: CSV-Import, Zuordnung, Ausgleich (DOM-frei)
