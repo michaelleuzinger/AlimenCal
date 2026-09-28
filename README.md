@@ -50,6 +50,13 @@ Unterhaltsfragen bei Trennung und Scheidung in der Schweiz:
 
 Ausführliche Anleitung: [docs/BENUTZERHANDBUCH.md](docs/BENUTZERHANDBUCH.md)
 
+## Doku aktuell halten (verbindliche Regel)
+
+Bei **jeder** Änderung an Code, Richtwerten, Presets, UI, i18n oder Tests sind
+Doku und README im selben Change nachzuführen – ein Change ohne Doku-Nachführung
+gilt als unvollständig. Details, Zuordnungstabelle und Merge-Checkliste:
+[AGENTS.md](AGENTS.md).
+
 ## Dokumentation
 
 | Dokument | Inhalt |
@@ -114,6 +121,7 @@ js/presets.js       Eingebettete Kopie der kantonalen Presets (file://-fähig)
 presets/*.json      Kantonale Richtwertsätze inkl. Quellen und Checklisten
 js/app.js           UI-Logik, i18n-Anwendung, localStorage, Import/Export
 js/i18n/{de,fr,it,en}.js  Sprachdateien
+AGENTS.md           Verbindliche Arbeitsregeln (Doku-in-Sync-Regel, Checklisten)
 docs/               Benutzerhandbuch, Berechnungslogik, Kostentrennung, Rechtliches
 screenshots/        Screenshots der App in vier Sprachen
 tests/              Unit-Tests (node)
