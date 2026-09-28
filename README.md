@@ -15,7 +15,6 @@ Unterhaltsfragen bei Trennung und Scheidung in der Schweiz:
   eine Partei) – mit automatischem Ausgleich
 
 ![Kindesunterhalt (DE)](screenshots/01-kindesunterhalt-de.png)
-![Kostentrennung (DE)](screenshots/07-kostentrennung-de.png)
 
 ## Eigenschaften
 
@@ -84,18 +83,21 @@ gilt als unvollständig. Details, Zuordnungstabelle und Merge-Checkliste:
 
 ## Screenshots
 
+Einbettungen: dieses README zeigt als Hero-Shot nur den Tab Kindesunterhalt;
+die weiteren Ansichten sind im
+[Benutzerhandbuch](docs/BENUTZERHANDBUCH.md) jeweils im zugehörigen
+Tab-Abschnitt eingebettet. Inventar (Regeln in [AGENTS.md](AGENTS.md)):
+
 | Screenshot | Inhalt |
 |---|---|
-| `screenshots/01-kindesunterhalt-de.png` | Kindesunterhalt (Deutsch) |
-| `screenshots/02-ehegattenunterhalt-de.png` | Ehegattenunterhalt (Deutsch) |
-| `screenshots/03-richtwerte-de.png` | Richtwerte mit Preset-Auswahl (Deutsch) |
-| `screenshots/04-pension-enfants-fr.png` | Pension alimentaire (Français) |
-| `screenshots/05-informazioni-it.png` | Informazioni (Italiano) |
-| `screenshots/06-child-maintenance-en.png` | Child maintenance (English) |
-| `screenshots/07-kostentrennung-de.png` | Kostentrennung mit Bankexport (Deutsch) |
-| `screenshots/08-themes-classic-de.png` | Themes mit Theme-Editor, Classic (Deutsch) |
-| `screenshots/09-themes-dark-de.png` | Themes, Dark-Theme (Deutsch) |
-| `screenshots/10-austausch-de.png` | Austausch-Tab mit Export/Import (Deutsch) |
+| `screenshots/01-kindesunterhalt-de.png` | Kindesunterhalt inkl. Aufwandsmodus und Resultat (Deutsch); Hero-Shot README + Handbuch |
+| `screenshots/02-ehegattenunterhalt-de.png` | Ehegattenunterhalt mit Bedarf/Leistungsfähigkeit und Resultat (Deutsch) |
+| `screenshots/03-richtwerte-de.png` | Richtwerte mit Preset-Auswahl und Wertetabelle (Deutsch) |
+| `screenshots/04-kostentrennung-de.png` | Kostentrennung mit anonymisiertem Bankexport, Zuordnungen und Ausgleich (Deutsch) |
+| `screenshots/05-themes-classic-de.png` | Themes mit Theme-Editor, Classic (Deutsch) |
+| `screenshots/06-themes-dark-de.png` | Themes, Dark-Theme (Duplikat von 05, legitimiert: dokumentiertes Feature) |
+| `screenshots/07-austausch-de.png` | Austausch-Tab mit Export/Import (Deutsch) |
+| `screenshots/08-pension-enfants-fr.png` | Pension alimentaire (Français); einzige fremdsprachige Ansicht als Beleg der Mehrsprachigkeit |
 
 ## Kantonale Presets
 
@@ -146,7 +148,7 @@ js/app.js           UI-Logik, i18n-Anwendung, localStorage, Import/Export
 js/i18n/{de,fr,it,en}.js  Sprachdateien
 AGENTS.md           Verbindliche Arbeitsregeln (Doku-in-Sync-Regel, Checklisten)
 docs/               Benutzerhandbuch, Berechnungslogik, Kostentrennung, Rechtliches
-screenshots/        Screenshots der App in vier Sprachen
+screenshots/        Screenshots der App (Inventar-Regel: s. AGENTS.md; Erzeugung tools/make-screenshots.js)
 tools/              make-screenshots.js: Screenshot-Generator (Puppeteer, s. AGENTS.md)
 tests/              Unit-Tests (node)
 ```

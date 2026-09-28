@@ -15,7 +15,13 @@
  * aussagekräftig sind.
  *
  * Dateinamen: fortlaufend nummeriert, Sprache im Suffix, z. B.
- * screenshots/01-kindesunterhalt-de.png (vgl. README-Tabelle Screenshots).
+ * screenshots/01-kindesunterhalt-de.png.
+ *
+ * Inventar-Regel (AGENTS.md): ein Screenshot pro Ansicht/Feature
+ * (Default-Sprache Deutsch), genau EINE zusaetzliche fremdsprachige
+ * Ansicht als Beleg der Mehrsprachigkeit sowie Theme-Varianten als
+ * legitimierte Duplikate. Aenderungen am Set: VIEWS hier, README-Tabelle
+ * und Einbettungen im BENUTZERHANDBUCH im selben Change nachfuehren.
  */
 'use strict';
 
@@ -28,19 +34,17 @@ const ROOT = path.resolve(__dirname, '..');
 const APP_URL = 'file://' + path.join(ROOT, 'index.html');
 const OUT_DIR = path.join(ROOT, 'screenshots');
 
-const LANGS = ['de', 'fr', 'it', 'en'];
+const LANGS = ['de', 'fr'];
 
 const VIEWS = [
   { n: 1, name: 'kindesunterhalt', langs: ['de'], setup: setupChildren },
   { n: 2, name: 'ehegattenunterhalt', langs: ['de'], setup: setupSpousal },
   { n: 3, name: 'richtwerte', langs: ['de'], setup: setupSettings },
-  { n: 4, name: 'pension-enfants', langs: ['fr'], setup: setupChildren },
-  { n: 5, name: 'informazioni', langs: ['it'], setup: setupChildren },
-  { n: 6, name: 'child-maintenance', langs: ['en'], setup: setupChildren },
-  { n: 7, name: 'kostentrennung', langs: ['de'], setup: setupCostsplit },
-  { n: 8, name: 'themes-classic', langs: ['de'], setup: setupThemesClassic },
-  { n: 9, name: 'themes-dark', langs: ['de'], setup: setupThemesDark },
-  { n: 10, name: 'austausch', langs: ['de'], setup: setupShare }
+  { n: 4, name: 'kostentrennung', langs: ['de'], setup: setupCostsplit },
+  { n: 5, name: 'themes-classic', langs: ['de'], setup: setupThemesClassic },
+  { n: 6, name: 'themes-dark', langs: ['de'], setup: setupThemesDark },
+  { n: 7, name: 'austausch', langs: ['de'], setup: setupShare },
+  { n: 8, name: 'pension-enfants', langs: ['fr'], setup: setupChildren }
 ];
 
 /* ---------- Beispieldaten (anonymisiert, keine echten Personen) ---------- */

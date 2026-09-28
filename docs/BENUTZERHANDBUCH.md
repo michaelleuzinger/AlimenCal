@@ -12,6 +12,10 @@ keine Installation und keine Abhängigkeiten.
 
 ## Sprachen
 
+Beispiel einer fremdsprachigen Ansicht (Français):
+
+![Pension alimentaire (FR)](../screenshots/08-pension-enfants-fr.png)
+
 Oben rechts kann die Sprache gewählt werden: **Deutsch, Français, Italiano,
 English**. Die Auswahl wird im Browser gespeichert (`localStorage`) und beim
 nächsten Öffnen wiederhergestellt.
@@ -28,6 +32,8 @@ nächsten Öffnen wiederhergestellt.
 | Richtwerte | Richtwerte einsehen, anpassen, speichern, exportieren/importieren, kantionale Presets laden |
 
 ## Tab «Kindesunterhalt»
+
+![Kindesunterhalt (DE)](../screenshots/01-kindesunterhalt-de.png)
 
 1. **Eltern**: Nettoeinkommen und allfälliges abweichendes Existenzminimum
    je Partei erfassen (Defaults: CHF 2200 erwerbstätig / CHF 2000 nicht
@@ -56,6 +62,8 @@ Hinweise:
 
 ## Tab «Ehegattenunterhalt»
 
+![Ehegattenunterhalt (DE)](../screenshots/02-ehegattenunterhalt-de.png)
+
 1. Checkbox aktivieren, falls ein Ehegattenunterhalt geprüft werden soll.
 2. Angaben zum gebührenden Lebensstandard (Bedarf), allfällige Mehrkosten
    sowie Einkommen und Existenzminima beider Parteien erfassen.
@@ -65,6 +73,8 @@ Hinweise:
    (Mankomethode, BGE 135 III 66).
 
 ## Tab «Kostentrennung»
+
+![Kostentrennung (DE)](../screenshots/04-kostentrennung-de.png)
 
 Für Paare, die ihre laufenden Kosten schon **vor** der Scheidung separat
 abrechnen wollen – ausführlich beschrieben in
@@ -83,6 +93,8 @@ Kurz:
 
 ## Tab «Richtwerte»
 
+![Richtwerte (DE)](../screenshots/03-richtwerte-de.png)
+
 - Alle Richtwerte (Existenzminima, Grundbedarfe, Betreuungsunterhalt) sind
   hier sichtbar und anpassbar – vgl. die Default-Quellen im README.
 - **Speichern** legt die angepassten Werte im Browser ab; **Export/Import**
@@ -94,6 +106,8 @@ Kurz:
   Schaffhausen ausgefüllt werden.
 
 ## Tab «Austausch» (zwei Parteien, zwei PCs)
+
+![Austausch (DE)](../screenshots/07-austausch-de.png)
 
 Arbeiten die Parteien **nicht am selben PC**, trägt jede Partei nur ihre
 eigenen Angaben ein und stellt sie der Gegenseite als Datei zu (z. B. per
@@ -125,6 +139,10 @@ Bearbeiten gibt es nicht; der Austausch ist sequenziell (A exportiert,
 B importiert, rechnet).
 
 ## Tab «Themes»
+
+![Themes Classic (DE)](../screenshots/05-themes-classic-de.png)
+
+![Themes Dark (DE)](../screenshots/06-themes-dark-de.png)
 
 - **Vordefinierte Themes**: Classic (Default), Dark, High Contrast (barrierefrei,
   für Sehbehinderte geeignet), Warm und Blue – Auswahl wirkt sofort.

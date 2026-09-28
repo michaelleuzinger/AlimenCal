@@ -21,24 +21,41 @@ unvollständig und darf nicht gemergt werden.
 | Presets (`presets/*.json`, `js/presets.js`) | README-Abschnitt «Kantonale Presets», Preset-`meta` (Quelle, URL, Hinweise) |
 | Sprachen / i18n (`js/i18n/*`) | `docs/BENUTZERHANDBUCH.md` (Sprachliste), ggf. README |
 | Struktur / neue Dateien | README-Abschnitt «Struktur» |
-| Screenshots (UI-Änderungen) | `screenshots/` erneuern **und** README-Tabelle «Screenshots» |
+| Screenshots (UI-Änderungen) | `screenshots/` erneuern; README-Tabelle «Screenshots» **und** Einbettungen im BENUTZERHANDBUCH synchron halten (Inventar-Regel, s. u.) |
 | Rechtliches / Rechtsprechungs-Bezug | `docs/RECHTLICHE-GRUNDLAGEN.md` |
 
 ### Zusätzlich gilt
 
 - **Screenshots**: Sichtbare UI-Änderungen erfordern erneuerte Screenshots
-  der betroffenen Ansichten (alle vier Sprachen, wenn Sprachtexte betroffen sind).
-- **Screenshot-Erstellung**: Die App hat einen integrierten Screenshot-Modus
-  (`?screenshot=1` als URL-Parameter bzw. Button im Tab «Über»):
+  der betroffenen Ansichten. Bei geänderten Sprachtexten genügt es, die
+  eine fremdsprachige Beleg-Ansicht (aktuell: FR, `08-pension-enfants-fr.png`)
+  mitzu erneuern – nicht alle vier Sprachen.
+- **Screenshot-Erstellung**:
   - Ausführen: `node tools/make-screenshots.js` (nutzt Puppeteer/Headless-Chromium,
     Installation von Puppeteer ausserhalb des Repos: `npm i puppeteer`)
-  - Erzeugt automatisch die PNGs unter `screenshots/` (eine Datei je Ansicht
-    und Sprache, fortlaufend nummeriert, Sprache im Suffix, z. B.
-    `01-kindesunterhalt-de.png`, `07-kostentrennung-de.png`)
+  - Erzeugt automatisch die PNGs unter `screenshots/` (fortlaufend nummeriert,
+    Sprache im Suffix, z. B. `01-kindesunterhalt-de.png`)
   - Bei jeder sichtbaren UI-Änderung neu ausführen und die erzeugten PNGs
-    committen; README-Tabelle «Screenshots» ggf. ergänzen/aktualisieren
-  - Neue Tabs oder sichtbare neue Funktionen erhalten i. d. R. einen eigenen
-    Screenshot (nächste freie Nummer, betroffene Sprachen)
+    committen
+- **Screenshot-Inventar (Regel)**: Die Anzahl und der Inhalt der Screenshots
+  dürfen und sollen bei Änderungen überdacht und angepasst werden. Massgebend:
+  1. **Ein Screenshot pro Ansicht/Feature** (Default-Sprache Deutsch), jeweils
+     mit aussagekräftigen (anonymisierten) Beispieldaten, so dass die Kern-
+     funktion der Ansicht sichtbar ist.
+  2. **Genau eine fremdsprachige Ansicht** als Beleg der Mehrsprachigkeit
+     (aktuell: Français). Keine weiteren Sprach-Duplikate.
+  3. **Duplikate nur bei dokumentiertem Mehrwert** und dann immer aktuell
+     halten (Beispiel: Theme-Varianten Classic/Dark, weil das Theme selbst
+     das Feature ist).
+  4. **Einbettungsort**: README enthält genau einen Hero-Shot (Tab
+     Kindesunterhalt); alle weiteren Ansichten sind im
+     `docs/BENUTZERHANDBUCH.md` jeweils im zugehörigen Abschnitt eingebettet
+     (Pfad von docs/ aus: `../screenshots/…`). Keine Doppel-Einbettungen
+     derselben Datei an mehreren Orten ausser dem Hero-Shot im README.
+  5. **Nachführung im selben Change**: `tools/make-screenshots.js` (VIEWS),
+     README-Tabelle «Screenshots» und die Einbettungen im
+     BENUTZERHANDBUCH sind konsistent zu halten; entfernte Screenshots sind
+     auch aus README/Handbuch zu löschen (keine toten Links).
 - **Tests**: Neue Funktionalität erhält Unit-Tests; wird die Anzahl/geprüfte
   Fälle geändert, sind die Test-Zahlen im README zu aktualisieren.
 - **Roadmap**: Erledigte Punkte im README werden abgehakt, neue geplante
