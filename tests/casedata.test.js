@@ -58,6 +58,16 @@ ok('parentA.income = 7800', res.sections.parentA.income === 7800);
 ok('parentB.employed: "false" => false', res.sections.parentB.employed === false);
 ok('parentB.existenzminimum: "" => ""', res.sections.parentB.existenzminimum === '');
 ok('children[0].age = 8', res.sections.children[0].age === 8);
+ok('children[0].costMode default = pauschal', res.sections.children[0].costMode === 'pauschal');
+ok('children[0].effectiveCosts default = 0', res.sections.children[0].effectiveCosts === 0);
+
+var effectiveChild = casedata.sanitizeChildren([
+  { age: 8, costMode: 'effective', effectiveCosts: 1800, ownIncome: 0, childAllowance: 0, kkPremium: 130, externalCareCosts: 0, careShareParentA: 0.5, careShareParentB: 0.5 }
+])[0];
+ok('children: costMode effective wird übernommen', effectiveChild.costMode === 'effective');
+ok('children: effectiveCosts = 1800', effectiveChild.effectiveCosts === 1800);
+ok('children: unbekannter costMode => pauschal',
+  casedata.sanitizeChildren([{ age: 8, costMode: 'hack' }])[0].costMode === 'pauschal');
 ok('spousalEnabled: true', res.sections.spousalEnabled === true);
 ok('costsplit.transactions[0].amount = -1500', res.sections.costsplit.transactions[0].amount === -1500);
 ok('costsplit.decisions.t1.mode = split', res.sections.costsplit.decisions.t1.mode === 'split');

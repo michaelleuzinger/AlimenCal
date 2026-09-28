@@ -311,6 +311,8 @@
   function childTemplate() {
     return {
       age: 8,
+      costMode: 'pauschal',
+      effectiveCosts: 0,
       ownIncome: 0,
       childAllowance: 0,
       kkPremium: 0,
@@ -334,6 +336,8 @@
     var rows = document.querySelectorAll('#children-list .child-row');
     for (var i = 0; i < rows.length; i++) {
       var row = rows[i];
+      state.children[i].costMode = row.querySelector('.f-mode').value === 'effective' ? 'effective' : 'pauschal';
+      state.children[i].effectiveCosts = parseFloat(row.querySelector('.f-eff').value) || 0;
       state.children[i].age = parseInt(row.querySelector('.f-age').value, 10) || 0;
       state.children[i].ownIncome = parseFloat(row.querySelector('.f-own').value) || 0;
       state.children[i].childAllowance = parseFloat(row.querySelector('.f-allow').value) || 0;
@@ -353,6 +357,26 @@
     for (var i = 0; i < state.children.length; i++) {
       host.appendChild(buildChildRow(i, state.children[i]));
     }
+  }
+
+  function modeSelect(cls, value) {
+    var select = document.createElement('select');
+    select.className = cls;
+    [
+      { value: 'pauschal', label: t('children', 'modePauschal') },
+      { value: 'effective', label: t('children', 'modeEffective') }
+    ].forEach(function (o) {
+      var opt = document.createElement('option');
+      opt.value = o.value;
+      opt.textContent = o.label;
+      select.appendChild(opt);
+    });
+    select.value = value === 'effective' ? 'effective' : 'pauschal';
+    select.addEventListener('change', function () {
+      renderChildrenList();
+      saveForm();
+    });
+    return select;
   }
 
   function inp(cls, val, opts) {
@@ -393,9 +417,15 @@
     head.appendChild(removeBtn);
     row.appendChild(head);
 
+    var mode = child.costMode === 'effective' ? 'effective' : 'pauschal';
+
     var grid = document.createElement('div');
     grid.className = 'child-grid';
 
+    grid.appendChild(field(t('children', 'costMode'), modeSelect('f-mode', mode)));
+    if (mode === 'effective') {
+      grid.appendChild(field(t('children', 'effectiveCosts'), inp('f-eff', child.effectiveCosts)));
+    }
     grid.appendChild(field(t('common', 'age'), inp('f-age', child.age)));
     grid.appendChild(field(t('common', 'ownIncome'), inp('f-own', child.ownIncome)));
     grid.appendChild(field(t('common', 'childAllowance'), inp('f-allow', child.childAllowance)));
@@ -467,7 +497,8 @@
     result.perChild.forEach(function (c) {
       var tr = document.createElement('tr');
       [
-        t('children', 'childLabel').replace('{n}', String(c.index + 1)) + ' (' + c.age + ')',
+        t('children', 'childLabel').replace('{n}', String(c.index + 1)) + ' (' + c.age + ')' +
+          (c.costMode === 'effective' ? ' [' + t('children', 'modeEffectiveShort') + ' ' + fmt(c.effectiveCosts) + ']' : ''),
         fmt(c.basicNeed),
         fmt(c.directCosts),
         fmt(c.childIncome),

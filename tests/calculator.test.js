@@ -156,6 +156,42 @@ ok('Mangellage: B zahlt maximal verfügbares Einkommen',
 ok('Mangellage: Manko total = 2345 - 500 = 1845',
   close(resManko.totals.totalManko, 1445 + 900 - 400 - 100, 0.02));
 
+/* ---------- Effektive Kosten statt Pauschale ---------- */
+
+/*
+ * Kind 8 Jahre, Aufwandsmodus 'effective': effektive Kosten 2000 total,
+ * davon KK-Prämie 150 und Fremdbetreuung 400 separat erfasst.
+ * Grundbedarf = 2000 - 150 - 400 = 1450 (statt Richtwert 1445).
+ * Barunterhalt = 1450 + 550 - Zulage 250 = 1750.
+ */
+
+var inputEff = {
+  parents: {
+    a: { income: 10000, existenzminimum: 2200, employed: true },
+    b: { income: 8000, existenzminimum: 2200, employed: true }
+  },
+  children: [
+    { age: 8, costMode: 'effective', effectiveCosts: 2000, ownIncome: 0, childAllowance: 250,
+      kkPremium: 150, externalCareCosts: 400, careShareParentA: 50, careShareParentB: 50 }
+  ]
+};
+
+var resEff = calc.calculateChildSupport(inputEff, CFG);
+var childEff = resEff.perChild[0];
+
+ok('Effektive Kosten: costMode = effective', childEff.costMode === 'effective');
+ok('Effektive Kosten: Grundbedarf = 2000 - 150 - 400 = 1450',
+  close(childEff.basicNeed, 1450));
+ok('Effektive Kosten: Barunterhalt total = 1450 + 550 - 250 = 1750',
+  close(childEff.barTotal, 1750));
+ok('Effektive Kosten: Aufteilung bleibt nach Leistungsfähigkeit',
+  close(childEff.barFromA, 1750 * (7800 / 13600), 0.05));
+
+/* Ohne costMode bleibt die Pauschale massgebend */
+ok('Ohne costMode: Richtwert 1445 bleibt massgebend', calc.childBasicNeed({ age: 8 }, CFG) === 1445);
+ok('childCostMode default = pauschal', calc.childCostMode({}) === 'pauschal');
+ok('childCostMode effective wird erkannt', calc.childCostMode({ costMode: 'effective' }) === 'effective');
+
 /* ---------- Mehrere Kinder ---------- */
 
 var inputMulti = {

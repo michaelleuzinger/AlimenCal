@@ -41,6 +41,11 @@ AlimenCal.i18n.it = {
   children: {
     heading: 'Alimenti per figli (art. 276, 285 seg. CC)',
     intro: 'Gli alimenti per figli comprendono gli alimenti in denaro (costi diretti) e il contributo di cura (costi indiretti della custodia durante il normale orario di lavoro). La ripartizione avviene secondo la capacità economica dei genitori.',
+    costMode: 'Modalità di costi',
+    modePauschal: 'Forfait (tabella di riferimento)',
+    modeEffective: 'Costi effettivi',
+    effectiveCosts: 'Costi effettivi del bambino (CHF/mese, totale)',
+    modeEffectiveShort: 'costi effettivi',
     careShareA: 'Quota di custodia genitore A (%)',
     careShareB: 'Quota di custodia genitore B (%)',
     resultsHeading: 'Risultato alimenti per figli',

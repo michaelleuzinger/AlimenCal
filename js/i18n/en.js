@@ -41,6 +41,11 @@ AlimenCal.i18n.en = {
   children: {
     heading: 'Child maintenance (Art. 276, 285 f. Swiss Civil Code)',
     intro: 'Child maintenance consists of cash maintenance (direct costs) and care maintenance (indirect costs of care during ordinary working hours). The split follows the parents\u2019 economic capacity.',
+    costMode: 'Cost mode',
+    modePauschal: 'Pauschale (reference table)',
+    modeEffective: 'Actual costs',
+    effectiveCosts: 'Actual costs of the child (CHF/month, total)',
+    modeEffectiveShort: 'actual costs',
     careShareA: 'Care share parent A (%)',
     careShareB: 'Care share parent B (%)',
     resultsHeading: 'Child maintenance result',

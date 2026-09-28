@@ -35,10 +35,17 @@ nächsten Öffnen wiederhergestellt.
 2. **Kinder hinzufügen**: Alter (vollendete Altersjahre), allenfalls eigene
    Einkünfte und Kinderzulagen, effektive Krankenkassenprämie,
    Fremdbetreuungskosten sowie die Betreuungsanteile (z. B. 60/40).
-3. **Resultat**: Grundbedarf (altersgestaffelt), Barunterhalt je Partei
-   (aufgeteilt nach wirtschaftlicher Leistungsfähigkeit) und
-   Betreuungsunterhalt (netto verrechnet zwischen den Parteien). Bei
-   Unterdeckung wird eine Mangellage mit Mankobetrag ausgewiesen.
+3. **Aufwandsmodus**: Standardmässig wird der Grundbedarf pauschal aus der
+   Richtwerttabelle ermittelt. Mit «Effektive Kosten» kann stattdessen der
+   effektive Aufwand des Kindes (Total CHF/Monat) angegeben werden;
+   Krankenkassenprämie und Fremdbetreuungskosten werden daraus abgezogen
+   (separate Erfassung als direkte Kosten), um Doppelerfassungen zu vermeiden.
+   Die Wahl gilt pro Kind und ist im Resultat ausgewiesen.
+4. **Resultat**: Grundbedarf (altersgestaffelt oder effektive Kosten),
+   Barunterhalt je Partei (aufgeteilt nach wirtschaftlicher
+   Leistungsfähigkeit) und Betreuungsunterhalt (netto verrechnet zwischen
+   den Parteien). Bei Unterdeckung wird eine Mangellage mit Mankobetrag
+   ausgewiesen.
 
 Hinweise:
 

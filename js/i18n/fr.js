@@ -41,6 +41,11 @@ AlimenCal.i18n.fr = {
   children: {
     heading: 'Pension alimentaire pour enfants (art. 276, 285 ss CC)',
     intro: 'La pension pour enfants comprend la pension alimentaire en espèces (coûts directs) et la contribution d\u2019entretien (coûts indirects de la garde pendant les heures de travail ordinaires). La répartition se fait selon la capacité économique des parents.',
+    costMode: 'Mode de coûts',
+    modePauschal: 'Forfait (barème de référence)',
+    modeEffective: 'Coûts effectifs',
+    effectiveCosts: 'Coûts effectifs de l\u2019enfant (CHF/mois, total)',
+    modeEffectiveShort: 'coûts effectifs',
     careShareA: 'Part de garde parent A (%)',
     careShareB: 'Part de garde parent B (%)',
     resultsHeading: 'Résultat pension pour enfants',

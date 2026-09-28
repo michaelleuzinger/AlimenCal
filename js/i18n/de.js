@@ -41,6 +41,11 @@ AlimenCal.i18n.de = {
   children: {
     heading: 'Kindesunterhalt (Art. 276, 285 f. ZGB)',
     intro: 'Der Kindesunterhalt setzt sich aus Barunterhalt (direkte Kosten) und Betreuungsunterhalt (indirekte Kosten der Betreuung während der ordentlichen Arbeitszeit) zusammen. Die Aufteilung richtet sich nach der wirtschaftlichen Leistungsfähigkeit der Eltern.',
+    costMode: 'Aufwandsmodus',
+    modePauschal: 'Pauschale (Richtwerttabelle)',
+    modeEffective: 'Effektive Kosten',
+    effectiveCosts: 'Effektive Kosten des Kindes (CHF/Monat, total)',
+    modeEffectiveShort: 'eff. Kosten',
     careShareA: 'Betreuungsanteil Elternteil A (%)',
     careShareB: 'Betreuungsanteil Elternteil B (%)',
     resultsHeading: 'Resultat Kindesunterhalt',

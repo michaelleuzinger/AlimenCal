@@ -4,7 +4,9 @@
 Unterhaltsfragen bei Trennung und Scheidung in der Schweiz:
 
 - **Kindesunterhalt** (Art. 276, 285 f. ZGB) mit Barunterhalt und
-  Betreuungsunterhalt (revidiertes Unterhaltsrecht, in Kraft seit 1. Januar 2017)
+  Betreuungsunterhalt (revidiertes Unterhaltsrecht, in Kraft seit 1. Januar 2017);
+  der Grundbedarf kann je Kind pauschal (Richtwerttabelle) oder über die
+  effektiven Kosten des Kindes ermittelt werden
 - **Ehegattenunterhalt** (Art. 176 ZGB bei Getrenntleben; Art. 125 ZGB
   nachehelich) nach der zweistufig-konkreten Methode (BGE 140 III 337) mit
   Überschussverteilung inklusive Mankoverteilung (BGE 135 III 66)
@@ -49,7 +51,8 @@ Unterhaltsfragen bei Trennung und Scheidung in der Schweiz:
    z. B. GitHub Pages) – oder die Datei direkt per `file://` starten.
 2. Tab **Kindesunterhalt**: Einkommen und Existenzminima der Eltern erfassen,
    Kinder hinzufügen (Alter, eigene Einkünfte, Kinderzulagen,
-   Krankenkassenprämie, Fremdbetreuungskosten, Betreuungsanteile).
+   Krankenkassenprämie, Fremdbetreuungskosten, Betreuungsanteile); je Kind
+   wählbar: Grundbedarf pauschal (Richtwerttabelle) oder effektive Kosten.
 3. Tab **Ehegattenunterhalt**: falls gewünscht aktivieren, Angaben zu
    gebührendem Lebensstandard, Mehrkosten und Leistungsfähigkeit erfassen.
 4. Tab **Kostentrennung**: Stichtag wählen, Bankexport (CSV) hochladen,
@@ -114,7 +117,7 @@ funktioniert; `tests/presets.test.js` prüft die Konsistenz zwischen beiden.
 ## Tests
 
 ```bash
-node tests/calculator.test.js   # Berechnungskern (46 Tests)
+node tests/calculator.test.js   # Berechnungskern (53 Tests)
 node tests/presets.test.js      # Presets: JSON-Gültigkeit, Konsistenz JS/JSON (29 Tests)
 node tests/costsplit.test.js    # Kostentrennung: CSV-Parsing, Zuordnung, Ausgleich (42 Tests)
 node tests/themes.test.js       # Themes: Presets, Token, Validierung, Sanitizing (113 Tests)

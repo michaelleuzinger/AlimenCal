@@ -3,7 +3,7 @@
 Dieses Dokument beschreibt, wie der Berechnungskern (`js/calculator.js`)
 arbeitet. Der Kern ist frei von DOM-Zugriff und damit auch in Node.js
 (Unit-Tests) lauffähig. Implementierung und Tests:
-`tests/calculator.test.js` (46 Tests).
+`tests/calculator.test.js` (53 Tests).
 
 ## 1. Kindesunterhalt (Art. 276, 285 f. ZGB)
 
@@ -42,7 +42,29 @@ verfügbares Einkommen = max(0, Nettoeinkommen − Existenzminimum)
   Kinderzulagen des Kindes (werden abgezogen) sowie Fremdbetreuungskosten
   (direkte Kosten, werden zum Grundbedarf addiert und analog verteilt).
 
-### 1.3 Aufteilung des Barunterhalts
+### 1.3 Aufwandsmodus: Pauschale oder effektive Kosten
+
+Pro Kind kann umgeschaltet werden, wie der Grundbedarf ermittelt wird
+(Feld **Aufwandsmodus**):
+
+- **Pauschale (Richtwerttabelle)**: Standard; der Grundbedarf ergibt sich
+  aus der altersgestaffelten Tabelle wie in Abschnitt 1.2 beschrieben.
+- **Effektive Kosten**: Der Grundbedarf wird aus den effektiv angegeben
+  Kosten des Kindes (Total CHF/Monat) abgeleitet. Da Krankenkassenprämie
+  und Fremdbetreuungskosten als direkte Kosten separat erfasst und
+  addiert werden, werden sie von den effektiven Kosten abgezogen, um eine
+  Doppelerfassung zu vermeiden:
+
+```
+Grundbedarf (effektiv) = max(0, effektive Kosten total
+                             − Krankenkassenprämie − Fremdbetreuungskosten)
+```
+
+Die übrige Berechnung (Abzug des Kindeseinkommens, Aufteilung nach
+wirtschaftlicher Leistungsfähigkeit, Mangellage) ist identisch zum
+pauschalen Modus. Das Resultat weist den gewählten Modus je Kind aus.
+
+### 1.4 Aufteilung des Barunterhalts
 
 ```
 Anteil Partei A = verfügbares Einkommen A / (verfügbar A + verfügbar B)
@@ -51,7 +73,7 @@ Anteil Partei B = 1 − Anteil A
 
 Ist nur eine Partei leistungsfähig, trägt diese den gesamten Barunterhalt.
 
-### 1.4 Betreuungsunterhalt
+### 1.5 Betreuungsunterhalt
 
 - Richtwerte je Altersklasse (Default: CHF 700–1100, Orientierungswerte).
 - Der Betreuungsunterhalt wird **netto verrechnet**: Jede Partei erhält für
@@ -62,7 +84,7 @@ Ist nur eine Partei leistungsfähig, trägt diese den gesamten Barunterhalt.
   Angabe gilt als 50/50). Betreuungsunterhalt entfällt ab dem 18. Altersjahr
   (`careSupportMaxAge`).
 
-### 1.5 Mangellage (Manko)
+### 1.6 Mangellage (Manko)
 
 Übersteigen die Bedarfe die verfügbaren Mittel, wird die Mangellage erkannt:
 

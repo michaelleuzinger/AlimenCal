@@ -65,6 +65,9 @@ AlimenCal.calculator = (function () {
   }
 
   function childBasicNeed(child, cfg) {
+    if (child && child.costMode === 'effective') {
+      return Math.max(0, num(child.effectiveCosts) - num(child.kkPremium) - num(child.externalCareCosts));
+    }
     var row = findAgeRow(num(child.age), cfg);
     if (!row) {
       return num(cfg.fallbackChildBasicNeed);
@@ -112,6 +115,14 @@ AlimenCal.calculator = (function () {
    *  - Mangellage: Der Anteil eines Elternteils wird auf das frei verfügbare
    *    Einkommen gedeckelt; die Unterdeckung wird als Manko ausgewiesen.
    */
+  /**
+   * Aufwandsmodus des Kindes: 'pauschal' (Richtwerttabelle, Default) oder
+   * 'effective' (effektive Kosten statt Pauschale).
+   */
+  function childCostMode(child) {
+    return child && child.costMode === 'effective' ? 'effective' : 'pauschal';
+  }
+
   function calculateChildSupport(input, cfg) {
     var parents = input.parents || {};
     var budgetA = parentBudget(parents.a, cfg);
@@ -181,6 +192,8 @@ AlimenCal.calculator = (function () {
       perChild.push({
         index: i,
         age: age,
+        costMode: childCostMode(child),
+        effectiveCosts: round2(childCostMode(child) === 'effective' ? num(child.effectiveCosts) : 0),
         basicNeed: round2(basicNeed),
         directCosts: round2(directCosts),
         kkPremium: round2(kkPremium),
@@ -320,6 +333,7 @@ AlimenCal.calculator = (function () {
     childBasicNeed: childBasicNeed,
     childCareSupportRichtwert: childCareSupportRichtwert,
     normalizeCareShares: normalizeCareShares,
+    childCostMode: childCostMode,
     round2: round2,
     clamp: clamp,
     num: num

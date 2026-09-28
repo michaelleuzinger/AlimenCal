@@ -45,8 +45,11 @@ AlimenCal.casedata = (function () {
     if (!child || typeof child !== 'object') { return null; }
     var age = parseInt(child.age, 10);
     if (!isFinite(age) || age < 0 || age > 99) { return null; }
+    var mode = child.costMode === 'effective' ? 'effective' : 'pauschal';
     return {
       age: age,
+      costMode: mode,
+      effectiveCosts: isNum(numOrEmpty(child.effectiveCosts)) ? numOrEmpty(child.effectiveCosts) : 0,
       ownIncome: isNum(numOrEmpty(child.ownIncome)) ? numOrEmpty(child.ownIncome) : 0,
       childAllowance: isNum(numOrEmpty(child.childAllowance)) ? numOrEmpty(child.childAllowance) : 0,
       kkPremium: isNum(numOrEmpty(child.kkPremium)) ? numOrEmpty(child.kkPremium) : 0,
