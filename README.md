@@ -1,59 +1,111 @@
 # AlimenCal
 
-**AlimenCal** ist ein mehrsprachiges Orientierungswerkzeug (Web-App) für Unterhaltsfragen bei Trennung und Scheidung in der Schweiz:
+**AlimenCal** ist ein mehrsprachiges Orientierungswerkzeug (Web-App) für
+Unterhaltsfragen bei Trennung und Scheidung in der Schweiz:
 
-- **Kindesunterhalt** (Art. 276, 285 f. ZGB) mit Barunterhalt und Betreuungsunterhalt (revidiertes Unterhaltsrecht, in Kraft seit 1. Januar 2017)
-- **Ehegattenunterhalt** (Art. 176 ZGB bei Getrenntleben; Art. 125 ZGB nachehelich) nach der Notbedarfs-/Bedarfsmethode mit Überschussverteilung (BGE 140 III 337) inkl. Mankoverteilung (BGE 135 III 66)
+- **Kindesunterhalt** (Art. 276, 285 f. ZGB) mit Barunterhalt und
+  Betreuungsunterhalt (revidiertes Unterhaltsrecht, in Kraft seit 1. Januar 2017)
+- **Ehegattenunterhalt** (Art. 176 ZGB bei Getrenntleben; Art. 125 ZGB
+  nachehelich) nach der zweistufig-konkreten Methode (BGE 140 III 337) mit
+  Überschussverteilung inklusive Mankoverteilung (BGE 135 III 66)
+- **Kostentrennung vor der Scheidung**: Stichtag definieren, Bankexport (CSV)
+  hochladen, Transaktionen zuordnen (ignorieren / anteilsmässig / voll durch
+  eine Partei) – mit automatischem Ausgleich
+
+![Kindesunterhalt (DE)](screenshots/01-kindesunterhalt-de.png)
+![Kostentrennung (DE)](screenshots/07-kostentrennung-de.png)
 
 ## Eigenschaften
 
-- **Vier Sprachen**: Deutsch, Français, Italiano, English – umschaltbar, Auswahl wird lokal gespeichert
-- **Konfigurierbare Richtwerte**: Existenzminima, altersgestaffelte Grundbedarfe und Betreuungsunterhalts-Richtwerte; speicherbar im Browser (localStorage), exportier- und importierbar als JSON
-- **Mangellagen-Erkennung**: Unterdeckung (Manko) wird ausgewiesen, inklusive Hinweis auf die Nachforderungspraxis
-- **Kein Server, keine Abhängigkeiten**: reine statische Web-App (HTML/CSS/Vanilla JS), alle Daten bleiben lokal im Browser
+- **Vier Sprachen**: Deutsch, Français, Italiano, English – umschaltbar,
+  Auswahl wird lokal gespeichert
+- **Konfigurierbare Richtwerte**: Existenzminima, altersgestaffelte
+  Grundbedarfe und Betreuungsunterhalts-Richtwerte; speicherbar im Browser
+  (localStorage), exportier- und importierbar als JSON
+- **Kantonale Presets**: JSON-Dateien unter `presets/`, in der App auswählbar
+  (z. B. Zürcher Kinderkosten-Tabelle 1.3.2025)
+- **Kostentrennung**: Bankexport-Upload mit automatischer Erkennung von
+  Trennzeichen, Datums- und Betragsformaten; je Transaktion ignorieren,
+  anteilsmässig aufteilen (Anteil konfigurierbar) oder voll einer Partei
+  zuordnen; Sammelaktionen für die Erstzuordnung
+- **Mangellagen-Erkennung**: Unterdeckung (Manko) wird ausgewiesen, inklusive
+  Hinweis auf die Nachforderungspraxis
+- **Kein Server, keine Abhängigkeiten**: reine statische Web-App
+  (HTML/CSS/Vanilla JS), alle Daten bleiben lokal im Browser
 
 ## Nutzung
 
-1. `index.html` im Browser öffnen (beliebiger Hosting-Ordner genügt, z. B. GitHub Pages).
-2. Tab **Kindesunterhalt**: Einkommen und Existenzminima der Eltern erfassen, Kinder hinzufügen (Alter, eigene Einkünfte, Kinderzulagen, Krankenkassenprämie, Fremdbetreuungskosten, Betreuungsanteile).
-3. Tab **Ehegattenunterhalt**: falls gewünscht aktivieren, Angaben zu gebührlichem Lebensstandard, Mehrkosten und Leistungsfähigkeit erfassen.
-4. Tab **Richtwerte**: kantonale Werte anpassen, speichern, exportieren/importieren.
+1. `index.html` im Browser öffnen (beliebiger Hosting-Ordner genügt,
+   z. B. GitHub Pages) – oder die Datei direkt per `file://` starten.
+2. Tab **Kindesunterhalt**: Einkommen und Existenzminima der Eltern erfassen,
+   Kinder hinzufügen (Alter, eigene Einkünfte, Kinderzulagen,
+   Krankenkassenprämie, Fremdbetreuungskosten, Betreuungsanteile).
+3. Tab **Ehegattenunterhalt**: falls gewünscht aktivieren, Angaben zu
+   gebührendem Lebensstandard, Mehrkosten und Leistungsfähigkeit erfassen.
+4. Tab **Kostentrennung**: Stichtag wählen, Bankexport (CSV) hochladen,
+   Kontoinhaber angeben, Transaktionen zuordnen – die App errechnet den
+   Ausgleich. Details: [docs/KOSTENTRENNUNG.md](docs/KOSTENTRENNUNG.md)
+5. Tab **Richtwerte**: kantonale Werte anpassen, speichern,
+   exportieren/importieren, Presets laden.
 
-## Kostentrennung vor der Scheidung
+Ausführliche Anleitung: [docs/BENUTZERHANDBUCH.md](docs/BENUTZERHANDBUCH.md)
 
-Für Paare, die ihre laufenden Kosten schon vor der Scheidung separat ab rechnen wollen, bietet der Tab **Kostentrennung**:
+## Dokumentation
 
-1. **Stichtagsdatum** wählen – Transaktionen vor diesem Datum werden ausgegraut und nicht gewertet.
-2. **Bankexport hochladen** (CSV): automatische Erkennung von Trennzeichen und Spalten (Datum/Beschreibung/Betrag, auch separate Belastung/Gutschrift-Spalten, CH- und ISO-Datumsformate, Apostroph- und Komma-Notation bei Beträgen).
-3. **Kontoinhaber** angeben (das Bankkonto gehört Partei A oder B) – daraus ergibt sich der Ausgleichssinn.
-4. **Je Transaktion entscheiden**: ignorieren, anteilsmässig aufteilen (Anteil in %, je Transaktion konfigurierbar) oder voll von Partei A bzw. B übernehmen. Sammelaktionen («alle 50/50», «alle ignorieren») erleichtern die Erstzuordnung.
-5. **Ausgleich**: Die App berechnet, welche Partei der anderen wie viel schuldet (basierend darauf, dass der Kontoinhaber alle Zahlungen geleistet hat).
+| Dokument | Inhalt |
+|---|---|
+| [docs/BENUTZERHANDBUCH.md](docs/BENUTZERHANDBUCH.md) | Schritt-für-Schritt-Anleitung aller Tabs |
+| [docs/KALKULATION.md](docs/KALKULATION.md) | Berechnungslogik Kindes- und Ehegattenunterhalt |
+| [docs/KOSTENTRENNUNG.md](docs/KOSTENTRENNUNG.md) | Modul Kostentrennung: CSV-Import, Zuordnung, Ausgleich |
+| [docs/RECHTLICHE-GRUNDLAGEN.md](docs/RECHTLICHE-GRUNDLAGEN.md) | Rechtsquellen, Rechtsprechung, kantonale Praxis, Disclaimer |
 
-Alle Daten bleiben lokal im Browser – Bankexporte werden nicht übertragen.
+## Screenshots
+
+| Screenshot | Inhalt |
+|---|---|
+| `screenshots/01-kindesunterhalt-de.png` | Kindesunterhalt (Deutsch) |
+| `screenshots/02-ehegattenunterhalt-de.png` | Ehegattenunterhalt (Deutsch) |
+| `screenshots/03-richtwerte-de.png` | Richtwerte mit Preset-Auswahl (Deutsch) |
+| `screenshots/04-pension-enfants-fr.png` | Pension alimentaire (Français) |
+| `screenshots/05-informazioni-it.png` | Informazioni (Italiano) |
+| `screenshots/06-child-maintenance-en.png` | Child maintenance (English) |
+| `screenshots/07-kostentrennung-de.png` | Kostentrennung mit Bankexport (Deutsch) |
 
 ## Kantonale Presets
 
-Unter `presets/` liegen kantonsbezogene Richtwertsätze als JSON, auswählbar im Tab **Richtwerte**:
+Unter `presets/` liegen kantonsbezogene Richtwertsätze als JSON, auswählbar im
+Tab **Richtwerte**:
 
-- `zuerich-2025.json` – Zürcher Kinderkosten-Tabelle vom 1. März 2025 (Referenz, identisch mit App-Default)
-- `schaffhausen-offen.json` – **Platzhalter mit Verifikations-Checkliste**: Der Kanton Schaffhausen hat keine publizierte Tabelle; die effektiven Ansätze von KESB/Kantonsgericht Schaffhausen MÜSSEN vor Verwendung erhoben und eingetragen werden (die Checkliste nennt KESB-Kontakt, Gebühren, Quellen).
+- `zuerich-2025.json` – Zürcher Kinderkosten-Tabelle vom 1. März 2025
+  (Referenz, identisch mit App-Default)
+- `schaffhausen-offen.json` – **Platzhalter mit Verifikations-Checkliste**:
+  Der Kanton Schaffhausen hat keine publizierte Tabelle; die effektiven
+  Ansätze von KESB/Kantonsgericht Schaffhausen MÜSSEN vor Verwendung erhoben
+  und eingetragen werden (die Checkliste nennt KESB-Kontakt, Gebühren, Quellen).
 
-Jedes Preset enthält `meta` (Name, Kanton, Quelle, URL, Hinweise, Verifikations-Checkliste) und die Wertfelder. `js/presets.js` hält eine eingebettete Kopie bereit, damit die App auch ohne Webserver via `file://` funktioniert; `tests/presets.test.js` prüft die Konsistenz zwischen beiden.
+Jedes Preset enthält `meta` (Name, Kanton, Quelle, URL, Hinweise,
+Verifikations-Checkliste) und die Wertfelder. `js/presets.js` hält eine
+eingebettete Kopie bereit, damit die App auch ohne Webserver via `file://`
+funktioniert; `tests/presets.test.js` prüft die Konsistenz zwischen beiden.
 
 ## Tests
 
 ```bash
 node tests/calculator.test.js   # Berechnungskern (46 Tests)
-node tests/presets.test.js      # Presets: JSON-Gültigkeit, Konsistenz JS/JSON, Plausibilität (29 Tests)
+node tests/presets.test.js      # Presets: JSON-Gültigkeit, Konsistenz JS/JSON (29 Tests)
 node tests/costsplit.test.js    # Kostentrennung: CSV-Parsing, Zuordnung, Ausgleich (42 Tests)
 ```
 
-Prüft u. a.: Grundbedarfstabellen, Aufteilung nach wirtschaftlicher Leistungsfähigkeit, netto-Verrechnung des Betreuungsunterhalts (kein Saldo bei 50/50), Mangellagen-Deckelung auf das frei verfügbare Einkommen, Mehrkindberechnungen sowie die Überschuss- und Mankomethode des Ehegattenunterhalts.
+Prüft u. a.: Grundbedarfstabellen, Aufteilung nach wirtschaftlicher
+Leistungsfähigkeit, netto-Verrechnung des Betreuungsunterhalts (kein Saldo
+bei 50/50), Mangellagen-Deckelung auf das frei verfügbare Einkommen,
+Mehrkindberechnungen, die Überschuss- und Mankomethode des
+Ehegattenunterhalts sowie CSV-Parsing und Ausgleichslogik der Kostentrennung.
 
 ## Struktur
 
 ```
-index.html          UI (Tabs: Kindesunterhalt, Ehegattenunterhalt, Richtwerte, Über)
+index.html          UI (Tabs: Kindesunterhalt, Ehegattenunterhalt, Kostentrennung, Richtwerte)
 css/style.css       Styles
 js/calculator.js    Berechnungskern (DOM-frei, auch in Node.js lauffähig)
 js/costsplit.js     Kostentrennung: CSV-Import, Zuordnung, Ausgleich (DOM-frei)
@@ -62,12 +114,15 @@ js/presets.js       Eingebettete Kopie der kantonalen Presets (file://-fähig)
 presets/*.json      Kantonale Richtwertsätze inkl. Quellen und Checklisten
 js/app.js           UI-Logik, i18n-Anwendung, localStorage, Import/Export
 js/i18n/{de,fr,it,en}.js  Sprachdateien
-tests/calculator.test.js  Unit-Tests (node)
+docs/               Benutzerhandbuch, Berechnungslogik, Kostentrennung, Rechtliches
+screenshots/        Screenshots der App in vier Sprachen
+tests/              Unit-Tests (node)
 ```
 
 ## Verwendete Richtwerte (Default)
 
-Die mitgelieferten Default-Richtwerte basieren auf folgenden Quellen (Stand: März 2025):
+Die mitgelieferten Default-Richtwerte basieren auf folgenden Quellen
+(Stand: März 2025):
 
 | Position | Wert | Quelle |
 |---|---|---|
@@ -80,18 +135,40 @@ Die mitgelieferten Default-Richtwerte basieren auf folgenden Quellen (Stand: Mä
 
 **Wichtige Hinweise zu den Werten:**
 
-- Die Zürcher Tabellenwerte beinhalten eine durchschnittliche Kinder-Krankenkassenprämie von CHF 130/Monat, die hier abgezogen wird, weil die effektive Prämie in der App separat erfasst wird (verhindert Doppelerfassung).
-- Die Tabelle kann über das 18. Altersjahr bis zum 21. Altersjahr angewendet werden, sofern der junge Erwachsene im Haushalt eines Elternteils lebt.
-- Per 2026 wird die Zürcher Kinderkosten-Tabelle nicht mehr weitergeführt. Seit dem Leitentscheid **BGer 147 III 265** ist die **zweistufig-konkrete Methode** (BGE 140 III 337) verbindlich; pauschalierende Tabellen sind unzulässig. Die Werte dienen deshalb nur noch als Vergleichsmasse und müssen im Einzelfall individuell begründet werden.
-- **Kanton Schaffhausen**: Es existiert keine publizierte kantonale Unterhaltstabelle. Die KESB Schaffhausen wendet zwar dasselbe Berechnungsmodell wie das Kantonsgericht Schaffhausen an (Merkblatt zum neuen Unterhaltsrecht, Ziff. 4), die konkreten Ansätze sind jedoch nicht veröffentlicht. Für Schaffhauser Fälle müssen die Werte daher zwingend über die Konfiguration angepasst und mit der KESB (Mühlentalstrasse 65A, 8200 Schaffhausen) oder anwaltlich verifiziert werden.
+- Die Zürcher Tabellenwerte beinhalten eine durchschnittliche
+  Kinder-Krankenkassenprämie von CHF 130/Monat, die hier abgezogen wird,
+  weil die effektive Prämie in der App separat erfasst wird (verhindert
+  Doppelerfassung).
+- Die Tabelle kann über das 18. Altersjahr bis zum 21. Altersjahr angewendet
+  werden, sofern der junge Erwachsene im Haushalt eines Elternteils lebt.
+- Per 2026 wird die Zürcher Kinderkosten-Tabelle nicht mehr weitergeführt.
+  Seit dem Leitentscheid **BGer 147 III 265** ist die **zweistufig-konkrete
+  Methode** (BGE 140 III 337) verbindlich; pauschalierende Tabellen sind
+  unzulässig. Die Werte dienen deshalb nur noch als Vergleichsmasse und müssen
+  im Einzelfall individuell begründet werden.
+- **Kanton Schaffhausen**: Es existiert keine publizierte kantonale
+  Unterhaltstabelle. Die KESB Schaffhausen wendet zwar dasselbe
+  Berechnungsmodell wie das Kantonsgericht Schaffhausen an (Merkblatt zum
+  neuen Unterhaltsrecht, Ziff. 4), die konkreten Ansätze sind jedoch nicht
+  veröffentlicht. Für Schaffhauser Fälle müssen die Werte daher zwingend über
+  die Konfiguration angepasst und mit der KESB (Mühlentalstrasse 65A,
+  8200 Schaffhausen) oder anwaltlich verifiziert werden.
 
 ## Rechtlicher Hinweis (Disclaimer)
 
-AlimenCal ist **keine Rechtsberatung** und liefert keine verbindlichen Resultate. Die Berechnung dient ausschliesslich der ersten Orientierung. Massgebend sind stets die konkreten Umstände des Einzelfalls sowie die Praxis der zuständigen Gerichte und der Kindes- und Erwachsenenschutzbehörde (KESB). Die mitgelieferten Richtwerte sind typische Orientierungswerte und müssen vor jedem produktiven Einsatz an die massgebliche kantonale Praxis (z. B. KESB/Kantonsgericht Schaffhausen) angepasst und verifiziert werden.
+AlimenCal ist **keine Rechtsberatung** und liefert keine verbindlichen
+Resultate. Die Berechnung dient ausschliesslich der ersten Orientierung.
+Massgebend sind stets die konkreten Umstände des Einzelfalls sowie die Praxis
+der zuständigen Gerichte und der Kindes- und Erwachsenenschutzbehörde (KESB).
+Die mitgelieferten Richtwerte sind typische Orientierungswerte und müssen vor
+jedem produktiven Einsatz an die massgebliche kantonale Praxis (z. B.
+KESB/Kantonsgericht Schaffhausen) angepasst und verifiziert werden. Details:
+[docs/RECHTLICHE-GRUNDLAGEN.md](docs/RECHTLICHE-GRUNDLAGEN.md).
 
 ## Roadmap
 
-- [ ] Kantonal vorkonfigurierte Richtwertsätze
+- [x] Kantonal vorkonfigurierte Richtwertsätze (Presets ZH / SH-Platzhalter)
+- [x] Kostentrennung vor der Scheidung (Stichtag, Bankexport, Ausgleich)
 - [ ] PDF-Export des Berechnungsblatts
 - [ ] BVG-/Vorsorgeabzüge und steuerliche Saldierung
 - [ ] Alimentenindexierung (Art. 129 ZGB)

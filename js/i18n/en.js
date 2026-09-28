@@ -141,6 +141,8 @@ costsplit: {
     balance: 'Balance',
     accountOwner: 'Bank account belongs to',
     owes: '{0} owes {1} CHF {2}',
+    partyA: 'Party A',
+    partyB: 'Party B',
     balanced: 'balanced',
     counts: 'Counted: {0} | Uncategorised: {1} | Before cut-off: {2}'
   }

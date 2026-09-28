@@ -141,6 +141,8 @@ costsplit: {
     balance: 'Saldo',
     accountOwner: 'Bankkonto gehört',
     owes: '{0} schuldet {1} CHF {2}',
+    partyA: 'Partei A',
+    partyB: 'Partei B',
     balanced: 'ausgeglichen',
     counts: 'Gewertet: {0} | Nicht kategorisiert: {1} | Vor Stichtag: {2}'
   }

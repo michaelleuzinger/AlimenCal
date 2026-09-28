@@ -213,7 +213,7 @@
     var ownerSelect = document.getElementById('costsplit-owner');
     var ownerVal = ownerSelect.value;
     ownerSelect.innerHTML = '';
-    [{ v: 'A', label: t('common', 'parentA') }, { v: 'B', label: t('common', 'parentB') }].forEach(function (o) {
+    [{ v: 'A', label: t('costsplit', 'partyA') }, { v: 'B', label: t('costsplit', 'partyB') }].forEach(function (o) {
       var opt = document.createElement('option');
       opt.value = o.v;
       opt.textContent = o.label;
@@ -682,8 +682,8 @@
     );
 
     document.getElementById('costsplit-totals').textContent =
-      t('common', 'parentA') + ': CHF ' + fmt(totals.sumA) + ' | ' +
-      t('common', 'parentB') + ': CHF ' + fmt(totals.sumB) + ' | ' +
+      t('costsplit', 'partyA') + ': CHF ' + fmt(totals.sumA) + ' | ' +
+      t('costsplit', 'partyB') + ': CHF ' + fmt(totals.sumB) + ' | ' +
       t('costsplit', 'totalConsidered') + ': CHF ' + fmt(totals.total);
 
     var ownerIsA = document.getElementById('costsplit-owner').value !== 'B';
@@ -691,8 +691,8 @@
     document.getElementById('costsplit-balance').textContent =
       settlement.amount > 0 && settlement.from && settlement.to
         ? t('costsplit', 'owes', [
-            settlement.from === 'A' ? t('common', 'parentA') : t('common', 'parentB'),
-            settlement.to === 'A' ? t('common', 'parentA') : t('common', 'parentB'),
+            settlement.from === 'A' ? t('costsplit', 'partyA') : t('costsplit', 'partyB'),
+            settlement.to === 'A' ? t('costsplit', 'partyA') : t('costsplit', 'partyB'),
             fmt(settlement.amount)
           ])
         : t('costsplit', 'balanced');
