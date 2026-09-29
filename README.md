@@ -16,6 +16,29 @@ Unterhaltsfragen bei Trennung und Scheidung in der Schweiz:
 
 ![Kindesunterhalt (DE)](screenshots/01-kindesunterhalt-de.png)
 
+## QuickStart
+
+AlimenCal ist eine rein statische Web-App (HTML/CSS/Vanilla JS) – keine
+Installation, kein Server, keine Abhängigkeiten.
+
+1. Repository klonen (oder auf GitHub **Code → Download ZIP** wählen und entpacken):
+
+   ```bash
+   git clone https://github.com/michaelleuzinger/AlimenCal.git
+   cd AlimenCal
+   ```
+
+2. `index.html` per Doppelklick im Browser öffnen (Chrome, Firefox, Edge …) –
+   die App läuft direkt über `file://`.
+
+3. Im Tab **Richtwerte** allenfalls das kantonale Preset laden (z. B. Zürcher
+   Kinderkosten-Tabelle 1.3.2025), dann im Tab **Kindesunterhalt** mit der
+   Erfassung beginnen.
+
+Alle Eingaben werden automatisch lokal im Browser (localStorage) gespeichert.
+Optional kann die App statt über `file://` auch über einen lokalen Webserver
+oder beliebiges statisches Hosting (z. B. GitHub Pages) bereitgestellt werden.
+
 ## Eigenschaften
 
 - **Vier Sprachen**: Deutsch, Français, Italiano, English – umschaltbar,
@@ -64,13 +87,6 @@ Unterhaltsfragen bei Trennung und Scheidung in der Schweiz:
    anderen Partei importieren (Merge).
 
 Ausführliche Anleitung: [docs/BENUTZERHANDBUCH.md](docs/BENUTZERHANDBUCH.md)
-
-## Doku aktuell halten (verbindliche Regel)
-
-Bei **jeder** Änderung an Code, Richtwerten, Presets, UI, i18n oder Tests sind
-Doku und README im selben Change nachzuführen – ein Change ohne Doku-Nachführung
-gilt als unvollständig. Details, Zuordnungstabelle und Merge-Checkliste:
-[AGENTS.md](AGENTS.md).
 
 ## Dokumentation
 
