@@ -123,7 +123,7 @@ funktioniert; `tests/presets.test.js` prüft die Konsistenz zwischen beiden.
 node tests/calculator.test.js   # Berechnungskern (53 Tests)
 node tests/presets.test.js      # Presets: JSON-Gültigkeit, Konsistenz JS/JSON (29 Tests)
 node tests/costsplit.test.js    # Kostentrennung: CSV-Parsing, Zuordnung, Ausgleich (42 Tests)
-node tests/themes.test.js       # Themes: Presets, Token, Validierung, Sanitizing (113 Tests)
+node tests/themes.test.js       # Themes: Presets, Token, Validierung, Sanitizing (123 Tests)
 node tests/casedata.test.js     # Falldaten-Austausch: Validierung, Merge, Roundtrip (43 Tests)
 ```
 

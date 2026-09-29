@@ -162,9 +162,10 @@ B importiert, rechnet).
 
 - **Vordefinierte Themes**: Classic (Default), Dark, High Contrast (barrierefrei,
   für Sehbehinderte geeignet), Warm und Blue – Auswahl wirkt sofort.
-- **Theme-Editor**: Alle 15 Design-Farben und der Eckenradius sind manuell
-  frei anpassbar. Änderungen werden sofort angewendet; die Auswahl springt auf
-  «Benutzerdefiniert».
+- **Theme-Editor**: Alle 17 Design-Farben und der Eckenradius sind manuell
+  frei anpassbar; inklusive Hintergrund und Textfarbe des oberen Banners,
+  das auch mit dem gewählten Theme wechselt. Änderungen werden sofort
+  angewendet; die Auswahl springt auf «Benutzerdefiniert».
 - **Zurücksetzen** stellt das Classic-Theme wieder her.
 - Theme-Auswahl und angepasste Werte werden im Browser gespeichert und nach
 einem Neustart wiederhergestellt.

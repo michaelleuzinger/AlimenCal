@@ -15,6 +15,8 @@ AlimenCal.themes = (function () {
     { key: 'ink', label: { de: 'Text', fr: 'Texte', it: 'Testo', en: 'Text' }, type: 'color' },
     { key: 'muted', label: { de: 'Sekundärtext', fr: 'Texte secondaire', it: 'Testo secondario', en: 'Muted text' }, type: 'color' },
     { key: 'accent', label: { de: 'Akzentfarbe', fr: 'Couleur d’accent', it: 'Colore d’accento', en: 'Accent colour' }, type: 'color' },
+    { key: 'bannerBg', label: { de: 'Banner oben', fr: 'Bandeau supérieur', it: 'Banner in alto', en: 'Top banner' }, type: 'color' },
+    { key: 'bannerInk', label: { de: 'Text auf Banner', fr: 'Texte sur bandeau', it: 'Testo su banner', en: 'Text on banner' }, type: 'color' },
     { key: 'accentDark', label: { de: 'Akzent dunkel', fr: 'Accent foncé', it: 'Accento scuro', en: 'Accent dark' }, type: 'color' },
     { key: 'accentInk', label: { de: 'Text auf Akzent', fr: 'Texte sur accent', it: 'Testo su accento', en: 'Text on accent' }, type: 'color' },
     { key: 'warn', label: { de: 'Warnung', fr: 'Avertissement', it: 'Avviso', en: 'Warning' }, type: 'color' },
@@ -34,6 +36,8 @@ AlimenCal.themes = (function () {
     ink: '--ink',
     muted: '--muted',
     accent: '--accent',
+    bannerBg: '--banner-bg',
+    bannerInk: '--banner-ink',
     accentDark: '--accent-dark',
     accentInk: '--accent-ink',
     warn: '--warn',
@@ -54,6 +58,8 @@ AlimenCal.themes = (function () {
       values: {
         bg: '#f5f6f8', card: '#ffffff', ink: '#1c2733', muted: '#5b6b7b',
         accent: '#0f5c5c', accentDark: '#0a4242', accentInk: '#ffffff',
+        bannerBg: '#0f5c5c',
+        bannerInk: '#ffffff',
         warn: '#b3541e', warnBg: '#fdf1e7', warnBorder: '#ecc9a9',
         line: '#d8dee6', inputBg: '#fbfcfd', btnSecondaryBg: '#e7ebee',
         disclaimerBg: '#fff8e1', disclaimerBorder: '#e8d9a0', radius: 10
@@ -65,6 +71,8 @@ AlimenCal.themes = (function () {
       values: {
         bg: '#14181d', card: '#1e242b', ink: '#e8edf3', muted: '#9fb0c0',
         accent: '#2fa4a4', accentDark: '#1f7d7d', accentInk: '#0d1117',
+        bannerBg: '#173a3a',
+        bannerInk: '#e8edf3',
         warn: '#ff9f5a', warnBg: '#2b1f16', warnBorder: '#5a3a22',
         line: '#34404d', inputBg: '#171d23', btnSecondaryBg: '#2a3440',
         disclaimerBg: '#2a2413', disclaimerBorder: '#54491f', radius: 10
@@ -76,6 +84,8 @@ AlimenCal.themes = (function () {
       values: {
         bg: '#ffffff', card: '#ffffff', ink: '#000000', muted: '#333333',
         accent: '#004777', accentDark: '#002b49', accentInk: '#ffffff',
+        bannerBg: '#000000',
+        bannerInk: '#ffffff',
         warn: '#8a3b00', warnBg: '#ffffff', warnBorder: '#000000',
         line: '#000000', inputBg: '#ffffff', btnSecondaryBg: '#eeeeee',
         disclaimerBg: '#ffffff', disclaimerBorder: '#000000', radius: 0
@@ -87,6 +97,8 @@ AlimenCal.themes = (function () {
       values: {
         bg: '#faf4ee', card: '#fffdf9', ink: '#33261b', muted: '#7a6a58',
         accent: '#9c4a1e', accentDark: '#7a3714', accentInk: '#ffffff',
+        bannerBg: '#9c4a1e',
+        bannerInk: '#ffffff',
         warn: '#a04a10', warnBg: '#fdefe2', warnBorder: '#e8c39e',
         line: '#e5d9c9', inputBg: '#fbf7f0', btnSecondaryBg: '#f0e6d8',
         disclaimerBg: '#fdf3d8', disclaimerBorder: '#e8d9a0', radius: 14
@@ -98,6 +110,8 @@ AlimenCal.themes = (function () {
       values: {
         bg: '#eef3fb', card: '#ffffff', ink: '#16273d', muted: '#51677f',
         accent: '#1d4f91', accentDark: '#153a6c', accentInk: '#ffffff',
+        bannerBg: '#1d4f91',
+        bannerInk: '#ffffff',
         warn: '#b3541e', warnBg: '#fdf1e7', warnBorder: '#ecc9a9',
         line: '#c9d6e8', inputBg: '#f7fafd', btnSecondaryBg: '#dde7f4',
         disclaimerBg: '#fff8e1', disclaimerBorder: '#e8d9a0', radius: 10
