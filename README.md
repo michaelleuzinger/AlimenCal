@@ -125,11 +125,10 @@ node tests/themes.test.js       # Themes: Presets, Token, Validierung, Sanitizin
 node tests/casedata.test.js     # Falldaten-Austausch: Validierung, Merge, Roundtrip (43 Tests)
 ```
 
-Prüft u. a.: Grundbedarfstabellen, Aufteilung nach wirtschaftlicher
-Leistungsfähigkeit, netto-Verrechnung des Betreuungsunterhalts (kein Saldo
-bei 50/50), Mangellagen-Deckelung auf das frei verfügbare Einkommen,
-Mehrkindberechnungen, die Überschuss- und Mankomethode des
-Ehegattenunterhalts sowie CSV-Parsing und Ausgleichslogik der Kostentrennung.
+Geprüft werden u. a. Grundbedarfstabellen, Aufteilung nach wirtschaftlicher
+Leistungsfähigkeit, Mangellagen-Deckelung, die Überschuss- und Mankomethode
+des Ehegattenunterhalts sowie CSV-Parsing und Ausgleichslogik; die
+Berechnungslogik im Detail: [docs/KALKULATION.md](docs/KALKULATION.md).
 
 ## Verwendete Richtwerte (Default)
 
