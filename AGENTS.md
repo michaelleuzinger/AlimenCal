@@ -20,8 +20,8 @@ unvollständig und darf nicht gemergt werden.
 | Richtwerte / Defaults (`js/config.js`) | `docs/KALKULATION.md` (Wertetabelle), README-Abschnitt «Verwendete Richtwerte», Quellenangaben inkl. Datum «Stand: …» |
 | Presets (`presets/*.json`, `js/presets.js`) | README-Abschnitt «Kantonale Presets», Preset-`meta` (Quelle, URL, Hinweise) |
 | Sprachen / i18n (`js/i18n/*`) | `docs/BENUTZERHANDBUCH.md` (Sprachliste), ggf. README |
-| Struktur / neue Dateien | README-Abschnitt «Struktur» |
-| Screenshots (UI-Änderungen) | `screenshots/` erneuern; README-Tabelle «Screenshots» **und** Einbettungen im BENUTZERHANDBUCH synchron halten (Inventar-Regel, s. u.) |
+| Struktur / neue Dateien | Struktur-Übersicht unten |
+| Screenshots (UI-Änderungen) | `screenshots/` erneuern; Inventar-Tabelle unten **und** Einbettungen im BENUTZERHANDBUCH synchron halten (Inventar-Regel, s. u.) |
 | Rechtliches / Rechtsprechungs-Bezug | `docs/RECHTLICHE-GRUNDLAGEN.md` |
 
 ### Zusätzlich gilt
@@ -53,9 +53,44 @@ unvollständig und darf nicht gemergt werden.
      (Pfad von docs/ aus: `../screenshots/…`). Keine Doppel-Einbettungen
      derselben Datei an mehreren Orten ausser dem Hero-Shot im README.
   5. **Nachführung im selben Change**: `tools/make-screenshots.js` (VIEWS),
-     README-Tabelle «Screenshots» und die Einbettungen im
+     Inventar-Tabelle (unten) und die Einbettungen im
      BENUTZERHANDBUCH sind konsistent zu halten; entfernte Screenshots sind
      auch aus README/Handbuch zu löschen (keine toten Links).
+### Screenshot-Inventar
+
+| Screenshot | Inhalt |
+|---|---|
+| [`screenshots/01-kindesunterhalt-de.png`](screenshots/01-kindesunterhalt-de.png) | Kindesunterhalt inkl. Aufwandsmodus und Resultat (Deutsch); Hero-Shot README + Handbuch |
+| [`screenshots/02-ehegattenunterhalt-de.png`](screenshots/02-ehegattenunterhalt-de.png) | Ehegattenunterhalt mit Bedarf/Leistungsfähigkeit und Resultat (Deutsch) |
+| [`screenshots/03-kostentrennung-de.png`](screenshots/03-kostentrennung-de.png) | Kostentrennung mit anonymisiertem Bankexport, Zuordnungen und Ausgleich (Deutsch) |
+| [`screenshots/04-austausch-de.png`](screenshots/04-austausch-de.png) | Austausch-Tab mit Export/Import (Deutsch) |
+| [`screenshots/05-einstellungen-menue-de.png`](screenshots/05-einstellungen-menue-de.png) | Zahnrad-Menü geöffnet: Einstellungen/Info-Einträge und Sprachwahl (Deutsch) |
+| [`screenshots/06-richtwerte-de.png`](screenshots/06-richtwerte-de.png) | Richtwerte mit Preset-Auswahl und Wertetabelle (Deutsch) |
+| [`screenshots/07-themes-classic-de.png`](screenshots/07-themes-classic-de.png) | Themes mit Theme-Editor, Classic (Deutsch) |
+| [`screenshots/08-themes-dark-de.png`](screenshots/08-themes-dark-de.png) | Themes, Dark-Theme (Duplikat von 07, legitimiert: dokumentiertes Feature) |
+| [`screenshots/09-pension-enfants-fr.png`](screenshots/09-pension-enfants-fr.png) | Pension alimentaire (Français); einzige fremdsprachige Ansicht als Beleg der Mehrsprachigkeit |
+
+### Struktur
+
+```
+index.html          UI (Tab-Navigation mit Funktionen: Kindesunterhalt, Ehegattenunterhalt, Kostentrennung, Austausch; Richtwerte/Themes/Über und Sprachwahl über Zahnrad-Menü oben rechts im Kopf)
+css/style.css       Styles
+js/calculator.js    Berechnungskern (DOM-frei, auch in Node.js lauffähig)
+js/costsplit.js     Kostentrennung: CSV-Import, Zuordnung, Ausgleich (DOM-frei)
+js/themes.js       Theme-Definitionen und -Validierung (DOM-frei, auch in Node.js lauffähig)
+js/casedata.js     Falldaten-Austausch: Validierung und Merge (DOM-frei)
+js/config.js        Default-Richtwerte (Zürcher Kinderkosten-Tabelle 1.3.2025)
+js/presets.js       Eingebettete Kopie der kantonalen Presets (file://-fähig)
+presets/*.json      Kantonale Richtwertsätze inkl. Quellen und Checklisten
+js/app.js           UI-Logik, i18n-Anwendung, localStorage, Import/Export
+js/i18n/{de,fr,it,en}.js  Sprachdateien
+AGENTS.md           Verbindliche Arbeitsregeln (Doku-in-Sync-Regel, Checklisten)
+docs/               Benutzerhandbuch, Berechnungslogik, Kostentrennung, Rechtliches
+screenshots/        Screenshots der App (Inventar-Regel: s. AGENTS.md; Erzeugung tools/make-screenshots.js)
+tools/              make-screenshots.js: Screenshot-Generator (Puppeteer, s. AGENTS.md)
+tests/              Unit-Tests (node)
+```
+
 - **Tests**: Neue Funktionalität erhält Unit-Tests; wird die Anzahl/geprüfte
   Fälle geändert, sind die Test-Zahlen im README zu aktualisieren.
 - **Roadmap**: Erledigte Punkte im README werden abgehakt, neue geplante
@@ -69,7 +104,7 @@ unvollständig und darf nicht gemergt werden.
 ### Kurz-Checkliste vor jedem Merge
 
 - [ ] Alle betroffenen `docs/*.md` aktualisiert
-- [ ] README aktuell (Features, Nutzung, Richtwerte, Tests, Struktur, Screenshots, Roadmap)
+- [ ] README aktuell (Features, QuickStart, Nutzung, Richtwerte, Tests, Roadmap)
 - [ ] Screenshots bei UI-Änderungen erneuert
 - [ ] `node tests/*.test.js` grün
 - [ ] Rechtlicher Disclaimer bleibt vollständig erhalten

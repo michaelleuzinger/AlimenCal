@@ -97,25 +97,6 @@ Ausführliche Anleitung: [docs/BENUTZERHANDBUCH.md](docs/BENUTZERHANDBUCH.md)
 | [docs/KOSTENTRENNUNG.md](docs/KOSTENTRENNUNG.md) | Modul Kostentrennung: CSV-Import, Zuordnung, Ausgleich |
 | [docs/RECHTLICHE-GRUNDLAGEN.md](docs/RECHTLICHE-GRUNDLAGEN.md) | Rechtsquellen, Rechtsprechung, kantonale Praxis, Disclaimer |
 
-## Screenshots
-
-Einbettungen: dieses README zeigt als Hero-Shot nur den Tab Kindesunterhalt;
-die weiteren Ansichten sind im
-[Benutzerhandbuch](docs/BENUTZERHANDBUCH.md) jeweils im zugehörigen
-Tab-Abschnitt eingebettet. Inventar (Regeln in [AGENTS.md](AGENTS.md)):
-
-| Screenshot | Inhalt |
-|---|---|
-| [`screenshots/01-kindesunterhalt-de.png`](screenshots/01-kindesunterhalt-de.png) | Kindesunterhalt inkl. Aufwandsmodus und Resultat (Deutsch); Hero-Shot README + Handbuch |
-| [`screenshots/02-ehegattenunterhalt-de.png`](screenshots/02-ehegattenunterhalt-de.png) | Ehegattenunterhalt mit Bedarf/Leistungsfähigkeit und Resultat (Deutsch) |
-| [`screenshots/03-kostentrennung-de.png`](screenshots/03-kostentrennung-de.png) | Kostentrennung mit anonymisiertem Bankexport, Zuordnungen und Ausgleich (Deutsch) |
-| [`screenshots/04-austausch-de.png`](screenshots/04-austausch-de.png) | Austausch-Tab mit Export/Import (Deutsch) |
-| [`screenshots/05-einstellungen-menue-de.png`](screenshots/05-einstellungen-menue-de.png) | Zahnrad-Menü geöffnet: Einstellungen/Info-Einträge und Sprachwahl (Deutsch) |
-| [`screenshots/06-richtwerte-de.png`](screenshots/06-richtwerte-de.png) | Richtwerte mit Preset-Auswahl und Wertetabelle (Deutsch) |
-| [`screenshots/07-themes-classic-de.png`](screenshots/07-themes-classic-de.png) | Themes mit Theme-Editor, Classic (Deutsch) |
-| [`screenshots/08-themes-dark-de.png`](screenshots/08-themes-dark-de.png) | Themes, Dark-Theme (Duplikat von 07, legitimiert: dokumentiertes Feature) |
-| [`screenshots/09-pension-enfants-fr.png`](screenshots/09-pension-enfants-fr.png) | Pension alimentaire (Français); einzige fremdsprachige Ansicht als Beleg der Mehrsprachigkeit |
-
 ## Kantonale Presets
 
 Unter `presets/` liegen kantonsbezogene Richtwertsätze als JSON, auswählbar im
@@ -149,61 +130,18 @@ bei 50/50), Mangellagen-Deckelung auf das frei verfügbare Einkommen,
 Mehrkindberechnungen, die Überschuss- und Mankomethode des
 Ehegattenunterhalts sowie CSV-Parsing und Ausgleichslogik der Kostentrennung.
 
-## Struktur
-
-```
-index.html          UI (Tab-Navigation mit Funktionen: Kindesunterhalt, Ehegattenunterhalt, Kostentrennung, Austausch; Richtwerte/Themes/Über und Sprachwahl über Zahnrad-Menü oben rechts im Kopf)
-css/style.css       Styles
-js/calculator.js    Berechnungskern (DOM-frei, auch in Node.js lauffähig)
-js/costsplit.js     Kostentrennung: CSV-Import, Zuordnung, Ausgleich (DOM-frei)
-js/themes.js       Theme-Definitionen und -Validierung (DOM-frei, auch in Node.js lauffähig)
-js/casedata.js     Falldaten-Austausch: Validierung und Merge (DOM-frei)
-js/config.js        Default-Richtwerte (Zürcher Kinderkosten-Tabelle 1.3.2025)
-js/presets.js       Eingebettete Kopie der kantonalen Presets (file://-fähig)
-presets/*.json      Kantonale Richtwertsätze inkl. Quellen und Checklisten
-js/app.js           UI-Logik, i18n-Anwendung, localStorage, Import/Export
-js/i18n/{de,fr,it,en}.js  Sprachdateien
-AGENTS.md           Verbindliche Arbeitsregeln (Doku-in-Sync-Regel, Checklisten)
-docs/               Benutzerhandbuch, Berechnungslogik, Kostentrennung, Rechtliches
-screenshots/        Screenshots der App (Inventar-Regel: s. AGENTS.md; Erzeugung tools/make-screenshots.js)
-tools/              make-screenshots.js: Screenshot-Generator (Puppeteer, s. AGENTS.md)
-tests/              Unit-Tests (node)
-```
-
 ## Verwendete Richtwerte (Default)
 
-Die mitgelieferten Default-Richtwerte basieren auf folgenden Quellen
-(Stand: März 2025):
-
-| Position | Wert | Quelle |
-|---|---|---|
-| Grundbedarf Kind 1.–6. Altersjahr | CHF 1310/Monat | Zürcher Kinderkosten-Tabelle vom 1. März 2025 (Einzelkind, Gesamtkosten CHF 1440 inkl. Wohnkosten) |
-| Grundbedarf Kind 7.–12. Altersjahr | CHF 1445/Monat | Zürcher Kinderkosten-Tabelle 2025 (Einzelkind, CHF 1575) |
-| Grundbedarf Kind 13.–17. Altersjahr | CHF 1790/Monat | Zürcher Kinderkosten-Tabelle 2025 (Einzelkind, CHF 1920) |
-| Grundbedarf ab 18. Altersjahr | CHF 1790/Monat | Zürcher Kinderkosten-Tabelle 2025 (anwendbar bis 21. Altersjahr) |
-| Betreuungsunterhalt (Richtwerte) | CHF 700–1100 je Altersklasse | Orientierungswerte, kantonale Praxis massgebend |
-| Existenzminima (Eltern) | CHF 2000/2200 | betreibungsrechtliche Richtlinien (KK-BSV, Art. 93 SchKG) als Orientierung |
-
-**Wichtige Hinweise zu den Werten:**
-
-- Die Zürcher Tabellenwerte beinhalten eine durchschnittliche
-  Kinder-Krankenkassenprämie von CHF 130/Monat, die hier abgezogen wird,
-  weil die effektive Prämie in der App separat erfasst wird (verhindert
-  Doppelerfassung).
-- Die Tabelle kann über das 18. Altersjahr bis zum 21. Altersjahr angewendet
-  werden, sofern der junge Erwachsene im Haushalt eines Elternteils lebt.
-- Per 2026 wird die Zürcher Kinderkosten-Tabelle nicht mehr weitergeführt.
-  Seit dem Leitentscheid **BGer 147 III 265** ist die **zweistufig-konkrete
-  Methode** (BGE 140 III 337) verbindlich; pauschalierende Tabellen sind
-  unzulässig. Die Werte dienen deshalb nur noch als Vergleichsmasse und müssen
-  im Einzelfall individuell begründet werden.
-- **Kanton Schaffhausen**: Es existiert keine publizierte kantonale
-  Unterhaltstabelle. Die KESB Schaffhausen wendet zwar dasselbe
-  Berechnungsmodell wie das Kantonsgericht Schaffhausen an (Merkblatt zum
-  neuen Unterhaltsrecht, Ziff. 4), die konkreten Ansätze sind jedoch nicht
-  veröffentlicht. Für Schaffhauser Fälle müssen die Werte daher zwingend über
-  die Konfiguration angepasst und mit der KESB (Mühlentalstrasse 65A,
-  8200 Schaffhausen) oder anwaltlich verifiziert werden.
+Die Default-Richtwerte (Stand: März 2025) basieren auf der Zürcher
+Kinderkosten-Tabelle vom 1. März 2025, abzüglich der enthaltenen pauschalen
+Kinder-Krankenkassenprämie (CHF 130, da die effektive Prämie separat erfasst
+wird), sowie auf betreibungsrechtlichen Existenzminima (Art. 93 SchKG) als
+Orientierung. Die vollständige Wertetabelle mit Quellen steht in
+[docs/KALKULATION.md](docs/KALKULATION.md); zur Rechtslage seit
+**BGer 147 III 265** (zweistufig-konkrete Methode verbindlich, Zürcher Tabelle
+per 2026 nicht mehr weitergeführt) und zur Praxis im Kanton Schaffhausen
+(keine publizierte Tabelle, Verifikation über die KESB zwingend) siehe
+[docs/RECHTLICHE-GRUNDLAGEN.md](docs/RECHTLICHE-GRUNDLAGEN.md).
 
 ## Rechtlicher Hinweis (Disclaimer)
 
