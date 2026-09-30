@@ -31,9 +31,9 @@ Installation, kein Server, keine Abhängigkeiten.
 2. `index.html` per Doppelklick im Browser öffnen (Chrome, Firefox, Edge …) –
    die App läuft direkt über `file://`.
 
-3. Im Tab **Richtwerte** allenfalls das kantonale Preset laden (z. B. Zürcher
-   Kinderkosten-Tabelle 1.3.2025), dann im Tab **Kindesunterhalt** mit der
-   Erfassung beginnen.
+3. Über das Zahnrad-Menü oben rechts allenfalls unter **Richtwerte** das
+   kantonale Preset laden (z. B. Zürcher Kinderkosten-Tabelle 1.3.2025),
+   dann im Tab **Kindesunterhalt** mit der Erfassung beginnen.
 
 Alle Eingaben werden automatisch lokal im Browser (localStorage) gespeichert.
 Optional kann die App statt über `file://` auch über einen lokalen Webserver
@@ -53,8 +53,8 @@ oder beliebiges statisches Hosting (z. B. GitHub Pages) bereitgestellt werden.
   anteilsmässig aufteilen (Anteil konfigurierbar) oder voll einer Partei
   zuordnen; Sammelaktionen für die Erstzuordnung
 - **Themes**: vordefinierte Designs (Classic, Dark, High Contrast, Warm, Blue)
-  und ein Theme-Editor, mit dem alle Farben und der Eckenradius frei anpassbar
-  sind; Auswahl wird lokal gespeichert
+  und ein Theme-Editor, mit dem alle Farben (inklusive Bannerfarbe) und der
+  Eckenradius frei anpassbar sind; Auswahl wird lokal gespeichert
 - **Persistenz**: alle Eingaben (inkl. Kinderliste, Kostentrennung mit
   Bankexport und Zuordnungen) werden automatisch gespeichert und nach einem
   Browser-Neustart wiederhergestellt – keine Daten gehen verloren
@@ -80,11 +80,12 @@ oder beliebiges statisches Hosting (z. B. GitHub Pages) bereitgestellt werden.
 4. Tab **Kostentrennung**: Stichtag wählen, Bankexport (CSV) hochladen,
    Kontoinhaber angeben, Transaktionen zuordnen – die App errechnet den
    Ausgleich. Details: [docs/KOSTENTRENNUNG.md](docs/KOSTENTRENNUNG.md)
-5. Tab **Themes**: Design wählen oder im Theme-Editor Farben anpassen.
-6. Tab **Richtwerte**: kantonale Werte anpassen, speichern,
-   exportieren/importieren, Presets laden.
-7. Tab **Austausch**: eigene Daten als JSON exportieren, Datei der
+5. Tab **Austausch**: eigene Daten als JSON exportieren, Datei der
    anderen Partei importieren (Merge).
+6. Über das Zahnrad-Menü oben rechts im Kopf: Sprachwahl sowie unter
+   **Richtwerte** kantonale Werte anpassen, speichern,
+   exportieren/importieren, Presets laden, und unter **Themes** Design
+   wählen oder im Theme-Editor Farben anpassen.
 
 Ausführliche Anleitung: [docs/BENUTZERHANDBUCH.md](docs/BENUTZERHANDBUCH.md)
 
