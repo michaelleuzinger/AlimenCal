@@ -9,6 +9,7 @@
   var LS_THEME = 'alimencal.theme';
   var LS_THEME_VALUES = 'alimencal.themevalues';
   var LS_BINDING = 'alimencal.binding';
+  var LS_KEYS = 'alimencal.keys';
   var FORM_FIELD_IDS = [
     'pa-income', 'pa-em', 'pa-employed', 'pb-income', 'pb-em', 'pb-employed',
     'spousal-enabled', 'sp-app-income', 'sp-app-em', 'sp-app-standard',
@@ -21,6 +22,7 @@
   var state = {
     lang: DEFAULT_LANG,
     cfg: null,
+    keys: null,
     children: [],
     costsplit: {
       transactions: [],
@@ -117,6 +119,7 @@
       setting.lockedB = !!s.lockedB;
       if (typeof s.valueBase === 'number') { setting.valueBase = s.valueBase; }
     });
+    svc.chain = Array.isArray(data.chain) ? data.chain : [];
     for (var scenarioId in (data.overrides || {})) {
       var ov = data.overrides[scenarioId];
       if (ov && typeof ov.valueOverride === 'number') {
@@ -126,7 +129,7 @@
   }
 
   function saveBindingState(svc) {
-    var data = { settings: {}, overrides: {} };
+    var data = { settings: {}, overrides: {}, chain: svc.chain || [] };
     BINDINGS.forEach(function (b) {
       var id = findSettingId(b.key);
       var setting = svc.getSetting(id);
@@ -149,7 +152,15 @@
       seen[ov.scenarioId + key] = true;
       data.overrides[ov.scenarioId] = { key: key, valueOverride: ov.valueOverride, reason: ov.reason || null };
     }
-    try { localStorage.setItem(LS_BINDING, JSON.stringify(data)); } catch (e) {}
+    /* appendChain dichtet Einträge async ab (Web Crypto); das Speichern
+     * läuft deshalb einen Microtask später, wenn ausstehende Siegel
+     * fertig sind. */
+    queueMicrotask(function () {
+      Promise.resolve(svc._chainQueue).then(function () {
+        data.chain = svc.chain || [];
+        try { localStorage.setItem(LS_BINDING, JSON.stringify(data)); } catch (e) {}
+      });
+    });
   }
 
   function findSettingId(key) {
@@ -283,6 +294,7 @@
       saveBindingState(svc);
       renderBindingTable();
       applyBindingLocksToForm();
+      refreshChainStatus();
       setBindingStatus(svc.isLocked(svc.getSetting(settingId)) ? t('binding', 'locked') : t('binding', 'pendingApproval'));
     } catch (e) {
       setBindingStatus(e.message);
@@ -292,6 +304,208 @@
   function setBindingStatus(msg) {
     var el = document.getElementById('binding-status');
     if (el) { el.textContent = msg || ''; }
+  }
+
+  /* ---- Schlüssel und signierte Lock-Dateien (serverlose Verbindlichkeit) -- */
+
+  function loadKeys() {
+    if (state.keys) { return state.keys; }
+    try {
+      var raw = localStorage.getItem(LS_KEYS);
+      if (raw) { state.keys = JSON.parse(raw); return state.keys; }
+    } catch (e) {}
+    state.keys = { partyA: null, partyB: null };
+    return state.keys;
+  }
+
+  function saveKeys() {
+    try { localStorage.setItem(LS_KEYS, JSON.stringify(state.keys)); } catch (e) {}
+  }
+
+  function hasKey(party) {
+    var k = loadKeys();
+    return !!(k && k['party' + party] && k['party' + party].publicKey);
+  }
+
+  function generateKeyFor(party) {
+    AlimenCal.settings.generateKeyPair(function (res, err) {
+      if (err || !res) {
+        setBindingStatus(t('crypto', 'keyGenError'));
+        return;
+      }
+      /* KeyPair-Objekt (CryptoKey) kann nicht serialisiert werden; wir
+       * speichern JWK + halten CryptoKey in Memory. PrivateKey-JWK bleibt
+       * lokal im Browser (localStorage). */
+      loadKeys();
+      state.keys['party' + party] = {
+        publicKey: res.jwk.publicKey,
+        privateKey: res.jwk.privateKey,
+        cryptoKey: res.keyPair.privateKey,
+        publicCryptoKey: res.keyPair.publicKey
+      };
+      saveKeys();
+      /* cryptoKey/ publicCryptoKey sind nicht serialisierbar -> nach dem
+       * Laden aus localStorage reimportieren (siehe importPrivateIfNeeded). */
+      delete state.keys['party' + party].cryptoKey;
+      delete state.keys['party' + party].publicCryptoKey;
+      saveKeys();
+      state.keys['party' + party].cryptoKey = res.keyPair.privateKey;
+      renderKeyStatus();
+      setBindingStatus(t('crypto', 'keyGenerated'));
+    });
+  }
+
+  function importPrivateIfNeeded(party) {
+    var k = loadKeys()['party' + party];
+    if (!k || !k.privateKey || k.cryptoKey) { return k ? k.cryptoKey : null; }
+    /* Reimport aus JWK (asynchron; einfach zurückgeben, true Synchrontität
+     * über generateKeyFor-Pfad; für Signatur wird reimportKey genutzt). */
+    return null;
+  }
+
+  function reimportPrivateKey(party, callback) {
+    var k = loadKeys()['party' + party];
+    if (!k || !k.privateKey) { callback(null); return; }
+    if (k.cryptoKey) { callback(k.cryptoKey); return; }
+    crypto.subtle.importKey('jwk', k.privateKey,
+      { name: 'ECDSA', namedCurve: 'P-256' }, true, ['sign']).then(function (ck) {
+      k.cryptoKey = ck;
+      callback(ck);
+    }).catch(function () { callback(null); });
+  }
+
+  function exportKeyFor(party) {
+    var k = loadKeys()['party' + party];
+    if (!k || !k.publicKey) { return; }
+    var blob = new Blob([JSON.stringify({
+      app: 'alimencal', kind: 'publickey', version: 1, party: party,
+      publicKey: k.publicKey
+    }, null, 2)], { type: 'application/json' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'alimencal-key-' + (party === 'A' ? 'a' : 'b') + '.json';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+
+  function importKeyFile(party, file) {
+    var reader = new FileReader();
+    reader.onload = function () {
+      try {
+        var parsed = JSON.parse(reader.result);
+        if (parsed.app !== 'alimencal' || parsed.kind !== 'publickey' || !parsed.publicKey) {
+          throw new Error('format');
+        }
+        loadKeys();
+        var other = party === 'A' ? 'partyB' : 'partyA';
+        state.keys[other] = state.keys[other] || {};
+        state.keys[other].publicKey = parsed.publicKey;
+        state.keys[other].importedParty = parsed.party;
+        saveKeys();
+        renderKeyStatus();
+        setBindingStatus(t('crypto', 'keyImported'));
+      } catch (e) {
+        setBindingStatus(t('crypto', 'keyImportError'));
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  function renderKeyStatus() {
+    var elA = document.getElementById('keys-party-a-status');
+    var elB = document.getElementById('keys-party-b-status');
+    if (!elA) { return; }
+    var k = loadKeys();
+    elA.textContent = (k.partyA && k.partyA.publicKey) ?
+      t('crypto', 'keyPresent') : t('crypto', 'keyMissing');
+    elB.textContent = (k.partyB && k.partyB.publicKey) ?
+      t('crypto', 'keyPresent') : t('crypto', 'keyMissing');
+  }
+
+  /* Gibt das eigene publicKey-JWK für Signaturprüfung zurück: Partei A
+   * prüft mit keyA; wir nehmen was vorhanden ist. */
+  function publicKeyFor(party) {
+    var k = loadKeys();
+    var entry = k['party' + party];
+    return entry && entry.publicKey ? entry.publicKey : null;
+  }
+
+  function doLockfileExport(signParty) {
+    var svc = settingsService();
+    svc.exportBindingFile(function (file) {
+      if (signParty) {
+        reimportPrivateKey(signParty, function (ck) {
+          if (!ck) { setBindingStatus(t('crypto', 'signNoKey')); return; }
+          svc.signBindingFile(file, ck, signParty, function (signed, err) {
+            if (err || !signed) { setBindingStatus(err ? err.message : t('crypto', 'signError')); return; }
+            /* Signierte Datei im State merken (für weiteren Signatur-Schritt
+             * der Gegenseite) und herunterladen. */
+            state.lastLockFile = signed;
+            downloadLockFile(signed);
+            setBindingStatus(t('crypto', 'signed'));
+          });
+        });
+      } else {
+        state.lastLockFile = file;
+        downloadLockFile(file);
+      }
+    });
+  }
+
+  function downloadLockFile(file) {
+    var blob = new Blob([JSON.stringify(file, null, 2)], { type: 'application/json' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'alimencal-binding.json';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+
+  function doLockfileImport(file) {
+    var reader = new FileReader();
+    reader.onload = function () {
+      try {
+        var parsed = JSON.parse(reader.result);
+        var svc = settingsService();
+        var current = svc.buildBindingFile().values;
+        svc.verifyBindingFile(parsed, publicKeyFor('A'), publicKeyFor('B'), current, function (result) {
+          state.lastLockFile = parsed;
+          renderLockfileResult(result);
+        });
+      } catch (e) {
+        setBindingStatus(t('crypto', 'lockfileInvalid'));
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  function renderLockfileResult(result) {
+    var el = document.getElementById('lockfile-result');
+    if (!el) { return; }
+    if (!result.formatOk) { el.textContent = t('crypto', 'lockfileInvalid'); return; }
+    var parts = [];
+    parts.push(result.valueHashOk ? t('crypto', 'hashOk') : t('crypto', 'hashBroken'));
+    parts.push(result.sigA ? t('crypto', 'sigOkA') : t('crypto', 'sigMissingA'));
+    parts.push(result.sigB ? t('crypto', 'sigOkB') : t('crypto', 'sigMissingB'));
+    if (result.matchesCurrent === true) { parts.push(t('crypto', 'matchesCurrent')); }
+    if (result.matchesCurrent === false) { parts.push(t('crypto', 'differsCurrent')); }
+    el.textContent = parts.join(' | ');
+  }
+
+  function refreshChainStatus() {
+    var el = document.getElementById('chain-status');
+    if (!el) { return; }
+    var svc = settingsService();
+    /* appendChain siegelt asynchron (Web Crypto); erst wenn die interne
+     * Queue abgearbeitet ist, ist die Kette vollständig und prüfbar. */
+    var queue = svc._chainQueue || Promise.resolve();
+    queue.then(function () {
+      svc.verifyChain(function (result) {
+        el.textContent = result.valid ?
+          t('crypto', 'chainOk') + ' (' + (svc.chain ? svc.chain.length : 0) + ')' :
+          t('crypto', 'chainBroken');
+      });
+    });
   }
 
   function fmt(x) {
@@ -513,6 +727,24 @@
     document.getElementById('cfg-restore').textContent = t('settings', 'restoreDefaults');
     document.getElementById('cfg-export').textContent = t('settings', 'exportJson');
     document.getElementById('cfg-import-label').textContent = t('settings', 'importJson');
+    document.getElementById('crypto-heading').textContent = t('crypto', 'heading');
+    document.getElementById('crypto-intro').textContent = t('crypto', 'intro');
+    document.getElementById('keys-legend').textContent = t('crypto', 'keysLegend');
+    document.getElementById('keys-party-a-status').textContent = t('crypto', 'keyMissing');
+    document.getElementById('keys-generate-a').textContent = t('crypto', 'generate');
+    document.getElementById('keys-export-a').textContent = t('crypto', 'exportPub');
+    document.getElementById('keys-import-a-label').textContent = t('crypto', 'importPub');
+    document.getElementById('keys-party-b-status').textContent = t('crypto', 'keyMissing');
+    document.getElementById('keys-generate-b').textContent = t('crypto', 'generate');
+    document.getElementById('keys-export-b').textContent = t('crypto', 'exportPub');
+    document.getElementById('keys-import-b-label').textContent = t('crypto', 'importPub');
+    document.getElementById('lockfile-legend').textContent = t('crypto', 'lockfileLegend');
+    document.getElementById('lockfile-export').textContent = t('crypto', 'lockfileExport');
+    document.getElementById('lockfile-sign-a').textContent = t('crypto', 'lockfileSignA');
+    document.getElementById('lockfile-sign-b').textContent = t('crypto', 'lockfileSignB');
+    document.getElementById('lockfile-import-label').textContent = t('crypto', 'lockfileImportLabel');
+    renderKeyStatus();
+    refreshChainStatus();
     document.getElementById('binding-heading').textContent = t('binding', 'heading');
     document.getElementById('binding-intro').textContent = t('binding', 'intro');
     document.getElementById('binding-override-label').textContent = t('binding', 'overrideMode');
@@ -1447,6 +1679,25 @@
       }
     });
 
+    document.getElementById('keys-generate-a').addEventListener('click', function () { generateKeyFor('A'); });
+    document.getElementById('keys-generate-b').addEventListener('click', function () { generateKeyFor('B'); });
+    document.getElementById('keys-export-a').addEventListener('click', function () { exportKeyFor('A'); });
+    document.getElementById('keys-export-b').addEventListener('click', function () { exportKeyFor('B'); });
+    document.getElementById('keys-import-a').addEventListener('change', function () {
+      if (this.files && this.files[0]) { importKeyFile('A', this.files[0]); }
+      this.value = '';
+    });
+    document.getElementById('keys-import-b').addEventListener('change', function () {
+      if (this.files && this.files[0]) { importKeyFile('B', this.files[0]); }
+      this.value = '';
+    });
+    document.getElementById('lockfile-export').addEventListener('click', function () { doLockfileExport(null); });
+    document.getElementById('lockfile-sign-a').addEventListener('click', function () { doLockfileExport('A'); });
+    document.getElementById('lockfile-sign-b').addEventListener('click', function () { doLockfileExport('B'); });
+    document.getElementById('lockfile-import').addEventListener('change', function () {
+      if (this.files && this.files[0]) { doLockfileImport(this.files[0]); }
+      this.value = '';
+    });
     document.getElementById('binding-override-mode').addEventListener('change', function () {
       renderBindingTable();
       setBindingStatus(this.checked ? t('binding', 'overrideActive') : '');

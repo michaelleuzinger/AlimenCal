@@ -274,6 +274,47 @@
         </table>
         <p id="binding-status" class="hint"></p>
       </div>
+      <div class="card" id="crypto-card">
+        <h3 id="crypto-heading"></h3>
+        <p id="crypto-intro" class="hint"></p>
+        <div class="grid">
+          <fieldset class="card">
+            <legend id="keys-legend"></legend>
+            <p id="keys-party-a-status" class="hint"></p>
+            <p>
+              <button id="keys-generate-a" class="secondary"></button>
+              <button id="keys-export-a" class="secondary"></button>
+              <label class="file-label">
+                <span id="keys-import-a-label"></span>
+                <input type="file" id="keys-import-a" accept="application/json,.json">
+              </label>
+            </p>
+            <p id="keys-party-b-status" class="hint"></p>
+            <p>
+              <button id="keys-generate-b" class="secondary"></button>
+              <button id="keys-export-b" class="secondary"></button>
+              <label class="file-label">
+                <span id="keys-import-b-label"></span>
+                <input type="file" id="keys-import-b" accept="application/json,.json">
+              </label>
+            </p>
+          </fieldset>
+          <fieldset class="card">
+            <legend id="lockfile-legend"></legend>
+            <p>
+              <button id="lockfile-export" class="secondary"></button>
+              <button id="lockfile-sign-a" class="secondary"></button>
+              <button id="lockfile-sign-b" class="secondary"></button>
+            </p>
+            <label class="file-label">
+              <span id="lockfile-import-label"></span>
+              <input type="file" id="lockfile-import" accept="application/json,.json">
+            </label>
+            <p id="lockfile-result" class="hint"></p>
+          </fieldset>
+        </div>
+        <p id="chain-status" class="hint"></p>
+      </div>
       <div class="actions">
         <button id="cfg-save" class="primary"></button>
         <button id="cfg-restore" class="ghost"></button>

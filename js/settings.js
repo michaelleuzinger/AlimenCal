@@ -1,5 +1,12 @@
 /*
  * AlimenCal – Verbindliche Einstellungen, Override-Modus, Read-Only-Imports.
+ * Manipulationsschutz (serverlos):
+   *  - Hash-Kette: jede Aktion erhaelt einen Ketten-Eintrag
+   *    hash = SHA-256(prevHash || kanonisches JSON der Aktion); nachtraegliche
+   *    Manipulation der Historie ist erkennbar (verifyChain()).
+   *  - Beidseitig signierte Lock-Dateien: exportBindingFile() erzeugt den
+   *    Hash ueber die gelockten Werte; beide Parteien signieren (Web Crypto,
+   *    ECDSA P-256); verifyBindingFile() prueft Werte und Signaturen.
  * DOM-freies Modul (Browser + Node.js):
  *  - Two-Party-Lock: Berechnungsrelevante Werte sind nach beidseitiger
  *    Bestätigung (Partei A und Partei B) read-only.
@@ -78,6 +85,7 @@ AlimenCal.settings = (function () {
       throw errorCode('Einstellung ' + settingId +
         ' ist beidseitig verbindlich festgelegt (read-only für beide Parteien)');
     }
+    this.appendChain('update', { key: setting.key, from: setting.valueBase, to: newValue, party: actorParty || null });
     this.audit(setting, actorParty || null, 'update', setting.valueBase, newValue);
     setting.valueBase = newValue;
   };
@@ -92,6 +100,7 @@ AlimenCal.settings = (function () {
       return this.isLocked(setting);
     }
     if (party === 'A') { setting.lockedA = true; } else { setting.lockedB = true; }
+    this.appendChain('confirm_lock', { key: setting.key, party: party });
     this.audit(setting, party, 'confirm_lock', null, null);
     return this.isLocked(setting);
   };
@@ -99,6 +108,7 @@ AlimenCal.settings = (function () {
   SettingsService.prototype.rebaseSetting = function (settingId, newValue, actorParty, role) {
     requireRole(role || 'APPROVER', 'rebase');
     var setting = this.getSetting(settingId);
+    this.appendChain('rebase', { key: setting.key, from: setting.valueBase, to: newValue, party: actorParty || null });
     this.audit(setting, actorParty || null, 'rebase', setting.valueBase, newValue);
     setting.version += 1;
     setting.valueBase = newValue;
@@ -118,6 +128,7 @@ AlimenCal.settings = (function () {
       existing.valueOverride = valueOverride;
       existing.reason = opts.reason || null;
       existing.createdByParty = opts.party || null;
+      this.appendChain('override_update', { key: setting.key, scenarioId: scenarioId, value: valueOverride, party: opts.party || null });
       return existing.id;
     }
     var id = newId('override');
@@ -126,6 +137,7 @@ AlimenCal.settings = (function () {
       valueOverride: valueOverride, reason: opts.reason || null,
       createdByParty: opts.party || null
     };
+    this.appendChain('override', { key: setting.key, scenarioId: scenarioId, value: valueOverride, party: opts.party || null });
     return id;
   };
 
@@ -144,7 +156,12 @@ AlimenCal.settings = (function () {
     if (!this.overrides[overrideId]) {
       throw errorCode('Override ' + overrideId + ' nicht gefunden');
     }
+    var ov = this.overrides[overrideId];
+    var setting = ov ? this.getSetting(ov.settingId) : null;
     delete this.overrides[overrideId];
+    if (setting) {
+      this.appendChain('override_delete', { key: setting.key, scenarioId: ov.scenarioId, party: null });
+    }
   };
 
   /* ---- Lesen (einzige Stelle für Berechnungen) ------------------------------ */
@@ -240,10 +257,237 @@ AlimenCal.settings = (function () {
     });
   };
 
+  /* ---- Hash-Kette (Manipulationserkennung der Historie) ------------------- */
+
+  var GENESIS = '0000000000000000000000000000000000000000000000000000000000000000';
+
+  function canonicalJson(value) {
+    function sort(v) {
+      if (Array.isArray(v)) { return v.map(sort); }
+      if (v && typeof v === 'object') {
+        var keys = Object.keys(v).sort();
+        var out = {};
+        keys.forEach(function (k) { out[k] = sort(v[k]); });
+        return out;
+      }
+      return v;
+    }
+    return JSON.stringify(sort(value));
+  }
+
+  function sha256Hex(str, callback) {
+    if (typeof crypto !== 'undefined' && crypto.subtle) {
+      crypto.subtle.digest('SHA-256', new TextEncoder().encode(str)).then(function (buf) {
+        var arr = new Uint8Array(buf);
+        var hex = '';
+        for (var i = 0; i < arr.length; i++) { hex += ('0' + arr[i].toString(16)).slice(-2); }
+        callback(hex);
+      });
+      return;
+    }
+    var nodeCrypto = null;
+    try { nodeCrypto = require('crypto'); } catch (e) {}
+    if (nodeCrypto) {
+      callback(nodeCrypto.createHash('sha256').update(str, 'utf8').digest('hex'));
+      return;
+    }
+    var h = 0x811c9dc5;
+    for (var j = 0; j < str.length; j++) { h = ((h ^ str.charCodeAt(j)) * 16777619) >>> 0; }
+    callback(('0000000' + h.toString(16)).slice(-8));
+  }
+
+  function sealEntry(entry, callback) {
+    sha256Hex(entry.prevHash + '|' + entry.action + '|' + canonicalJson(entry.payload), function (hex) {
+      entry.hash = hex;
+      callback(entry);
+    });
+  }
+
+  /* Anfügen wird serialisiert: der Previous-Hash ist erst lesbar, wenn das
+   * vorherige Siegel abgeschlossen ist (Web Crypto ist asynchron). */
+  SettingsService.prototype.appendChain = function (action, payload, done) {
+    var self = this;
+    this.chain = this.chain || [];
+    this._chainQueue = this._chainQueue || Promise.resolve();
+    this._chainQueue = this._chainQueue.then(function () {
+      return new Promise(function (resolve) {
+        var prev = self.chain.length ? self.chain[self.chain.length - 1].hash : GENESIS;
+        var entry = { prevHash: prev, action: action, payload: payload, hash: null };
+        sealEntry(entry, function (sealed) {
+          self.chain.push(sealed);
+          resolve(sealed);
+        });
+      });
+    }).then(function (sealed) {
+      if (typeof done === 'function') { done(sealed); }
+    });
+  };
+
+  SettingsService.prototype.verifyChain = function (done) {
+    var chain = this.chain || [];
+    var prev = GENESIS;
+    function step(i) {
+      if (i >= chain.length) { done({ valid: true, brokenAt: -1 }); return; }
+      var e = chain[i];
+      if (e.prevHash !== prev) { done({ valid: false, brokenAt: i }); return; }
+      sealEntry({ prevHash: e.prevHash, action: e.action, payload: e.payload, hash: null }, function (re) {
+        if (re.hash !== e.hash) { done({ valid: false, brokenAt: i }); return; }
+        prev = e.hash;
+        step(i + 1);
+      });
+    }
+    step(0);
+  };
+
+  /* ---- Signierte Lock-Dateien (Web Crypto, ECDSA P-256) -------------------- */
+
+  var KEY_ALGO = { name: 'ECDSA', namedCurve: 'P-256' };
+  var SIGN_ALGO = { name: 'ECDSA', hash: { name: 'SHA-256' } };
+
+  function exportKeyPair(kp, callback) {
+    Promise.all([
+      crypto.subtle.exportKey('jwk', kp.publicKey),
+      crypto.subtle.exportKey('jwk', kp.privateKey)
+    ]).then(function (jwks) {
+      callback({ publicKey: jwks[0], privateKey: jwks[1] });
+    }).catch(callback);
+  }
+
+  function generateKeyPair(callback) {
+    if (typeof crypto === 'undefined' || !crypto.subtle) {
+      callback(null, new Error('Web Crypto nicht verfügbar'));
+      return;
+    }
+    crypto.subtle.generateKey(KEY_ALGO, true, ['sign', 'verify']).then(function (kp) {
+      exportKeyPair(kp, function (jwk, err) {
+        if (err) { callback(null, err); return; }
+        callback({ keyPair: kp, jwk: jwk });
+      });
+    }).catch(function (e) { callback(null, e); });
+  }
+
+  function importPublicKey(jwk, callback) {
+    if (typeof crypto === 'undefined' || !crypto.subtle) { callback(null, new Error('Web Crypto nicht verfügbar')); return; }
+    crypto.subtle.importKey('jwk', jwk, KEY_ALGO, true, ['verify']).then(callback).catch(callback);
+  }
+
+  function hexToBytes(hexHash) {
+    return new Uint8Array(hexHash.match(/.{2}/g).map(function (h) { return parseInt(h, 16); }));
+  }
+
+  function base64Encode(bytes) {
+    var s = '';
+    for (var i = 0; i < bytes.length; i++) { s += String.fromCharCode(bytes[i]); }
+    return typeof btoa === 'function' ? btoa(s) : Buffer.from(bytes).toString('base64');
+  }
+
+  function base64Decode(b64) {
+    if (typeof atob === 'function') {
+      var bin = atob(b64);
+      var out = new Uint8Array(bin.length);
+      for (var i = 0; i < bin.length; i++) { out[i] = bin.charCodeAt(i); }
+      return out;
+    }
+    return new Uint8Array(Buffer.from(b64, 'base64'));
+  }
+
+  function signHash(privateKey, hexHash, callback) {
+    if (typeof crypto === 'undefined' || !crypto.subtle) { callback(null, new Error('Web Crypto nicht verfügbar')); return; }
+    crypto.subtle.sign(SIGN_ALGO, privateKey, hexToBytes(hexHash)).then(function (sig) {
+      callback(base64Encode(new Uint8Array(sig)));
+    }).catch(callback);
+  }
+
+  function verifySignature(publicKeyJwk, hexHash, signatureB64, callback) {
+    var promise = new Promise(function (resolve) {
+      importPublicKey(publicKeyJwk, function (key, err) {
+        if (err || !key) { resolve(false); return; }
+        crypto.subtle.verify(SIGN_ALGO, key, base64Decode(signatureB64), hexToBytes(hexHash)).then(function (ok) {
+          resolve(!!ok);
+        }).catch(function () { resolve(false); });
+      });
+    });
+    if (typeof callback === 'function') { promise.then(callback); }
+    return promise;
+  }
+
+  SettingsService.prototype.buildBindingFile = function () {
+    var locked = {};
+    var ids = Object.keys(this.settings);
+    for (var i = 0; i < ids.length; i++) {
+      var s = this.settings[ids[i]];
+      if (s.lockedA && s.lockedB) { locked[s.key] = s.valueBase; }
+    }
+    return {
+      app: 'alimencal', kind: 'binding', version: 1,
+      values: locked,
+      signatures: { partyA: null, partyB: null },
+      chainHead: (this.chain && this.chain.length) ? this.chain[this.chain.length - 1].hash : GENESIS
+    };
+  };
+
+  SettingsService.prototype.exportBindingFile = function (callback) {
+    var file = this.buildBindingFile();
+    sha256Hex(canonicalJson(file.values), function (hex) {
+      file.valueHash = hex;
+      callback(file);
+    });
+  };
+
+  SettingsService.prototype.signBindingFile = function (file, privateKey, party, callback) {
+    sha256Hex(canonicalJson(file.values), function (hex) {
+      if (file.valueHash && file.valueHash !== hex) {
+        callback(null, new Error('valueHash stimmt nicht mit den Werten überein'));
+        return;
+      }
+      file.valueHash = hex;
+      signHash(privateKey, hex, function (sigB64, err) {
+        if (err || !sigB64) { callback(null, err || new Error('Signatur fehlgeschlagen')); return; }
+        file.signatures[party === 'A' ? 'partyA' : 'partyB'] = sigB64;
+        callback(file);
+      });
+    });
+  };
+
+  SettingsService.prototype.verifyBindingFile = function (file, publicKeyA, publicKeyB, currentValues, callback) {
+    var result = { formatOk: false, valueHashOk: false, sigA: false, sigB: false, matchesCurrent: null };
+    if (!file || file.app !== 'alimencal' || file.kind !== 'binding' ||
+        !file.values || typeof file.values !== 'object') {
+      callback(result); return;
+    }
+    result.formatOk = true;
+    sha256Hex(canonicalJson(file.values), function (hex) {
+      result.valueHashOk = !file.valueHash || file.valueHash === hex;
+      var checks = [];
+      if (publicKeyA && file.signatures && file.signatures.partyA) {
+        checks.push(verifySignature(publicKeyA, hex, file.signatures.partyA).then(function (ok) {
+          result.sigA = ok;
+        }));
+      }
+      if (publicKeyB && file.signatures && file.signatures.partyB) {
+        checks.push(verifySignature(publicKeyB, hex, file.signatures.partyB).then(function (ok) {
+          result.sigB = ok;
+        }));
+      }
+      Promise.all(checks).then(function () {
+        if (currentValues != null) {
+          result.matchesCurrent = canonicalJson(currentValues) === canonicalJson(file.values);
+        }
+        callback(result);
+      });
+    });
+  };
+
   return {
     SettingsService: SettingsService,
     computeChecksum: computeChecksum,
     hasPermission: hasPermission,
-    ROLES: ROLES
+    canonicalJson: canonicalJson,
+    sha256Hex: sha256Hex,
+    generateKeyPair: generateKeyPair,
+    verifySignature: verifySignature,
+    base64Encode: base64Encode,
+    base64Decode: base64Decode,
+    GENESIS: GENESIS
   };
 })();

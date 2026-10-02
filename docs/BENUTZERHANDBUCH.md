@@ -133,10 +133,18 @@ Kurz:
   die Override-Werte; der verbindliche Wert bleibt in der Tabelle sichtbar
   (durchgestrichen) und wird nie verändert. Ein Klick auf «Zurücksetzen»
   entfernt den Override und stellt die Originalberechnung wieder her.
+- **Serverlose Verbindlichkeit (Kryptografie):** Im selben Tab lassen sich
+  pro Partei Schlüssel erzeugen (bleiben lokal im Browser), öffentliche
+  Schlüssel gegenseitig importieren und die Lock-Datei von beiden Parteien
+  signieren. Der Import einer Lock-Datei prüft Werte-Hash, beide Signaturen
+  und Abweichungen von den eigenen Werten – Manipulationen sind damit
+  nachweisbar. Die Historie aller Aktionen ist zusätzlich als Hash-Kette
+  gesichert; ihr Status wird unter der Sektion angezeigt.
 - Hinweis: Die Verbindlichkeit wirkt im rein lokalen Betrieb (ohne Server)
-  pro Browser; für eine parteiübergreifend garantierte Verbindlichkeit sind
-  die Werte zu exportieren/importieren (JSON) oder serverseitig zu
-  persistieren (vgl. docs/settings-binding-override.md).
+  pro Browser; die kryptografische Prüfung (Kette + Signaturen) macht
+  Abweichungen nachweisbar. Eine erzwungene Schreibsperre auf gemeinsamer
+  Ablage bleibt ohne Server ausgeschlossen (vgl.
+  docs/settings-binding-override.md).
 
 ## Tab «Austausch» (zwei Parteien, zwei PCs)
 

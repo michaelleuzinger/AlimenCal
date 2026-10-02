@@ -29,7 +29,7 @@ Berechnung = f(Base ⊕ Overrides)
 | Modul (DOM-frei, Browser + Node) | `js/settings.js` | Two-Party-Lock, Override-Layer, `resolve()`, Import-Preview/Commit |
 | UI-Integration | `index.html` (Tab Richtwerte) + `js/app.js` | Bestätigungs-Buttons, Override-Modus, effektive Werte in der Berechnung |
 | SQL-Referenz (optional) | `schema/calc_settings.sql` | Tabellen + Immutability-Trigger für eine spätere Persistenz-Schicht |
-| Tests | `tests/settings.test.js` | Unit-Tests (Node), 21 Tests |
+| Tests | `tests/settings.test.js`, `tests/crypto.test.js` | Unit-Tests (Node): 21 + 15 Tests |
 
 Das Modul ist bewusst DOM-frei gehalten (gleiche Konvention wie
 `js/calculator.js`, `js/costsplit.js`, `js/casedata.js`): Die UI-Schicht
@@ -52,15 +52,59 @@ Das Modul ist bewusst DOM-frei gehalten (gleiche Konvention wie
 - Persistenz: Locks und Overrides werden unter dem localStorage-Schlüssel
   `alimencal.binding` gespeichert.
 
+### Serverlose Verbindlichkeit (Kryptografie, ohne Server)
+
+Manipulationen lassen sich ohne Server **nachweisbar** machen – nicht
+verhindern, aber erkennbar. Zwei Mechanismen (beide in `js/settings.js`,
+UI im Tab Richtwerte):
+
+**1. Hash-Kette (Manipulationserkennung der Historie)**
+
+- Jede Aktion (`update`, `confirm_lock`, `rebase`, `override`,
+  `override_update`, `override_delete`) erhält einen Ketten-Eintrag:
+  `hash = SHA-256(prevHash | action | kanonisches JSON des Payloads)`.
+- `verifyChain()` prüft die komplette Kette; nachträgliches Ändern,
+  Löschen oder Einfügen von Einträgen bricht die Verkettung → erkennbar.
+- Die Kette wird mit `alimencal.binding` persistiert; der Status ist in
+  der UI sichtbar («Historie (Hash-Kette) intakt (n)»).
+- Das Anfügen ist serialisiert (interne Promise-Queue), da Web Crypto
+  asynchron siegelt.
+
+**2. Beidseitig signierte Lock-Dateien (ECDSA P-256, Web Crypto)**
+
+- Pro Partei lässt sich ein Schlüsselpaar erzeugen (privater Schlüssel
+  bleibt lokal im Browser, `alimencal.keys`; öffentlicher Schlüssel wird
+  als JSON-Datei exportiert und von der Gegenseite importiert).
+- `exportBindingFile()` erzeugt die Lock-Datei mit `valueHash =
+  SHA-256(kanonisches JSON der gelockten Werte)`; beide Parteien
+  signieren diesen Hash (`signBindingFile`).
+- `verifyBindingFile()` prüft beim Import: Format, Werte-Hash (wurden die
+  Werte nach dem Signieren verändert?), beide Signaturen (fremde
+  Signaturen sind nicht fälschbar) und Abgleich mit den eigenen gelockten
+  Werten. Das Resultat wird in der UI konkret benannt.
+- Workflow: Partei A exportiert/signiert → Datei an Partei B → B signiert
+  dieselbe Datei → ab dann kann jede Seite jede empfangene Datei prüfen.
+
+**Was serverlos möglich ist / nicht möglich ist:**
+
+- Möglich: Nachweis, dass ein Wert manipuliert wurde (Hash-Kette,
+  Werte-Hash) und dass beide Parteien einen konkreten Stand bestätigt
+  haben (Signaturen). Das genügt für dokumentierte Verbindlichkeit.
+- Nicht möglich: technische Schreibsperre im Browser des anderen
+  (localStorage ist lokal zugänglich). Wer in seinem eigenen Browser
+  trotzdem ändert, verliert aber den Status «verbindlich bestätigt» –
+  und das ist nachweisbar.
+
 ### Grenzen im rein lokalen Betrieb (SPA)
 
-Der Two-Party-Lock wirkt **pro Browser-Instanz** (localStorage). Eine
-parteiübergreifend garantierte, manipulationsgeschützte Verbindlichkeit
-(erzwungene Gemeinsamkeit der Werte beider Parteien) ist ohne gemeinsame
-Ablage nicht möglich; dafür steht `schema/calc_settings.sql` als Referenz
-bereit. Im lokalen Betrieb gilt: verbindlich = beidseitig bestätigt und
-lokal fixiert; Export/Import (JSON) dient dem Abgleich zwischen den
-Parteien. Die App bleibt
+Der Two-Party-Lock wirkt **pro Browser-Instanz** (localStorage); die
+kryptografische Prüfung (Kette + Signaturen) macht Abweichungen davon
+nachweisbar. Eine parteiübergreifend *erzwungene* Verbindlichkeit
+(Schreibsperre auf gemeinsamer Ablage) bleibt ohne Server
+ausgeschlossen; dafür steht `schema/calc_settings.sql` als Referenz
+bereit. Im lokalen Betrieb gilt: verbindlich = beidseitig bestätigt,
+lokal fixiert und signiert; Export/Import (JSON) dient dem Abgleich
+zwischen den Parteien. Die App bleibt
 durchaus eine rein statische Web-App; das optionale SQL-Schema ist eine
 Referenz für den Fall, dass die verbindlichen Werte später serverseitig
 persistiert werden müssen (z. B. beim Austausch zwischen Parteien).
