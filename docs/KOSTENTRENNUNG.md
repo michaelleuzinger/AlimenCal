@@ -1,14 +1,14 @@
 # AlimenCal – Kostentrennung vor der Scheidung (Bankexport-Abgleich)
 
 Modul: `js/costsplit.js` · UI-Tab: **Kostentrennung** · Tests:
-`tests/costsplit.test.js` (42 Tests)
+`tests/costsplit.test.js` (54 Tests)
 
 ## Zweck
 
 Entscheidet sich ein Paar, seine laufenden Kosten schon **vor** der Scheidung
 zu separieren, erlaubt dieses Modul einen einfachen Ausgleich: Es wird ein
 Stichtag definiert, ab dem die Kosten getrennt gewertet werden. Ein
-Bankexport (CSV) dient als Belegliste; jede Transaktion wird einer Partei
+Ein Bankexport (CSV oder ISO-20022-XML/camt) dient als Belegliste; jede Transaktion wird einer Partei
 zugeordnet (ignorieren, anteilsmässig, voll). Die App berechnet, welche Partei
 der anderen einen Ausgleichsbetrag bezahlt.
 
@@ -22,7 +22,7 @@ Das Datum definiert, per wann die Kosten separiert werden. Transaktionen
 **vor** dem Stichtag werden ausgegraut und nicht gewertet (sie zählen in der
 Statistik unter «Vor Stichtag»).
 
-### 2. Bankexport hochladen (CSV)
+### 2. Bankexport hochladen (CSV oder camt-XML)
 
 Unterstützt werden gängige Schweizer Bankexporte:
 
@@ -35,6 +35,17 @@ Unterstützt werden gängige Schweizer Bankexporte:
   Tausenderzeichen wird ignoriert
 - **Kopfzeile**: Spaltennamen werden normalisiert und erkannt; ungültige
   Zeilen werden mit Warnung übersprungen
+
+Zusätzlich werden **ISO-20022-XML-Dateien** (camt.052/053/054, wie sie viele
+Schweizer E-Banking-Portale als alternativen Export anbieten) direkt gelesen:
+
+- **Erkennung**: Dateien, die mit `<` beginnen, werden als XML geparsed
+- **Buchungsdatum**: `BookgDt` (Fallback `ValDt`)
+- **Betrag**: `Amt` mit Vorzeichen gemäss `CdtDbfInd` (`DBIT` negativ,
+  `CRDT` positiv)
+- **Beschreibung**: `RmtInf/Ustrd`, sonst `AddtlNtryInf`, sonst `BkTxCd/Prtry`
+- Ungültige Einträge werden mit Warnung übersprungen; alles bleibt lokal im
+  Browser (kein XML-Validator externer Herkunft, kein Upload)
 
 ### 3. Kontoinhaber angeben
 

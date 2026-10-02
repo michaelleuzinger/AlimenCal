@@ -217,7 +217,7 @@ costsplit: {
     intro: 'Für Paare, die ihre laufenden Kosten schon vor der Scheidung separat abrechnen möchten: Definieren Sie ein Stichtagsdatum und laden Sie Bankexporte (CSV) hoch. Jede Transaktion kann ignoriert, anteilsmässig aufgeteilt (konfigurierbarer Anteil) oder vollständig einer Partei zugewiesen werden. Transaktionen vor dem Stichtag werden ausgegraut und nicht gewertet.',
     dateLabel: 'Stichtag (Kosten ab diesem Datum trennen)',
     uploadLabel: 'Bankexport hochladen (CSV)',
-    uploadHint: 'Unterstützt gängige Bankformate mit automatischer Spaltenerkennung (Datum, Beschreibung, Betrag oder separate Belastung/Gutschrift). Alle Daten bleiben lokal im Browser.',
+    uploadHint: 'Unterstützt gängige Bankformate (CSV sowie ISO-20022-XML/camt.052–054) mit automatischer Spalten- bzw. Felderkennung. Alle Daten bleiben lokal im Browser.',
     parseError: 'Der Bankexport konnte nicht gelesen werden. Bitte prüfen Sie, ob die Datei eine Kopfzeile mit Datum- und Betragsspalte enthält.',
     colDate: 'Datum',
     colDescription: 'Beschreibung',

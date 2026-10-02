@@ -99,8 +99,9 @@ abrechnen wollen – ausführlich beschrieben in
 Kurz:
 
 1. **Stichtag** wählen – Transaktionen davor werden nicht gewertet.
-2. **Bankexport (CSV)** hochladen – Trennzeichen, Datums- und Betragsformate
-   werden automatisch erkannt.
+2. **Bankexport** hochladen – CSV (Trennzeichen, Datums- und Betragsformate
+   werden automatisch erkannt) oder ISO-20022-XML (camt.052/053/054); das
+   Format wird automatisch erkannt.
 3. **Kontoinhaber** angeben (Partei A oder B).
 4. Je Transaktion entscheiden: **ignorieren**, **anteilsmässig aufteilen**
    (Anteil je Transaktion konfigurierbar) oder **voll von Partei A bzw. B

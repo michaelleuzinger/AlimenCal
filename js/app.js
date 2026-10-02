@@ -1268,7 +1268,10 @@
   function handleCostsplitFile(file) {
     var reader = new FileReader();
     reader.onload = function () {
-      var parsed = AlimenCal.costsplit.parseBankCsv(reader.result);
+      var text = String(reader.result || '');
+      var parsed = text.trim().charAt(0) === '<'
+        ? AlimenCal.costsplit.parseCamtXml(text)
+        : AlimenCal.costsplit.parseBankCsv(text);
       if (!parsed.transactions.length) {
         var err = document.getElementById('costsplit-error');
         err.textContent = t('costsplit', 'parseError');

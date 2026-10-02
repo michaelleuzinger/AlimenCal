@@ -217,7 +217,7 @@ costsplit: {
     intro: 'Per le coppie che desiderano gestire separatamente i costi correnti prima del divorzio: definite una data di riferimento e caricate gli estratti bancari (CSV). Ogni transazione può essere ignorata, suddivisa proporzionalmente (quota configurabile) o assegnata interamente a una parte. Le transazioni precedenti alla data sono disattivate e non considerate.',
     dateLabel: 'Data di riferimento (separare i costi da questa data)',
     uploadLabel: 'Carica un estratto bancario (CSV)',
-    uploadHint: 'Supporta i formati bancari più comuni con rilevamento automatico delle colonne (data, descrizione, importo o addebito/accredito separati). Tutti i dati restano localmente nel browser.',
+    uploadHint: 'Supporta i formati bancari più comuni (CSV nonché XML ISO 20022/camt.052–054) con rilevamento automatico delle colonne o dei campi. Tutti i dati restano localmente nel browser.',
     parseError: 'L\u2019estratto bancario non ha potuto essere letto. Verificate che il file contenga una riga di intestazione con le colonne data e importo.',
     colDate: 'Data',
     colDescription: 'Descrizione',
