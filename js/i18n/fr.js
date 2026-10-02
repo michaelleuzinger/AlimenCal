@@ -217,7 +217,7 @@ costsplit: {
     intro: 'Pour les couples qui souhaitent répartir leurs coûts courants séparément avant le divorce : définissez une date de référence et importez des extraits bancaires (CSV). Chaque transaction peut être ignorée, répartie proportionnellement (part configurable) ou entièrement attribuée à une partie. Les transactions antérieures à la date sont grisées et non prises en compte.',
     dateLabel: 'Date de référence (séparer les coûts dès cette date)',
     uploadLabel: 'Importer un extrait bancaire (CSV)',
-    uploadHint: 'Prend en charge les formats bancaires courants avec détection automatique des colonnes (date, description, montant ou débit/crédit séparés). Toutes les données restent localement dans le navigateur.',
+    uploadHint: 'Prend en charge les formats bancaires courants (CSV ainsi que XML ISO 20022/camt.052–054) avec détection automatique des colonnes ou champs. Toutes les données restent localement dans le navigateur.',
     parseError: 'L\u2019extrait bancaire n\u2019a pas pu être lu. Vérifiez que le fichier contient une ligne d\u2019en-tête avec les colonnes date et montant.',
     colDate: 'Date',
     colDescription: 'Description',

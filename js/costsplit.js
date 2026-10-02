@@ -205,6 +205,238 @@ AlimenCal.costsplit = (function () {
   }
 
   /* ------------------------------------------------------------------ *
+   *  camt.052/053/054 XML-Parsing (ISO 20022)                           *
+   * ------------------------------------------------------------------ */
+
+  var XML_ENTITIES = {
+    lt: '<', gt: '>', quot: '"', apos: "'", amp: '&',
+    auml: '\u00e4', ouml: '\u00f6', uuml: '\u00fc', Auml: '\u00c4', Ouml: '\u00d6', Uuml: '\u00dc',
+    eacute: '\u00e9', egrave: '\u00e8', ecirc: '\u00ea', euml: '\u00eb',
+    agrave: '\u00e0', acirc: '\u00e2', ccedil: '\u00e7', ugrave: '\u00f9',
+    nbsp: ' ', deg: '\u00b0', szlig: '\u00df'
+  };
+
+  function xmlDecode(s) {
+    return String(s)
+      .replace(/&#x([0-9a-fA-F]+);/g, function (_, h) { return String.fromCharCode(parseInt(h, 16)); })
+      .replace(/&#(\d+);/g, function (_, d) { return String.fromCharCode(d); })
+      .replace(/&([A-Za-z]+);/g, function (m, name) {
+        return Object.prototype.hasOwnProperty.call(XML_ENTITIES, name) ? XML_ENTITIES[name] : m;
+      });
+  }
+
+  function tagWithoutNs(name) {
+    var i = name.indexOf(':');
+    return i >= 0 ? name.slice(i + 1) : name;
+  }
+
+  function parseXml(text) {
+    if (typeof DOMParser !== 'undefined') {
+      var doc = new DOMParser().parseFromString(text, 'application/xml');
+      if (doc && doc.getElementsByTagName('parsererror').length) { return null; }
+      return doc;
+    }
+    if (typeof require === 'function') {
+      var domModule = null;
+      try { domModule = require('xmldom'); } catch (e) {}
+      if (domModule && domModule.DOMParser) {
+        var d = new domModule.DOMParser().parseFromString(text, 'application/xml');
+        return d && d.documentElement ? d : null;
+      }
+    }
+    return buildMiniDom(text);
+  }
+
+  /**
+   * Minimaler, abhängigkeitsfreier XML-Fallback-Parser (nur für gut
+   * geformte Bankexporte ohne CDATA/Kommentare). Erzeugt ein kleines
+   * Element-Baum-Objekt mit childNodes/textContent/getElementsByTagName.
+   */
+  function buildMiniDom(text) {
+    function El(name) {
+      return {
+        nodeType: 1,
+        nodeName: name,
+        localName: tagWithoutNs(name),
+        childNodes: [],
+        textContent: '',
+        append: function (child) { this.childNodes.push(child); }
+      };
+    }
+    var root = El('#document');
+    var stack = [root];
+    var re = /<\/?([A-Za-z_][\w.:-]*)((?:"[^"]*"|'[^']*'|[^'">])*)>|([^<]+)/g;
+    var m;
+    while ((m = re.exec(text)) !== null) {
+      if (m[3] !== undefined) {
+        var parent = stack[stack.length - 1];
+        parent.textContent += xmlDecode(m[3]);
+        continue;
+      }
+      var tag = m[1];
+      if (m[0].charAt(1) === '/') {
+        if (stack.length > 1) { stack.pop(); }
+        continue;
+      }
+      var selfClosing = /\/\s*$/.test(m[2]);
+      var attrs = m[2].replace(/\/\s*$/, '').trim();
+      var el = El(tag);
+      if (selfClosing || attrs.charAt(attrs.length - 1) === '/') {
+        stack[stack.length - 1].append(el);
+      } else {
+        stack[stack.length - 1].append(el);
+        stack.push(el);
+      }
+    }
+    if (stack.length !== 1 || !root.childNodes.length) { return null; }
+
+    function collect(node, name, out) {
+      if (node.localName === name) { out.push(node); }
+      for (var i = 0; i < node.childNodes.length; i++) { collect(node.childNodes[i], name, out); }
+    }
+    root.getElementsByTagName = function (name) {
+      var out = [];
+      collect(root, name, out);
+      return out;
+    };
+    var documentElement = root.childNodes[0];
+    documentElement.getElementsByTagName = function (name) {
+      var out = [];
+      collect(documentElement, name, out);
+      return out;
+    };
+    return { documentElement: documentElement, getElementsByTagName: root.getElementsByTagName };
+  }
+
+  function childrenByTag(node, name) {
+    var out = [];
+    if (!node || !node.childNodes) { return out; }
+    for (var i = 0; i < node.childNodes.length; i++) {
+      var c = node.childNodes[i];
+      if (c.nodeType === 1 && tagWithoutNs(c.nodeName) === name) { out.push(c); }
+    }
+    return out;
+  }
+
+  function firstChildByTag(node, name) {
+    var l = childrenByTag(node, name);
+    return l.length ? l[0] : null;
+  }
+
+  function descendantText(node) {
+    var s = String(node.textContent || '');
+    for (var i = 0; i < node.childNodes.length; i++) {
+      s += descendantText(node.childNodes[i]);
+    }
+    return s;
+  }
+
+  function childText(node, name) {
+    var c = firstChildByTag(node, name);
+    if (!c) { return ''; }
+    var own = String(c.textContent || '').trim();
+    if (own) { return own; }
+    return descendantText(c).trim();
+  }
+
+  function camtDateToIso(raw) {
+    if (!raw) { return null; }
+    var m = String(raw).match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (m) { return m[1] + '-' + m[2] + '-' + m[3]; }
+    return null;
+  }
+
+  function camtDescription(ntry) {
+    var parts = [];
+    var ntryDtls = firstChildByTag(ntry, 'NtryDtls');
+    var txDtls = ntryDtls ? childrenByTag(ntryDtls, 'TxDtls') : childrenByTag(ntry, 'TxDtls');
+    if (txDtls.length) {
+      var first = txDtls[0];
+      var rmtInf = firstChildByTag(first, 'RmtInf');
+      var rmt = rmtInf ? childrenByTag(rmtInf, 'Ustrd') : [];
+      if (rmt.length && String(rmt[0].textContent || '').trim()) {
+        parts.push(String(rmt[0].textContent).trim());
+      } else {
+        var nm = firstChildByTag(first, 'Nm');
+        if (nm && String(nm.textContent || '').trim()) { parts.push(String(nm.textContent).trim()); }
+      }
+    }
+    var addtlNtryInf = childText(ntry, 'AddtlNtryInf');
+    if (addtlNtryInf) { parts.push(addtlNtryInf); }
+    if (!parts.length) {
+      var cd = firstChildByTag(ntry, 'BkTxCd');
+      var prtry = cd ? childText(cd, 'Prtry') : '';
+      if (prtry) { parts.push(prtry); }
+    }
+    return parts.filter(function (p, i, a) { return p && a.indexOf(p) === i; }).join(' ');
+  }
+
+  /**
+   * Parst einen Bankexport im ISO-20022-XML-Format (camt.052, camt.053,
+   * camt.054). Erkennt Buchungs-/Valutadatum je `Ntry`, `Amt` inkl.
+   * Vorzeichen (`CdtDbfInd`) und Beschreibung aus `RmtInf/Ustrd`,
+   * `AddtlNtryInf` oder `BkTxCd/Prtry`.
+   * Rückgabe: { transactions: [...], warnings: [...] }
+   */
+  function parseCamtXml(text) {
+    var result = { transactions: [], warnings: [] };
+    var doc = parseXml(text);
+    if (!doc || !doc.documentElement) {
+      result.warnings.push('invalidXml');
+      return result;
+    }
+
+    var entries = [];
+    var direct = doc.getElementsByTagName('Ntry');
+    if (direct && direct.length) {
+      for (var d = 0; d < direct.length; d++) { entries.push(direct[d]); }
+    } else {
+      var all = doc.getElementsByTagName('*');
+      for (var a = 0; a < all.length; a++) {
+        if (all[a].nodeType === 1 && (all[a].localName || tagWithoutNs(all[a].nodeName)) === 'Ntry') {
+          entries.push(all[a]);
+        }
+      }
+    }
+    if (!entries.length) {
+      result.warnings.push('noEntries');
+      return result;
+    }
+
+    for (var i = 0; i < entries.length; i++) {
+      var ntry = entries[i];
+      var dateRaw = childText(ntry, 'BookgDt') || childText(ntry, 'ValDt');
+      var date = camtDateToIso(dateRaw);
+      var amount = null;
+
+      var amtEl = firstChildByTag(ntry, 'Amt');
+      if (amtEl) {
+        var amt = parseAmount(String(amtEl.textContent || '').trim());
+        if (amt != null) {
+          var cdi = childText(ntry, 'CdtDbfInd');
+          if (cdi === 'DBIT') { amt = -Math.abs(amt); }
+          else if (cdi === 'CRDT') { amt = Math.abs(amt); }
+          amount = amt;
+        }
+      }
+
+      if (date == null || amount == null) {
+        result.warnings.push('entry' + i);
+        continue;
+      }
+
+      result.transactions.push({
+        id: 'tx-' + (i + 1),
+        date: date,
+        description: camtDescription(ntry) || ('Eintrag ' + (i + 1)),
+        amount: amount
+      });
+    }
+
+    return result;
+  }
+
+  /* ------------------------------------------------------------------ *
    *  Kategorisierung und Auswertung                                     *
    * ------------------------------------------------------------------ */
 
@@ -312,6 +544,7 @@ AlimenCal.costsplit = (function () {
 
   return {
     parseBankCsv: parseBankCsv,
+    parseCamtXml: parseCamtXml,
     computeSplit: computeSplit,
     computeSettlement: computeSettlement,
     parseAmount: parseAmount,
