@@ -146,6 +146,29 @@ async function setupSettingsMenu(page) {
 
 async function setupSettings(page) {
   await switchTab(page, 'settings');
+  // Verbindliche Einstellungen: alle vier Basiswerte beidseitig bestätigen,
+  // dann Override-Modus aktivieren (vgl. docs/settings-binding-override.md).
+  await sleep(150);
+  await page.evaluate(() => {
+    const btns = document.querySelectorAll('#binding-tbody button');
+    btns.forEach(b => b.click());
+  });
+  await sleep(150);
+  await page.evaluate(() => {
+    const cb = document.getElementById('binding-override-mode');
+    cb.checked = true;
+    cb.dispatchEvent(new Event('change', { bubbles: true }));
+  });
+  await sleep(150);
+  await page.evaluate(() => {
+    const row = document.querySelectorAll('#binding-tbody tr')[1];
+    const inp = row && row.querySelector('input[type="number"]');
+    if (inp) {
+      inp.value = '2100';
+      inp.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+  });
+  await sleep(150);
 }
 
 async function setupCostsplit(page) {

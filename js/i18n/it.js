@@ -8,6 +8,25 @@ AlimenCal.i18n.it = {
   title: 'AlimenCal – Calcolatore di alimenti',
   subtitle: 'Strumento di orientamento per gli alimenti per figli e coniugi (Svizzera)',
   disclaimerShort: 'Nessuna consulenza legale. Il calcolo serve solo come orientamento e non sostituisce un esame individuale da parte di avvocati o dell\u2019APEA.',
+  binding: {
+    heading: 'Impostazioni vincolanti',
+    intro: 'I valori confermati da entrambe le parti (A e B) sono fissati in modo vincolante e non possono più essere modificati. Con la modalità di override è possibile inserire valori diversi senza modificare i valori originali vincolanti; il calcolo utilizza quindi i valori di override.',
+    overrideMode: 'Attiva modalità override',
+    colSetting: 'Impostazione',
+    colBase: 'Valore vincolante',
+    colApproval: 'Conferma',
+    colOverride: 'Override',
+    confirmA: 'Parte A',
+    confirmB: 'Parte B',
+    locked: 'Valore fissato in modo vincolante (sola lettura).',
+    pendingApproval: 'In attesa della conferma dell’altra parte.',
+    notLocked: 'Override possibile solo dopo la conferma di entrambe le parti.',
+    enableOverrideHint: 'Attivare la modalità override per inserire valori diversi.',
+    removeOverride: 'Ripristina',
+    lockedFieldHint: 'Fissato in modo vincolante – modifica solo tramite modalità override.',
+    overrideActive: 'Modalità override attiva: le immissioni modificano solo i valori di override, non i valori vincolanti.'
+  },
+
   nav: {
     children: 'Alimenti per figli',
     spousal: 'Alimenti per il coniuge',

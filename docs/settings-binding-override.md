@@ -27,12 +27,40 @@ Berechnung = f(Base ⊕ Overrides)
 | Komponente | Datei | Aufgabe |
 |---|---|---|
 | Modul (DOM-frei, Browser + Node) | `js/settings.js` | Two-Party-Lock, Override-Layer, `resolve()`, Import-Preview/Commit |
+| UI-Integration | `index.html` (Tab Richtwerte) + `js/app.js` | Bestätigungs-Buttons, Override-Modus, effektive Werte in der Berechnung |
 | SQL-Referenz (optional) | `schema/calc_settings.sql` | Tabellen + Immutability-Trigger für eine spätere Persistenz-Schicht |
 | Tests | `tests/settings.test.js` | Unit-Tests (Node), 21 Tests |
 
 Das Modul ist bewusst DOM-frei gehalten (gleiche Konvention wie
 `js/calculator.js`, `js/costsplit.js`, `js/casedata.js`): Die UI-Schicht
-(`js/app.js`) bedient es, die Regeln gelten unabhängig vom DOM. Die App bleibt
+(`js/app.js`) bedient es, die Regeln gelten unabhängig vom DOM.
+
+### UI-Integration (Tab «Richtwerte»)
+
+- Die vier Basiswerte (Existenzminima erwerbstätig/nichterwerbstätig,
+  Standard Lebensstandard, Fallback Grundbedarf) sind im Service
+  registriert (`BINDINGS` in `js/app.js`).
+- **Bestätigung:** Pro Wert existieren Buttons «Partei A» / «Partei B»;
+  nach beidseitiger Bestätigung sind die Formularfelder `disabled`
+  (read-only) und jede Änderung wird vom Service verweigert.
+- **Override-Modus:** Die Checkbox «Override-Modus aktivieren» schaltet die
+  Override-Spalte der Tabelle frei; Eingaben erzeugen Overrides im Szenario
+  `ui_override`. `effectiveCfg()` liefert der Berechnung Base ⊕ Override;
+  ohne aktiven Override-Modus rechnet die App mit den Base-Werten.
+- Der verbindliche Wert bleibt sichtbar (durchgestrichen, solange ein
+  Override aktiv ist); «Zurücksetzen» löscht den Override.
+- Persistenz: Locks und Overrides werden unter dem localStorage-Schlüssel
+  `alimencal.binding` gespeichert.
+
+### Grenzen im rein lokalen Betrieb (SPA)
+
+Der Two-Party-Lock wirkt **pro Browser-Instanz** (localStorage). Eine
+parteiübergreifend garantierte, manipulationsgeschützte Verbindlichkeit
+(erzwungene Gemeinsamkeit der Werte beider Parteien) ist ohne gemeinsame
+Ablage nicht möglich; dafür steht `schema/calc_settings.sql` als Referenz
+bereit. Im lokalen Betrieb gilt: verbindlich = beidseitig bestätigt und
+lokal fixiert; Export/Import (JSON) dient dem Abgleich zwischen den
+Parteien. Die App bleibt
 durchaus eine rein statische Web-App; das optionale SQL-Schema ist eine
 Referenz für den Fall, dass die verbindlichen Werte später serverseitig
 persistiert werden müssen (z. B. beim Austausch zwischen Parteien).

@@ -8,6 +8,7 @@
   var LS_FORM = 'alimencal.form';
   var LS_THEME = 'alimencal.theme';
   var LS_THEME_VALUES = 'alimencal.themevalues';
+  var LS_BINDING = 'alimencal.binding';
   var FORM_FIELD_IDS = [
     'pa-income', 'pa-em', 'pa-employed', 'pb-income', 'pb-em', 'pb-employed',
     'spousal-enabled', 'sp-app-income', 'sp-app-em', 'sp-app-standard',
@@ -73,6 +74,224 @@
       str = str.split('{' + idx + '}').join(sub);
     });
     return str;
+  }
+
+  /* -------------------------------------------------------------
+   * Verbindliche Einstellungen (Two-Party-Lock) + Override-Modus.
+   * Der SettingsService (js/settings.js) hält Base-Werte, Locks und
+   * Overrides; hier wird er mit state.cfg gekoppelt und gerendert.
+   * ------------------------------------------------------------- */
+  var BINDINGS = [
+    { key: 'defaultExistenzminimumEmployed',  labelKey: 'emEmployed',        uiId: 'cfg-em-employed' },
+    { key: 'defaultExistenzminimumNotEmployed', labelKey: 'emNotEmployed',   uiId: 'cfg-em-notemployed' },
+    { key: 'defaultSpousalStandard',          labelKey: 'spousalDefault',    uiId: 'cfg-spousal-standard' },
+    { key: 'fallbackChildBasicNeed',          labelKey: 'fallbackChildBasicNeed', uiId: 'cfg-fallback-child' }
+  ];
+
+  function settingsService() {
+    if (!state.settingsService) {
+      state.settingsService = new AlimenCal.settings.SettingsService();
+      initSettingsService(state.settingsService);
+    }
+    return state.settingsService;
+  }
+
+  function initSettingsService(svc) {
+    BINDINGS.forEach(function (b) {
+      svc.registerSetting('richtwerte', b.key, AlimenCal.config[b.key]);
+    });
+    try {
+      var raw = localStorage.getItem(LS_BINDING);
+      if (raw) { restoreBindingState(svc, JSON.parse(raw)); }
+    } catch (e) {}
+  }
+
+  function restoreBindingState(svc, data) {
+    if (!data || !data.settings) { return; }
+    BINDINGS.forEach(function (b) {
+      var s = data.settings[b.key];
+      if (!s) { return; }
+      var id = findSettingId(b.key);
+      var setting = svc.getSetting(id);
+      setting.lockedA = !!s.lockedA;
+      setting.lockedB = !!s.lockedB;
+      if (typeof s.valueBase === 'number') { setting.valueBase = s.valueBase; }
+    });
+    for (var scenarioId in (data.overrides || {})) {
+      var ov = data.overrides[scenarioId];
+      if (ov && typeof ov.valueOverride === 'number') {
+        svc.createOverride(findSettingId(ov.key), scenarioId, ov.valueOverride, { reason: ov.reason || null });
+      }
+    }
+  }
+
+  function saveBindingState(svc) {
+    var data = { settings: {}, overrides: {} };
+    BINDINGS.forEach(function (b) {
+      var id = findSettingId(b.key);
+      var setting = svc.getSetting(id);
+      data.settings[b.key] = {
+        valueBase: setting.valueBase,
+        lockedA: setting.lockedA,
+        lockedB: setting.lockedB
+      };
+    });
+    svc.overrides = svc.overrides || {};
+    var seen = {};
+    for (var oid in svc.overrides) {
+      var ov = svc.overrides[oid];
+      var setting = svc.getSetting(ov.settingId);
+      var key = null;
+      BINDINGS.forEach(function (b) {
+        if (findSettingId(b.key) === ov.settingId) { key = b.key; }
+      });
+      if (!key || seen[ov.scenarioId + key]) { continue; }
+      seen[ov.scenarioId + key] = true;
+      data.overrides[ov.scenarioId] = { key: key, valueOverride: ov.valueOverride, reason: ov.reason || null };
+    }
+    try { localStorage.setItem(LS_BINDING, JSON.stringify(data)); } catch (e) {}
+  }
+
+  function findSettingId(key) {
+    var svc = settingsService();
+    for (var id in svc.settings) {
+      if (Object.prototype.hasOwnProperty.call(svc.settings, id) && svc.settings[id].key === key) {
+        return id;
+      }
+    }
+    return null;
+  }
+
+  /* Effektive Config für Berechnungen: Base ⊕ Override des aktiven Szenarios. */
+  function effectiveCfg() {
+    var cfg = state.cfg;
+    var scenarioId = overrideScenarioId();
+    if (!scenarioId) { return cfg; }
+    var svc = settingsService();
+    var eff = clone(cfg);
+    BINDINGS.forEach(function (b) {
+      var id = findSettingId(b.key);
+      eff[b.key] = svc.resolve(id, scenarioId);
+    });
+    return eff;
+  }
+
+  function overrideScenarioId() {
+    var el = document.getElementById('binding-override-mode');
+    return el && el.checked ? 'ui_override' : null;
+  }
+
+  function renderBindingTable() {
+    var svc = settingsService();
+    var tbody = document.getElementById('binding-tbody');
+    if (!tbody) { return; }
+    tbody.innerHTML = '';
+    var scenarioId = overrideScenarioId();
+    BINDINGS.forEach(function (b) {
+      var id = findSettingId(b.key);
+      var setting = svc.getSetting(id);
+      var tr = document.createElement('tr');
+
+      var tdName = document.createElement('td');
+      tdName.textContent = t('settings', b.labelKey);
+      tr.appendChild(tdName);
+
+      var tdBase = document.createElement('td');
+      var base = document.createElement('span');
+      base.textContent = fmt(setting.valueBase);
+      if (scenarioId && svc.resolveWithContext(id, scenarioId).overridden) {
+        base.className = 'hint';
+        base.style.textDecoration = 'line-through';
+      }
+      tdBase.appendChild(base);
+      tr.appendChild(tdBase);
+
+      var tdLock = document.createElement('td');
+      var lockWrap = document.createElement('span');
+      lockWrap.textContent = setting.lockedA ? 'A ✓' : 'A –';
+      lockWrap.style.marginRight = '0.75em';
+      if (!setting.lockedA) {
+        var btnA = document.createElement('button');
+        btnA.type = 'button';
+        btnA.className = 'secondary';
+        btnA.textContent = t('binding', 'confirmA');
+        btnA.addEventListener('click', function () { confirmBindingFor(id, 'A'); });
+        lockWrap.appendChild(btnA);
+      }
+      tdLock.appendChild(lockWrap);
+      var lockWrapB = document.createElement('span');
+      lockWrapB.textContent = setting.lockedB ? 'B ✓' : 'B –';
+      if (!setting.lockedB) {
+        var btnB = document.createElement('button');
+        btnB.type = 'button';
+        btnB.className = 'secondary';
+        btnB.textContent = t('binding', 'confirmB');
+        btnB.addEventListener('click', function () { confirmBindingFor(id, 'B'); });
+        lockWrapB.appendChild(btnB);
+      }
+      tdLock.appendChild(lockWrapB);
+      tr.appendChild(tdLock);
+
+      var tdOv = document.createElement('td');
+      if (setting.lockedA && setting.lockedB) {
+        if (scenarioId) {
+          var ctx = svc.resolveWithContext(id, scenarioId);
+          var inp = document.createElement('input');
+          inp.type = 'number';
+          inp.min = '0';
+          inp.step = '50';
+          inp.value = ctx.effectiveValue;
+          inp.addEventListener('change', function () {
+            var v = parseFloat(inp.value);
+            if (isFinite(v)) {
+              svc.createOverride(id, scenarioId, v, { party: 'A' });
+              saveBindingState(svc);
+              renderBindingTable();
+            }
+          });
+          tdOv.appendChild(inp);
+          if (ctx.overridden) {
+            var del = document.createElement('button');
+            del.type = 'button';
+            del.className = 'ghost';
+            del.textContent = t('binding', 'removeOverride');
+            del.addEventListener('click', function () {
+              var ov = svc.findOverride(id, scenarioId);
+              if (ov) { svc.deleteOverride(ov.id); }
+              saveBindingState(svc);
+              renderBindingTable();
+            });
+            tdOv.appendChild(del);
+          }
+        } else {
+          tdOv.textContent = t('binding', 'enableOverrideHint');
+          tdOv.className = 'hint';
+        }
+      } else {
+        tdOv.textContent = t('binding', 'notLocked');
+        tdOv.className = 'hint';
+      }
+      tr.appendChild(tdOv);
+      tbody.appendChild(tr);
+    });
+  }
+
+  function confirmBindingFor(settingId, party) {
+    var svc = settingsService();
+    try {
+      svc.confirmBinding(settingId, party);
+      saveBindingState(svc);
+      renderBindingTable();
+      applyBindingLocksToForm();
+      setBindingStatus(svc.isLocked(svc.getSetting(settingId)) ? t('binding', 'locked') : t('binding', 'pendingApproval'));
+    } catch (e) {
+      setBindingStatus(e.message);
+    }
+  }
+
+  function setBindingStatus(msg) {
+    var el = document.getElementById('binding-status');
+    if (el) { el.textContent = msg || ''; }
   }
 
   function fmt(x) {
@@ -294,6 +513,14 @@
     document.getElementById('cfg-restore').textContent = t('settings', 'restoreDefaults');
     document.getElementById('cfg-export').textContent = t('settings', 'exportJson');
     document.getElementById('cfg-import-label').textContent = t('settings', 'importJson');
+    document.getElementById('binding-heading').textContent = t('binding', 'heading');
+    document.getElementById('binding-intro').textContent = t('binding', 'intro');
+    document.getElementById('binding-override-label').textContent = t('binding', 'overrideMode');
+    document.getElementById('bind-col-setting').textContent = t('binding', 'colSetting');
+    document.getElementById('bind-col-base').textContent = t('binding', 'colBase');
+    document.getElementById('bind-col-approval').textContent = t('binding', 'colApproval');
+    document.getElementById('bind-col-override').textContent = t('binding', 'colOverride');
+    renderBindingTable();
     document.getElementById('preset-label').textContent = t('settings', 'preset');
     document.getElementById('preset-notes-heading').textContent = t('settings', 'presetNotes');
     document.getElementById('preset-verification-heading').textContent = t('settings', 'presetVerification');
@@ -471,7 +698,7 @@
       children: state.children
     };
 
-    var result = AlimenCal.calculator.calculateChildSupport(input, state.cfg);
+    var result = AlimenCal.calculator.calculateChildSupport(input, effectiveCfg());
     renderChildrenResult(result);
   }
 
@@ -562,7 +789,7 @@
       childSupportPaidByRespondent: parseFloat(document.getElementById('sp-res-childpaid').value) || 0
     };
 
-    var result = AlimenCal.calculator.calculateSpousalSupport(input, state.cfg);
+    var result = AlimenCal.calculator.calculateSpousalSupport(input, effectiveCfg());
     renderSpousalResult(result);
   }
 
@@ -623,19 +850,57 @@
     }
   }
 
+  function syncBaseFromService() {
+    var svc = settingsService();
+    BINDINGS.forEach(function (b) {
+      var id = findSettingId(b.key);
+      if (id) {
+        var ctx = svc.resolveWithContext(id, null);
+        state.cfg[b.key] = ctx.baseValue;
+      }
+    });
+  }
+
+  function applyBindingLocksToForm() {
+    var svc = settingsService();
+    BINDINGS.forEach(function (b) {
+      var id = findSettingId(b.key);
+      var setting = svc.getSetting(id);
+      var el = document.getElementById(b.uiId);
+      if (el) {
+        var locked = setting.lockedA && setting.lockedB;
+        el.disabled = locked;
+        el.title = locked ? t('binding', 'lockedFieldHint') : '';
+      }
+    });
+  }
+
   function fillCfgForm() {
+    syncBaseFromService();
     document.getElementById('cfg-em-employed').value = state.cfg.defaultExistenzminimumEmployed;
     document.getElementById('cfg-em-notemployed').value = state.cfg.defaultExistenzminimumNotEmployed;
     document.getElementById('cfg-spousal-standard').value = state.cfg.defaultSpousalStandard;
     document.getElementById('cfg-fallback-child').value = state.cfg.fallbackChildBasicNeed;
     renderCfgTable();
+    applyBindingLocksToForm();
+    renderBindingTable();
   }
 
   function collectCfgForm() {
-    state.cfg.defaultExistenzminimumEmployed = parseFloat(document.getElementById('cfg-em-employed').value) || 0;
-    state.cfg.defaultExistenzminimumNotEmployed = parseFloat(document.getElementById('cfg-em-notemployed').value) || 0;
-    state.cfg.defaultSpousalStandard = parseFloat(document.getElementById('cfg-spousal-standard').value) || 0;
-    state.cfg.fallbackChildBasicNeed = parseFloat(document.getElementById('cfg-fallback-child').value) || 0;
+    var svc = settingsService();
+    BINDINGS.forEach(function (b) {
+      var el = document.getElementById(b.uiId);
+      var id = findSettingId(b.key);
+      if (!el || el.disabled) { return; }
+      try {
+        svc.updateBaseValue(id, parseFloat(el.value) || 0, 'A');
+      } catch (e) {
+        setBindingStatus(e.message);
+      }
+    });
+    syncBaseFromService();
+    saveBindingState(svc);
+    applyBindingLocksToForm();
   }
 
   /* ------------------------------------------------------------- *
@@ -1106,6 +1371,7 @@
   function init() {
     state.lang = getLang();
     state.cfg = getCfg();
+    settingsService();
     document.getElementById('lang-select').value = state.lang;
 
     var storedThemeValues = null;
@@ -1181,6 +1447,10 @@
       }
     });
 
+    document.getElementById('binding-override-mode').addEventListener('change', function () {
+      renderBindingTable();
+      setBindingStatus(this.checked ? t('binding', 'overrideActive') : '');
+    });
     document.getElementById('add-child').addEventListener('click', addChildRow);
     document.getElementById('calc-children').addEventListener('click', calculateChildren);
     document.getElementById('reset-children').addEventListener('click', function () {
@@ -1200,7 +1470,18 @@
       document.getElementById('cfg-status').textContent = t('settings', 'saved');
     });
     document.getElementById('cfg-restore').addEventListener('click', function () {
+      collectCfgForm();
+      var svc = settingsService();
+      BINDINGS.forEach(function (b) {
+        var id = findSettingId(b.key);
+        var setting = svc.getSetting(id);
+        if (!(setting.lockedA && setting.lockedB)) {
+          try { svc.updateBaseValue(id, AlimenCal.config[b.key], 'A'); } catch (e) {}
+        }
+      });
+      syncBaseFromService();
       state.cfg = clone(AlimenCal.config);
+      syncBaseFromService();
       saveCfg(state.cfg);
       try { localStorage.removeItem(LS_PRESET); } catch (e) {}
       document.getElementById('preset-select').value = '__default__';

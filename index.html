@@ -252,6 +252,28 @@
         </fieldset>
       </div>
 
+      <div class="card" id="binding-card">
+        <h3 id="binding-heading"></h3>
+        <p id="binding-intro" class="hint"></p>
+        <p>
+          <label>
+            <input type="checkbox" id="binding-override-mode">
+            <span id="binding-override-label"></span>
+          </label>
+        </p>
+        <table class="cfg-table" id="binding-table">
+          <thead>
+            <tr>
+              <th id="bind-col-setting"></th>
+              <th id="bind-col-base"></th>
+              <th id="bind-col-approval"></th>
+              <th id="bind-col-override"></th>
+            </tr>
+          </thead>
+          <tbody id="binding-tbody"></tbody>
+        </table>
+        <p id="binding-status" class="hint"></p>
+      </div>
       <div class="actions">
         <button id="cfg-save" class="primary"></button>
         <button id="cfg-restore" class="ghost"></button>
@@ -285,6 +307,7 @@
   <script src="js/casedata.js"></script>
   <script src="js/presets.js"></script>
   <script src="js/calculator.js"></script>
+  <script src="js/settings.js"></script>
   <script src="js/costsplit.js"></script>
   <script src="js/app.js"></script>
 </body>

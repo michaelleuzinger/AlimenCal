@@ -8,6 +8,25 @@ AlimenCal.i18n.en = {
   title: 'AlimenCal – Maintenance calculator',
   subtitle: 'Orientation tool for child and spousal maintenance (Switzerland)',
   disclaimerShort: 'This is not legal advice. The calculation is for orientation only and does not replace an individual review by a lawyer or the Child and Adult Protection Authority (CAPA/KESB).',
+  binding: {
+    heading: 'Binding settings',
+    intro: 'Values confirmed by both parties (A and B) are fixed bindingly and can no longer be changed. Override mode allows entering different values without changing the binding original values; the calculation then uses the override values.',
+    overrideMode: 'Enable override mode',
+    colSetting: 'Setting',
+    colBase: 'Binding value',
+    colApproval: 'Confirmation',
+    colOverride: 'Override',
+    confirmA: 'Party A',
+    confirmB: 'Party B',
+    locked: 'Value is bindingly fixed (read-only).',
+    pendingApproval: 'Awaiting confirmation by the other party.',
+    notLocked: 'Override available only after confirmation by both parties.',
+    enableOverrideHint: 'Enable override mode to enter differing values.',
+    removeOverride: 'Reset',
+    lockedFieldHint: 'Bindingly fixed – change only via override mode.',
+    overrideActive: 'Override mode active: entries only change override values, not the binding values.'
+  },
+
   nav: {
     children: 'Child maintenance',
     spousal: 'Spousal maintenance',

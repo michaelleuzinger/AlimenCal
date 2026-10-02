@@ -8,6 +8,25 @@ AlimenCal.i18n.fr = {
   title: 'AlimenCal – Calculateur de pensions',
   subtitle: 'Outil d\u2019orientation pour la pension alimentaire pour enfants et conjoint (Suisse)',
   disclaimerShort: 'Aucun conseil juridique. Le calcul sert uniquement d\u2019orientation et ne remplace pas un examen individuel par un avocat ou l\u2019APEA.',
+  binding: {
+    heading: 'Paramètres contraignants',
+    intro: 'Les valeurs confirmées par les deux parties (A et B) sont fixées de manière contraignante et ne peuvent plus être modifiées. Le mode de remplacement permet de saisir des valeurs divergentes sans modifier les valeurs originales contraignantes ; le calcul utilise alors les valeurs de remplacement.',
+    overrideMode: 'Activer le mode de remplacement',
+    colSetting: 'Paramètre',
+    colBase: 'Valeur contraignante',
+    colApproval: 'Confirmation',
+    colOverride: 'Remplacement',
+    confirmA: 'Partie A',
+    confirmB: 'Partie B',
+    locked: 'Valeur fixée de manière contraignante (lecture seule).',
+    pendingApproval: 'En attente de la confirmation de l’autre partie.',
+    notLocked: 'Remplacement possible seulement après confirmation des deux parties.',
+    enableOverrideHint: 'Activer le mode de remplacement pour saisir des valeurs divergentes.',
+    removeOverride: 'Réinitialiser',
+    lockedFieldHint: 'Fixé de manière contraignante – modification uniquement via le mode de remplacement.',
+    overrideActive: 'Mode de remplacement actif : les saisies ne modifient que les valeurs de remplacement, pas les valeurs contraignantes.'
+  },
+
   nav: {
     children: 'Pension pour enfants',
     spousal: 'Pension conjugale',

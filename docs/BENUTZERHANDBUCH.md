@@ -120,6 +120,23 @@ Kurz:
   das mitgelieferte Preset ist ein Platzhalter mit Verifikations-Checkliste
   und **muss** vor Verwendung mit den effektiven Ansätzen von KESB/Kantonsgericht
   Schaffhausen ausgefüllt werden.
+- **Verbindliche Einstellungen (Two-Party-Lock):** Die vier Basiswerte
+  (Existenzminima erwerbstätig/nichterwerbstätig, Standard Lebensstandard,
+  Fallback Grundbedarf) können von beiden Parteien separat bestätigt werden
+  (Buttons «Partei A» / «Partei B»). Erst nach **beidseitiger Bestätigung**
+  sind sie verbindlich festgelegt und read-only; Änderungen sind dann nur
+  noch über den Override-Modus oder einen bewussten Neustart des
+  Bestätigungsprozesses möglich.
+- **Override-Modus:** Mit der Checkbox «Override-Modus aktivieren» können
+  abweichende Werte erfasst werden, **ohne die verbindlichen Originalwerte
+  zu ändern**. Die Berechnungen (Kindes- und Ehegattenunterhalt) nutzen dann
+  die Override-Werte; der verbindliche Wert bleibt in der Tabelle sichtbar
+  (durchgestrichen) und wird nie verändert. Ein Klick auf «Zurücksetzen»
+  entfernt den Override und stellt die Originalberechnung wieder her.
+- Hinweis: Die Verbindlichkeit wirkt im rein lokalen Betrieb (ohne Server)
+  pro Browser; für eine parteiübergreifend garantierte Verbindlichkeit sind
+  die Werte zu exportieren/importieren (JSON) oder serverseitig zu
+  persistieren (vgl. docs/settings-binding-override.md).
 
 ## Tab «Austausch» (zwei Parteien, zwei PCs)
 
