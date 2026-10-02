@@ -210,7 +210,12 @@ AlimenCal.i18n.de = {
     sectionSpousalRespondent: 'Ehegattenunterhalt: Zahlungspflichtige/r',
     sectionSpousalEnabled: 'Ehegattenunterhalt aktiviert (Flag)',
     sectionCostsplit: 'Kostentrennung (Bankexport, Zuordnungen)',
-    privacyHint: 'Die exportierte Datei enthält die ausgewählten Daten im Klartext. Sensible Angaben (Einkommen, Banktransaktionen) nur über vertrauliche Kanäle übermitteln.'
+    privacyHint: 'Die exportierte Datei enthält die ausgewählten Daten im Klartext. Sensible Angaben (Einkommen, Banktransaktionen) nur über vertrauliche Kanäle übermitteln.',
+    encryptLabel: 'Für Gegenseite verschlüsseln (Public Key, ECDH/AES-GCM)',
+    encryptNoKey: 'Kein öffentlicher Schlüssel der Gegenseite importiert. Bitte zuerst im Tab «Einstellungen» unter «Schlüssel» den Public Key der Gegenseite importieren.',
+    encryptError: 'Verschlüsselung fehlgeschlagen.',
+    decryptNoKey: 'Datei ist verschlüsselt, aber es ist kein eigener privater Schlüssel vorhanden. Bitte zuerst einen Schlüssel im Tab «Einstellungen» generieren.',
+    decryptError: 'Entschlüsselung fehlgeschlagen (falscher Schlüssel oder Datei manipuliert).',
   },
 costsplit: {
     heading: 'Kostentrennung ab Stichtag',

@@ -210,7 +210,12 @@ AlimenCal.i18n.it = {
     sectionSpousalRespondent: 'Contributo coniugale: debitore/debitrice',
     sectionSpousalEnabled: 'Contributo coniugale attivato (flag)',
     sectionCostsplit: 'Separazione dei costi (esportazione bancaria, assegnazioni)',
-    privacyHint: 'Il file esportato contiene i dati selezionati in chiaro. Trasmettere i dati sensibili (redditi, transazioni) solo tramite canali riservati.'
+    privacyHint: 'Il file esportato contiene i dati selezionati in chiaro. Trasmettere i dati sensibili (redditi, transazioni) solo tramite canali riservati.',
+    encryptLabel: 'Cifrare per l\'altra parte (chiave pubblica, ECDH/AES-GCM)',
+    encryptNoKey: 'Nessuna chiave pubblica dell\'altra parte importata. Importare prima la sua chiave pubblica sotto « Chiavi » nella scheda « Impostazioni ».',
+    encryptError: 'Cifratura non riuscita.',
+    decryptNoKey: 'Il file è cifrato, ma non è presente una chiave privata propria. Generare prima una chiave nella scheda « Impostazioni ».',
+    decryptError: 'Decifratura non riuscita (chiave errata o file manomesso).',
   },
 costsplit: {
     heading: 'Separazione dei costi da una data specifica',

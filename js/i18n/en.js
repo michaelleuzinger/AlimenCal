@@ -210,7 +210,12 @@ AlimenCal.i18n.en = {
     sectionSpousalRespondent: 'Spousal support: payer',
     sectionSpousalEnabled: 'Spousal support enabled (flag)',
     sectionCostsplit: 'Cost separation (bank export, allocations)',
-    privacyHint: 'The exported file contains the selected data in plain text. Only transmit sensitive data (income, bank transactions) through confidential channels.'
+    privacyHint: 'The exported file contains the selected data in plain text. Only transmit sensitive data (income, bank transactions) through confidential channels.',
+    encryptLabel: 'Encrypt for the other party (public key, ECDH/AES-GCM)',
+    encryptNoKey: 'No public key of the other party imported. Please import the other party\'s public key first under «Keys» in the «Settings» tab.',
+    encryptError: 'Encryption failed.',
+    decryptNoKey: 'The file is encrypted, but no own private key is present. Please generate a key in the «Settings» tab first.',
+    decryptError: 'Decryption failed (wrong key or tampered file).',
   },
 costsplit: {
     heading: 'Cost separation from a cut-off date',
