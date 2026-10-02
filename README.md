@@ -58,6 +58,10 @@ oder beliebiges statisches Hosting (z. B. GitHub Pages) bereitgestellt werden.
 - **Persistenz**: alle Eingaben (inkl. Kinderliste, Kostentrennung mit
   Bankexport und Zuordnungen) werden automatisch gespeichert und nach einem
   Browser-Neustart wiederhergestellt – keine Daten gehen verloren
+- **Nach Updates lesbar**: versioniertes Speicherformat (`js/storage.js`) mit
+  Migration und Sanitizing – nach einem App-Update werden vorhandene
+  Eingaben in jedem Fall wieder gelesen; Altbestände werden beim Start
+  migriert (Regel in AGENTS.md, «Lesbarkeit der Nutzerdaten nach Updates»)
 - **Austausch zwischen Parteien**: Jede Partei erfasst nur ihre eigenen Daten
   auf ihrem PC, exportiert sie als JSON-Datei und stellt sie der anderen Partei
   zu; der Import übernimmt nur die enthaltenen Abschnitte (Merge) – eigene
@@ -125,6 +129,7 @@ node tests/themes.test.js       # Themes: Presets, Token, Validierung, Sanitizin
 node tests/casedata.test.js     # Falldaten-Austausch: Validierung, Merge, Roundtrip (43 Tests)
 node tests/settings.test.js    # Verbindliche Einstellungen: Two-Party-Lock, Override-Modus, Read-Only-Imports (21 Tests)
 node tests/crypto.test.js      # Serverlose Verbindlichkeit: Hash-Kette, signierte Lock-Dateien (15 Tests)
+node tests/storage.test.js    # localStorage-Persistenz: Versionierung, Migration, Sanitizing (35 Tests)
 ```
 
 Geprüft werden u. a. Grundbedarfstabellen, Aufteilung nach wirtschaftlicher

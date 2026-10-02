@@ -21,6 +21,7 @@ unvollständig und darf nicht gemergt werden.
 | Presets (`presets/*.json`, `js/presets.js`) | README-Abschnitt «Kantonale Presets», Preset-`meta` (Quelle, URL, Hinweise) |
 | Sprachen / i18n (`js/i18n/*`) | `docs/BENUTZERHANDBUCH.md` (Sprachliste), ggf. README |
 | Struktur / neue Dateien | Struktur-Übersicht unten |
+| localStorage-Persistenz (`js/storage.js`) | Regel-Abschnitt «Lesbarkeit der Nutzerdaten nach Updates» unten, `docs/BENUTZERHANDBUCH.md` (Datenhaltung), README-Abschnitt «Tests» |
 | Screenshots (UI-Änderungen) | `screenshots/` erneuern; Inventar-Tabelle unten **und** Einbettungen im BENUTZERHANDBUCH synchron halten (Inventar-Regel, s. u.) |
 | Rechtliches / Rechtsprechungs-Bezug | `docs/RECHTLICHE-GRUNDLAGEN.md` |
 
@@ -83,6 +84,7 @@ js/settings.js     Verbindliche Einstellungen: Two-Party-Lock, Override-Modus, R
 js/config.js        Default-Richtwerte (Zürcher Kinderkosten-Tabelle 1.3.2025)
 js/presets.js       Eingebettete Kopie der kantonalen Presets (file://-fähig)
 presets/*.json      Kantonale Richtwertsätze inkl. Quellen und Checklisten
+js/storage.js      localStorage-Persistenz: Versionierung, Sanitizing, Migration (DOM-frei)
 js/app.js           UI-Logik, i18n-Anwendung, localStorage, Import/Export
 js/i18n/{de,fr,it,en}.js  Sprachdateien
 AGENTS.md           Verbindliche Arbeitsregeln (Doku-in-Sync-Regel, Checklisten)
@@ -109,12 +111,38 @@ tests/              Unit-Tests (node)
 - [ ] README aktuell (Features, QuickStart, Nutzung, Richtwerte, Tests, Roadmap)
 - [ ] Screenshots bei UI-Änderungen erneuert
 - [ ] `node tests/*.test.js` grün
+- [ ] Persistenz-Kompatibilität geprüft (Checkliste oben)
 - [ ] Rechtlicher Disclaimer bleibt vollständig erhalten
+
+## Verbindliche Regel: Lesbarkeit der Nutzerdaten nach Updates
+
+**Bei jeder Änderung, die gespeicherte Datenstrukturen betrifft, muss
+sichergestellt sein, dass bestehende Nutzerdaten nach dem Update gelesen
+werden können ("Persistenz-Kompatibilitäts-Regel").** Der Nachweis erfolgt
+durch Unit-Tests; ein Change ohne grünen Kompatibilitätstest gilt als
+unvollständig und darf nicht gemergt werden.
+
+### Was bedeutet das konkret?
+
+| Bereich | Persistenz | Vorgabe bei Änderung |
+|---|---|---|
+| Formular, Kinder, Kostentrennung | `alimencal.form` über `js/storage.js` (`AlimenCal.storage`) | `FORM_VERSION` in `js/storage.js` erhöhen, Migration in `migrateForm` ergänzen, Test mit Payload der vorherigen Version in `tests/storage.test.js` |
+| Falldaten-Import/Export | JSON-Dateien über `js/casedata.js` | `CASE_VERSION` erhöhen und `sanitizeCase`/Migrationspfad ergänzen; Roundtrip-Test in `tests/casedata.test.js` |
+| Richtwerte/Config | `alimencal.config` über `getCfg` (Merge mit Defaults) | Neue Felder müssen Defaults aus `js/config.js` erben; bestehende Felder nicht umbenennen oder entfernen |
+| Themes | `alimencal.theme`, `alimencal.themevalues` über `js/themes.js`-Validierung | Ungültige Werte müssen still auf Defaults fallen; Test in `tests/themes.test.js` |
+| Schlüssel/Lock-Dateien (`js/settings.js`) | `alimencal.keys`, signierte Dateien | Version in den Dateien führen (`version: 1`) und beim Einlesen prüfen |
+
+### Kurz-Checkliste Persistenz vor jedem Merge
+
+- [ ] Schema-Änderungen? -> `FORM_VERSION`/`CASE_VERSION` erhöht + Migration + Test mit Altdaten
+- [ ] Keine Feld-/Schlüsselnamen ohne Migrationspfad umbenannt oder entfernt
+- [ ] `node tests/storage.test.js` (und `node tests/casedata.test.js`) grün
+- [ ] Neue Felder tolerieren fehlende Werte (Defaults, kein Absturz beim Lesen von Altdaten)
 
 ## Allgemeine Regeln
 
 - Kleinste korrekte Änderung; bestehende Nutzerdaten (localStorage-Formate)
-  nicht brechen.
+  nicht brechen (Details: Persistenz-Kompatibilitäts-Regel oben).
 - Keine neuen Abhängigkeiten; die App bleibt eine statische, serverlose
   Web-App (Vanilla JS).
 - Berechnungs- und Parsing-Kerne (`js/calculator.js`, `js/costsplit.js`)
