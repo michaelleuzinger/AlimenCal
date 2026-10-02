@@ -178,6 +178,63 @@ ok('E2E Ausgleich: B zahlt A 850',
   settlementE2E.from === 'B' && settlementE2E.to === 'A' &&
   close(settlementE2E.amount, 850));
 
+/* ---------- camt.053 XML-Import (ISO 20022) ---------- */
+var camtXml = [
+  '<?xml version="1.0" encoding="UTF-8"?>',
+  '<Document xmlns="urn:iso:std:iso:20022:tech:xsd:camt.053.001.02">',
+  '  <BkToCstmrAcctRpt>',
+  '    <Stmt>',
+  '      <Acct>',
+  '        <Id><IBAN>CH001234000123456789</IBAN></Id>',
+  '      </Acct>',
+  '      <Ntry>',
+  '        <Amt Ccy="CHF">1500.00</Amt>',
+  '        <CdtDbfInd>DBIT</CdtDbfInd>',
+  '        <BookgDt><Dt>2025-03-14</Dt></BookgDt>',
+  '        <NtryDtls><TxDtls>',
+  '          <RmtInf><Ustrd>Miete M&auml;rz</Ustrd></RmtInf>',
+  '        </TxDtls></NtryDtls>',
+  '      </Ntry>',
+  '      <Ntry>',
+  '        <Amt Ccy="CHF">2500.55</Amt>',
+  '        <CdtDbfInd>CRDT</CdtDbfInd>',
+  '        <BookgDt><Dt>2025-03-15</Dt></BookgDt>',
+  '        <AddtlNtryInf>Lohn</AddtlNtryInf>',
+  '      </Ntry>',
+  '      <Ntry>',
+  '        <Amt Ccy="CHF">100.00</Amt>',
+  '        <CdtDbfInd>DBIT</CdtDbfInd>',
+  '        <ValDt><Dt>2025-03-16</Dt></ValDt>',
+  '      </Ntry>',
+  '    </Stmt>',
+  '  </BkToCstmrAcctRpt>',
+  '</Document>'
+].join('\n');
+
+var parsedCamt = cs.parseCamtXml(camtXml);
+ok('camt: 3 Transaktionen erkannt', parsedCamt.transactions.length === 3);
+ok('camt: Betrag DBIT negativ', close(parsedCamt.transactions[0].amount, -1500));
+ok('camt: Betrag CRDT positiv', close(parsedCamt.transactions[1].amount, 2500.55));
+ok('camt: Buchungsdatum ISO', parsedCamt.transactions[0].date === '2025-03-14');
+ok('camt: Valutadatum als Fallback', parsedCamt.transactions[2].date === '2025-03-16');
+ok('camt: Ustrd als Beschreibung', /Miete M\u00e4rz/.test(parsedCamt.transactions[0].description));
+ok('camt: XML-Entity dekodiert', parsedCamt.transactions[0].description.indexOf('März') >= 0);
+ok('camt: AddtlNtryInf als Beschreibung', parsedCamt.transactions[1].description === 'Lohn');
+ok('camt: BkTxCd-Fallback leer akzeptiert', typeof parsedCamt.transactions[2].description === 'string');
+
+var camtNamespaced = camtXml.replace(/<Amt /g, '<ns:Amt ').replace(/<\/Amt>/g, '</ns:Amt>');
+ok('camt: ungültiges XML erkannt', cs.parseCamtXml('nicht xml').warnings.indexOf('invalidXml') >= 0 || cs.parseCamtXml('nicht xml').warnings.length > 0);
+ok('camt: leere Eingabe ohne Transaktionen', cs.parseCamtXml('').transactions.length === 0);
+
+var camtDecisions = {
+  'tx-1': { mode: 'split', shareA: 0.5 },
+  'tx-2': { mode: 'partyA' },
+  'tx-3': { mode: 'ignore' }
+};
+var camtTotals = cs.computeSplit(parsedCamt.transactions, camtDecisions, null);
+var camtSettlement = cs.computeSettlement(camtTotals, true);
+ok('camt E2E: Ausgleich berechnet', isFinite(camtSettlement.amount) && camtSettlement.amount >= 0);
+
 /* ---------- Zusammenfassung ---------- */
 
 console.log('\n' + passed + ' Tests bestanden' +

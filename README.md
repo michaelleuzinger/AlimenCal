@@ -10,7 +10,8 @@ Unterhaltsfragen bei Trennung und Scheidung in der Schweiz:
 - **Ehegattenunterhalt** (Art. 176 ZGB bei Getrenntleben; Art. 125 ZGB
   nachehelich) nach der zweistufig-konkreten Methode (BGE 140 III 337) mit
   Überschussverteilung inklusive Mankoverteilung (BGE 135 III 66)
-- **Kostentrennung vor der Scheidung**: Stichtag definieren, Bankexport (CSV)
+- **Kostentrennung vor der Scheidung**: Stichtag definieren, Bankexport (CSV
+  oder ISO-20022-XML/camt.052–054)
   hochladen, Transaktionen zuordnen (ignorieren / anteilsmässig / voll durch
   eine Partei) – mit automatischem Ausgleich
 
@@ -81,7 +82,8 @@ oder beliebiges statisches Hosting (z. B. GitHub Pages) bereitgestellt werden.
    wählbar: Grundbedarf pauschal (Richtwerttabelle) oder effektive Kosten.
 3. Tab **Ehegattenunterhalt**: falls gewünscht aktivieren, Angaben zu
    gebührendem Lebensstandard, Mehrkosten und Leistungsfähigkeit erfassen.
-4. Tab **Kostentrennung**: Stichtag wählen, Bankexport (CSV) hochladen,
+4. Tab **Kostentrennung**: Stichtag wählen, Bankexport (CSV oder camt-XML)
+   hochladen,
    Kontoinhaber angeben, Transaktionen zuordnen – die App errechnet den
    Ausgleich. Details: [docs/KOSTENTRENNUNG.md](docs/KOSTENTRENNUNG.md)
 5. Tab **Austausch**: eigene Daten als JSON exportieren, Datei der
@@ -99,7 +101,7 @@ Ausführliche Anleitung: [docs/BENUTZERHANDBUCH.md](docs/BENUTZERHANDBUCH.md)
 |---|---|
 | [docs/BENUTZERHANDBUCH.md](docs/BENUTZERHANDBUCH.md) | Schritt-für-Schritt-Anleitung aller Tabs |
 | [docs/KALKULATION.md](docs/KALKULATION.md) | Berechnungslogik Kindes- und Ehegattenunterhalt |
-| [docs/KOSTENTRENNUNG.md](docs/KOSTENTRENNUNG.md) | Modul Kostentrennung: CSV-Import, Zuordnung, Ausgleich |
+| [docs/KOSTENTRENNUNG.md](docs/KOSTENTRENNUNG.md) | Modul Kostentrennung: CSV- und camt-XML-Import, Zuordnung, Ausgleich |
 | [docs/RECHTLICHE-GRUNDLAGEN.md](docs/RECHTLICHE-GRUNDLAGEN.md) | Rechtsquellen, Rechtsprechung, kantonale Praxis, Disclaimer |
 
 ## Kantonale Presets
@@ -124,7 +126,7 @@ funktioniert; `tests/presets.test.js` prüft die Konsistenz zwischen beiden.
 ```bash
 node tests/calculator.test.js   # Berechnungskern (53 Tests)
 node tests/presets.test.js      # Presets: JSON-Gültigkeit, Konsistenz JS/JSON (29 Tests)
-node tests/costsplit.test.js    # Kostentrennung: CSV-Parsing, Zuordnung, Ausgleich (42 Tests)
+node tests/costsplit.test.js    # Kostentrennung: CSV- und camt-XML-Parsing, Zuordnung, Ausgleich (54 Tests)
 node tests/themes.test.js       # Themes: Presets, Token, Validierung, Sanitizing (123 Tests)
 node tests/casedata.test.js     # Falldaten-Austausch: Validierung, Merge, Roundtrip (43 Tests)
 node tests/settings.test.js    # Verbindliche Einstellungen: Two-Party-Lock, Override-Modus, Read-Only-Imports (21 Tests)
@@ -164,7 +166,7 @@ KESB/Kantonsgericht Schaffhausen) angepasst und verifiziert werden. Details:
 ## Roadmap
 
 - [x] Kantonal vorkonfigurierte Richtwertsätze (Presets ZH / SH-Platzhalter)
-- [x] Kostentrennung vor der Scheidung (Stichtag, Bankexport, Ausgleich)
+- [x] Kostentrennung vor der Scheidung (Stichtag, Bankexport CSV/camt-XML, Ausgleich)
 - [x] Themes mit Theme-Editor (vordefinierte Designs, freie Farbanpassung)
 - [x] Persistenz aller Eingaben über Browser-Neustarts
 - [x] Austausch zwischen Parteien (Export/Import mit Merge, serverlos)

@@ -217,7 +217,7 @@ costsplit: {
     intro: 'For couples who want to settle their running costs separately before the divorce: define a cut-off date and upload bank exports (CSV). Each transaction can be ignored, split proportionally (configurable share) or fully assigned to one party. Transactions before the cut-off date are greyed out and not counted.',
     dateLabel: 'Cut-off date (separate costs from this date)',
     uploadLabel: 'Upload bank export (CSV)',
-    uploadHint: 'Supports common bank formats with automatic column detection (date, description, amount or separate debit/credit). All data stays local in your browser.',
+    uploadHint: 'Supports common bank formats (CSV as well as ISO 20022 XML/camt.052–054) with automatic column or field detection. All data stays local in your browser.',
     parseError: 'The bank export could not be read. Please check that the file contains a header row with date and amount columns.',
     colDate: 'Date',
     colDescription: 'Description',
