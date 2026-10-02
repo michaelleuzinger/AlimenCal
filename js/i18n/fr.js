@@ -210,7 +210,12 @@ AlimenCal.i18n.fr = {
     sectionSpousalRespondent: 'Contribution entre époux : débiteur/trice',
     sectionSpousalEnabled: 'Contribution entre époux activée (indicateur)',
     sectionCostsplit: 'Séparation des coûts (export bancaire, affectations)',
-    privacyHint: 'Le fichier exporté contient les données sélectionnées en clair. Ne transmettez les données sensibles (revenus, transactions) que par des canaux confidentiels.'
+    privacyHint: 'Le fichier exporté contient les données sélectionnées en clair. Ne transmettez les données sensibles (revenus, transactions) que par des canaux confidentiels.',
+    encryptLabel: 'Chiffrer pour l\'autre partie (clé publique, ECDH/AES-GCM)',
+    encryptNoKey: 'Aucune clé publique de l\'autre partie n\'a été importée. Veuillez d\'abord importer sa clé publique sous « Clés » dans l\'onglet « Paramètres ».',
+    encryptError: 'Échec du chiffrement.',
+    decryptNoKey: 'Le fichier est chiffré, mais aucune clé privée n\'est présente. Veuillez d\'abord générer une clé dans l\'onglet « Paramètres ».',
+    decryptError: 'Échec du déchiffrement (mauvaise clé ou fichier altéré).',
   },
 costsplit: {
     heading: 'Séparation des coûts dès une date donnée',

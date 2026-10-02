@@ -160,10 +160,24 @@ E-Mail oder über die Anwältin/den Anwalt):
 2. **Exportieren**: Im Tab «Austausch» die gewünschten Abschnitte anwählen
    (Empfehlung: nur die eigenen – nicht die der anderen Partei) und
    «Exportieren (JSON)» klicken. Es entsteht eine Datei `alimencal-case.json`.
-3. **Datei übermitteln** – über einen vertraulichen Kanal. Die Datei enthält
-   die Daten im Klartext (keine Verschlüsselung!).
+
+**Verschlüsselter Export (empfohlen):** Ist die Option «Für Gegenseite
+verschlüsseln» aktiviert (Standard), wird die Datei mit dem öffentlichen
+Schlüssel der Gegenseite verschlüsselt (ECDH P-256 + AES-GCM, Web Crypto):
+`alimencal-case-encrypted.json`. Voraussetzung: Der Public Key der
+Gegenseite wurde zuvor im Tab «Einstellungen» unter «Schlüssel» importiert
+und man besitzt selbst ein Schlüsselpaar (Schlüssel generieren). Nur die
+Gegenseite kann die Datei mit ihrem privaten Schlüssel entschlüsseln – der
+Exporteur selbst kann die Datei nachträglich nicht mehr lesen. Die Datei
+kann nun auch über weniger vertrauliche Kanäle (z. B. E-Mail über die
+Anwältin/den Anwalt) übermittelt werden.
+
+3. **Datei übermitteln** – verschlüsselt (empfohlen, s. o.) oder als
+   unverschlüsseltes JSON über einen vertraulichen Kanal.
 4. **Importieren**: Die andere Partei wählt die erhaltene Datei im Tab
-   «Austausch». Nur die in der Datei enthaltenen, gültigen Abschnitte
+   «Austausch». Verschlüsselte Dateien werden automatisch erkannt und mit
+   dem eigenen privaten Schlüssel lokal entschlüsselt. Nur die in der Datei
+   enthaltenen, gültigen Abschnitte
    ersetzen die entsprechenden Felder – **alle eigenen Eingaben bleiben
    unverändert**.
 
@@ -175,8 +189,11 @@ Exportierbare Abschnitte:
 - Ehegattenunterhalt aktiviert (Kennzeichen)
 - Kostentrennung (Bankexport inkl. Zuordnungen)
 
-**Grenzen:** Die Datei ist nicht verschlüsselt und nicht signiert – die
-Parteien müssen sich auf den Kanal einigen. Ein gemeinsames, gleichzeitiges
+**Grenzen:** Ohne Verschlüsselungsoption ist die Datei unverschlüsselt und nicht
+signiert – die Parteien müssen sich auf den Kanal einigen. Der
+verschlüsselte Export schützt nur die Vertraulichkeit (nur die Gegenseite
+kann lesen), aber keine Urheberschaft: Er ist keine Unterschrift; für
+Verbindlichkeit siehe Tab «Einstellungen», signierte Lock-Dateien. Ein gemeinsames, gleichzeitiges
 Bearbeiten gibt es nicht; der Austausch ist sequenziell (A exportiert,
 B importiert, rechnet).
 
