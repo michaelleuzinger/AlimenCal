@@ -67,6 +67,9 @@ oder beliebiges statisches Hosting (z. B. GitHub Pages) bereitgestellt werden.
   auf ihrem PC, exportiert sie als JSON-Datei und stellt sie der anderen Partei
   zu; der Import übernimmt nur die enthaltenen Abschnitte (Merge) – eigene
   Eingaben bleiben unverändert
+- **Verschlüsselter Export (Public-Key)**: Der Austausch-Export kann mit dem
+  öffentlichen Schlüssel der Gegenseite verschlüsselt werden (ECDH P-256 +
+  AES-GCM, Web Crypto) – nur die Gegenseite kann die Datei öffnen
 - **Mangellagen-Erkennung**: Unterdeckung (Manko) wird ausgewiesen, inklusive
   Hinweis auf die Nachforderungspraxis
 - **Kein Server, keine Abhängigkeiten**: reine statische Web-App
@@ -131,6 +134,7 @@ node tests/themes.test.js       # Themes: Presets, Token, Validierung, Sanitizin
 node tests/casedata.test.js     # Falldaten-Austausch: Validierung, Merge, Roundtrip (43 Tests)
 node tests/settings.test.js    # Verbindliche Einstellungen: Two-Party-Lock, Override-Modus, Read-Only-Imports (21 Tests)
 node tests/crypto.test.js      # Serverlose Verbindlichkeit: Hash-Kette, signierte Lock-Dateien (15 Tests)
+node tests/casecrypto.test.js  # Verschlüsselter Austausch: ECDH/AES-GCM-Export (14 Tests)
 node tests/storage.test.js    # localStorage-Persistenz: Versionierung, Migration, Sanitizing (35 Tests)
 ```
 
@@ -172,6 +176,7 @@ KESB/Kantonsgericht Schaffhausen) angepasst und verifiziert werden. Details:
 - [x] Austausch zwischen Parteien (Export/Import mit Merge, serverlos)
 - [x] Verbindliche Einstellungen: Two-Party-Lock, Override-Modus, Read-Only-Imports ([docs/settings-binding-override.md](docs/settings-binding-override.md))
 - [x] Serverlose Verbindlichkeit: Hash-Kette und beidseitig signierte Lock-Dateien (Web Crypto, ohne Server)
+- [x] Public-Key-verschlüsselter Austausch (ECDH P-256 + AES-GCM)
 - [ ] PDF-Export des Berechnungsblatts
 - [ ] BVG-/Vorsorgeabzüge und steuerliche Saldierung
 - [ ] Alimentenindexierung (Art. 129 ZGB)

@@ -708,6 +708,7 @@
     document.getElementById('share-export-heading').textContent = t('share', 'exportHeading');
     document.getElementById('share-export-hint').textContent = t('share', 'exportHint');
     document.getElementById('share-export').textContent = t('share', 'exportButton');
+    document.getElementById('share-export-encrypt-label').textContent = t('share', 'encryptLabel');
     document.getElementById('share-import-heading').textContent = t('share', 'importHeading');
     document.getElementById('share-import-hint').textContent = t('share', 'importHint');
     document.getElementById('share-import-label').textContent = t('share', 'importLabel');
@@ -1460,20 +1461,55 @@
     });
   }
 
+  function recipientPublicKey() {
+    var k = loadKeys();
+    if (!k) { return null; }
+    var a = k.partyA, b = k.partyB;
+    if (a && a.importedParty && a.publicKey) { return a.publicKey; }
+    if (b && b.importedParty && b.publicKey) { return b.publicKey; }
+    return null;
+  }
+  function ownPrivateKey() {
+    var k = loadKeys();
+    if (!k) { return null; }
+    var a = k.partyA, b = k.partyB;
+    if (a && !a.importedParty && a.privateKey) { return a.privateKey; }
+    if (b && !b.importedParty && b.privateKey) { return b.privateKey; }
+    return null;
+  }
   function doShareExport() {
     var checked = Array.prototype.slice.call(
       document.querySelectorAll('#share-export-checkboxes input:checked')
     ).map(function (el) { return el.value; });
+    var encrypt = !!(document.getElementById('share-export-encrypt') || {}).checked;
     var current = collectCurrentSections();
     var sections = {};
     checked.forEach(function (key) { sections[key] = current[key]; });
     var file = AlimenCal.casedata.buildFile(sections);
-    var blob = new Blob([JSON.stringify(file, null, 2)], { type: 'application/json' });
-    var a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'alimencal-case.json';
-    a.click();
-    URL.revokeObjectURL(a.href);
+    function download(obj, name) {
+      var blob = new Blob([JSON.stringify(obj, null, 2)], { type: 'application/json' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = name;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+    if (encrypt) {
+      var recipient = recipientPublicKey();
+      if (!recipient) {
+        alert(t('share', 'encryptNoKey'));
+        return;
+      }
+      AlimenCal.casecrypto.encryptCase(file, recipient, function (env, err) {
+        if (err || !env) {
+          alert(t('share', 'encryptError'));
+          return;
+        }
+        download(env, 'alimencal-case-encrypted.json');
+      });
+      return;
+    }
+    download(file, 'alimencal-case.json');
   }
 
   function applySectionsToForm(sections) {
@@ -1519,8 +1555,33 @@
     reader.onload = function () {
       var raw;
       try { raw = JSON.parse(reader.result); } catch (e) { raw = null; }
-      var result = raw ? AlimenCal.casedata.sanitizeCase(raw) : null;
       var status = document.getElementById('share-import-status');
+      if (raw && AlimenCal.casecrypto && AlimenCal.casecrypto.isEnvelope(raw)) {
+        var priv = ownPrivateKey();
+        if (!priv) {
+          status.textContent = t('share', 'decryptNoKey');
+          return;
+        }
+        AlimenCal.casecrypto.decryptCase(raw, priv, function (dec, err) {
+          if (err || !dec) {
+            status.textContent = t('share', 'decryptError');
+            return;
+          }
+          var decResult = AlimenCal.casedata.sanitizeCase(dec);
+          if (!decResult || !decResult.valid) {
+            status.textContent = t('share', 'importInvalid');
+            return;
+          }
+          applySectionsToForm(decResult.sections);
+          var decPartial = decResult.invalid.length
+            ? t('share', 'importPartial', [decResult.invalid.join(', ')])
+            : '';
+          status.textContent = t('share', 'importOk',
+            [String(Object.keys(decResult.sections).length), decPartial]);
+        });
+        return;
+      }
+      var result = raw ? AlimenCal.casedata.sanitizeCase(raw) : null;
       if (!result || !result.valid) {
         status.textContent = t('share', 'importInvalid');
         return;

@@ -81,6 +81,7 @@ js/costsplit.js     Kostentrennung: CSV-Import, Zuordnung, Ausgleich (DOM-frei)
 js/themes.js       Theme-Definitionen und -Validierung (DOM-frei, auch in Node.js lauffähig)
 js/casedata.js     Falldaten-Austausch: Validierung und Merge (DOM-frei)
 js/settings.js     Verbindliche Einstellungen: Two-Party-Lock, Override-Modus, Read-Only-Imports (DOM-frei)
+js/casecrypto.js   Verschlüsselter Austausch-Export: ECDH P-256 + AES-GCM (DOM-frei, auch in Node.js lauffähig)
 js/config.js        Default-Richtwerte (Zürcher Kinderkosten-Tabelle 1.3.2025)
 js/presets.js       Eingebettete Kopie der kantonalen Presets (file://-fähig)
 presets/*.json      Kantonale Richtwertsätze inkl. Quellen und Checklisten
