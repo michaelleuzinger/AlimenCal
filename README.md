@@ -123,6 +123,7 @@ node tests/presets.test.js      # Presets: JSON-Gültigkeit, Konsistenz JS/JSON 
 node tests/costsplit.test.js    # Kostentrennung: CSV-Parsing, Zuordnung, Ausgleich (42 Tests)
 node tests/themes.test.js       # Themes: Presets, Token, Validierung, Sanitizing (123 Tests)
 node tests/casedata.test.js     # Falldaten-Austausch: Validierung, Merge, Roundtrip (43 Tests)
+node tests/settings.test.js    # Verbindliche Einstellungen: Two-Party-Lock, Override-Modus, Read-Only-Imports (21 Tests)
 ```
 
 Geprüft werden u. a. Grundbedarfstabellen, Aufteilung nach wirtschaftlicher
@@ -161,6 +162,7 @@ KESB/Kantonsgericht Schaffhausen) angepasst und verifiziert werden. Details:
 - [x] Themes mit Theme-Editor (vordefinierte Designs, freie Farbanpassung)
 - [x] Persistenz aller Eingaben über Browser-Neustarts
 - [x] Austausch zwischen Parteien (Export/Import mit Merge, serverlos)
+- [x] Verbindliche Einstellungen: Two-Party-Lock, Override-Modus, Read-Only-Imports ([docs/settings-binding-override.md](docs/settings-binding-override.md))
 - [ ] PDF-Export des Berechnungsblatts
 - [ ] BVG-/Vorsorgeabzüge und steuerliche Saldierung
 - [ ] Alimentenindexierung (Art. 129 ZGB)

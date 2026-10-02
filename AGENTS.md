@@ -79,13 +79,15 @@ js/calculator.js    Berechnungskern (DOM-frei, auch in Node.js lauffähig)
 js/costsplit.js     Kostentrennung: CSV-Import, Zuordnung, Ausgleich (DOM-frei)
 js/themes.js       Theme-Definitionen und -Validierung (DOM-frei, auch in Node.js lauffähig)
 js/casedata.js     Falldaten-Austausch: Validierung und Merge (DOM-frei)
+js/settings.js     Verbindliche Einstellungen: Two-Party-Lock, Override-Modus, Read-Only-Imports (DOM-frei)
 js/config.js        Default-Richtwerte (Zürcher Kinderkosten-Tabelle 1.3.2025)
 js/presets.js       Eingebettete Kopie der kantonalen Presets (file://-fähig)
 presets/*.json      Kantonale Richtwertsätze inkl. Quellen und Checklisten
 js/app.js           UI-Logik, i18n-Anwendung, localStorage, Import/Export
 js/i18n/{de,fr,it,en}.js  Sprachdateien
 AGENTS.md           Verbindliche Arbeitsregeln (Doku-in-Sync-Regel, Checklisten)
-docs/               Benutzerhandbuch, Berechnungslogik, Kostentrennung, Rechtliches
+docs/               Benutzerhandbuch, Berechnungslogik, Kostentrennung, Rechtliches, Verbindliche Einstellungen
+schema/             Optionales SQL-Referenzschema (Immutability-Trigger) für spätere Persistenz
 screenshots/        Screenshots der App (Inventar-Regel: s. AGENTS.md; Erzeugung tools/make-screenshots.js)
 tools/              make-screenshots.js: Screenshot-Generator (Puppeteer, s. AGENTS.md)
 tests/              Unit-Tests (node)
