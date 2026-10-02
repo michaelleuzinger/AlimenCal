@@ -210,6 +210,16 @@ wiederhergestellt:
 Gespeichert wird bei jeder Eingabe sowie beim Verlassen/Neuladen der Seite
 (`beforeunload`, `pagehide`, `visibilitychange`).
 
+### Lesbarkeit nach App-Updates
+
+Die Falldaten werden in einem versionierten Format gespeichert
+(`js/storage.js`). Beim Start prüft die App die Format-Version, wandelt
+ältere Bestände automatisch um (Migration) und ergänzt fehlende Felder mit
+Standardwerten; ungültige Einzelwerte werden verworfen, statt die gesamte
+Wiederherstellung scheitern zu lassen. Dadurch bleiben alle Eingaben nach
+einem App-Update lesbar – auch wenn das Speicherformat zwischen zwei Versionen
+geändert wurde.
+
 ## Datenschutz
 
 Alle Eingaben bleiben lokal im Browser (`localStorage`). Bankexporte werden

@@ -1554,19 +1554,41 @@
   }
 
   function saveForm() {
-    try { localStorage.setItem(LS_FORM, JSON.stringify(collectFormState())); } catch (e) {}
+    try {
+      localStorage.setItem(LS_FORM,
+        JSON.stringify(AlimenCal.storage.buildFormPayload(collectFormState())));
+    } catch (e) {}
   }
 
   function scheduleSaveForm() {
     saveForm();
   }
 
+  /* Selbsttest beim Start: der aktuelle Zustand wird einmal gespeichert,
+   * sofort wieder gelesen und ueber AlimenCal.storage validiert. Schlägt
+   * das Lesen fehl, ist das Persistenz-Format inkonsistent (z. B. nach
+   * einer Schema-Aenderung ohne Migration) und wird im Browser-Log
+   * gemeldet, damit der Fall bei der Entwicklung auffaellt. */
+  function restoreFormSelfTest() {
+    saveForm();
+    var raw = null;
+    try { raw = localStorage.getItem(LS_FORM); } catch (e) { raw = null; }
+    var parsed = raw ? AlimenCal.storage.parseStored(raw) : null;
+    if (!raw || !parsed || parsed.status !== 'ok') {
+      if (window.console && console.warn) {
+        console.warn('AlimenCal: Persistenz-Selbsttest fehlgeschlagen (status=' +
+          (parsed ? parsed.status : 'unreadable') + ')');
+      }
+    }
+  }
+
   function restoreForm() {
     var raw = null;
     try { raw = localStorage.getItem(LS_FORM); } catch (e) {}
     if (!raw) { return; }
-    var form;
-    try { form = JSON.parse(raw); } catch (e) { return; }
+    var parsed = AlimenCal.storage.parseStored(raw);
+    if (parsed.status !== 'ok' || !parsed.form) { return; }
+    var form = parsed.form;
     FORM_FIELD_IDS.forEach(function (id) {
       var el = document.getElementById(id);
       if (!el || !(id in form)) { return; }
@@ -1585,6 +1607,7 @@
       document.getElementById('costsplit-section').hidden = false;
       renderCostsplitTable();
     }
+    if (parsed.changed) { saveForm(); }
   }
 
   /* ------------------------------------------------------------- */
@@ -1618,6 +1641,7 @@
     document.addEventListener('input', scheduleSaveForm);
     document.addEventListener('change', scheduleSaveForm);
     document.addEventListener('click', scheduleSaveForm);
+    restoreFormSelfTest();
     window.addEventListener('beforeunload', saveForm);
     window.addEventListener('pagehide', saveForm);
     document.addEventListener('visibilitychange', function () {
