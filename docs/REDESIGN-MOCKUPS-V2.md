@@ -45,6 +45,16 @@ Mobile: komplette Ansicht und Resultat) unter
 [`previews/`](../design/mockups-v2/previews/) (Dateien `empfehlung-1` bis
 `empfehlung-5`).
 
+**Apple-Variante der Empfehlung** (auf Wunsch priorisiert):
+[`mockup-empfehlung-apple.html`](../design/mockups-v2/mockup-empfehlung-apple.html)
+– gleiche Struktur (Sidebar, Wizard, Resultatkarte), aber konsequent an den
+Apple Human Interface Guidelines ausgerichtet: Hintergrund `#f5f5f7`, weisse
+Karten, einziger Blau-Akzent `#0071e3`, 18px-Radien, Pill-Buttons, SF-artige
+Typografie mit negativem Letter-Spacing, translucente Sidebar
+(`backdrop-filter`), grüne Erfolgs-Badges (`#34c759`). Vorschau-Screenshots:
+`apple-empfehlung-1` bis `-5` (Desktop-Top/Eingaben/Resultat, Mobile
+komplett, Mobile-Resultat).
+
 ## Abgrenzung zu V1
 
 - `design/mockups/` (V1, Apple/Material/…-Stile) bleibt als Historie erhalten;

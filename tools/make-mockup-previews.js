@@ -49,6 +49,11 @@ const V2_SHOTS = [
   /* Empfehlung (Kombination): Desktop-Sektionen + Mobile */
   { f: 'mockup-empfehlung', out: 'empfehlung-1-desktop-top', w: 1280, h: 900, full: false, scrollTo: 0 },
   { f: 'mockup-empfehlung', out: 'empfehlung-4-mobile-full', w: 400, h: 780, full: true },
+  /* Empfehlung im Apple-Design (HIG-Farbwelt) */
+  { f: 'mockup-empfehlung-apple', out: 'apple-empfehlung-1-desktop-top', w: 1280, h: 900, full: false, scrollTo: 0 },
+  { f: 'mockup-empfehlung-apple', out: 'apple-empfehlung-2-desktop-eingaben', w: 1280, h: 900, full: false, scrollTo: 620 },
+  { f: 'mockup-empfehlung-apple', out: 'apple-empfehlung-3-desktop-resultat', w: 1280, h: 900, full: false, scrollTo: 99999 },
+  { f: 'mockup-empfehlung-apple', out: 'apple-empfehlung-4-mobile-full', w: 400, h: 780, full: true },
 ];
 
 (async () => {
