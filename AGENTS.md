@@ -17,14 +17,14 @@ unvollständig und darf nicht gemergt werden.
 | Berechnungslogik (`js/calculator.js`) | `docs/KALKULATION.md`, README-Abschnitt «Tests»/«Richtwerte» |
 | Kostentrennung (`js/costsplit.js`, zugehörige UI) | `docs/KOSTENTRENNUNG.md` |
 | UI/Bedienung, neue Tabs oder Felder | `docs/BENUTZERHANDBUCH.md`, README-Abschnitt «Nutzung» |
-| Richtwerte / Defaults (`js/config.js`) | `docs/KALKULATION.md` (Wertetabelle), README-Abschnitt «Verwendete Richtwerte», Quellenangaben inkl. Datum «Stand: …» |
-| Presets (`presets/*.json`, `js/presets.js`) | README-Abschnitt «Kantonale Presets», Preset-`meta` (Quelle, URL, Hinweise) |
+| Richtwerte / Defaults (`js/config.js`) | `docs/KALKULATION.md` (Wertetabelle), README-Abschnitt «Richtwerte», Quellenangaben inkl. Datum «Stand: …» |
+| Presets (`presets/*.json`, `js/presets.js`) | README-Abschnitt «Richtwerte», Preset-`meta` (Quelle, URL, Hinweise) |
 | Sprachen / i18n (`js/i18n/*`) | `docs/BENUTZERHANDBUCH.md` (Sprachliste), ggf. README |
 | Struktur / neue Dateien | Struktur-Übersicht unten |
 | localStorage-Persistenz (`js/storage.js`) | Regel-Abschnitt «Lesbarkeit der Nutzerdaten nach Updates» unten, `docs/BENUTZERHANDBUCH.md` (Datenhaltung), README-Abschnitt «Tests» |
 | Screenshots (UI-Änderungen) | `screenshots/` erneuern; Inventar-Tabelle unten **und** Einbettungen im BENUTZERHANDBUCH synchron halten (Inventar-Regel, s. u.) |
 | Rechtliches / Rechtsprechungs-Bezug | `docs/RECHTLICHE-GRUNDLAGEN.md` |
-| Kantonale Presets (`presets/`) | `docs/PRESETS.md`, README-Abschnitt «Kantonale Presets» |
+| Kantonale Presets (`presets/`) | `docs/PRESETS.md`, README-Abschnitt «Richtwerte» |
 | Roadmap / neue geplante Funktionen | `docs/ROADMAP.md`, README-Abschnitt «Roadmap, Design, Tests & Mitmachen» |
 | Design-Stile / Mockups / Redesign | `docs/DESIGN.md` (Verweis auf Redesign-Docs), README-Abschnitt «Roadmap, Design, Tests & Mitmachen» |
 | Tests / neue Testdateien | `docs/TESTS.md`, README-Abschnitt «Roadmap, Design, Tests & Mitmachen» |
