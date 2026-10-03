@@ -108,21 +108,19 @@ Schritt-für-Schritt-Anleitung aller Tabs:
 | [docs/REDESIGN-MOCKUPS.md](docs/REDESIGN-MOCKUPS.md) | Design-Konzepte V1 (Apple, Material 3, Minimal, Bento, Dark, Neo-Brutalismus) |
 | [docs/REDESIGN-MOCKUPS-V2.md](docs/REDESIGN-MOCKUPS-V2.md) | Design-Konzepte V2 (Sidebar, Wizard, Editorial, Command-Center) |
 
-## Kantonale Presets
+## Richtwerte
 
-Kantonale Richtwertsätze (z. B. Zürcher Kinderkosten-Tabelle 1.3.2025,
-Schaffhausen-Platzhalter mit Verifikations-Checkliste) liegen unter
-`presets/` und sind im Tab **Richtwerte** ladbar. Eigene Presets sind als
-JSON importierbar – Aufbau und Verifikation:
-[docs/PRESETS.md](docs/PRESETS.md).
+**Default** (Stand: März 2025) ist die Zürcher Kinderkosten-Tabelle vom
+1. März 2025 (abzüglich der enthaltenen pauschalen Kinder-Krankenkassenprämie,
+da die effektive Prämie separat erfasst wird) sowie betreibungsrechtliche
+Existenzminima (Art. 93 SchKG) als Orientierung – Wertetabelle mit Quellen:
+[docs/KALKULATION.md](docs/KALKULATION.md).
 
-## Verwendete Richtwerte (Default)
-
-Die Default-Richtwerte (Stand: März 2025) basieren auf der Zürcher
-Kinderkosten-Tabelle vom 1. März 2025 sowie auf betreibungsrechtlichen
-Existenzminima (Art. 93 SchKG) als Orientierung. Wertetabelle mit Quellen:
-[docs/KALKULATION.md](docs/KALKULATION.md); Rechtslage und kantonale Praxis:
-[docs/RECHTLICHE-GRUNDLAGEN.md](docs/RECHTLICHE-GRUNDLAGEN.md).
+**Kantonale Presets** liegen als JSON unter `presets/` und sind im Tab
+**Richtwerte** ladbar; eigene Sätze sind importierbar (z. B.
+Schaffhausen-Platzhalter mit Verifikations-Checkliste) – Aufbau und
+Verifikation: [docs/PRESETS.md](docs/PRESETS.md). Rechtslage und kantonale
+Praxis: [docs/RECHTLICHE-GRUNDLAGEN.md](docs/RECHTLICHE-GRUNDLAGEN.md).
 
 ## Rechtlicher Hinweis (Disclaimer)
 
