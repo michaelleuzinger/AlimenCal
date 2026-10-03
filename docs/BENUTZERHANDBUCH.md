@@ -235,7 +235,7 @@ B importiert, rechnet).
 
 ![Themes Dark (DE)](../screenshots/pc/08-themes-dark-de.png)
 
-![Design-Auswahl im Themes-Tab, Apple-Stil (DE)](../screenshots/10-themes-designs-apple-de.png)
+![Design-Auswahl im Themes-Tab, Apple-Stil (DE)](../screenshots/pc/09-themes-designs-apple-de.png)
 
 - **Design-Stile**: Neben den Farb-Themes gibt es im Themes-Tab eine
   Design-Stil-Auswahl mit anklickbaren Karten. Jeder Stil passt das
@@ -266,12 +266,12 @@ Die Design-Stile im Überblick (Kindesunterhalt-Ansicht, Deutsch):
 
 | Design-Stil | Vorschau |
 |---|---|
-| Apple | ![Hero Apple](../screenshots/11-hero-apple-de.png) |
-| Material 3 | ![Hero Material 3](../screenshots/12-hero-material-de.png) |
-| Modern Minimal | ![Hero Minimal](../screenshots/13-hero-minimal-de.png) |
-| Bento (dunkel) | ![Hero Bento](../screenshots/14-hero-bento-de.png) |
-| Dark Premium | ![Hero Dark Premium](../screenshots/15-hero-dark-premium-de.png) |
-| Neo-Brutalismus | ![Hero Neo-Brutalismus](../screenshots/16-hero-neubrutalism-de.png) |
+| Apple | ![Hero Apple](../screenshots/pc/10-hero-apple-de.png) |
+| Material 3 | ![Hero Material 3](../screenshots/pc/11-hero-material-de.png) |
+| Modern Minimal | ![Hero Minimal](../screenshots/pc/12-hero-minimal-de.png) |
+| Bento (dunkel) | ![Hero Bento](../screenshots/pc/13-hero-bento-de.png) |
+| Dark Premium | ![Hero Dark Premium](../screenshots/pc/14-hero-dark-premium-de.png) |
+| Neo-Brutalismus | ![Hero Neo-Brutalismus](../screenshots/pc/15-hero-neubrutalism-de.png) |
 
 ## Persistenz (kein Datenverlust)
 
