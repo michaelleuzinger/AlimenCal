@@ -86,6 +86,14 @@ themes.PRESETS.forEach(function (preset) {
 var applePreset = themes.PRESETS.filter(function (p) { return p.id === 'apple'; })[0];
 ok('Apple-Preset vorhanden', !!applePreset);
 ok('designOfPreset: Apple erkannt', themes.designOfPreset(applePreset) === 'apple');
+ok('Editorial-Preset vorhanden und Stil erkannt', (function () {
+  var p = themes.PRESETS.filter(function (q) { return q.id === 'editorial'; })[0];
+  return !!p && themes.designOfPreset(p) === 'editorial';
+})());
+ok('Command-Center-Preset vorhanden und Stil erkannt', (function () {
+  var p = themes.PRESETS.filter(function (q) { return q.id === 'command-center'; })[0];
+  return !!p && themes.designOfPreset(p) === 'command-center';
+})());
 ok('designOfPreset: ohne design => base', themes.designOfPreset({ id: 'x' }) === 'base');
 ok('designOfPreset: null => base', themes.designOfPreset(null) === 'base');
 var designIds = ['material','minimal','bento','dark-premium','neubrutalism'];

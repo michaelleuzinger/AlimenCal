@@ -59,8 +59,9 @@ oder beliebiges statisches Hosting (z. B. GitHub Pages) bereitgestellt werden.
   zuordnen; Sammelaktionen für die Erstzuordnung
 - **Design-Stile**: neben den Farb-Themes gibt es im Themes-Tab eine Auswahl
   ganzer Design-Stile (Klassisch, Apple, Material 3, Modern Minimal, Bento,
-  Dark Premium, Neo-Brutalismus) – jeder Stil passt Typografie, Karten, Rahmen
-  und Schatten des kompletten Erscheinungsbildes an; alle responsiv
+  Dark Premium, Neo-Brutalismus, Editorial/Legal, Command-Center) – jeder
+  Stil passt Typografie, Karten, Rahmen und Schatten des kompletten
+  Erscheinungsbildes an; alle responsiv
 - **Themes**: vordefinierte Farb-Designs (Classic, Dark, High Contrast, Warm,
   Blue) und ein Theme-Editor, mit dem alle Farben (inklusive Bannerfarbe) und
   der Eckenradius frei anpassbar sind; Auswahl wird lokal gespeichert
@@ -140,8 +141,9 @@ Alimentenindexierung): [docs/ROADMAP.md](docs/ROADMAP.md).
 
 ### Design
 
-Alle sieben Design-Stile (Apple, Material 3, Modern Minimal, Bento,
-Dark Premium, Neo-Brutalismus, Base) sind im Tab **Themes** wählbar;
+Alle neun Design-Stile (Apple, Material 3, Modern Minimal, Bento,
+Dark Premium, Neo-Brutalismus, Editorial/Legal, Command-Center, Base)
+sind im Tab **Themes** wählbar;
 Apple ist der Standard. Grundgerüst, Stile und Design-Historie:
 [docs/DESIGN.md](docs/DESIGN.md).
 

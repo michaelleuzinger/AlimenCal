@@ -53,7 +53,7 @@ AlimenCal.themes = (function () {
 
   /* Design-Stile (neben den Farb-Tokens): steuern Typografie, Schatten,
      Rahmen und Layout-Dichte ueber data-design am <html>-Element. */
-  var DESIGNS = ['base', 'apple', 'material', 'minimal', 'bento', 'dark-premium', 'neubrutalism'];
+  var DESIGNS = ['base', 'apple', 'material', 'minimal', 'bento', 'dark-premium', 'neubrutalism', 'editorial', 'command-center'];
   var PRESETS = [
     {
       id: 'classic',
@@ -203,7 +203,35 @@ AlimenCal.themes = (function () {
         line: '#111111', inputBg: '#fdf6e3', btnSecondaryBg: '#3d9dfc',
         disclaimerBg: '#ffffff', disclaimerBorder: '#111111', radius: 0
       }
-    }
+    },
+    {
+      id: 'editorial',
+      name: 'Editorial / Legal',
+      design: 'editorial',
+      values: {
+        bg: '#f7f5f2', card: '#fffdfb', ink: '#232019', muted: '#6f6a5e',
+        accent: '#1f3a5f', accentDark: '#16293f', accentInk: '#ffffff',
+        bannerBg: '#f7f5f2',
+        bannerInk: '#232019',
+        warn: '#8a4b00', warnBg: '#f6efe2', warnBorder: '#d6c9a8',
+        line: '#e6e1d8', inputBg: '#ffffff', btnSecondaryBg: '#efece6',
+        disclaimerBg: '#eef2f6', disclaimerBorder: '#c7d3e0', radius: 6
+      }
+    },
+    {
+      id: 'command-center',
+      name: 'Command-Center',
+      design: 'command-center',
+      values: {
+        bg: '#0d1117', card: '#151b23', ink: '#e6edf3', muted: '#8b949e',
+        accent: '#58a6ff', accentDark: '#1f6feb', accentInk: '#0d1117',
+        bannerBg: '#151b23',
+        bannerInk: '#e6edf3',
+        warn: '#d29922', warnBg: '#211a0d', warnBorder: '#4a3a14',
+        line: '#2a3441', inputBg: '#0d1117', btnSecondaryBg: '#1b232e',
+        disclaimerBg: '#101621', disclaimerBorder: '#2a3441', radius: 9
+      }
+    },
   ];
 
   function designOfPreset(preset) {
