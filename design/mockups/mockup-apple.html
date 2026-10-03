@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup: Apple-Inspired – AlimenCal</title>
+<style>
+  :root{
+    --bg:#ffffff; --bg-alt:#f5f5f7;
+    --ink:#1d1d1f; --ink-secondary:#6e6e73;
+    --accent:#0071e3; --accent-hover:#0077ed;
+    --fill:#e8e8ed; --fill-hover:#dcdcdf;
+    --line:#d2d2d7; --radius:18px;
+    --shadow:0 2px 12px rgba(0,0,0,.06);
+    --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:var(--font);background:var(--bg);color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:880px;margin:0 auto;padding:0 1.25rem}
+
+  /* Nav – schmale translucent Leiste wie macOS */
+  nav{position:sticky;top:0;z-index:10;backdrop-filter:saturate(180%) blur(20px);background:rgba(255,255,255,.72);border-bottom:1px solid rgba(0,0,0,.08)}
+  nav .wrap{display:flex;align-items:center;gap:1.5rem;height:48px}
+  nav .brand{font-weight:600;letter-spacing:-.01em}
+  nav a{color:var(--ink-secondary);text-decoration:none;font-size:.85rem}
+  nav a.active{color:var(--ink)}
+  nav a:hover{color:var(--ink)}
+  nav .gear{margin-left:auto}
+
+  /* Hero */
+  header{padding:4.5rem 0 2.5rem;text-align:center}
+  h1{font-size:2.8rem;letter-spacing:-.02em;margin:0 0 .5rem;font-weight:700}
+  header p{color:var(--ink-secondary);font-size:1.15rem;margin:0 auto;max-width:56ch}
+
+  /* Segmented Control für Tabs */
+  .segmented{display:flex;justify-content:center;margin:1.75rem 0 .5rem}
+  .seg{display:inline-flex;background:var(--fill);border-radius:980px;padding:3px}
+  .seg button{border:0;background:transparent;padding:.45rem 1.3rem;border-radius:980px;font-size:.92rem;color:var(--ink);cursor:pointer;font-family:inherit}
+  .seg button.active{background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.12);font-weight:500}
+
+  .banner{background:var(--bg-alt);border-radius:var(--radius);padding:.9rem 1.2rem;font-size:.88rem;color:var(--ink-secondary);margin:1.25rem 0;display:flex;gap:.6rem;align-items:flex-start}
+  .banner .icon{font-size:1rem}
+
+  h2{font-size:1.5rem;letter-spacing:-.01em;margin:2rem 0 .35rem}
+  .section-sub{color:var(--ink-secondary);margin:0 0 1.5rem}
+
+  /* Karten */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin:1.5rem 0}
+  @media(max-width:640px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid rgba(0,0,0,.04);padding:1.5rem}
+  .card h3{margin:0 0 1rem;font-size:1.05rem}
+  .field{margin-bottom:1rem}
+  .field label{display:block;font-size:.85rem;color:var(--ink-secondary);margin-bottom:.35rem}
+  .field input{width:100%;padding:.6rem .8rem;border:1px solid var(--line);border-radius:10px;font-size:.95rem;font-family:inherit;background:#fff;color:var(--ink)}
+  .field input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,113,227,.15)}
+  .check{display:flex;align-items:center;gap:.55rem;font-size:.92rem;margin-top:.75rem}
+  .check input{width:1.05rem;height:1.05rem;accent-color:var(--accent)}
+
+  /* Apple Switch */
+  .switch{display:flex;align-items:center;justify-content:space-between;background:var(--bg-alt);border-radius:14px;padding:.9rem 1.1rem;margin-bottom:.75rem}
+  .switch .lbl{font-size:.92rem;font-weight:500}
+  .switch .track{width:44px;height:26px;background:var(--fill);border-radius:980px;position:relative;transition:background .2s;flex-shrink:0}
+  .switch .track::after{content:"";position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+  .switch.on .track{background:#34c759}
+  .switch.on .track::after{left:20px}
+
+  .btn{display:inline-block;border:0;border-radius:980px;padding:.7rem 1.5rem;font-size:.95rem;font-family:inherit;cursor:pointer;text-decoration:none}
+  .btn-primary{background:var(--accent);color:#fff}
+  .btn-primary:hover{background:var(--accent-hover)}
+  .btn-ghost{background:transparent;color:var(--accent)}
+  .btn-secondary{background:var(--fill);color:var(--ink)}
+  .btn-lg{padding:.8rem 2rem;font-size:1rem}
+  .actions{display:flex;gap:.75rem;margin:1.5rem 0}
+
+  /* Result */
+  .result{background:var(--bg-alt);border-radius:var(--radius);padding:1.75rem;margin:1.5rem 0}
+  .result h3{margin:0 0 1rem;font-size:1.1rem}
+  table{width:100%;border-collapse:collapse;font-size:.95rem}
+  th,td{text-align:left;padding:.6rem .25rem;border-bottom:1px solid var(--line)}
+  th{color:var(--ink-secondary);font-weight:500;font-size:.82rem;text-transform:uppercase;letter-spacing:.04em}
+  tr:last-child td{border-bottom:0}
+  .total{display:flex;justify-content:space-between;font-size:1.35rem;font-weight:700;margin-top:1rem;letter-spacing:-.01em}
+
+  .hint{font-size:.82rem;color:var(--ink-secondary)}
+  .child-card{display:flex;justify-content:space-between;align-items:center;padding:.75rem 1.1rem;background:var(--bg-alt);border-radius:12px;margin-bottom:.6rem;font-size:.92rem}
+  .add{color:var(--accent);background:none;border:0;font-family:inherit;font-size:.92rem;cursor:pointer;padding:0}
+  .child-wrap{margin:1rem 0 1.5rem}
+  footer{padding:3rem 0 4rem;text-align:center;color:var(--ink-secondary);font-size:.82rem}
+</style>
+</head>
+<body>
+<nav>
+  <div class="wrap">
+    <span class="brand">AlimenCal</span>
+    <a href="#" class="active">Kindesunterhalt</a>
+    <a href="#">Ehegattenunterhalt</a>
+    <a href="#">Kostentrennung</a>
+    <a href="#">Austausch</a>
+    <a href="#" class="gear">⚙︎</a>
+  </div>
+</nav>
+
+<header class="wrap">
+  <h1>Kindesunterhalt.</h1>
+  <p>Ermitteln Sie den monatlichen Bar- und Betreuungsunterhalt – einfach, transparent und nach schweizerischem Recht.</p>
+  <div class="segmented"><div class="seg"><button class="active">Kindesunterhalt</button><button>Ehegattenunterhalt</button><button>Kostentrennung</button></div></div>
+</header>
+
+<main class="wrap">
+  <div class="banner"><span class="icon">ⓘ</span><span>Orientierungswerkzeug – keine Rechtsberatung. Die Berechnung ersetzt keine fachkundige Beurteilung des Einzelfalls.</span></div>
+
+  <h2>Eltern</h2>
+  <p class="section-sub">Einkommen und Existenzminimum beider Elternteile.</p>
+  <div class="grid">
+    <div class="card">
+      <h3>Elternteil A</h3>
+      <div class="field"><label>Einkommen (CHF/Monat)</label><input value="6'800"></div>
+      <div class="field"><label>Existenzminimum (CHF/Monat)</label><input value="2'400"></div>
+      <div class="switch on"><span class="lbl">Erwerbstätig</span><span class="track"></span></div>
+    </div>
+    <div class="card">
+      <h3>Elternteil B</h3>
+      <div class="field"><label>Einkommen (CHF/Monat)</label><input value="4'300"></div>
+      <div class="field"><label>Existenzminimum (CHF/Monat)</label><input value="2'550"></div>
+      <div class="switch"><span class="lbl">Erwerbstätig</span><span class="track"></span></div>
+    </div>
+  </div>
+
+  <h2>Kinder</h2>
+  <p class="section-sub">Ein Kind erfassen – Grundbedarf pauschal oder effective Kosten.</p>
+  <div class="child-wrap">
+    <div class="child-card"><span><strong>Mia</strong> · 9 Jahre · Betreuung 70/30 · pauschaler Grundbedarf</span><span>CHF 480</span></div>
+    <button class="add">＋ Kind hinzufügen</button>
+  </div>
+
+  <div class="actions">
+    <button class="btn btn-primary btn-lg">Berechnen</button>
+    <button class="btn btn-ghost">Zurücksetzen</button>
+  </div>
+
+  <div class="result">
+    <h3>Resultat</h3>
+    <table>
+      <thead><tr><th>Position</th><th>Elternteil A</th><th>Elternteil B</th></tr></thead>
+      <tbody>
+        <tr><td>Barunterhalt</td><td>CHF 267</td><td>CHF 213</td></tr>
+        <tr><td>Betreuungsunterhalt</td><td>CHF 0</td><td>CHF 170</td></tr>
+      </tbody>
+    </table>
+    <div class="total"><span>Total Kind 1</span><span>CHF 650</span></div>
+    <p class="hint">Beide Elternteile sind leistungsfähig – kein Manko-Ausgleich erforderlich.</p>
+  </div>
+</main>
+
+<footer>Redesign-Mockup · Apple Human Interface Guidelines · nicht produktiv</footer>
+</body>
+</html>

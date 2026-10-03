@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup: Neo-Brutalismus – AlimenCal</title>
+<style>
+  :root{
+    --paper:#fdf6e3; --ink:#111111;
+    --orange:#ff5c00; --blue:#3d9dfc; --yellow:#ffd41f; --pink:#ff90e8;
+    --border:3px solid var(--ink);
+    --shadow:6px 6px 0 var(--ink);
+    --font:"Archivo","Space Grotesk",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font);line-height:1.5;
+       background-image:radial-gradient(rgba(17,17,17,.08) 1.2px,transparent 1.2px);background-size:22px 22px}
+  .wrap{max-width:860px;margin:0 auto;padding:0 1.25rem 3rem}
+
+  nav{display:flex;align-items:center;gap:1rem;max-width:860px;margin:0 auto;padding:1rem 1.25rem;border-bottom:var(--border);background:var(--paper)}
+  .logo{background:var(--ink);color:var(--paper);padding:.35rem .8rem;font-weight:800;letter-spacing:.02em;transform:rotate(-1.5deg)}
+  nav .links{display:flex;gap:.5rem;flex-wrap:wrap}
+  nav .links a{text-decoration:none;color:var(--ink);border:var(--border);background:#fff;padding:.3rem .75rem;font-size:.8rem;font-weight:600;box-shadow:3px 3px 0 var(--ink)}
+  nav .links a.active{background:var(--yellow);transform:translate(1px,1px);box-shadow:2px 2px 0 var(--ink)}
+  nav .gear{margin-left:auto;border:var(--border);background:var(--pink);width:2.3rem;height:2.3rem;display:grid;place-items:center;cursor:pointer;box-shadow:3px 3px 0 var(--ink)}
+
+  header{padding:2.75rem 0 1.25rem}
+  h1{font-size:clamp(2.2rem,6vw,3.4rem);line-height:1.02;margin:0 0 .6rem;font-weight:800;text-transform:uppercase;letter-spacing:-.02em}
+  h1 .hl{background:var(--orange);color:var(--paper);padding:0 .35rem;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+  .lead{font-size:1rem;max-width:52ch;font-weight:500}
+
+  .notice{background:#fff;border:var(--border);box-shadow:var(--shadow);padding:.85rem 1.1rem;font-size:.88rem;font-weight:600;margin:1.5rem 0;display:flex;gap:.7rem}
+  .notice .badge{background:var(--pink);border:var(--border);padding:0 .5rem;height:fit-content;font-size:.75rem}
+
+  h2{font-size:.85rem;text-transform:uppercase;letter-spacing:.14em;font-weight:800;margin:2rem 0 .9rem}
+  h2::before{content:"■ ";color:var(--orange)}
+
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem}
+  @media(max-width:640px){.grid{grid-template-columns:1fr}}
+  .card{background:#fff;border:var(--border);box-shadow:var(--shadow);padding:1.1rem 1.2rem}
+  .card h3{margin:0 0 1rem;font-size:1rem;text-transform:uppercase;border-bottom:var(--border);padding-bottom:.5rem;display:inline-block;background:var(--blue);color:#fff;padding:.15rem .6rem}
+  .field{margin-bottom:.85rem}
+  .field label{display:block;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.3rem}
+  .field input{width:100%;border:var(--border);background:var(--paper);padding:.5rem .7rem;font-family:inherit;font-size:.95rem;font-weight:600;box-shadow:inset 3px 3px 0 rgba(17,17,17,.12)}
+  .field input:focus{outline:none;background:#fff;box-shadow:inset 0 0 0 0 transparent,3px 3px 0 var(--blue)}
+  .check{display:flex;align-items:center;gap:.55rem;font-size:.88rem;font-weight:700}
+  .check input{width:1.2rem;height:1.2rem;accent-color:var(--orange)}
+
+  .child-card{background:#fff;border:var(--border);box-shadow:var(--shadow);padding:.8rem 1.1rem;display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem;font-weight:600;font-size:.9rem}
+  .child-card .amt{background:var(--yellow);border:var(--border);padding:.1rem .5rem}
+  .add{width:100%;border:var(--border);background:var(--blue);color:#fff;font-family:inherit;font-weight:800;font-size:.9rem;padding:.7rem;cursor:pointer;box-shadow:var(--shadow);text-transform:uppercase}
+  .add:active{transform:translate(4px,4px);box-shadow:2px 2px 0 var(--ink)}
+
+  .actions{display:flex;gap:1rem;margin:1.75rem 0;flex-wrap:wrap}
+  .btn{border:var(--border);font-family:inherit;font-weight:800;font-size:.95rem;padding:.75rem 1.75rem;cursor:pointer;box-shadow:var(--shadow);text-transform:uppercase;letter-spacing:.03em}
+  .btn:active{transform:translate(4px,4px);box-shadow:2px 2px 0 var(--ink)}
+  .btn-primary{background:var(--orange);color:#fff}
+  .btn-ghost{background:#fff;color:var(--ink)}
+
+  .result{background:#fff;border:var(--border);box-shadow:8px 8px 0 var(--orange);padding:1.5rem 1.6rem;margin:1.75rem 0}
+  .result .tag{display:inline-block;background:var(--ink);color:var(--paper);font-size:.75rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:.2rem .6rem;margin-bottom:.75rem}
+  .big{font-size:clamp(2.4rem,7vw,3.6rem);font-weight:900;letter-spacing:-.03em;line-height:1;margin:0 0 1.1rem}
+  .big .cur{background:var(--yellow);border:var(--border);padding:0 .3rem;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+  .strip{display:flex;gap:.8rem;flex-wrap:wrap;font-size:.85rem;font-weight:700}
+  .strip span{border:var(--border);padding:.25rem .7rem;background:var(--paper)}
+  .strip b{color:var(--orange)}
+  footer{padding-top:2.25rem;font-size:.78rem;font-weight:600;text-align:center;text-transform:uppercase;letter-spacing:.08em}
+</style>
+</head>
+<body>
+<nav>
+  <span class="logo">AlimenCal</span>
+  <div class="links">
+    <a href="#" class="active">Kindesunterhalt</a><a href="#">Ehegatten</a><a href="#">Kostentrennung</a><a href="#">Austausch</a>
+  </div>
+  <span class="gear">⚙</span>
+</nav>
+
+<div class="wrap">
+  <header>
+    <h1>Kindes-<br><span class="hl">unterhalt.</span></h1>
+    <p class="lead">Bar- und Betreuungsunterhalt – klar berechnet, ehrlich präsentiert. Keine Kompromisse, keine versteckten Zahlen.</p>
+  </header>
+
+  <div class="notice"><span class="badge">!</span><span>Orientierungswerkzeug – keine Rechtsberatung. Zahlen sind Schätzwerte auf Basis der gewählten Richtwerte.</span></div>
+
+  <h2>Eltern</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>Elternteil A</h3>
+      <div class="field"><label>Einkommen (CHF)</label><input value="6'800"></div>
+      <div class="field"><label>Existenzminimum (CHF)</label><input value="2'400"></div>
+      <label class="check"><input type="checkbox" checked> Erwerbstätig</label>
+    </div>
+    <div class="card">
+      <h3>Elternteil B</h3>
+      <div class="field"><label>Einkommen (CHF)</label><input value="4'300"></div>
+      <div class="field"><label>Existenzminimum (CHF)</label><input value="2'550"></div>
+      <label class="check"><input type="checkbox"> Erwerbstätig</label>
+    </div>
+  </div>
+
+  <h2>Kinder</h2>
+  <div class="child-card"><span><strong>Mia</strong> · 9 Jahre · 70/30 · pauschal</span><span class="amt">CHF 480</span></div>
+  <button class="add">＋ Kind hinzufügen</button>
+
+  <div class="actions">
+    <button class="btn btn-primary">Berechnen →</button>
+    <button class="btn btn-ghost">Zurücksetzen</button>
+  </div>
+
+  <div class="result">
+    <span class="tag">Resultat / Monat</span>
+    <p class="big"><span class="cur">CHF 650</span></p>
+    <div class="strip">
+      <span>Barunterhalt <b>CHF 480</b></span>
+      <span>Betreuung <b>AG CHF 170</b></span>
+      <span>Manko <b>keins ✓</b></span>
+    </div>
+  </div>
+  <footer>Redesign-Mockup · Neo-Brutalismus · nicht produktiv</footer>
+</div>
+</body>
+</html>

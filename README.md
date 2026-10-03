@@ -125,6 +125,14 @@ Verifikations-Checkliste) und die Wertfelder. `js/presets.js` hält eine
 eingebettete Kopie bereit, damit die App auch ohne Webserver via `file://`
 funktioniert; `tests/presets.test.js` prüft die Konsistenz zwischen beiden.
 
+## Redesign-Mockups
+
+Unter [`design/mockups/`](design/mockups/index.html) liegen statische
+HTML/CSS-Mockups als Diskussionsgrundlage für ein UI-Redesign – Apple-Inspired,
+Google/Material 3 sowie vier moderne Best-Practice-/Trend-Richtungen
+(Minimal/Calm, Bento, Dark Premium, Neo-Brutalismus). Details und Empfehlung:
+[`docs/REDESIGN-MOCKUPS.md`](docs/REDESIGN-MOCKUPS.md).
+
 ## Tests
 
 ```bash
