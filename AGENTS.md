@@ -34,7 +34,7 @@ unvollständig und darf nicht gemergt werden.
 - **Screenshots**: Sichtbare UI-Änderungen erfordern erneuerte Screenshots
   der betroffenen Ansichten – Standard-Ansichten (Views 01–10) in allen
   vier Sprachen und allen drei Geraetetypen, Design-Hero-Shots der
-  Nicht-Standard-Stile (Views 11–15) nur `pc/de` (Erzeugung siehe unten).
+  Nicht-Standard-Stile (Views 11–14) nur `pc/de` (Erzeugung siehe unten).
 - **Screenshot-Erstellung**:
   - Ausführen: `node tools/make-screenshots.js` (erzeugt alle Geraetetypen; mit `--devices pc,iphone,ipad` einschraenkbar; nutzt Puppeteer/Headless-Chromium,
     Installation von Puppeteer ausserhalb des Repos: `npm i puppeteer`)
@@ -72,10 +72,12 @@ unvollständig und darf nicht gemergt werden.
 
 Screenshots sind nach Geraetetyp gegliedert: `screenshots/pc/` (1395x2084),
 `screenshots/iphone/` (390x844), `screenshots/ipad/` (820x1180).
-Vereinbart sind insgesamt 3 Geraetetypen: PC, iPhone, iPad. Jede Ansicht
-wird je Geraetetyp in allen vier Sprachen (de, fr, it, en) erzeugt
-(Suffix im Dateinamen); insgesamt 8 Ansichten x 4 Sprachen x 3 Geraete
-= 96 PNGs.
+Vereinbart sind insgesamt 3 Geraetetypen: PC, iPhone, iPad. Die
+Standard-Ansichten (Views 01-10) werden je Geraetetyp in allen vier
+Sprachen (de, fr, it, en) erzeugt (Suffix im Dateinamen); die
+Design-Hero-Shots der Nicht-Standard-Stile (Views 11-14) nur `pc/de`.
+Insgesamt 10 Ansichten x 4 Sprachen x 3 Geraete + 4 Hero-Shots
+= 124 PNGs.
 
 | Screenshot (je `pc/`, `iphone/`, `ipad/`, Suffix `-de/-fr/-it/-en`) | Inhalt |
 |---|---|
@@ -83,32 +85,30 @@ wird je Geraetetyp in allen vier Sprachen (de, fr, it, en) erzeugt
 | `02-ehegattenunterhalt-<lang>.png` | Ehegattenunterhalt mit Bedarf/Leistungsfähigkeit und Resultat |
 | `03-kostentrennung-<lang>.png` | Kostentrennung mit anonymisiertem Bankexport, Zuordnungen und Ausgleich |
 | `04-austausch-<lang>.png` | Austausch-Tab mit Export/Import |
-| `05-hauptmenue-<lang>.png` | Navigation: Sidebar mit allen Einträgen (Desktop; Hamburger-Menü entfiel im Apple-Redesign) |
+| `05-hauptmenue-<lang>.png` | Navigation: Topbar mit Hauptfunktionen und Befehlspalette (Desktop; Mobile: Tab-Leiste) |
 | `06-richtwerte-<lang>.png` | Richtwerte mit Preset-Auswahl und Wertetabelle |
 | `07-themes-classic-<lang>.png` | Themes mit Theme-Editor, Classic |
 | `08-themes-dark-<lang>.png` | Themes, Dark-Theme (Duplikat von 07, legitimiert: dokumentiertes Feature) |
-| `09-themes-designs-apple-<lang>.png` | Themes-Tab mit Design-Stil-Auswahl (Karten), Apple-Stil aktiv |
-| `10-hero-apple-<lang>.png` | Hero-Shot Design-Stil Apple: Kindesunterhalt |
-| `11-hero-material-de.png` (nur `pc/de`) | Hero-Shot Design-Stil Material 3: Kindesunterhalt |
-| `12-hero-minimal-de.png` (nur `pc/de`) | Hero-Shot Design-Stil Modern Minimal: Kindesunterhalt |
-| `13-hero-bento-de.png` (nur `pc/de`) | Hero-Shot Design-Stil Bento (dunkel): Kindesunterhalt |
-| `14-hero-dark-premium-de.png` (nur `pc/de`) | Hero-Shot Design-Stil Dark Premium: Kindesunterhalt |
-| `15-hero-neubrutalism-de.png` (nur `pc/de`) | Hero-Shot Design-Stil Neo-Brutalismus: Kindesunterhalt |
-| `16-hero-editorial-de.png` (nur `pc/de`) | Hero-Shot Design-Stil Editorial/Legal: Kindesunterhalt |
-| `17-hero-command-center-de.png` (nur `pc/de`) | Hero-Shot Design-Stil Command-Center: Kindesunterhalt |
+| `09-themes-designs-<lang>.png` | Themes-Tab mit Design-Stil-Auswahl (Karten), Calm-Stil aktiv |
+| `10-hero-calm-<lang>.png` | Hero-Shot Design-Stil Calm (Standard): Kindesunterhalt mit Live-Ergebnis-Panel |
+| `11-hero-classic-de.png` (nur `pc/de`) | Hero-Shot Design-Stil Klassisch: Kindesunterhalt |
+| `12-hero-calm-dark-de.png` (nur `pc/de`) | Hero-Shot Design-Stil Calm Dark: Kindesunterhalt |
+| `13-hero-editorial-de.png` (nur `pc/de`) | Hero-Shot Design-Stil Editorial/Legal: Kindesunterhalt |
+| `14-hero-neubrutalism-de.png` (nur `pc/de`) | Hero-Shot Design-Stil Neo-Brutalismus: Kindesunterhalt |
 
-Hinweis: Alle Standard-App-Ansichten (01–08) werden seit dem Redesign im
-Design-Stil «Apple» erzeugt (`design: 'apple'` in VIEWS,
-`tools/make-screenshots.js`); die Farb-Theme-Screenshots 07/08 bleiben als
-Classic/Dark-Beleg erhalten, da das Farb-Theme dort das Feature ist. Die
-Design-Hero-Shots: 10 (Apple, Standard-Stil) wird wie alle Standard-Ansichten
-je Gerätetyp und Sprache erzeugt; die Nicht-Standard-Stile 11–17 nur als
-`pc/de`-Beleg (`langs: ['de'], devices: ['pc']` in VIEWS).
+Hinweis: Alle Standard-App-Ansichten (01–08) werden seit dem
+SOTA-Redesign im Design-Stil «Calm» erzeugt (`design: 'calm'` in
+VIEWS, `tools/make-screenshots.js`); die Farb-Theme-Screenshots 07/08
+bleiben als Classic/Dark-Beleg erhalten, da das Farb-Theme dort das
+Feature ist. Die Design-Hero-Shots: 10 (Calm, Standard-Stil) wird wie
+alle Standard-Ansichten je Geraetetyp und Sprache erzeugt; die
+Nicht-Standard-Stile 11–14 nur als `pc/de`-Beleg (`langs: ['de'],
+devices: ['pc']` in VIEWS).
 
 ### Struktur
 
 ```
-index.html          UI (Sidebar-Navigation links mit Icons, auf Mobile als iOS-Tab-Leiste unten – 4 Hauptfunktionen + «Mehr»-Bottom-Sheet mit Richtwerte, Themes, Über, Sprachwahl; Einstiegs-Assistent «Schnellstart» im Tab Kindesunterhalt)
+index.html          UI (Topbar-Navigation mit 4 Hauptfunktionen + Befehlspalette Ctrl+K fuer alle Tabs; auf Mobile task-first Tab-Leiste unten mit 4 Hauptfunktionen + «Mehr» (oeffnet Palette); Tab Kindesunterhalt mit Live-Ergebnis-Panel)
 css/style.css       Styles
 js/calculator.js    Berechnungskern (DOM-frei, auch in Node.js lauffähig)
 js/costsplit.js     Kostentrennung: CSV-Import, Zuordnung, Ausgleich (DOM-frei)
@@ -128,8 +128,6 @@ schema/             Optionales SQL-Referenzschema (Immutability-Trigger) für sp
 screenshots/        Screenshots der App (Inventar-Regel: s. AGENTS.md; Erzeugung tools/make-screenshots.js)
 tools/              make-screenshots.js: Screenshot-Generator (Puppeteer, s. AGENTS.md)
 tools/              check-links.js: Link-/Referenzpruefung fuer Repository-Hygiene (s. AGENTS.md)
-design/mockups-v3/  Runde-3-SOTA-Mockups (Referenz-Kategorie): drei responsive HTML-Konzepte + index.html-Galerie + PNG-Previews; Erzeugung: tools/make-mockup-previews.js; Entscheidung in docs/DESIGN.md, Abschnitt "Runde 3"; werden bei der Umsetzungs-/Verwurfsentscheidung geloescht
-tools/              make-mockup-previews.js: Preview-Generator fuer design/mockups-v3 (Puppeteer, s. docs/DESIGN.md)
 tests/              Unit-Tests (node)
 ```
 
@@ -197,7 +195,8 @@ sonst wird sie geloescht:**
 - **Mockups, Prototypen, Explorationen** werden im selben Change geloescht,
   in dem die Umsetzungs- (oder Verwurfs-) Entscheidung faellt. Der
   Entscheidungsstand lebt in `docs/`, nicht in Dateien (Historie:
-  design/mockups und design/mockups-v2 wurden nach Umsetzung entfernt).
+  design/mockups, design/mockups-v2 und design/mockups-v3 wurden
+  jeweils nach Umsetzung entfernt).
 - **Erzeugnisse ohne Erzeugung**: Was das Tool nicht mehr erzeugt (z. B.
   alte Screenshot-Schemata), wird beim naechsten Generator-Lauf per
   `git rm` entfernt, nicht liegen gelassen.

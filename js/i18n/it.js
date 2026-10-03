@@ -73,6 +73,7 @@ AlimenCal.i18n.it = {
     language: 'Lingua',
     more: 'Altro'
   },
+  palette: { placeholder: 'Cercare o passare a …', empty: 'Nessun risultato' },
   common: {
     parentA: 'Genitore A',
     parentB: 'Genitore B',
@@ -104,6 +105,7 @@ AlimenCal.i18n.it = {
     modeEffectiveShort: 'costi effettivi',
     careShareA: 'Quota di custodia genitore A (%)',
     careShareB: 'Quota di custodia genitore B (%)',
+    resultEmpty: 'Il risultato appare qui non appena vengono inseriti entrambi i redditi.',
     resultsHeading: 'Risultato alimenti per figli',
     tableChild: 'Figlio',
     tableBasicNeed: 'Bisogno base',

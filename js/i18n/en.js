@@ -73,6 +73,7 @@ AlimenCal.i18n.en = {
     language: 'Language',
     more: 'More'
   },
+  palette: { placeholder: 'Search or jump to …', empty: 'No results' },
   common: {
     parentA: 'Parent A',
     parentB: 'Parent B',
@@ -104,6 +105,7 @@ AlimenCal.i18n.en = {
     modeEffectiveShort: 'actual costs',
     careShareA: 'Care share parent A (%)',
     careShareB: 'Care share parent B (%)',
+    resultEmpty: 'The result will appear here once both incomes are entered.',
     resultsHeading: 'Child maintenance result',
     tableChild: 'Child',
     tableBasicNeed: 'Basic need',

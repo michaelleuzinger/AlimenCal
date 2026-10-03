@@ -45,23 +45,20 @@ const DEVICES = {
 const DEVICE_KEYS = ['pc', 'iphone', 'ipad'];
 
 const VIEWS = [
-  { n: 1, name: 'kindesunterhalt', langs: LANGS, setup: setupChildren, design: 'apple' },
-  { n: 2, name: 'ehegattenunterhalt', langs: LANGS, setup: setupSpousal, design: 'apple' },
-  { n: 3, name: 'kostentrennung', langs: LANGS, setup: setupCostsplit, design: 'apple' },
-  { n: 4, name: 'austausch', langs: LANGS, setup: setupShare, design: 'apple' },
-  { n: 5, name: 'hauptmenue', langs: LANGS, setup: setupSettingsMenu, design: 'apple' },
-  { n: 6, name: 'richtwerte', langs: LANGS, setup: setupSettings, design: 'apple' },
+  { n: 1, name: 'kindesunterhalt', langs: LANGS, setup: setupChildren, design: 'calm' },
+  { n: 2, name: 'ehegattenunterhalt', langs: LANGS, setup: setupSpousal, design: 'calm' },
+  { n: 3, name: 'kostentrennung', langs: LANGS, setup: setupCostsplit, design: 'calm' },
+  { n: 4, name: 'austausch', langs: LANGS, setup: setupShare, design: 'calm' },
+  { n: 5, name: 'hauptmenue', langs: LANGS, setup: setupSettingsMenu, design: 'calm' },
+  { n: 6, name: 'richtwerte', langs: LANGS, setup: setupSettings, design: 'calm' },
   { n: 7, name: 'themes-classic', langs: LANGS, setup: setupThemesClassic },
   { n: 8, name: 'themes-dark', langs: LANGS, setup: setupThemesDark },
-  { n: 9, name: 'themes-designs-apple', langs: LANGS, setup: setupThemesDesignsApple },
-  { n: 10, name: 'hero-apple', langs: LANGS, setup: setupHeroApple },
-  { n: 11, name: 'hero-material', langs: ['de'], devices: ['pc'], setup: setupHeroMaterial },
-  { n: 12, name: 'hero-minimal', langs: ['de'], devices: ['pc'], setup: setupHeroMinimal },
-  { n: 13, name: 'hero-bento', langs: ['de'], devices: ['pc'], setup: setupHeroBento },
-  { n: 14, name: 'hero-dark-premium', langs: ['de'], devices: ['pc'], setup: setupHeroDarkPremium },
-  { n: 15, name: 'hero-neubrutalism', langs: ['de'], devices: ['pc'], setup: setupHeroNeubrutalism },
-  { n: 16, name: 'hero-editorial', langs: ['de'], devices: ['pc'], setup: setupHeroEditorial },
-  { n: 17, name: 'hero-command-center', langs: ['de'], devices: ['pc'], setup: setupHeroCommandCenter }
+  { n: 9, name: 'themes-designs', langs: LANGS, setup: setupThemesDesignsCalm },
+  { n: 10, name: 'hero-calm', langs: LANGS, setup: setupHeroCalm },
+  { n: 11, name: 'hero-classic', langs: ['de'], devices: ['pc'], setup: setupHeroClassic },
+  { n: 12, name: 'hero-calm-dark', langs: ['de'], devices: ['pc'], setup: setupHeroCalmDark },
+  { n: 13, name: 'hero-editorial', langs: ['de'], devices: ['pc'], setup: setupHeroEditorial },
+  { n: 14, name: 'hero-neubrutalism', langs: ['de'], devices: ['pc'], setup: setupHeroNeubrutalism }
 ];
 
 /* ---------- Beispieldaten (anonymisiert, keine echten Personen) ---------- */
@@ -75,7 +72,9 @@ async function setLang(page, lang) {
 
 async function switchTab(page, name) {
   await page.evaluate(n => {
-    document.querySelector('.tab[data-tab="' + n + '"]').click();
+    const el = document.querySelector('.tab[data-tab="' + n + '"]');
+    if (el) { el.click(); return; }
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true, metaKey: true, bubbles: true }));
   }, name);
   await sleep(150);
 }
@@ -157,9 +156,8 @@ async function setupSpousal(page) {
 }
 
 async function setupSettingsMenu(page) {
-  /* Hamburger-Menue entfiel im Apple-Redesign: die Sidebar-Navigation
-     ist auf dem Desktop dauerhaft sichtbar, daher bleibt dieser Shot
-     ohne zusaetzliche Interaktion auf dem Kindesunterhalt-Tab. */
+  /* Hauptmenue ist seit dem SOTA-Redesign die Topbar (nicht-modal);
+     der Shot bleibt ohne zusaetzliche Interaktion auf dem Kindesunterhalt-Tab. */
   await switchTab(page, 'children');
 }
 
@@ -263,43 +261,32 @@ async function selectDesign(page, design) {
   await sleep(200);
 }
 
-async function setupThemesDesignsApple(page) {
+async function setupThemesDesignsCalm(page) {
   await switchTab(page, 'themes');
-  await selectDesign(page, 'apple');
+  await selectDesign(page, 'calm');
 }
-
-async function setupHeroApple(page) {
-  await selectDesign(page, 'apple');
+async function setupHeroCalm(page) {
+  await selectDesign(page, 'calm');
   await setupChildren(page);
 }
-
-async function setupHeroMaterial(page) {
-  await selectDesign(page, 'material');
+async function setupHeroClassic(page) {
+  await selectDesign(page, 'base');
   await setupChildren(page);
 }
-
-async function setupHeroMinimal(page) {
-  await selectDesign(page, 'minimal');
+async function setupHeroCalmDark(page) {
+  await selectDesign(page, 'calm-dark');
   await setupChildren(page);
 }
-
-async function setupHeroBento(page) {
-  await selectDesign(page, 'bento');
+async function setupHeroEditorial(page) {
+  await selectDesign(page, 'editorial');
   await setupChildren(page);
 }
-
-async function setupHeroDarkPremium(page) {
-  await selectDesign(page, 'dark-premium');
-  await setupChildren(page);
-}
-
 async function setupHeroNeubrutalism(page) {
   await selectDesign(page, 'neubrutalism');
   await setupChildren(page);
 }
 
 /* ---------- Hauptprogramm ---------- */
-
 async function run() {
   const only = process.argv.includes('--only')
     ? parseInt(process.argv[process.argv.indexOf('--only') + 1], 10)
@@ -307,14 +294,11 @@ async function run() {
   const devices = process.argv.includes('--devices')
     ? process.argv[process.argv.indexOf('--devices') + 1].split(',').filter(d => DEVICE_KEYS.includes(d))
     : DEVICE_KEYS;
-
   fs.mkdirSync(OUT_DIR, { recursive: true });
-
   const browser = await puppeteer.launch({
     headless: 'new',
     args: ['--no-sandbox', '--disable-setuid-sandbox', '--font-render-hinting=none']
   });
-
   try {
     for (const view of VIEWS) {
       if (only && view.n !== only) { continue; }
@@ -324,14 +308,12 @@ async function run() {
           const page = await browser.newPage();
           await page.setViewport({ ...DEVICES[device], deviceScaleFactor: 1 });
           page.on('pageerror', e => console.error('PAGE ERROR:', String(e)));
-
           await page.goto(APP_URL + '?screenshot=1', { waitUntil: 'networkidle0' });
           await sleep(200);
           await setLang(page, lang);
           if (view.design) { await selectDesign(page, view.design); }
           await view.setup(page);
           await sleep(300);
-
           const num = String(view.n).padStart(2, '0');
           const deviceDir = path.join(OUT_DIR, device);
           fs.mkdirSync(deviceDir, { recursive: true });
@@ -348,12 +330,3 @@ async function run() {
 }
 
 run().catch(err => { console.error(err); process.exit(1); });
-
-async function setupHeroEditorial(page) {
-  await selectDesign(page, 'editorial');
-  await setupChildren(page);
-}
-async function setupHeroCommandCenter(page) {
-  await selectDesign(page, 'command-center');
-  await setupChildren(page);
-}
