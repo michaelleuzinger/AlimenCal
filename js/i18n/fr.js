@@ -70,8 +70,10 @@ AlimenCal.i18n.fr = {
     share: 'Échange',
     about: 'À propos',
     settingsMenu: 'Paramètres et informations',
-    language: 'Langue'
+    language: 'Langue',
+    more: 'Plus'
   },
+  palette: { placeholder: 'Rechercher ou aller à …', empty: 'Aucun résultat' },
   common: {
     parentA: 'Parent A',
     parentB: 'Parent B',
@@ -103,6 +105,7 @@ AlimenCal.i18n.fr = {
     modeEffectiveShort: 'coûts effectifs',
     careShareA: 'Part de garde parent A (%)',
     careShareB: 'Part de garde parent B (%)',
+    resultEmpty: 'Le résultat apparaîtra ici dès que les deux revenus seront saisis.',
     resultsHeading: 'Résultat pension pour enfants',
     tableChild: 'Enfant',
     tableBasicNeed: 'Besoin de base',
@@ -189,8 +192,12 @@ AlimenCal.i18n.fr = {
     saved: 'Thème enregistré.',
     editor: 'Ouvrir l’éditeur',
     custom: 'Personnalisé (adapté)',
-    presetLabel: 'Thème prédéfini'
+    presetLabel: 'Thème prédéfini',
+    designHeading: 'Style de design',
+    designIntro: 'Choisissez un style de design : il adapte l’apparence complète (typographie, cartes, ombres, couleurs). Les détails peuvent ensuite être ajustés dans l’éditeur de thème.',
+    designCurrent: 'Actuel'
   },
+  wizard: { title: 'Demarrage rapide', step1: 'Parents', step2: 'Enfants', step3: 'Revenus', question: 'Combien d enfants avez-vous ?', one: '1 enfant', oneHint: 'Saisir age, couts et revenus', two: '2 enfants', twoHint: 'Majoration familiale prise en compte', next: 'Continuer', skip: 'Passer' },
   share: {
     heading: 'Échange entre les parties',
     intro: 'Si les parties travaillent sur des PC distincts, chacune peut saisir uniquement ses propres données, les exporter dans un fichier et le transmettre à l’autre partie (par ex. par e-mail ou via l’avocat). L’autre partie importe le fichier ; seules les sections contenues sont reprises, tout le reste reste inchangé.',

@@ -70,8 +70,10 @@ AlimenCal.i18n.de = {
     share: 'Austausch',
     about: 'Über',
     settingsMenu: 'Einstellungen und Informationen',
-    language: 'Sprache'
+    language: 'Sprache',
+    more: 'Mehr'
   },
+  palette: { placeholder: 'Suchen oder Sprung zu …', empty: 'Kein Treffer' },
   common: {
     parentA: 'Elternteil A',
     parentB: 'Elternteil B',
@@ -103,6 +105,7 @@ AlimenCal.i18n.de = {
     modeEffectiveShort: 'eff. Kosten',
     careShareA: 'Betreuungsanteil Elternteil A (%)',
     careShareB: 'Betreuungsanteil Elternteil B (%)',
+    resultEmpty: 'Das Resultat erscheint hier, sobald beide Einkommen erfasst sind.',
     resultsHeading: 'Resultat Kindesunterhalt',
     tableChild: 'Kind',
     tableBasicNeed: 'Grundbedarf',
@@ -189,8 +192,12 @@ AlimenCal.i18n.de = {
     saved: 'Theme gespeichert.',
     editor: 'Editor öffnen',
     custom: 'Benutzerdefiniert (angepasst)',
-    presetLabel: 'Vordefiniertes Theme'
+    presetLabel: 'Vordefiniertes Theme',
+    designHeading: 'Design-Stil',
+    designIntro: 'Wählen Sie einen Design-Stil: er passt das komplette Erscheinungsbild (Typografie, Karten, Schatten, Farben) an. Farbdetails können danach im Theme-Editor feinjustiert werden.',
+    designCurrent: 'Aktuell'
   },
+  wizard: { title: 'Schnellstart', step1: 'Eltern', step2: 'Kinder', step3: 'Einkommen', question: 'Wie viele Kinder hast du?', one: '1 Kind', oneHint: 'Alter, Kosten und Einkommen erfassen', two: '2 Kinder', twoHint: 'Familienzuschlag wird beruecksichtigt', next: 'Weiter', skip: 'Ueberspringen' },
   share: {
     heading: 'Austausch zwischen den Parteien',
     intro: 'Arbeiten die Parteien an verschiedenen PCs, kann jede Partei nur ihre eigenen Angaben erfassen, diese als Datei exportieren und der anderen Partei (z. B. via E-Mail oder über die Anwältin) zustellen. Die andere Partei importiert die Datei; nur die enthaltenen Abschnitte werden übernommen, alles andere bleibt unverändert.',

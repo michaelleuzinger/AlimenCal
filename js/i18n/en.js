@@ -70,8 +70,10 @@ AlimenCal.i18n.en = {
     share: 'Exchange',
     about: 'About',
     settingsMenu: 'Settings and information',
-    language: 'Language'
+    language: 'Language',
+    more: 'More'
   },
+  palette: { placeholder: 'Search or jump to …', empty: 'No results' },
   common: {
     parentA: 'Parent A',
     parentB: 'Parent B',
@@ -103,6 +105,7 @@ AlimenCal.i18n.en = {
     modeEffectiveShort: 'actual costs',
     careShareA: 'Care share parent A (%)',
     careShareB: 'Care share parent B (%)',
+    resultEmpty: 'The result will appear here once both incomes are entered.',
     resultsHeading: 'Child maintenance result',
     tableChild: 'Child',
     tableBasicNeed: 'Basic need',
@@ -189,8 +192,12 @@ AlimenCal.i18n.en = {
     saved: 'Theme saved.',
     editor: 'Open editor',
     custom: 'Custom (adjusted)',
-    presetLabel: 'Predefined theme'
+    presetLabel: 'Predefined theme',
+    designHeading: 'Design style',
+    designIntro: 'Choose a design style: it adjusts the complete look (typography, cards, shadows, colours). Details can be fine-tuned in the theme editor afterwards.',
+    designCurrent: 'Current'
   },
+  wizard: { title: 'Quick start', step1: 'Parents', step2: 'Children', step3: 'Income', question: 'How many children do you have?', one: '1 child', oneHint: 'Enter age, costs and income', two: '2 children', twoHint: 'Family supplement is considered', next: 'Continue', skip: 'Skip' },
   share: {
     heading: 'Exchange between the parties',
     intro: 'If the parties work on separate PCs, each party can enter only their own data, export it as a file and send it to the other party (e.g. via e-mail or through the lawyer). The other party imports the file; only the contained sections are applied, everything else remains unchanged.',

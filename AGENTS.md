@@ -17,19 +17,24 @@ unvollständig und darf nicht gemergt werden.
 | Berechnungslogik (`js/calculator.js`) | `docs/KALKULATION.md`, README-Abschnitt «Tests»/«Richtwerte» |
 | Kostentrennung (`js/costsplit.js`, zugehörige UI) | `docs/KOSTENTRENNUNG.md` |
 | UI/Bedienung, neue Tabs oder Felder | `docs/BENUTZERHANDBUCH.md`, README-Abschnitt «Nutzung» |
-| Richtwerte / Defaults (`js/config.js`) | `docs/KALKULATION.md` (Wertetabelle), README-Abschnitt «Verwendete Richtwerte», Quellenangaben inkl. Datum «Stand: …» |
-| Presets (`presets/*.json`, `js/presets.js`) | README-Abschnitt «Kantonale Presets», Preset-`meta` (Quelle, URL, Hinweise) |
+| Richtwerte / Defaults (`js/config.js`) | `docs/KALKULATION.md` (Wertetabelle), README-Abschnitt «Richtwerte», Quellenangaben inkl. Datum «Stand: …» |
+| Presets (`presets/*.json`, `js/presets.js`) | README-Abschnitt «Richtwerte», Preset-`meta` (Quelle, URL, Hinweise) |
 | Sprachen / i18n (`js/i18n/*`) | `docs/BENUTZERHANDBUCH.md` (Sprachliste), ggf. README |
 | Struktur / neue Dateien | Struktur-Übersicht unten |
 | localStorage-Persistenz (`js/storage.js`) | Regel-Abschnitt «Lesbarkeit der Nutzerdaten nach Updates» unten, `docs/BENUTZERHANDBUCH.md` (Datenhaltung), README-Abschnitt «Tests» |
 | Screenshots (UI-Änderungen) | `screenshots/` erneuern; Inventar-Tabelle unten **und** Einbettungen im BENUTZERHANDBUCH synchron halten (Inventar-Regel, s. u.) |
 | Rechtliches / Rechtsprechungs-Bezug | `docs/RECHTLICHE-GRUNDLAGEN.md` |
+| Kantonale Presets (`presets/`) | `docs/PRESETS.md`, README-Abschnitt «Richtwerte» |
+| Roadmap / neue geplante Funktionen | `docs/ROADMAP.md`, README-Abschnitt «Roadmap, Design, Tests & Mitmachen» |
+| Design-Stile / Design-Historie | `docs/DESIGN.md`, README-Abschnitt «Roadmap, Design, Tests & Mitmachen» |
+| Tests / neue Testdateien | `docs/TESTS.md`, README-Abschnitt «Roadmap, Design, Tests & Mitmachen» |
 
 ### Zusätzlich gilt
 
 - **Screenshots**: Sichtbare UI-Änderungen erfordern erneuerte Screenshots
-  der betroffenen Ansichten – in allen vier Sprachen und allen drei
-  Geraetetypen (Erzeugung siehe unten).
+  der betroffenen Ansichten – Standard-Ansichten (Views 01–10) in allen
+  vier Sprachen und allen drei Geraetetypen, Design-Hero-Shots der
+  Nicht-Standard-Stile (Views 11–14) nur `pc/de` (Erzeugung siehe unten).
 - **Screenshot-Erstellung**:
   - Ausführen: `node tools/make-screenshots.js` (erzeugt alle Geraetetypen; mit `--devices pc,iphone,ipad` einschraenkbar; nutzt Puppeteer/Headless-Chromium,
     Installation von Puppeteer ausserhalb des Repos: `npm i puppeteer`)
@@ -52,7 +57,14 @@ unvollständig und darf nicht gemergt werden.
      `docs/BENUTZERHANDBUCH.md` jeweils im zugehörigen Abschnitt eingebettet
      (Pfad von docs/ aus: `../screenshots/…`). Keine Doppel-Einbettungen
      derselben Datei an mehreren Orten ausser dem Hero-Shot im README.
-  5. **Nachführung im selben Change**: `tools/make-screenshots.js` (VIEWS),
+  5. **Hero-Shot im README immer aktuell**: Der Hero-Shot im README
+     (aktuell `screenshots/pc/01-kindesunterhalt-de.png`) ist bei JEDER
+     sichtbaren UI-Änderung (Layout, Navigation, Design-Stil, Farben,
+     Typografie) zwingend im selben Change neu zu erzeugen und zu
+     committen – auch wenn die Ansicht selbst unverändert wirkt. Der
+     Hero-Shot ist das Aushängeschild des Repos und darf nie einen
+     veralteten Stand zeigen.
+  6. **Nachführung im selben Change**: `tools/make-screenshots.js` (VIEWS),
      Inventar-Tabelle (unten) und die Einbettungen im
      BENUTZERHANDBUCH sind konsistent zu halten; entfernte Screenshots sind
      auch aus README/Handbuch zu löschen (keine toten Links).
@@ -60,10 +72,12 @@ unvollständig und darf nicht gemergt werden.
 
 Screenshots sind nach Geraetetyp gegliedert: `screenshots/pc/` (1395x2084),
 `screenshots/iphone/` (390x844), `screenshots/ipad/` (820x1180).
-Vereinbart sind insgesamt 3 Geraetetypen: PC, iPhone, iPad. Jede Ansicht
-wird je Geraetetyp in allen vier Sprachen (de, fr, it, en) erzeugt
-(Suffix im Dateinamen); insgesamt 8 Ansichten x 4 Sprachen x 3 Geraete
-= 96 PNGs.
+Vereinbart sind insgesamt 3 Geraetetypen: PC, iPhone, iPad. Die
+Standard-Ansichten (Views 01-10) werden je Geraetetyp in allen vier
+Sprachen (de, fr, it, en) erzeugt (Suffix im Dateinamen); die
+Design-Hero-Shots der Nicht-Standard-Stile (Views 11-14) nur `pc/de`.
+Insgesamt 10 Ansichten x 4 Sprachen x 3 Geraete + 4 Hero-Shots
+= 124 PNGs.
 
 | Screenshot (je `pc/`, `iphone/`, `ipad/`, Suffix `-de/-fr/-it/-en`) | Inhalt |
 |---|---|
@@ -71,15 +85,30 @@ wird je Geraetetyp in allen vier Sprachen (de, fr, it, en) erzeugt
 | `02-ehegattenunterhalt-<lang>.png` | Ehegattenunterhalt mit Bedarf/Leistungsfähigkeit und Resultat |
 | `03-kostentrennung-<lang>.png` | Kostentrennung mit anonymisiertem Bankexport, Zuordnungen und Ausgleich |
 | `04-austausch-<lang>.png` | Austausch-Tab mit Export/Import |
-| `05-hauptmenue-<lang>.png` | Hamburger-Menü geöffnet: alle Navigationseinträge und Sprachwahl |
+| `05-hauptmenue-<lang>.png` | Navigation: Topbar mit Hauptfunktionen und Befehlspalette (Desktop; Mobile: Tab-Leiste) |
 | `06-richtwerte-<lang>.png` | Richtwerte mit Preset-Auswahl und Wertetabelle |
 | `07-themes-classic-<lang>.png` | Themes mit Theme-Editor, Classic |
 | `08-themes-dark-<lang>.png` | Themes, Dark-Theme (Duplikat von 07, legitimiert: dokumentiertes Feature) |
+| `09-themes-designs-<lang>.png` | Themes-Tab mit Design-Stil-Auswahl (Karten), Calm-Stil aktiv |
+| `10-hero-calm-<lang>.png` | Hero-Shot Design-Stil Calm (Standard): Kindesunterhalt mit Live-Ergebnis-Panel |
+| `11-hero-classic-de.png` (nur `pc/de`) | Hero-Shot Design-Stil Klassisch: Kindesunterhalt |
+| `12-hero-calm-dark-de.png` (nur `pc/de`) | Hero-Shot Design-Stil Calm Dark: Kindesunterhalt |
+| `13-hero-editorial-de.png` (nur `pc/de`) | Hero-Shot Design-Stil Editorial/Legal: Kindesunterhalt |
+| `14-hero-neubrutalism-de.png` (nur `pc/de`) | Hero-Shot Design-Stil Neo-Brutalismus: Kindesunterhalt |
+
+Hinweis: Alle Standard-App-Ansichten (01–08) werden seit dem
+SOTA-Redesign im Design-Stil «Calm» erzeugt (`design: 'calm'` in
+VIEWS, `tools/make-screenshots.js`); die Farb-Theme-Screenshots 07/08
+bleiben als Classic/Dark-Beleg erhalten, da das Farb-Theme dort das
+Feature ist. Die Design-Hero-Shots: 10 (Calm, Standard-Stil) wird wie
+alle Standard-Ansichten je Geraetetyp und Sprache erzeugt; die
+Nicht-Standard-Stile 11–14 nur als `pc/de`-Beleg (`langs: ['de'],
+devices: ['pc']` in VIEWS).
 
 ### Struktur
 
 ```
-index.html          UI (Hamburger-Menü oben rechts mit Navigation: Kindesunterhalt, Ehegattenunterhalt, Kostentrennung, Austausch, Richtwerte, Themes, Über und Sprachwahl)
+index.html          UI (Topbar-Navigation mit 4 Hauptfunktionen + Befehlspalette Ctrl+K fuer alle Tabs; auf Mobile task-first Tab-Leiste unten mit 4 Hauptfunktionen + «Mehr» (oeffnet Palette); Tab Kindesunterhalt mit Live-Ergebnis-Panel)
 css/style.css       Styles
 js/calculator.js    Berechnungskern (DOM-frei, auch in Node.js lauffähig)
 js/costsplit.js     Kostentrennung: CSV-Import, Zuordnung, Ausgleich (DOM-frei)
@@ -94,10 +123,11 @@ js/storage.js      localStorage-Persistenz: Versionierung, Sanitizing, Migration
 js/app.js           UI-Logik, i18n-Anwendung, localStorage, Import/Export
 js/i18n/{de,fr,it,en}.js  Sprachdateien
 AGENTS.md           Verbindliche Arbeitsregeln (Doku-in-Sync-Regel, Checklisten)
-docs/               Benutzerhandbuch, Berechnungslogik, Kostentrennung, Rechtliches, Verbindliche Einstellungen
+docs/               Benutzerhandbuch, Berechnungslogik, Kostentrennung, Rechtliches, Verbindliche Einstellungen, Design (inkl. Design-Historie), Tests, Presets, Roadmap
 schema/             Optionales SQL-Referenzschema (Immutability-Trigger) für spätere Persistenz
 screenshots/        Screenshots der App (Inventar-Regel: s. AGENTS.md; Erzeugung tools/make-screenshots.js)
 tools/              make-screenshots.js: Screenshot-Generator (Puppeteer, s. AGENTS.md)
+tools/              check-links.js: Link-/Referenzpruefung fuer Repository-Hygiene (s. AGENTS.md)
 tests/              Unit-Tests (node)
 ```
 
@@ -119,6 +149,10 @@ tests/              Unit-Tests (node)
 - [ ] `node tests/*.test.js` grün
 - [ ] Persistenz-Kompatibilität geprüft (Checkliste oben)
 - [ ] Rechtlicher Disclaimer bleibt vollständig erhalten
+- [ ] Hygiene: `git ls-files` enthält nur Produktiv-/Erzeugnis-/Referenz-Dateien
+- [ ] Hygiene: keine neuen Dateien ohne Eintrag in der Struktur-Tabelle
+- [ ] Hygiene: `node tools/check-links.js` grün
+- [ ] Hygiene: gelöschte Dateien ohne verbleibende Referenzen (grep)
 
 ## Verbindliche Regel: Lesbarkeit der Nutzerdaten nach Updates
 
@@ -144,6 +178,44 @@ unvollständig und darf nicht gemergt werden.
 - [ ] Keine Feld-/Schlüsselnamen ohne Migrationspfad umbenannt oder entfernt
 - [ ] `node tests/storage.test.js` (und `node tests/casedata.test.js`) grün
 - [ ] Neue Felder tolerieren fehlende Werte (Defaults, kein Absturz beim Lesen von Altdaten)
+
+## Verbindliche Regel: Repository-Hygiene (clean Repository)
+
+**Jede Datei im Repository muss einer von drei Kategorien angehoeren –
+sonst wird sie geloescht:**
+
+| Kategorie | Test | Beispiele |
+|---|---|---|
+| **Produktiv** | Wird von `index.html` geladen oder von Tests ausgefuehrt | `js/*`, `css/*`, `js/i18n/*` |
+| **Erzeugnis** | Wird von einem Tool generiert **und** in Doku/README referenziert | `screenshots/*`, `presets/*.json` |
+| **Referenz** | In Doku verlinkt **und** beschreibt einen nicht umgesetzten, aktiv verfolgten Gedanken | `schema/calc_settings.sql` |
+
+### Konsequenzen
+
+- **Mockups, Prototypen, Explorationen** werden im selben Change geloescht,
+  in dem die Umsetzungs- (oder Verwurfs-) Entscheidung faellt. Der
+  Entscheidungsstand lebt in `docs/`, nicht in Dateien (Historie:
+  design/mockups, design/mockups-v2 und design/mockups-v3 wurden
+  jeweils nach Umsetzung entfernt).
+- **Erzeugnisse ohne Erzeugung**: Was das Tool nicht mehr erzeugt (z. B.
+  alte Screenshot-Schemata), wird beim naechsten Generator-Lauf per
+  `git rm` entfernt, nicht liegen gelassen.
+- **Keine neuen Dateien ohne Struktur-Tabellen-Eintrag** (unten): Wer keine
+  Zeile in der Struktur-Tabelle findet, hinterfragt die Datei.
+- **Binärdateien** (PNG, JSON-Daten) nur, wenn in Doku eingebettet oder von
+  einem Test validiert; jede Erzeugnis-Kategorie hat genau ein Tool.
+- **Single-Home fuer Doku**: Jedes Thema hat genau ein Dokument
+  (`docs/DESIGN.md`, `docs/TESTS.md`, ...); README haelt pro Thema maximal
+  eine kurze Einleitung + Link – keine duplizierten Inhalte. README-
+  Abschnitts-Umbenennungen ziehen die Verweise in dieser Datei im selben
+  Change nach.
+
+### Link- und Referenzpruefung
+
+Vor jedem Merge laeuft `node tools/check-links.js` (prueft alle MD- und
+HTML-Dateien auf interne Links/src/href; Exit-Code 1 bei defekten
+Verweisen). Nach dem Loeschen von Dateien zusaetzlich per grep pruefen,
+dass keine Referenzen mehr auf die geloeschten Namen zeigen.
 
 ## Allgemeine Regeln
 

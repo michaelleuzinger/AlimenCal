@@ -638,6 +638,12 @@
     }
   }
 
+  function setNavLabel(el, text) {
+    var label = el.querySelector('.nav-label');
+    if (label) { label.textContent = text; }
+    else { el.textContent = text; }
+  }
+
   function applyI18n() {
     var dict = AlimenCal.i18n[state.lang] || AlimenCal.i18n[DEFAULT_LANG];
     document.documentElement.lang = dict.htmlLang;
@@ -646,20 +652,13 @@
     document.getElementById('app-subtitle').textContent = t('subtitle');
     document.getElementById('disclaimer').textContent = t('disclaimerShort');
 
-    document.querySelectorAll('.tab[data-tab="children"]').forEach(function (el) { el.textContent = t('nav', 'children'); });
-    document.querySelectorAll('.tab[data-tab="spousal"]').forEach(function (el) { el.textContent = t('nav', 'spousal'); });
-    document.querySelectorAll('.tab[data-tab="costsplit"]').forEach(function (el) { el.textContent = t('nav', 'costsplit'); });
-    document.querySelectorAll('.tab[data-tab="themes"]').forEach(function (el) { el.textContent = t('nav', 'themes'); });
-    document.querySelectorAll('.tab[data-tab="share"]').forEach(function (el) { el.textContent = t('nav', 'share'); });
-    document.querySelectorAll('.tab[data-tab="settings"]').forEach(function (el) { el.textContent = t('nav', 'settings'); });
-    document.querySelectorAll('.tab[data-tab="about"]').forEach(function (el) { el.textContent = t('nav', 'about'); });
-
-    var menuBtn = document.getElementById('menu-btn');
-    menuBtn.title = t('nav', 'settingsMenu');
-    menuBtn.setAttribute('aria-label', t('nav', 'settingsMenu'));
-    if (!menuBtn.innerHTML) {
-      menuBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>';
-    }
+    document.querySelectorAll('.tab[data-tab="children"]').forEach(function (el) { setNavLabel(el, t('nav', 'children')); });
+    document.querySelectorAll('.tab[data-tab="spousal"]').forEach(function (el) { setNavLabel(el, t('nav', 'spousal')); });
+    document.querySelectorAll('.tab[data-tab="costsplit"]').forEach(function (el) { setNavLabel(el, t('nav', 'costsplit')); });
+    document.querySelectorAll('.tab[data-tab="themes"]').forEach(function (el) { setNavLabel(el, t('nav', 'themes')); });
+    document.querySelectorAll('.tab[data-tab="share"]').forEach(function (el) { setNavLabel(el, t('nav', 'share')); });
+    document.querySelectorAll('.tab[data-tab="settings"]').forEach(function (el) { setNavLabel(el, t('nav', 'settings')); });
+    document.querySelectorAll('.tab[data-tab="about"]').forEach(function (el) { setNavLabel(el, t('nav', 'about')); });
 
     var ownerSelect = document.getElementById('costsplit-owner');
     var ownerVal = ownerSelect.value;
@@ -719,6 +718,9 @@
     document.getElementById('theme-editor-heading').textContent = t('themes', 'editorHeading');
     document.getElementById('theme-editor-hint').textContent = t('themes', 'editorHint');
     document.getElementById('theme-reset').textContent = t('themes', 'reset');
+    document.getElementById('design-heading').textContent = t('themes', 'designHeading');
+    document.getElementById('design-intro').textContent = t('themes', 'designIntro');
+    renderDesignGrid();
     renderThemeEditor();
     document.getElementById('settings-heading').textContent = t('settings', 'heading');
     document.getElementById('settings-intro').textContent = t('settings', 'intro');
@@ -1298,7 +1300,7 @@
   function getThemeId() {
     var stored = null;
     try { stored = localStorage.getItem(LS_THEME); } catch (e) {}
-    return stored || 'classic';
+    return stored || 'calm';
   }
 
   function saveTheme(id, values) {
@@ -1315,6 +1317,9 @@
   function applyTheme(id, values) {
     var preset = getPresetById(id);
     var vals = values || (preset ? preset.values : AlimenCal.themes.PRESETS[0].values);
+    if (vals && !vals.__design) {
+      vals.__design = AlimenCal.themes.designOfPreset(preset);
+    }
     AlimenCal.themes.applyToDocument(vals);
   }
 
@@ -1322,12 +1327,84 @@
     var raw = null;
     try { raw = localStorage.getItem(LS_THEME_VALUES); } catch (e) {}
     if (raw) {
-      try { return JSON.parse(raw); } catch (e) {}
+      try {
+        var parsed = JSON.parse(raw);
+        if (!parsed.__design) {
+          var preset0 = getPresetById(getThemeId()) || AlimenCal.themes.PRESETS[0];
+          parsed.__design = AlimenCal.themes.designOfPreset(preset0);
+        }
+        return parsed;
+      } catch (e) {}
     }
     var preset = getPresetById(getThemeId()) || AlimenCal.themes.PRESETS[0];
-    return preset.values;
+    var vals = preset.values;
+    vals.__design = AlimenCal.themes.designOfPreset(preset);
+    return vals;
   }
 
+  /* Design-Stil-Auswahl: Karten je Stil, Klick uebernimmt das zugehoerige
+     Preset (Farben + design). Neue Stile werden hier und in
+     AlimenCal.themes.DESIGNS/PRESETS nachgefuehrt. */
+  var DESIGN_LABELS = {
+    base: { de: 'Klassisch', fr: 'Classique', it: 'Classico', en: 'Classic' },
+    calm: { de: 'Calm', fr: 'Calm', it: 'Calm', en: 'Calm' },
+    'calm-dark': { de: 'Calm Dark', fr: 'Calm Dark', it: 'Calm Dark', en: 'Calm Dark' },
+    editorial: { de: 'Editorial / Legal', fr: 'Editorial / Juridique', it: 'Editoriale / Legale', en: 'Editorial / Legal' },
+    neubrutalism: { de: 'Neo-Brutalismus', fr: 'N\u00e9o-brutalisme', it: 'Neo-brutalismo', en: 'Neo-Brutalism' }
+  };
+  function designPresetFor(design) {
+    var preset = (AlimenCal.themes.PRESETS || []).filter(function (p) {
+      return AlimenCal.themes.designOfPreset(p) === design;
+    })[0];
+    return preset || AlimenCal.themes.PRESETS[0];
+  }
+  function currentDesign() {
+    var values = currentThemeValues();
+    if (values && values.__design && AlimenCal.themes.DESIGNS.indexOf(values.__design) !== -1) {
+      return values.__design;
+    }
+    var preset = getPresetById(getThemeId()) || AlimenCal.themes.PRESETS[0];
+    return AlimenCal.themes.designOfPreset(preset);
+  }
+  function renderDesignGrid() {
+    var grid = document.getElementById('design-grid');
+    if (!grid) { return; }
+    grid.innerHTML = '';
+    var active = currentDesign();
+    AlimenCal.themes.DESIGNS.forEach(function (design) {
+      var preset = designPresetFor(design);
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'design-card' + (design === active ? ' active' : '');
+      btn.dataset.design = design;
+      var swatch = document.createElement('span');
+      swatch.className = 'design-swatch';
+      swatch.style.background = preset.values.bannerBg;
+      swatch.style.borderBottomColor = preset.values.accent;
+      btn.appendChild(swatch);
+      var name = document.createElement('span');
+      name.className = 'design-name';
+      name.textContent = (DESIGN_LABELS[design] && DESIGN_LABELS[design][state.lang]) ||
+        (DESIGN_LABELS[design] && DESIGN_LABELS[design].en) || design;
+      btn.appendChild(name);
+      if (design === active) {
+        var cur = document.createElement('span');
+        cur.className = 'design-current';
+        cur.textContent = t('themes', 'designCurrent');
+        btn.appendChild(cur);
+      }
+      btn.addEventListener('click', function () {
+        saveTheme(preset.id, null);
+        applyTheme(preset.id, preset.values);
+        var select = document.getElementById('theme-select');
+        if (select) { select.value = preset.id; }
+        document.getElementById('theme-status').textContent = t('themes', 'saved');
+        renderDesignGrid();
+        renderThemeEditor();
+      });
+      grid.appendChild(btn);
+    });
+  }
   function initThemeSelect() {
     var select = document.getElementById('theme-select');
     select.innerHTML = '';
@@ -1687,6 +1764,140 @@
     }
   }
 
+  /* -------------------------------------------------------------
+   *  Command-Palette (Ctrl+K): Navigation und Aktionen per Tastatur.
+   * ------------------------------------------------------------- */
+  function initCmdPalette() {
+    var trigger = document.getElementById('cmdk-trigger');
+    var palette = document.getElementById('cmdk-palette');
+    var backdrop = document.getElementById('cmdk-backdrop');
+    var input = document.getElementById('cmdk-input');
+    var list = document.getElementById('cmdk-list');
+    if (!trigger || !palette || !backdrop || !input || !list) { return; }
+    var selIndex = 0;
+    var items = [];
+    function commands() {
+      return [
+        { tab: 'children', label: t('nav', 'children'), hint: 'Tab' },
+        { tab: 'spousal', label: t('nav', 'spousal'), hint: 'Tab' },
+        { tab: 'costsplit', label: t('nav', 'costsplit'), hint: 'Tab' },
+        { tab: 'share', label: t('nav', 'share'), hint: 'Tab' },
+        { tab: 'settings', label: t('nav', 'settings'), hint: 'Tab' },
+        { tab: 'themes', label: t('nav', 'themes'), hint: 'Tab' },
+        { tab: 'about', label: t('nav', 'about'), hint: 'Tab' }
+      ];
+    }
+    function render() {
+      var q = (input.value || '').toLowerCase();
+      items = commands().filter(function (c) {
+        return !q || c.label.toLowerCase().indexOf(q) !== -1;
+      });
+      if (selIndex >= items.length) { selIndex = 0; }
+      list.innerHTML = '';
+      if (!items.length) {
+        var empty = document.createElement('div');
+        empty.className = 'cmdk-empty';
+        empty.textContent = t('palette', 'empty');
+        list.appendChild(empty);
+        return;
+      }
+      items.forEach(function (c, i) {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'cmdk-item' + (i === selIndex ? ' sel' : '');
+        var label = document.createElement('span');
+        label.textContent = c.label;
+        btn.appendChild(label);
+        var hint = document.createElement('span');
+        hint.className = 'cmdk-hint';
+        hint.textContent = c.hint;
+        btn.appendChild(hint);
+        btn.addEventListener('click', function () {
+          close();
+          switchTab(c.tab);
+        });
+        list.appendChild(btn);
+      });
+    }
+    function open() {
+      palette.classList.add('open');
+      backdrop.classList.add('open');
+      palette.setAttribute('aria-hidden', 'false');
+      backdrop.setAttribute('aria-hidden', 'false');
+      trigger.setAttribute('aria-expanded', 'true');
+      input.value = '';
+      selIndex = 0;
+      render();
+      setTimeout(function () { input.focus(); }, 30);
+    }
+    function close() {
+      palette.classList.remove('open');
+      backdrop.classList.remove('open');
+      palette.setAttribute('aria-hidden', 'true');
+      backdrop.setAttribute('aria-hidden', 'true');
+      trigger.setAttribute('aria-expanded', 'false');
+    }
+    trigger.addEventListener('click', open);
+    backdrop.addEventListener('click', close);
+    input.addEventListener('input', function () { selIndex = 0; render(); });
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowDown') { selIndex = Math.min(selIndex + 1, items.length - 1); render(); e.preventDefault(); }
+      else if (e.key === 'ArrowUp') { selIndex = Math.max(selIndex - 1, 0); render(); e.preventDefault(); }
+      else if (e.key === 'Enter' && items[selIndex]) { close(); switchTab(items[selIndex].tab); e.preventDefault(); }
+    });
+    document.addEventListener('keydown', function (e) {
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K')) {
+        e.preventDefault();
+        if (palette.classList.contains('open')) { close(); } else { open(); }
+      } else if (e.key === 'Escape' && palette.classList.contains('open')) {
+        close();
+      }
+    });
+  }
+
+  /* -------------------------------------------------------------
+   *  Live-Ergebnis (Kindesunterhalt): aktualisiert das sticky
+   *  Ergebnis-Panel bei jeder Eingabe statt nur auf Klick.
+   * ------------------------------------------------------------- */
+  function updateChildrenLiveResult() {
+    var calcBtn = document.getElementById('calc-children');
+    if (!calcBtn) { return; }
+    var panel = document.getElementById('children-result');
+    var empty = document.getElementById('children-result-empty');
+    var paIncome = parseFloat((document.getElementById('pa-income') || {}).value) || 0;
+    var pbIncome = parseFloat((document.getElementById('pb-income') || {}).value) || 0;
+    if (paIncome > 0 && pbIncome > 0) {
+      calculateChildren();
+      if (empty) { empty.hidden = true; }
+      panel.hidden = false;
+    } else {
+      panel.hidden = true;
+      if (empty) { empty.hidden = false; }
+    }
+  }
+  function initLiveResult() {
+    var ids = ['pa-income', 'pb-income', 'pa-em', 'pb-em'];
+    ids.forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) { el.addEventListener('input', updateChildrenLiveResult); }
+    });
+    document.getElementById('children-list').addEventListener('input', updateChildrenLiveResult);
+    var empty = document.getElementById('children-result-empty');
+    if (empty) { empty.hidden = true; }
+  }
+
+  /* -------------------------------------------------------------
+   *  Mobile: «Mehr»-Klappteil in der unteren Tab-Leiste.
+   * ------------------------------------------------------------- */
+  function initMobileMore() {
+    var btn = document.getElementById('mob-more-btn');
+    if (!btn) { return; }
+    btn.addEventListener('click', function () {
+      var trigger = document.getElementById('cmdk-trigger');
+      if (trigger) { trigger.click(); }
+    });
+  }
+
   function init() {
     state.lang = getLang();
     state.cfg = getCfg();
@@ -1719,7 +1930,7 @@
       this.value = '';
     });
     document.getElementById('theme-reset').addEventListener('click', function () {
-      var id = 'classic';
+      var id = 'calm';
       var preset = getPresetById(id) || AlimenCal.themes.PRESETS[0];
       saveTheme(id, null);
       applyTheme(id, preset.values);
@@ -1727,10 +1938,16 @@
       renderThemeEditor();
       document.getElementById('theme-status').textContent = t('themes', 'saved');
     });
-    document.getElementById('lang-select').addEventListener('change', function () {
-      state.lang = this.value;
-      try { localStorage.setItem(LS_LANG, state.lang); } catch (e) {}
-      applyI18n();
+    Array.prototype.forEach.call(document.querySelectorAll('.lang-select-sync'), function (sel) {
+      sel.value = state.lang;
+      sel.addEventListener('change', function () {
+        state.lang = this.value;
+        try { localStorage.setItem(LS_LANG, state.lang); } catch (e) {}
+        Array.prototype.forEach.call(document.querySelectorAll('.lang-select-sync'), function (other) {
+          other.value = state.lang;
+        });
+        applyI18n();
+      });
     });
 
     var tabs = document.querySelectorAll('.tab');
@@ -1742,30 +1959,10 @@
       })(tabs[i]);
     }
 
-    var menuBtn = document.getElementById('menu-btn');
-    var mainMenu = document.getElementById('main-menu');
-    function closeSettingsMenu() {
-      mainMenu.hidden = true;
-      menuBtn.setAttribute('aria-expanded', 'false');
-    }
-    menuBtn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      mainMenu.hidden = !mainMenu.hidden;
-      menuBtn.setAttribute('aria-expanded', String(!mainMenu.hidden));
-    });
-    Array.prototype.forEach.call(mainMenu.querySelectorAll('.tab'), function (btn) {
-      btn.addEventListener('click', closeSettingsMenu);
-    });
-    document.addEventListener('click', function (e) {
-      if (!mainMenu.hidden && !mainMenu.contains(e.target) && e.target !== menuBtn) {
-        closeSettingsMenu();
-      }
-    });
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && !mainMenu.hidden) {
-        closeSettingsMenu();
-      }
-    });
+    initCmdPalette();
+    initLiveResult();
+    initMobileMore();
+    switchTab('children');
 
     document.getElementById('keys-generate-a').addEventListener('click', function () { generateKeyFor('A'); });
     document.getElementById('keys-generate-b').addEventListener('click', function () { generateKeyFor('B'); });

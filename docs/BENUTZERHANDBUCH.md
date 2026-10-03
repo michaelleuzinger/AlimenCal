@@ -48,17 +48,18 @@ auf Französisch:
 
 ![Pension alimentaire (FR)](../screenshots/pc/01-kindesunterhalt-fr.png)
 
-Die Sprache wird im Hamburger-Menü oben rechts gewählt: **Deutsch, Français,
-Italiano, English**. Die Auswahl wird im Browser gespeichert (`localStorage`)
+Die Sprache wird in der Topbar (Desktop) gewählt: **Deutsch, Français,
+Italiano, English**; auf dem Smartphone liegt die Sprachwahl in den
+Einstellungen. Die Auswahl wird im Browser gespeichert (`localStorage`)
 und beim nächsten Öffnen wiederhergestellt.
 
 ## Tabs im Überblick
 
-Die komplette Navigation – Funktionen, Einstellungen und Informationen
-sowie die Sprachwahl – ist über das Hamburger-Menü („Einstellungen und
-Informationen“) oben rechts im Kopf erreichbar. Das Menü schliesst bei
-Auswahl eines Eintrags, Klick ausserhalb des Menüs oder mit der
-Escape-Taste.
+Die Hauptfunktionen sind auf dem Desktop dauerhaft in der schmalen Kopfzeile
+(Topbar) sichtbar; Richtwerte, Themes und Über sind über die
+Befehlspalette (Ctrl+K) erreichbar. Auf dem Smartphone liegt eine
+task-orientierte Tab-Leiste mit den vier Hauptfunktionen und «Mehr» am
+unteren Rand; «Mehr» öffnet die Befehlspalette.
 
 **Funktionen (Hauptnavigation):**
 
@@ -69,9 +70,9 @@ Escape-Taste.
 | Kostentrennung | Laufende Kosten ab einem Stichtag separat abrechnen (Bankexport) |
 | Austausch | Eigene Daten exportieren, Datei der anderen Partei importieren |
 
-**Einstellungen & Info (im Hamburger-Menü):**
+**Einstellungen & Info (in der Befehlspalette bzw. über «Mehr»):**
 
-![Hauptmenü (DE)](../screenshots/pc/05-hauptmenue-de.png)
+![Navigation (DE)](../screenshots/pc/05-hauptmenue-de.png)
 
 | Tab | Zweck |
 |---|---|
@@ -235,15 +236,36 @@ B importiert, rechnet).
 
 ![Themes Dark (DE)](../screenshots/pc/08-themes-dark-de.png)
 
-- **Vordefinierte Themes**: Classic (Default), Dark, High Contrast (barrierefrei,
-  für Sehbehinderte geeignet), Warm und Blue – Auswahl wirkt sofort.
+![Design-Auswahl im Themes-Tab, Calm-Stil (DE)](../screenshots/pc/09-themes-designs-de.png)
+
+- **Design-Stile**: Neben den Farb-Themes gibt es im Themes-Tab eine
+  Design-Stil-Auswahl mit anklickbaren Karten. Jeder Stil passt das
+  komplette Erscheinungsbild an (Typografie, Karten, Rahmen, Schatten und
+  Farben): **Calm** (Standard, helles Werkzeug-Design), **Klassisch** (ursprüngliches Aussehen), **Calm Dark**, **Editorial/Legal** und **Neo-Brutalismus**. Die Auswahl wirkt sofort.
+- **Vordefinierte Themes**: Classic (Default), Dark, High Contrast
+  (barrierefrei, für Sehbehinderte geeignet), Warm und Blue – Auswahl
+  wirkt sofort.
 - **Theme-Editor**: Alle 17 Design-Farben und der Eckenradius sind manuell
   frei anpassbar; inklusive Hintergrund und Textfarbe des oberen Banners,
   das auch mit dem gewählten Theme wechselt. Änderungen werden sofort
-  angewendet; die Auswahl springt auf «Benutzerdefiniert».
+  angewendet; die Auswahl springt auf «Benutzerdefiniert»; der gewählte
+  Design-Stil bleibt dabei erhalten.
 - **Zurücksetzen** stellt das Classic-Theme wieder her.
-- Theme-Auswahl und angepasste Werte werden im Browser gespeichert und nach
-einem Neustart wiederhergestellt.
+- Design-Stil, Theme-Auswahl und angepasste Werte werden im Browser
+  gespeichert und nach einem Neustart wiederhergestellt.
+- Alle Design-Stile sind responsiv und funktionieren auf Smartphones,
+  Tablets und Desktop; die Design-Karten ordnen sich auf kleinen
+  Bildschirmen zweispaltig an.
+
+Die Design-Stile im Überblick (Kindesunterhalt-Ansicht, Deutsch):
+
+| Design-Stil | Vorschau |
+|---|---|
+| Calm (Standard) | ![Hero Calm](../screenshots/pc/10-hero-calm-de.png) |
+| Klassisch | ![Hero Klassisch](../screenshots/pc/11-hero-classic-de.png) |
+| Calm Dark | ![Hero Calm Dark](../screenshots/pc/12-hero-calm-dark-de.png) |
+| Editorial / Legal | ![Hero Editorial](../screenshots/pc/13-hero-editorial-de.png) |
+| Neo-Brutalismus | ![Hero Neo-Brutalismus](../screenshots/pc/14-hero-neubrutalism-de.png) |
 
 ## Persistenz (kein Datenverlust)
 

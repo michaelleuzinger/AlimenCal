@@ -8,31 +8,45 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+  <div class="topbar">
+    <div class="topbar-in">
+      <div class="brand"><span class="brand-mark">A</span><span class="brand-name">AlimenCal</span></div>
+      <nav class="topnav" aria-label="Hauptnavigation">
+        <button type="button" class="tab nav-item" data-tab="children"><span class="nav-label"></span></button>
+        <button type="button" class="tab nav-item" data-tab="spousal"><span class="nav-label"></span></button>
+        <button type="button" class="tab nav-item" data-tab="costsplit"><span class="nav-label"></span></button>
+        <button type="button" class="tab nav-item" data-tab="share"><span class="nav-label"></span></button>
+      </nav>
+      <div class="topbar-right">
+        <button type="button" class="cmdk-trigger" id="cmdk-trigger" aria-haspopup="dialog" aria-expanded="false">
+          <span data-i18n="palette.placeholder"></span><span class="kbd">Ctrl K</span>
+        </button>
+        <label class="lang-switch"><span data-i18n="nav.language"></span>
+          <select id="lang-select" class="lang-select-sync">
+            <option value="de">Deutsch</option>
+            <option value="fr">Français</option>
+            <option value="it">Italiano</option>
+            <option value="en">English</option>
+          </select>
+        </label>
+      </div>
+    </div>
+  </div>
+  <div id="cmdk-backdrop" class="cmdk-backdrop" aria-hidden="true"></div>
+  <div id="cmdk-palette" class="cmdk-palette" role="dialog" aria-label="Befehlspalette" aria-hidden="true">
+    <input type="text" id="cmdk-input" class="cmdk-input" autocomplete="off">
+    <div id="cmdk-list" class="cmdk-list"></div>
+  </div>
+  <nav class="mobile-tabs" aria-label="Mobile Navigation">
+    <button type="button" class="tab mob-item" data-tab="children"><span class="nav-label"></span></button>
+    <button type="button" class="tab mob-item" data-tab="spousal"><span class="nav-label"></span></button>
+    <button type="button" class="tab mob-item" data-tab="costsplit"><span class="nav-label"></span></button>
+    <button type="button" class="tab mob-item" data-tab="share"><span class="nav-label"></span></button>
+    <button type="button" class="mob-item" id="mob-more-btn" aria-haspopup="dialog" aria-expanded="false"><span data-i18n="nav.more"></span></button>
+  </nav>
+<div class="app-shell">
   <header>
     <div class="wrap">
-      <div class="header-actions">
-        <button type="button" id="menu-btn" class="settings-btn menu-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="main-menu"></button>
-        <div id="main-menu" class="settings-menu main-menu" role="menu" hidden>
-          <button type="button" class="tab settings-menu-item" data-tab="children" role="menuitem"></button>
-          <button type="button" class="tab settings-menu-item" data-tab="spousal" role="menuitem"></button>
-          <button type="button" class="tab settings-menu-item" data-tab="costsplit" role="menuitem"></button>
-          <button type="button" class="tab settings-menu-item" data-tab="share" role="menuitem"></button>
-          <div class="settings-menu-sep"></div>
-          <button type="button" class="tab settings-menu-item" data-tab="settings" role="menuitem"></button>
-          <button type="button" class="tab settings-menu-item" data-tab="themes" role="menuitem"></button>
-          <button type="button" class="tab settings-menu-item" data-tab="about" role="menuitem"></button>
-          <div class="settings-menu-sep"></div>
-          <label class="lang-switch">
-            <span data-i18n="nav.language"></span>
-            <select id="lang-select">
-              <option value="de">Deutsch</option>
-              <option value="fr">Français</option>
-              <option value="it">Italiano</option>
-              <option value="en">English</option>
-            </select>
-          </label>
-        </div>
-      </div>
       <h1 id="app-title">AlimenCal</h1>
       <p id="app-subtitle" class="subtitle"></p>
     </div>
@@ -45,6 +59,8 @@
     <section id="tab-children" class="tabpanel active">
       <h2 id="children-heading"></h2>
       <p id="children-intro" class="intro"></p>
+      <div class="tab-columns">
+      <div class="form-col">
 
       <div class="grid parents">
         <fieldset class="card">
@@ -69,7 +85,9 @@
         <button id="reset-children" class="ghost"></button>
       </div>
 
-      <div id="children-result" class="result" hidden>
+      </div><!-- /form-col -->
+      <aside class="result-col">
+      <div id="children-result" class="result result-panel" hidden>
         <h3 id="children-result-heading"></h3>
         <table class="result-table">
           <thead id="children-thead"></thead>
@@ -79,6 +97,9 @@
         <p id="children-manko" class="manko warn" hidden></p>
         <p class="hint" id="children-care-hint"></p>
       </div>
+      <p id="children-result-empty" class="result-panel result-empty" data-i18n="children.resultEmpty"></p>
+      </aside>
+      </div><!-- /tab-columns -->
     </section>
 
     <section id="tab-spousal" class="tabpanel">
@@ -194,6 +215,11 @@
     <section id="tab-themes" class="tabpanel">
       <h2 id="themes-heading"></h2>
       <p id="themes-intro" class="intro"></p>
+      <div class="card preset-card">
+        <h3 id="design-heading"></h3>
+        <p id="design-intro" class="hint"></p>
+        <div id="design-grid" class="design-grid"></div>
+      </div>
       <div class="card preset-card">
         <label>
           <span id="theme-select-label"></span>
@@ -356,5 +382,5 @@
   <script src="js/storage.js"></script>
   <script src="js/casecrypto.js"></script>
   <script src="js/app.js"></script>
-</body>
+</div><!-- /app-shell -->  </body>
 </html>

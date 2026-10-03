@@ -70,8 +70,10 @@ AlimenCal.i18n.it = {
     share: 'Scambio',
     about: 'Informazioni',
     settingsMenu: 'Impostazioni e informazioni',
-    language: 'Lingua'
+    language: 'Lingua',
+    more: 'Altro'
   },
+  palette: { placeholder: 'Cercare o passare a …', empty: 'Nessun risultato' },
   common: {
     parentA: 'Genitore A',
     parentB: 'Genitore B',
@@ -103,6 +105,7 @@ AlimenCal.i18n.it = {
     modeEffectiveShort: 'costi effettivi',
     careShareA: 'Quota di custodia genitore A (%)',
     careShareB: 'Quota di custodia genitore B (%)',
+    resultEmpty: 'Il risultato appare qui non appena vengono inseriti entrambi i redditi.',
     resultsHeading: 'Risultato alimenti per figli',
     tableChild: 'Figlio',
     tableBasicNeed: 'Bisogno base',
@@ -189,8 +192,12 @@ AlimenCal.i18n.it = {
     saved: 'Tema salvato.',
     editor: 'Apri l’editor',
     custom: 'Personalizzato (adattato)',
-    presetLabel: 'Tema predefinito'
+    presetLabel: 'Tema predefinito',
+    designHeading: 'Stile di design',
+    designIntro: 'Scegli uno stile di design: adatta l’aspetto completo (tipografia, schede, ombre, colori). I dettagli possono poi essere affinati nell’editor dei temi.',
+    designCurrent: 'Attuale'
   },
+  wizard: { title: 'Avvio rapido', step1: 'Genitori', step2: 'Figli', step3: 'Redditi', question: 'Quanti figli hai?', one: '1 figlio', oneHint: 'Inserisci eta, costi e reddito', two: '2 figli', twoHint: 'Aggiunta per figli considerata', next: 'Avanti', skip: 'Salta' },
   share: {
     heading: 'Scambio tra le parti',
     intro: 'Se le parti lavorano su PC diversi, ciascuna può inserire solo i propri dati, esportarli in un file e trasmetterlo all’altra parte (ad es. via e-mail o tramite l’avvocato). L’altra parte importa il file; solo le sezioni contenute vengono recepite, tutto il resto rimane invariato.',
