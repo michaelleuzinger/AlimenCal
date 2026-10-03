@@ -25,9 +25,9 @@ unvollständig und darf nicht gemergt werden.
 | Screenshots (UI-Änderungen) | `screenshots/` erneuern; Inventar-Tabelle unten **und** Einbettungen im BENUTZERHANDBUCH synchron halten (Inventar-Regel, s. u.) |
 | Rechtliches / Rechtsprechungs-Bezug | `docs/RECHTLICHE-GRUNDLAGEN.md` |
 | Kantonale Presets (`presets/`) | `docs/PRESETS.md`, README-Abschnitt «Kantonale Presets» |
-| Roadmap / neue geplante Funktionen | `docs/ROADMAP.md`, README-Abschnitt «Roadmap & Mitmachen» |
-| Design-Stile / Mockups / Redesign | `docs/DESIGN.md` (Verweis auf Redesign-Docs), README-Abschnitt «Design» |
-| Tests / neue Testdateien | `docs/TESTS.md`, README-Abschnitt «Tests» |
+| Roadmap / neue geplante Funktionen | `docs/ROADMAP.md`, README-Abschnitt «Roadmap, Design, Tests & Mitmachen» |
+| Design-Stile / Mockups / Redesign | `docs/DESIGN.md` (Verweis auf Redesign-Docs), README-Abschnitt «Roadmap, Design, Tests & Mitmachen» |
+| Tests / neue Testdateien | `docs/TESTS.md`, README-Abschnitt «Roadmap, Design, Tests & Mitmachen» |
 
 ### Zusätzlich gilt
 

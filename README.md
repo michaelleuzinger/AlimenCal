@@ -116,19 +116,6 @@ Schaffhausen-Platzhalter mit Verifikations-Checkliste) liegen unter
 JSON importierbar – Aufbau und Verifikation:
 [docs/PRESETS.md](docs/PRESETS.md).
 
-## Design
-
-Alle sieben Design-Stile (Apple, Material 3, Modern Minimal, Bento,
-Dark Premium, Neo-Brutalismus, Base) sind im Tab **Themes** wählbar;
-Apple ist der Standard. Konzepte, Mockups und das aktuelle
-Grundgerüst: [docs/DESIGN.md](docs/DESIGN.md).
-
-## Tests
-
-Über 500 Tests (Berechnungskern, Presets, Kostentrennung, Themes, Austausch,
-Verschlüsselung, Persistenz) laufen ohne Abhängigkeiten mit Node.js –
-Übersicht und Ausführung: [docs/TESTS.md](docs/TESTS.md).
-
 ## Verwendete Richtwerte (Default)
 
 Die Default-Richtwerte (Stand: März 2025) basieren auf der Zürcher
@@ -148,10 +135,25 @@ jedem produktiven Einsatz an die massgebliche kantonale Praxis (z. B.
 KESB/Kantonsgericht Schaffhausen) angepasst und verifiziert werden. Details:
 [docs/RECHTLICHE-GRUNDLAGEN.md](docs/RECHTLICHE-GRUNDLAGEN.md).
 
-## Roadmap & Mitmachen
+## Roadmap, Design, Tests & Mitmachen
+
+### Roadmap
 
 Geplante Funktionen (u. a. PDF-Export, BVG-/Vorsorgeabzüge,
 Alimentenindexierung): [docs/ROADMAP.md](docs/ROADMAP.md).
+
+### Design
+
+Alle sieben Design-Stile (Apple, Material 3, Modern Minimal, Bento,
+Dark Premium, Neo-Brutalismus, Base) sind im Tab **Themes** wählbar;
+Apple ist der Standard. Konzepte, Mockups und das aktuelle
+Grundgerüst: [docs/DESIGN.md](docs/DESIGN.md).
+
+### Tests
+
+Über 500 Tests (Berechnungskern, Presets, Kostentrennung, Themes,
+Austausch, Verschlüsselung, Persistenz) laufen ohne Abhängigkeiten mit
+Node.js – Übersicht und Ausführung: [docs/TESTS.md](docs/TESTS.md).
 
 ### Mitmachen
 
@@ -165,7 +167,7 @@ Beiträge sind willkommen:
    [AGENTS.md](AGENTS.md).
 3. **Doku-Beiträge**: Alle Detail-Dokumente leben unter `docs/` – die
    Docs-in-sync-Regel (AGENTS.md) verlangt die Nachführung der jeweils
-   zugehörige Doku im selben Change.
+   zugehörigen Doku im selben Change.
 4. **Kantonale Presets**: Eigene Richtwertsätze als JSON – Aufbau und
    Verifikations-Checkliste: [docs/PRESETS.md](docs/PRESETS.md).
 
