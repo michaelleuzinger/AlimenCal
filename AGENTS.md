@@ -24,6 +24,8 @@ unvollständig und darf nicht gemergt werden.
 | localStorage-Persistenz (`js/storage.js`) | Regel-Abschnitt «Lesbarkeit der Nutzerdaten nach Updates» unten, `docs/BENUTZERHANDBUCH.md` (Datenhaltung), README-Abschnitt «Tests» |
 | Screenshots (UI-Änderungen) | `screenshots/` erneuern; Inventar-Tabelle unten **und** Einbettungen im BENUTZERHANDBUCH synchron halten (Inventar-Regel, s. u.) |
 | Rechtliches / Rechtsprechungs-Bezug | `docs/RECHTLICHE-GRUNDLAGEN.md` |
+| Kantonale Presets (`presets/`) | `docs/PRESETS.md`, README-Abschnitt «Kantonale Presets» |
+| Roadmap / neue geplante Funktionen | `docs/ROADMAP.md`, README-Abschnitt «Roadmap & Mitmachen» |
 
 ### Zusätzlich gilt
 
@@ -115,7 +117,7 @@ js/storage.js      localStorage-Persistenz: Versionierung, Sanitizing, Migration
 js/app.js           UI-Logik, i18n-Anwendung, localStorage, Import/Export
 js/i18n/{de,fr,it,en}.js  Sprachdateien
 AGENTS.md           Verbindliche Arbeitsregeln (Doku-in-Sync-Regel, Checklisten)
-docs/               Benutzerhandbuch, Berechnungslogik, Kostentrennung, Rechtliches, Verbindliche Einstellungen, Redesign-Mockups
+docs/               Benutzerhandbuch, Berechnungslogik, Kostentrennung, Rechtliches, Verbindliche Einstellungen, Redesign-Mockups, Presets, Roadmap
 schema/             Optionales SQL-Referenzschema (Immutability-Trigger) für spätere Persistenz
 screenshots/        Screenshots der App (Inventar-Regel: s. AGENTS.md; Erzeugung tools/make-screenshots.js)
 tools/              make-screenshots.js: Screenshot-Generator (Puppeteer, s. AGENTS.md)
