@@ -189,7 +189,10 @@ AlimenCal.i18n.en = {
     saved: 'Theme saved.',
     editor: 'Open editor',
     custom: 'Custom (adjusted)',
-    presetLabel: 'Predefined theme'
+    presetLabel: 'Predefined theme',
+    designHeading: 'Design style',
+    designIntro: 'Choose a design style: it adjusts the complete look (typography, cards, shadows, colours). Details can be fine-tuned in the theme editor afterwards.',
+    designCurrent: 'Current'
   },
   share: {
     heading: 'Exchange between the parties',

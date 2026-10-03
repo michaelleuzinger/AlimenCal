@@ -235,15 +235,43 @@ B importiert, rechnet).
 
 ![Themes Dark (DE)](../screenshots/pc/08-themes-dark-de.png)
 
-- **Vordefinierte Themes**: Classic (Default), Dark, High Contrast (barrierefrei,
-  für Sehbehinderte geeignet), Warm und Blue – Auswahl wirkt sofort.
+![Design-Auswahl im Themes-Tab, Apple-Stil (DE)](../screenshots/10-themes-designs-apple-de.png)
+
+- **Design-Stile**: Neben den Farb-Themes gibt es im Themes-Tab eine
+  Design-Stil-Auswahl mit anklickbaren Karten. Jeder Stil passt das
+  komplette Erscheinungsbild an (Typografie, Karten, Rahmen, Schatten und
+  Farben): **Klassisch** (bisheriges Aussehen), **Apple** (Human Interface
+  Guidelines: viel Weissraum, runde Pill-Buttons, weiche Schatten),
+  **Material 3** (Google Material You: Tonal Elevation, Pill-Tabs),
+  **Modern Minimal** (ruhige, neutrale Fläche, tabellarische Ziffern),
+  **Bento (dunkel)** (dunkle modulare Karten), **Dark Premium** (dunkel
+  mit Gold-Akzent und Serifen-Ziffern) und **Neo-Brutalismus** (harte
+  Kanten, dicke Rahmen, Offset-Schatten). Die Auswahl wirkt sofort.
+- **Vordefinierte Themes**: Classic (Default), Dark, High Contrast
+  (barrierefrei, für Sehbehinderte geeignet), Warm und Blue – Auswahl
+  wirkt sofort.
 - **Theme-Editor**: Alle 17 Design-Farben und der Eckenradius sind manuell
   frei anpassbar; inklusive Hintergrund und Textfarbe des oberen Banners,
   das auch mit dem gewählten Theme wechselt. Änderungen werden sofort
-  angewendet; die Auswahl springt auf «Benutzerdefiniert».
+  angewendet; die Auswahl springt auf «Benutzerdefiniert»; der gewählte
+  Design-Stil bleibt dabei erhalten.
 - **Zurücksetzen** stellt das Classic-Theme wieder her.
-- Theme-Auswahl und angepasste Werte werden im Browser gespeichert und nach
-einem Neustart wiederhergestellt.
+- Design-Stil, Theme-Auswahl und angepasste Werte werden im Browser
+  gespeichert und nach einem Neustart wiederhergestellt.
+- Alle Design-Stile sind responsiv und funktionieren auf Smartphones,
+  Tablets und Desktop; die Design-Karten ordnen sich auf kleinen
+  Bildschirmen zweispaltig an.
+
+Die Design-Stile im Überblick (Kindesunterhalt-Ansicht, Deutsch):
+
+| Design-Stil | Vorschau |
+|---|---|
+| Apple | ![Hero Apple](../screenshots/11-hero-apple-de.png) |
+| Material 3 | ![Hero Material 3](../screenshots/12-hero-material-de.png) |
+| Modern Minimal | ![Hero Minimal](../screenshots/13-hero-minimal-de.png) |
+| Bento (dunkel) | ![Hero Bento](../screenshots/14-hero-bento-de.png) |
+| Dark Premium | ![Hero Dark Premium](../screenshots/15-hero-dark-premium-de.png) |
+| Neo-Brutalismus | ![Hero Neo-Brutalismus](../screenshots/16-hero-neubrutalism-de.png) |
 
 ## Persistenz (kein Datenverlust)
 

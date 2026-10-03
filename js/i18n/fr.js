@@ -189,7 +189,10 @@ AlimenCal.i18n.fr = {
     saved: 'Thème enregistré.',
     editor: 'Ouvrir l’éditeur',
     custom: 'Personnalisé (adapté)',
-    presetLabel: 'Thème prédéfini'
+    presetLabel: 'Thème prédéfini',
+    designHeading: 'Style de design',
+    designIntro: 'Choisissez un style de design : il adapte l’apparence complète (typographie, cartes, ombres, couleurs). Les détails peuvent ensuite être ajustés dans l’éditeur de thème.',
+    designCurrent: 'Actuel'
   },
   share: {
     heading: 'Échange entre les parties',
