@@ -1,4 +1,4 @@
-# AlimenCal
+# AlimenCal – Unterhaltsrechner für die Schweiz
 
 **AlimenCal** ist ein mehrsprachiges Orientierungswerkzeug (Web-App) für
 Unterhaltsfragen bei Trennung und Scheidung in der Schweiz:
@@ -32,9 +32,13 @@ Installation, kein Server, keine Abhängigkeiten.
 2. `index.html` per Doppelklick im Browser öffnen (Chrome, Firefox, Edge …) –
    die App läuft direkt über `file://`.
 
-3. Über das Hamburger-Menü oben rechts allenfalls unter **Richtwerte** das
-   kantonale Preset laden (z. B. Zürcher Kinderkosten-Tabelle 1.3.2025),
-   dann im Tab **Kindesunterhalt** mit der Erfassung beginnen.
+3. Einkommen der Eltern erfassen – das Resultat des Kindesunterhalts
+   erscheint live im Seitenpanel; Kinder über «Kind hinzufügen» ergänzen,
+   allenfalls unter **Richtwerte** (Befehlspalette Ctrl+K bzw. «Mehr»)
+   das kantonale Preset laden (z. B. Zürcher Kinderkosten-Tabelle
+   1.3.2025); die Navigation läuft über die Topbar (Desktop) bzw. die
+   Tab-Leiste unten mit «Mehr» (Mobile), die Sprachwahl liegt in der
+   Topbar.
 
 Alle Eingaben werden automatisch lokal im Browser (localStorage) gespeichert.
 Optional kann die App statt über `file://` auch über einen lokalen Webserver
@@ -54,9 +58,13 @@ oder beliebiges statisches Hosting (z. B. GitHub Pages) bereitgestellt werden.
   Trennzeichen, Datums- und Betragsformaten; je Transaktion ignorieren,
   anteilsmässig aufteilen (Anteil konfigurierbar) oder voll einer Partei
   zuordnen; Sammelaktionen für die Erstzuordnung
-- **Themes**: vordefinierte Designs (Classic, Dark, High Contrast, Warm, Blue)
-  und ein Theme-Editor, mit dem alle Farben (inklusive Bannerfarbe) und der
-  Eckenradius frei anpassbar sind; Auswahl wird lokal gespeichert
+- **Design-Stile**: neben den Farb-Themes gibt es im Themes-Tab eine Auswahl
+  ganzer Design-Stile (Calm, Klassisch, Calm Dark, Editorial/Legal,
+  Neo-Brutalismus) – jeder Stil passt Typografie, Karten, Rahmen und
+  Schatten des kompletten Erscheinungsbildes an; alle responsiv
+- **Themes**: vordefinierte Farb-Designs (Classic, Dark, High Contrast, Warm,
+  Blue) und ein Theme-Editor, mit dem alle Farben (inklusive Bannerfarbe) und
+  der Eckenradius frei anpassbar sind; Auswahl wird lokal gespeichert
 - **Persistenz**: alle Eingaben (inkl. Kinderliste, Kostentrennung mit
   Bankexport und Zuordnungen) werden automatisch gespeichert und nach einem
   Browser-Neustart wiederhergestellt – keine Daten gehen verloren
@@ -78,26 +86,14 @@ oder beliebiges statisches Hosting (z. B. GitHub Pages) bereitgestellt werden.
 
 ## Nutzung
 
-1. `index.html` im Browser öffnen (beliebiger Hosting-Ordner genügt,
-   z. B. GitHub Pages) – oder die Datei direkt per `file://` starten.
-2. Tab **Kindesunterhalt**: Einkommen und Existenzminima der Eltern erfassen,
-   Kinder hinzufügen (Alter, eigene Einkünfte, Kinderzulagen,
-   Krankenkassenprämie, Fremdbetreuungskosten, Betreuungsanteile); je Kind
-   wählbar: Grundbedarf pauschal (Richtwerttabelle) oder effektive Kosten.
-3. Tab **Ehegattenunterhalt**: falls gewünscht aktivieren, Angaben zu
-   gebührendem Lebensstandard, Mehrkosten und Leistungsfähigkeit erfassen.
-4. Tab **Kostentrennung**: Stichtag wählen, Bankexport (CSV oder camt-XML)
-   hochladen,
-   Kontoinhaber angeben, Transaktionen zuordnen – die App errechnet den
-   Ausgleich. Details: [docs/KOSTENTRENNUNG.md](docs/KOSTENTRENNUNG.md)
-5. Tab **Austausch**: eigene Daten als JSON exportieren, Datei der
-   anderen Partei importieren (Merge).
-6. Über das Hamburger-Menü oben rechts im Kopf: Sprachwahl sowie unter
-   **Richtwerte** kantonale Werte anpassen, speichern,
-   exportieren/importieren, Presets laden, und unter **Themes** Design
-   wählen oder im Theme-Editor Farben anpassen.
+Über die Topbar (Desktop) bzw. die Tab-Leiste unten mit «Mehr»
+(Mobile) sind alle Funktionen erreichbar: Kindesunterhalt,
+Ehegattenunterhalt, Kostentrennung, Austausch; Richtwerte, Themes und
+Über über die Befehlspalette (Ctrl+K). Die Sprachwahl (Deutsch,
+Français, Italiano, English) liegt in der Topbar.
 
-Ausführliche Anleitung: [docs/BENUTZERHANDBUCH.md](docs/BENUTZERHANDBUCH.md)
+Schritt-für-Schritt-Anleitung aller Tabs:
+[docs/BENUTZERHANDBUCH.md](docs/BENUTZERHANDBUCH.md)
 
 ## Dokumentation
 
@@ -107,55 +103,24 @@ Ausführliche Anleitung: [docs/BENUTZERHANDBUCH.md](docs/BENUTZERHANDBUCH.md)
 | [docs/KALKULATION.md](docs/KALKULATION.md) | Berechnungslogik Kindes- und Ehegattenunterhalt |
 | [docs/KOSTENTRENNUNG.md](docs/KOSTENTRENNUNG.md) | Modul Kostentrennung: CSV- und camt-XML-Import, Zuordnung, Ausgleich |
 | [docs/RECHTLICHE-GRUNDLAGEN.md](docs/RECHTLICHE-GRUNDLAGEN.md) | Rechtsquellen, Rechtsprechung, kantonale Praxis, Disclaimer |
+| [docs/PRESETS.md](docs/PRESETS.md) | Kantonale Presets: Aufbau, Verifikation, eigene Presets |
+| [docs/ROADMAP.md](docs/ROADMAP.md) | Erledigte und geplante Funktionen |
+| [docs/TESTS.md](docs/TESTS.md) | Test-Übersicht und Ausführung |
+| [docs/DESIGN.md](docs/DESIGN.md) | Design-Stile, SOTA-Grundgerüst, Design-Historie |
 
-## Kantonale Presets
+## Richtwerte
 
-Unter `presets/` liegen kantonsbezogene Richtwertsätze als JSON, auswählbar im
-Tab **Richtwerte**:
+**Default** (Stand: März 2025) ist die Zürcher Kinderkosten-Tabelle vom
+1. März 2025 (abzüglich der enthaltenen pauschalen Kinder-Krankenkassenprämie,
+da die effektive Prämie separat erfasst wird) sowie betreibungsrechtliche
+Existenzminima (Art. 93 SchKG) als Orientierung – Wertetabelle mit Quellen:
+[docs/KALKULATION.md](docs/KALKULATION.md).
 
-- `zuerich-2025.json` – Zürcher Kinderkosten-Tabelle vom 1. März 2025
-  (Referenz, identisch mit App-Default)
-- `schaffhausen-offen.json` – **Platzhalter mit Verifikations-Checkliste**:
-  Der Kanton Schaffhausen hat keine publizierte Tabelle; die effektiven
-  Ansätze von KESB/Kantonsgericht Schaffhausen MÜSSEN vor Verwendung erhoben
-  und eingetragen werden (die Checkliste nennt KESB-Kontakt, Gebühren, Quellen).
-
-Jedes Preset enthält `meta` (Name, Kanton, Quelle, URL, Hinweise,
-Verifikations-Checkliste) und die Wertfelder. `js/presets.js` hält eine
-eingebettete Kopie bereit, damit die App auch ohne Webserver via `file://`
-funktioniert; `tests/presets.test.js` prüft die Konsistenz zwischen beiden.
-
-## Tests
-
-```bash
-node tests/calculator.test.js   # Berechnungskern (53 Tests)
-node tests/presets.test.js      # Presets: JSON-Gültigkeit, Konsistenz JS/JSON (29 Tests)
-node tests/costsplit.test.js    # Kostentrennung: CSV- und camt-XML-Parsing, Zuordnung, Ausgleich (54 Tests)
-node tests/themes.test.js       # Themes: Presets, Token, Validierung, Sanitizing (123 Tests)
-node tests/casedata.test.js     # Falldaten-Austausch: Validierung, Merge, Roundtrip (43 Tests)
-node tests/settings.test.js    # Verbindliche Einstellungen: Two-Party-Lock, Override-Modus, Read-Only-Imports (21 Tests)
-node tests/crypto.test.js      # Serverlose Verbindlichkeit: Hash-Kette, signierte Lock-Dateien (15 Tests)
-node tests/casecrypto.test.js  # Verschlüsselter Austausch: ECDH/AES-GCM-Export (14 Tests)
-node tests/storage.test.js    # localStorage-Persistenz: Versionierung, Migration, Sanitizing (35 Tests)
-```
-
-Geprüft werden u. a. Grundbedarfstabellen, Aufteilung nach wirtschaftlicher
-Leistungsfähigkeit, Mangellagen-Deckelung, die Überschuss- und Mankomethode
-des Ehegattenunterhalts sowie CSV-Parsing und Ausgleichslogik; die
-Berechnungslogik im Detail: [docs/KALKULATION.md](docs/KALKULATION.md).
-
-## Verwendete Richtwerte (Default)
-
-Die Default-Richtwerte (Stand: März 2025) basieren auf der Zürcher
-Kinderkosten-Tabelle vom 1. März 2025, abzüglich der enthaltenen pauschalen
-Kinder-Krankenkassenprämie (CHF 130, da die effektive Prämie separat erfasst
-wird), sowie auf betreibungsrechtlichen Existenzminima (Art. 93 SchKG) als
-Orientierung. Die vollständige Wertetabelle mit Quellen steht in
-[docs/KALKULATION.md](docs/KALKULATION.md); zur Rechtslage seit
-**BGer 147 III 265** (zweistufig-konkrete Methode verbindlich, Zürcher Tabelle
-per 2026 nicht mehr weitergeführt) und zur Praxis im Kanton Schaffhausen
-(keine publizierte Tabelle, Verifikation über die KESB zwingend) siehe
-[docs/RECHTLICHE-GRUNDLAGEN.md](docs/RECHTLICHE-GRUNDLAGEN.md).
+**Kantonale Presets** liegen als JSON unter `presets/` und sind im Tab
+**Richtwerte** ladbar; eigene Sätze sind importierbar (z. B.
+Schaffhausen-Platzhalter mit Verifikations-Checkliste) – Aufbau und
+Verifikation: [docs/PRESETS.md](docs/PRESETS.md). Rechtslage und kantonale
+Praxis: [docs/RECHTLICHE-GRUNDLAGEN.md](docs/RECHTLICHE-GRUNDLAGEN.md).
 
 ## Rechtlicher Hinweis (Disclaimer)
 
@@ -168,16 +133,41 @@ jedem produktiven Einsatz an die massgebliche kantonale Praxis (z. B.
 KESB/Kantonsgericht Schaffhausen) angepasst und verifiziert werden. Details:
 [docs/RECHTLICHE-GRUNDLAGEN.md](docs/RECHTLICHE-GRUNDLAGEN.md).
 
-## Roadmap
+## Roadmap, Design, Tests & Mitmachen
 
-- [x] Kantonal vorkonfigurierte Richtwertsätze (Presets ZH / SH-Platzhalter)
-- [x] Kostentrennung vor der Scheidung (Stichtag, Bankexport CSV/camt-XML, Ausgleich)
-- [x] Themes mit Theme-Editor (vordefinierte Designs, freie Farbanpassung)
-- [x] Persistenz aller Eingaben über Browser-Neustarts
-- [x] Austausch zwischen Parteien (Export/Import mit Merge, serverlos)
-- [x] Verbindliche Einstellungen: Two-Party-Lock, Override-Modus, Read-Only-Imports ([docs/settings-binding-override.md](docs/settings-binding-override.md))
-- [x] Serverlose Verbindlichkeit: Hash-Kette und beidseitig signierte Lock-Dateien (Web Crypto, ohne Server)
-- [x] Public-Key-verschlüsselter Austausch (ECDH P-256 + AES-GCM)
-- [ ] PDF-Export des Berechnungsblatts
-- [ ] BVG-/Vorsorgeabzüge und steuerliche Saldierung
-- [ ] Alimentenindexierung (Art. 129 ZGB)
+### Roadmap
+
+Geplante Funktionen (u. a. PDF-Export, BVG-/Vorsorgeabzüge,
+Alimentenindexierung): [docs/ROADMAP.md](docs/ROADMAP.md).
+
+### Design
+
+Die vier Design-Stile (Calm, Calm Dark, Editorial/Legal,
+Neo-Brutalismus; Calm ist der Standard) sind im Tab **Themes** wählbar.
+Grundgerüst, Stile und Design-Historie:
+[docs/DESIGN.md](docs/DESIGN.md).
+
+### Tests
+
+Über 500 Tests (Berechnungskern, Presets, Kostentrennung, Themes,
+Austausch, Verschlüsselung, Persistenz) laufen ohne Abhängigkeiten mit
+Node.js – Übersicht und Ausführung: [docs/TESTS.md](docs/TESTS.md).
+
+### Mitmachen
+
+Beiträge sind willkommen:
+
+1. **Fehler und Vorschläge**: GitHub Issue erfassen (möglichst mit
+   Reproduktionsschritten, Browser und Sprache).
+2. **Code-Beiträge**: Branch erstellen, Änderungen mit Tests und – bei
+   sichtbaren UI-Änderungen – erneuerten Screenshots (4 Sprachen ×
+   3 Gerätetypen) einreichen; die Regeln dazu stehen in
+   [AGENTS.md](AGENTS.md).
+3. **Doku-Beiträge**: Alle Detail-Dokumente leben unter `docs/` – die
+   Docs-in-sync-Regel (AGENTS.md) verlangt die Nachführung der jeweils
+   zugehörigen Doku im selben Change.
+4. **Kantonale Presets**: Eigene Richtwertsätze als JSON – Aufbau und
+   Verifikations-Checkliste: [docs/PRESETS.md](docs/PRESETS.md).
+
+Vor dem ersten Beitrag [AGENTS.md](AGENTS.md) lesen: Architektur,
+Screenshot-Regeln und Test-Ausführung sind dort verbindlich beschrieben.

@@ -51,6 +51,9 @@ AlimenCal.themes = (function () {
     radius: '--radius'
   };
 
+  /* Design-Stile (neben den Farb-Tokens): steuern Typografie, Schatten,
+     Rahmen und Layout-Dichte ueber data-design am <html>-Element. */
+  var DESIGNS = ['base', 'calm', 'calm-dark', 'editorial', 'neubrutalism'];
   var PRESETS = [
     {
       id: 'classic',
@@ -116,8 +119,68 @@ AlimenCal.themes = (function () {
         line: '#c9d6e8', inputBg: '#f7fafd', btnSecondaryBg: '#dde7f4',
         disclaimerBg: '#fff8e1', disclaimerBorder: '#e8d9a0', radius: 10
       }
+    },
+    {
+      id: 'calm',
+      name: 'Calm',
+      design: 'calm',
+      values: {
+        bg: '#fafafa', card: '#ffffff', ink: '#18181b', muted: '#71717a',
+        accent: '#635bff', accentDark: '#4c46d4', accentInk: '#ffffff',
+        bannerBg: '#fafafa',
+        bannerInk: '#18181b',
+        warn: '#b25000', warnBg: '#fff4e5', warnBorder: '#f0d9b8',
+        line: '#e4e4e7', inputBg: '#ffffff', btnSecondaryBg: '#f4f4f5',
+        disclaimerBg: '#fff8e1', disclaimerBorder: '#e8d9a0', radius: 8
+      }
+    },
+    {
+      id: 'calm-dark',
+      name: 'Calm Dark',
+      design: 'calm-dark',
+      values: {
+        bg: '#0b0b0d', card: '#131316', ink: '#f4f4f5', muted: '#9d9da8',
+        accent: '#8b85ff', accentDark: '#a29dff', accentInk: '#0b0b0d',
+        bannerBg: '#0b0b0d',
+        bannerInk: '#f4f4f5',
+        warn: '#f5b04c', warnBg: '#2a2114', warnBorder: '#57431f',
+        line: '#26262b', inputBg: '#0e0e11', btnSecondaryBg: '#1b1b1f',
+        disclaimerBg: '#16150d', disclaimerBorder: '#3c3a1f', radius: 8
+      }
+    },
+    {
+      id: 'neubrutalism',
+      name: 'Neo-Brutalismus',
+      design: 'neubrutalism',
+      values: {
+        bg: '#fdf6e3', card: '#ffffff', ink: '#111111', muted: '#4a4a4a',
+        accent: '#ff5c00', accentDark: '#cc4a00', accentInk: '#ffffff',
+        bannerBg: '#ffd41f',
+        bannerInk: '#111111',
+        warn: '#a30000', warnBg: '#ffe1e1', warnBorder: '#111111',
+        line: '#111111', inputBg: '#fdf6e3', btnSecondaryBg: '#3d9dfc',
+        disclaimerBg: '#ffffff', disclaimerBorder: '#111111', radius: 0
+      }
+    },
+    {
+      id: 'editorial',
+      name: 'Editorial / Legal',
+      design: 'editorial',
+      values: {
+        bg: '#f7f5f2', card: '#fffdfb', ink: '#232019', muted: '#6f6a5e',
+        accent: '#1f3a5f', accentDark: '#16293f', accentInk: '#ffffff',
+        bannerBg: '#f7f5f2',
+        bannerInk: '#232019',
+        warn: '#8a4b00', warnBg: '#f6efe2', warnBorder: '#d6c9a8',
+        line: '#e6e1d8', inputBg: '#ffffff', btnSecondaryBg: '#efece6',
+        disclaimerBg: '#eef2f6', disclaimerBorder: '#c7d3e0', radius: 6
+      }
     }
   ];
+
+  function designOfPreset(preset) {
+    return (preset && DESIGNS.indexOf(preset.design) !== -1) ? preset.design : 'base';
+  }
 
   function cssToToken(cssVar) {
     for (var key in TOKEN_TO_CSS) {
@@ -177,12 +240,19 @@ AlimenCal.themes = (function () {
     TOKENS.forEach(function (token) {
       root.style.setProperty(TOKEN_TO_CSS[token.key], String(sanitized[token.key]));
     });
+    var design = 'base';
+    if (values && values.__design && DESIGNS.indexOf(values.__design) !== -1) {
+      design = values.__design;
+    }
+    root.setAttribute('data-design', design);
   }
 
   return {
     TOKENS: TOKENS,
     TOKEN_TO_CSS: TOKEN_TO_CSS,
     PRESETS: PRESETS,
+    DESIGNS: DESIGNS,
+    designOfPreset: designOfPreset,
     cssToToken: cssToToken,
     isValidColor: isValidColor,
     isValidRadius: isValidRadius,

@@ -45,14 +45,20 @@ const DEVICES = {
 const DEVICE_KEYS = ['pc', 'iphone', 'ipad'];
 
 const VIEWS = [
-  { n: 1, name: 'kindesunterhalt', langs: LANGS, setup: setupChildren },
-  { n: 2, name: 'ehegattenunterhalt', langs: LANGS, setup: setupSpousal },
-  { n: 3, name: 'kostentrennung', langs: LANGS, setup: setupCostsplit },
-  { n: 4, name: 'austausch', langs: LANGS, setup: setupShare },
-  { n: 5, name: 'hauptmenue', langs: LANGS, setup: setupSettingsMenu },
-  { n: 6, name: 'richtwerte', langs: LANGS, setup: setupSettings },
+  { n: 1, name: 'kindesunterhalt', langs: LANGS, setup: setupChildren, design: 'calm' },
+  { n: 2, name: 'ehegattenunterhalt', langs: LANGS, setup: setupSpousal, design: 'calm' },
+  { n: 3, name: 'kostentrennung', langs: LANGS, setup: setupCostsplit, design: 'calm' },
+  { n: 4, name: 'austausch', langs: LANGS, setup: setupShare, design: 'calm' },
+  { n: 5, name: 'hauptmenue', langs: LANGS, setup: setupSettingsMenu, design: 'calm' },
+  { n: 6, name: 'richtwerte', langs: LANGS, setup: setupSettings, design: 'calm' },
   { n: 7, name: 'themes-classic', langs: LANGS, setup: setupThemesClassic },
-  { n: 8, name: 'themes-dark', langs: LANGS, setup: setupThemesDark }
+  { n: 8, name: 'themes-dark', langs: LANGS, setup: setupThemesDark },
+  { n: 9, name: 'themes-designs', langs: LANGS, setup: setupThemesDesignsCalm },
+  { n: 10, name: 'hero-calm', langs: LANGS, setup: setupHeroCalm },
+  { n: 11, name: 'hero-classic', langs: ['de'], devices: ['pc'], setup: setupHeroClassic },
+  { n: 12, name: 'hero-calm-dark', langs: ['de'], devices: ['pc'], setup: setupHeroCalmDark },
+  { n: 13, name: 'hero-editorial', langs: ['de'], devices: ['pc'], setup: setupHeroEditorial },
+  { n: 14, name: 'hero-neubrutalism', langs: ['de'], devices: ['pc'], setup: setupHeroNeubrutalism }
 ];
 
 /* ---------- Beispieldaten (anonymisiert, keine echten Personen) ---------- */
@@ -66,7 +72,9 @@ async function setLang(page, lang) {
 
 async function switchTab(page, name) {
   await page.evaluate(n => {
-    document.querySelector('.tab[data-tab="' + n + '"]').click();
+    const el = document.querySelector('.tab[data-tab="' + n + '"]');
+    if (el) { el.click(); return; }
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true, metaKey: true, bubbles: true }));
   }, name);
   await sleep(150);
 }
@@ -148,7 +156,9 @@ async function setupSpousal(page) {
 }
 
 async function setupSettingsMenu(page) {
-  await page.evaluate(() => document.getElementById('menu-btn').click());
+  /* Hauptmenue ist seit dem SOTA-Redesign die Topbar (nicht-modal);
+     der Shot bleibt ohne zusaetzliche Interaktion auf dem Kindesunterhalt-Tab. */
+  await switchTab(page, 'children');
 }
 
 async function setupSettings(page) {
@@ -242,8 +252,41 @@ async function setupShare(page) {
   await switchTab(page, 'share');
 }
 
-/* ---------- Hauptprogramm ---------- */
+/* ---------- Design-Stile (Themes-Tab, neue Karten) ---------- */
 
+async function selectDesign(page, design) {
+  await page.evaluate(d => {
+    document.querySelector('#design-grid .design-card[data-design="' + d + '"]').click();
+  }, design);
+  await sleep(200);
+}
+
+async function setupThemesDesignsCalm(page) {
+  await switchTab(page, 'themes');
+  await selectDesign(page, 'calm');
+}
+async function setupHeroCalm(page) {
+  await selectDesign(page, 'calm');
+  await setupChildren(page);
+}
+async function setupHeroClassic(page) {
+  await selectDesign(page, 'base');
+  await setupChildren(page);
+}
+async function setupHeroCalmDark(page) {
+  await selectDesign(page, 'calm-dark');
+  await setupChildren(page);
+}
+async function setupHeroEditorial(page) {
+  await selectDesign(page, 'editorial');
+  await setupChildren(page);
+}
+async function setupHeroNeubrutalism(page) {
+  await selectDesign(page, 'neubrutalism');
+  await setupChildren(page);
+}
+
+/* ---------- Hauptprogramm ---------- */
 async function run() {
   const only = process.argv.includes('--only')
     ? parseInt(process.argv[process.argv.indexOf('--only') + 1], 10)
@@ -251,29 +294,26 @@ async function run() {
   const devices = process.argv.includes('--devices')
     ? process.argv[process.argv.indexOf('--devices') + 1].split(',').filter(d => DEVICE_KEYS.includes(d))
     : DEVICE_KEYS;
-
   fs.mkdirSync(OUT_DIR, { recursive: true });
-
   const browser = await puppeteer.launch({
     headless: 'new',
     args: ['--no-sandbox', '--disable-setuid-sandbox', '--font-render-hinting=none']
   });
-
   try {
     for (const view of VIEWS) {
       if (only && view.n !== only) { continue; }
-      for (const device of devices) {
+      const viewDevices = view.devices ? devices.filter(d => view.devices.includes(d)) : devices;
+      for (const device of viewDevices) {
         for (const lang of view.langs) {
           const page = await browser.newPage();
           await page.setViewport({ ...DEVICES[device], deviceScaleFactor: 1 });
           page.on('pageerror', e => console.error('PAGE ERROR:', String(e)));
-
           await page.goto(APP_URL + '?screenshot=1', { waitUntil: 'networkidle0' });
           await sleep(200);
           await setLang(page, lang);
+          if (view.design) { await selectDesign(page, view.design); }
           await view.setup(page);
           await sleep(300);
-
           const num = String(view.n).padStart(2, '0');
           const deviceDir = path.join(OUT_DIR, device);
           fs.mkdirSync(deviceDir, { recursive: true });
