@@ -1,4 +1,4 @@
-# AlimenCal
+# AlimenCal – Unterhaltsrechner für die Schweiz
 
 **AlimenCal** ist ein mehrsprachiges Orientierungswerkzeug (Web-App) für
 Unterhaltsfragen bei Trennung und Scheidung in der Schweiz:
@@ -103,6 +103,8 @@ Schritt-für-Schritt-Anleitung aller Tabs:
 | [docs/RECHTLICHE-GRUNDLAGEN.md](docs/RECHTLICHE-GRUNDLAGEN.md) | Rechtsquellen, Rechtsprechung, kantonale Praxis, Disclaimer |
 | [docs/PRESETS.md](docs/PRESETS.md) | Kantonale Presets: Aufbau, Verifikation, eigene Presets |
 | [docs/ROADMAP.md](docs/ROADMAP.md) | Erledigte und geplante Funktionen |
+| [docs/DESIGN.md](docs/DESIGN.md) | Design-Stile, Mockups, Apple-Redesign-Grundgerüst |
+| [docs/TESTS.md](docs/TESTS.md) | Test-Übersicht und Ausführung |
 | [docs/REDESIGN-MOCKUPS.md](docs/REDESIGN-MOCKUPS.md) | Design-Konzepte V1 (Apple, Material 3, Minimal, Bento, Dark, Neo-Brutalismus) |
 | [docs/REDESIGN-MOCKUPS-V2.md](docs/REDESIGN-MOCKUPS-V2.md) | Design-Konzepte V2 (Sidebar, Wizard, Editorial, Command-Center) |
 
@@ -118,30 +120,14 @@ JSON importierbar – Aufbau und Verifikation:
 
 Alle sieben Design-Stile (Apple, Material 3, Modern Minimal, Bento,
 Dark Premium, Neo-Brutalismus, Base) sind im Tab **Themes** wählbar;
-Apple ist der Standard. Design-Konzepte und Mockups als Referenz:
-[docs/REDESIGN-MOCKUPS.md](docs/REDESIGN-MOCKUPS.md),
-[docs/REDESIGN-MOCKUPS-V2.md](docs/REDESIGN-MOCKUPS-V2.md) sowie
-[`design/mockups/`](design/mockups/index.html) und
-[`design/mockups-v2/`](design/mockups-v2/index.html).
+Apple ist der Standard. Konzepte, Mockups und das aktuelle
+Grundgerüst: [docs/DESIGN.md](docs/DESIGN.md).
 
 ## Tests
 
-```bash
-node tests/calculator.test.js   # Berechnungskern (53 Tests)
-node tests/presets.test.js      # Presets: JSON-Gültigkeit, Konsistenz JS/JSON (29 Tests)
-node tests/costsplit.test.js    # Kostentrennung: CSV- und camt-XML-Parsing, Zuordnung, Ausgleich (54 Tests)
-node tests/themes.test.js       # Themes: Presets, Design-Stile, Token, Validierung, Sanitizing (254 Tests)
-node tests/casedata.test.js     # Falldaten-Austausch: Validierung, Merge, Roundtrip (43 Tests)
-node tests/settings.test.js    # Verbindliche Einstellungen: Two-Party-Lock, Override-Modus, Read-Only-Imports (21 Tests)
-node tests/crypto.test.js      # Serverlose Verbindlichkeit: Hash-Kette, signierte Lock-Dateien (15 Tests)
-node tests/casecrypto.test.js  # Verschlüsselter Austausch: ECDH/AES-GCM-Export (14 Tests)
-node tests/storage.test.js    # localStorage-Persistenz: Versionierung, Migration, Sanitizing (35 Tests)
-```
-
-Geprüft werden u. a. Grundbedarfstabellen, Aufteilung nach wirtschaftlicher
-Leistungsfähigkeit, Mangellagen-Deckelung, die Überschuss- und Mankomethode
-des Ehegattenunterhalts sowie CSV-Parsing und Ausgleichslogik; die
-Berechnungslogik im Detail: [docs/KALKULATION.md](docs/KALKULATION.md).
+Über 500 Tests (Berechnungskern, Presets, Kostentrennung, Themes, Austausch,
+Verschlüsselung, Persistenz) laufen ohne Abhängigkeiten mit Node.js –
+Übersicht und Ausführung: [docs/TESTS.md](docs/TESTS.md).
 
 ## Verwendete Richtwerte (Default)
 
@@ -166,7 +152,22 @@ KESB/Kantonsgericht Schaffhausen) angepasst und verifiziert werden. Details:
 
 Geplante Funktionen (u. a. PDF-Export, BVG-/Vorsorgeabzüge,
 Alimentenindexierung): [docs/ROADMAP.md](docs/ROADMAP.md).
-Fehler und Vorschläge gern als GitHub Issue erfassen.
 
-Beiträge willkommen – Architektur, Regeln (Screenshots, Docs-in-sync) und
-Test-Ausführung: [AGENTS.md](AGENTS.md).
+### Mitmachen
+
+Beiträge sind willkommen:
+
+1. **Fehler und Vorschläge**: GitHub Issue erfassen (möglichst mit
+   Reproduktionsschritten, Browser und Sprache).
+2. **Code-Beiträge**: Branch erstellen, Änderungen mit Tests und – bei
+   sichtbaren UI-Änderungen – erneuerten Screenshots (4 Sprachen ×
+   3 Gerätetypen) einreichen; die Regeln dazu stehen in
+   [AGENTS.md](AGENTS.md).
+3. **Doku-Beiträge**: Alle Detail-Dokumente leben unter `docs/` – die
+   Docs-in-sync-Regel (AGENTS.md) verlangt die Nachführung der jeweils
+   zugehörige Doku im selben Change.
+4. **Kantonale Presets**: Eigene Richtwertsätze als JSON – Aufbau und
+   Verifikations-Checkliste: [docs/PRESETS.md](docs/PRESETS.md).
+
+Vor dem ersten Beitrag [AGENTS.md](AGENTS.md) lesen: Architektur,
+Screenshot-Regeln und Test-Ausführung sind dort verbindlich beschrieben.
