@@ -25,6 +25,12 @@ Leistungsfähigkeit, Mangellagen-Deckelung, die Überschuss- und Mankomethode
 des Ehegattenunterhalts sowie CSV-Parsing und Ausgleichslogik; die
 Berechnungslogik im Detail: [KALKULATION.md](KALKULATION.md).
 
-Sichtbare UI-Änderungen erfordern ausserdem erneuerte Screenshots aller
-betroffenen Ansichten (4 Sprachen × 3 Gerätetypen) – Erzeugung und Regeln:
-[AGENTS.md](../AGENTS.md) bzw. `tools/make-screenshots.js`.
+Zusätzlich zur Repository-Hygiene vor jedem Merge:
+
+```bash
+node tools/check-links.js   # defekte interne Links/Referenzen in MD + HTML
+```
+
+Sichtbare UI-Änderungen erfordern ausserdem erneuerte Screenshots der
+betroffenen Ansichten – Erzeugung und Regeln: [AGENTS.md](../AGENTS.md)
+bzw. `tools/make-screenshots.js`.

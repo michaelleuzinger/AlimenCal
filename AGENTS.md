@@ -127,6 +127,7 @@ docs/               Benutzerhandbuch, Berechnungslogik, Kostentrennung, Rechtlic
 schema/             Optionales SQL-Referenzschema (Immutability-Trigger) für spätere Persistenz
 screenshots/        Screenshots der App (Inventar-Regel: s. AGENTS.md; Erzeugung tools/make-screenshots.js)
 tools/              make-screenshots.js: Screenshot-Generator (Puppeteer, s. AGENTS.md)
+tools/              check-links.js: Link-/Referenzpruefung fuer Repository-Hygiene (s. AGENTS.md)
 tests/              Unit-Tests (node)
 ```
 
@@ -148,6 +149,10 @@ tests/              Unit-Tests (node)
 - [ ] `node tests/*.test.js` grün
 - [ ] Persistenz-Kompatibilität geprüft (Checkliste oben)
 - [ ] Rechtlicher Disclaimer bleibt vollständig erhalten
+- [ ] Hygiene: `git ls-files` enthält nur Produktiv-/Erzeugnis-/Referenz-Dateien
+- [ ] Hygiene: keine neuen Dateien ohne Eintrag in der Struktur-Tabelle
+- [ ] Hygiene: `node tools/check-links.js` grün
+- [ ] Hygiene: gelöschte Dateien ohne verbleibende Referenzen (grep)
 
 ## Verbindliche Regel: Lesbarkeit der Nutzerdaten nach Updates
 
@@ -173,6 +178,43 @@ unvollständig und darf nicht gemergt werden.
 - [ ] Keine Feld-/Schlüsselnamen ohne Migrationspfad umbenannt oder entfernt
 - [ ] `node tests/storage.test.js` (und `node tests/casedata.test.js`) grün
 - [ ] Neue Felder tolerieren fehlende Werte (Defaults, kein Absturz beim Lesen von Altdaten)
+
+## Verbindliche Regel: Repository-Hygiene (clean Repository)
+
+**Jede Datei im Repository muss einer von drei Kategorien angehoeren –
+sonst wird sie geloescht:**
+
+| Kategorie | Test | Beispiele |
+|---|---|---|
+| **Produktiv** | Wird von `index.html` geladen oder von Tests ausgefuehrt | `js/*`, `css/*`, `js/i18n/*` |
+| **Erzeugnis** | Wird von einem Tool generiert **und** in Doku/README referenziert | `screenshots/*`, `presets/*.json` |
+| **Referenz** | In Doku verlinkt **und** beschreibt einen nicht umgesetzten, aktiv verfolgten Gedanken | `schema/calc_settings.sql` |
+
+### Konsequenzen
+
+- **Mockups, Prototypen, Explorationen** werden im selben Change geloescht,
+  in dem die Umsetzungs- (oder Verwurfs-) Entscheidung faellt. Der
+  Entscheidungsstand lebt in `docs/`, nicht in Dateien (Historie:
+  design/mockups und design/mockups-v2 wurden nach Umsetzung entfernt).
+- **Erzeugnisse ohne Erzeugung**: Was das Tool nicht mehr erzeugt (z. B.
+  alte Screenshot-Schemata), wird beim naechsten Generator-Lauf per
+  `git rm` entfernt, nicht liegen gelassen.
+- **Keine neuen Dateien ohne Struktur-Tabellen-Eintrag** (unten): Wer keine
+  Zeile in der Struktur-Tabelle findet, hinterfragt die Datei.
+- **Binärdateien** (PNG, JSON-Daten) nur, wenn in Doku eingebettet oder von
+  einem Test validiert; jede Erzeugnis-Kategorie hat genau ein Tool.
+- **Single-Home fuer Doku**: Jedes Thema hat genau ein Dokument
+  (`docs/DESIGN.md`, `docs/TESTS.md`, ...); README haelt pro Thema maximal
+  eine kurze Einleitung + Link – keine duplizierten Inhalte. README-
+  Abschnitts-Umbenennungen ziehen die Verweise in dieser Datei im selben
+  Change nach.
+
+### Link- und Referenzpruefung
+
+Vor jedem Merge laeuft `node tools/check-links.js` (prueft alle MD- und
+HTML-Dateien auf interne Links/src/href; Exit-Code 1 bei defekten
+Verweisen). Nach dem Loeschen von Dateien zusaetzlich per grep pruefen,
+dass keine Referenzen mehr auf die geloeschten Namen zeigen.
 
 ## Allgemeine Regeln
 
