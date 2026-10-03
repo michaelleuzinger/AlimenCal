@@ -47,17 +47,17 @@ Beispiel einer fremdsprachigen Ansicht (Français):
 
 ![Pension alimentaire (FR)](../screenshots/pc/09-pension-enfants-fr.png)
 
-Die Sprache wird im Zahnrad-Menü oben rechts gewählt: **Deutsch, Français,
+Die Sprache wird im Hamburger-Menü oben rechts gewählt: **Deutsch, Français,
 Italiano, English**. Die Auswahl wird im Browser gespeichert (`localStorage`)
 und beim nächsten Öffnen wiederhergestellt.
 
 ## Tabs im Überblick
 
-Die Hauptnavigation enthält die **Funktionen** (Berechnungen und
-Austausch). Die **Einstellungen und Informationen** sind über den
-Zahnrad-Button („Einstellungen und Informationen“) oben rechts im Kopf
-über ein Dropdown-Menü erreichbar; dieses schliesst bei Auswahl, Klick
-ausserhalb des Menüs oder mit der Escape-Taste.
+Die komplette Navigation – Funktionen, Einstellungen und Informationen
+sowie die Sprachwahl – ist über das Hamburger-Menü („Einstellungen und
+Informationen“) oben rechts im Kopf erreichbar. Das Menü schliesst bei
+Auswahl eines Eintrags, Klick ausserhalb des Menüs oder mit der
+Escape-Taste.
 
 **Funktionen (Hauptnavigation):**
 
@@ -68,9 +68,9 @@ ausserhalb des Menüs oder mit der Escape-Taste.
 | Kostentrennung | Laufende Kosten ab einem Stichtag separat abrechnen (Bankexport) |
 | Austausch | Eigene Daten exportieren, Datei der anderen Partei importieren |
 
-**Einstellungen & Info (Zahnrad-Menü im Kopf):**
+**Einstellungen & Info (im Hamburger-Menü):**
 
-![Einstellungen-Menü (DE)](../screenshots/pc/05-einstellungen-menue-de.png)
+![Hauptmenü (DE)](../screenshots/pc/05-hauptmenue-de.png)
 
 | Tab | Zweck |
 |---|---|

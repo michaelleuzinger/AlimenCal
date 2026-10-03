@@ -11,8 +11,13 @@
   <header>
     <div class="wrap">
       <div class="header-actions">
-        <button type="button" id="settings-btn" class="settings-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="settings-menu"></button>
-        <div id="settings-menu" class="settings-menu" role="menu" hidden>
+        <button type="button" id="menu-btn" class="settings-btn menu-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="main-menu"></button>
+        <div id="main-menu" class="settings-menu main-menu" role="menu" hidden>
+          <button type="button" class="tab settings-menu-item" data-tab="children" role="menuitem"></button>
+          <button type="button" class="tab settings-menu-item" data-tab="spousal" role="menuitem"></button>
+          <button type="button" class="tab settings-menu-item" data-tab="costsplit" role="menuitem"></button>
+          <button type="button" class="tab settings-menu-item" data-tab="share" role="menuitem"></button>
+          <div class="settings-menu-sep"></div>
           <button type="button" class="tab settings-menu-item" data-tab="settings" role="menuitem"></button>
           <button type="button" class="tab settings-menu-item" data-tab="themes" role="menuitem"></button>
           <button type="button" class="tab settings-menu-item" data-tab="about" role="menuitem"></button>
@@ -33,12 +38,6 @@
     </div>
   </header>
 
-  <nav class="tabs wrap" role="tablist">
-    <button class="tab active" data-tab="children" role="tab"></button>
-    <button class="tab" data-tab="spousal" role="tab"></button>
-    <button class="tab" data-tab="costsplit" role="tab"></button>
-    <button class="tab" data-tab="share" role="tab"></button>
-  </nav>
 
   <main class="wrap">
     <p id="disclaimer" class="disclaimer"></p>
