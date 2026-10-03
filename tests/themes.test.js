@@ -73,6 +73,27 @@ ok('isCustomized: geaenderter Wert erkannt',
 ok('isCustomized: dark-Preset ist customisiert (gegenueber classic)',
   themes.isCustomized(themes.PRESETS[1].values) === true);
 
+/* ---------- Design-Stile ---------- */
+ok('DESIGNS vorhanden und nicht leer',
+  Array.isArray(themes.DESIGNS) && themes.DESIGNS.length >= 2);
+ok('DESIGNS: base als Standard enthalten', themes.DESIGNS.indexOf('base') !== -1);
+themes.PRESETS.forEach(function (preset) {
+  if (preset.design != null) {
+    ok('Preset ' + preset.id + ': gueltiger design-Stil',
+      themes.DESIGNS.indexOf(preset.design) !== -1);
+  }
+});
+var applePreset = themes.PRESETS.filter(function (p) { return p.id === 'apple'; })[0];
+ok('Apple-Preset vorhanden', !!applePreset);
+ok('designOfPreset: Apple erkannt', themes.designOfPreset(applePreset) === 'apple');
+ok('designOfPreset: ohne design => base', themes.designOfPreset({ id: 'x' }) === 'base');
+ok('designOfPreset: null => base', themes.designOfPreset(null) === 'base');
+var designIds = ['material','minimal','bento','dark-premium','neubrutalism'];
+designIds.forEach(function (id) {
+  ok('Design-Preset ' + id + ' vorhanden',
+    themes.PRESETS.some(function (p) { return p.id === id && p.design; }));
+});
+
 /* ---------- Anwendung (DOM-frei) ---------- */
 ok('applyToDocument ohne DOM wirft nicht', themes.applyToDocument(base.values) === undefined);
 

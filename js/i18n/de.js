@@ -189,7 +189,10 @@ AlimenCal.i18n.de = {
     saved: 'Theme gespeichert.',
     editor: 'Editor öffnen',
     custom: 'Benutzerdefiniert (angepasst)',
-    presetLabel: 'Vordefiniertes Theme'
+    presetLabel: 'Vordefiniertes Theme',
+    designHeading: 'Design-Stil',
+    designIntro: 'Wählen Sie einen Design-Stil: er passt das komplette Erscheinungsbild (Typografie, Karten, Schatten, Farben) an. Farbdetails können danach im Theme-Editor feinjustiert werden.',
+    designCurrent: 'Aktuell'
   },
   share: {
     heading: 'Austausch zwischen den Parteien',

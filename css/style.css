@@ -297,3 +297,118 @@ footer { padding: 1.5rem 0 2.5rem; color: var(--muted); font-size: 0.85rem; }
   }
   input[type="checkbox"] { min-width: 2.4rem; }
 }
+
+/* -------------------------------------------------------------
+ * Design-Stil-Auswahl (Themes-Tab): Karten je Stil, responsive
+ * ------------------------------------------------------------- */
+.design-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
+  gap: 0.7rem;
+  margin: 0.8rem 0 0.4rem;
+}
+.design-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: calc(var(--radius) * 0.8);
+  background: var(--card);
+  color: var(--ink);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.85rem;
+  text-align: left;
+  overflow: hidden;
+  min-width: 0;
+}
+.design-card:hover { border-color: var(--accent); }
+.design-card.active { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent); }
+.design-swatch {
+  display: block;
+  height: 3.2rem;
+  border-bottom: 0.45rem solid transparent;
+}
+.design-name { padding: 0 0.6rem; font-weight: 600; }
+.design-current { padding: 0 0.6rem 0.6rem; font-size: 0.72rem; color: var(--muted); }
+@media (max-width: 560px) {
+  .design-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* -------------------------------------------------------------
+ * Design-Stile: Typografie / Schatten / Rahmen je data-design
+ * (Farben kommen aus den Theme-Presets, hier nur Stil-Merkmale)
+ * ------------------------------------------------------------- */
+:root { --design-shadow: none; --design-font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+
+[data-design="apple"] {
+  --design-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+  --design-shadow: 0 2px 12px rgba(0,0,0,0.07);
+}
+[data-design="apple"] body { letter-spacing: -0.01em; }
+[data-design="apple"] header h1 { font-weight: 700; letter-spacing: -0.02em; }
+[data-design="apple"] .card { border-color: rgba(0,0,0,0.06); box-shadow: var(--design-shadow); }
+[data-design="apple"] .tab { border-radius: 990px; border: 0; background: var(--btn-secondary-bg); color: var(--ink); }
+[data-design="apple"] .tab.active { background: var(--accent); color: var(--accent-ink); }
+[data-design="apple"] input, [data-design="apple"] select {
+  border-radius: 10px; box-shadow: none;
+}
+[data-design="apple"] input:focus { box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent); }
+[data-design="apple"] .primary { border-radius: 990px; }
+
+[data-design="material"] {
+  --design-font: Roboto, "Google Sans", system-ui, sans-serif;
+}
+[data-design="material"] header { box-shadow: 0 1px 3px rgba(0,0,0,0.12); }
+[data-design="material"] .card { border-color: transparent; box-shadow: 0 1px 3px rgba(0,0,0,0.14); }
+[data-design="material"] .tab { border: 1px solid var(--line); border-radius: 990px; text-transform: none; }
+[data-design="material"] .tab.active { background: var(--accent); color: var(--accent-ink); }
+[data-design="material"] .tab:hover { background: var(--btn-secondary-bg); }
+[data-design="material"] .primary { border-radius: 990px; box-shadow: 0 1px 3px rgba(0,0,0,0.25); }
+[data-design="material"] .secondary { border-radius: 990px; background: var(--btn-secondary-bg); border: 0; }
+[data-design="material"] input, [data-design="material"] select { border-radius: 8px; }
+[data-design="material"] input:focus { border-width: 2px; padding: calc(0.5rem - 1px) calc(0.6rem - 1px); }
+
+[data-design="minimal"] {
+  --design-font: "Inter", "SF Pro Text", system-ui, sans-serif;
+}
+[data-design="minimal"] body { background: var(--bg); color: var(--ink); }
+[data-design="minimal"] .card { box-shadow: none; }
+[data-design="minimal"] .tab { border-radius: 8px; background: transparent; }
+[data-design="minimal"] .tab.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+[data-design="minimal"] .primary { background: var(--ink); color: var(--bg); border-radius: 10px; }
+[data-design="minimal"] .secondary { border: 1px solid var(--line); background: transparent; color: var(--ink); border-radius: 10px; }
+[data-design="minimal"] input, [data-design="minimal"] select { border-radius: 8px; }
+[data-design="minimal"] input, [data-design="minimal"] .result, [data-design="minimal"] .totals { font-variant-numeric: tabular-nums; }
+
+[data-design="bento"] { --design-shadow: none; }
+[data-design="bento"] .card { border-color: color-mix(in srgb, var(--line) 60%, transparent); }
+[data-design="bento"] .result { background: color-mix(in srgb, var(--accent) 12%, var(--card)); border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
+[data-design="bento"] .primary { background: var(--accent); color: var(--accent-ink); border-radius: 990px; border: 0; }
+[data-design="bento"] .totals, [data-design="bento"] .big { font-variant-numeric: tabular-nums; }
+
+[data-design="dark-premium"] { --design-shadow: none; }
+[data-design="dark-premium"] body { letter-spacing: 0.005em; }
+[data-design="dark-premium"] header h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 500; letter-spacing: 0.01em; }
+[data-design="dark-premium"] .disclaimer { border-left: 3px solid var(--accent); border-radius: 6px; }
+[data-design="dark-premium"] .result { border-color: color-mix(in srgb, var(--accent) 45%, transparent); background: linear-gradient(180deg, color-mix(in srgb, var(--card) 88%, var(--accent) 4%), var(--card)); }
+[data-design="dark-premium"] .big { font-family: Georgia, serif; color: var(--accent); }
+[data-design="dark-premium"] .primary { background: var(--accent); color: var(--accent-ink); border-radius: 990px; border: 0; font-weight: 600; }
+[data-design="dark-premium"] .tab.active { background: var(--accent); color: var(--accent-ink); }
+
+[data-design="neubrutalism"] { --design-shadow: 5px 5px 0 var(--ink); }
+[data-design="neubrutalism"] body { font-weight: 500; }
+[data-design="neubrutalism"] .card { border-width: 2px; border-style: solid; box-shadow: var(--design-shadow); border-radius: 0; }
+[data-design="neubrutalism"] .card legend { background: var(--accent); color: var(--accent-ink); padding: 0.1rem 0.5rem; font-weight: 700; }
+[data-design="neubrutalism"] .tab { border-width: 2px; border-style: solid; border-radius: 0; font-weight: 700; box-shadow: 3px 3px 0 var(--ink); background: var(--card); }
+[data-design="neubrutalism"] .tab.active { background: var(--btn-secondary-bg); color: var(--ink); transform: translate(1px, 1px); box-shadow: 2px 2px 0 var(--ink); }
+[data-design="neubrutalism"] .primary { border: 2px solid var(--ink); border-radius: 0; font-weight: 700; box-shadow: var(--design-shadow); text-transform: uppercase; letter-spacing: 0.03em; }
+[data-design="neubrutalism"] .secondary { border: 2px solid var(--ink); border-radius: 0; background: var(--card); color: var(--ink); box-shadow: var(--design-shadow); }
+[data-design="neubrutalism"] input, [data-design="neubrutalism"] select { border-width: 2px; border-style: solid; border-radius: 0; font-weight: 600; }
+[data-design="neubrutalism"] .disclaimer { border-width: 2px; border-style: solid; border-radius: 0; box-shadow: var(--design-shadow); }
+[data-design="neubrutalism"] .result { border-width: 2px; border-style: solid; box-shadow: 6px 6px 0 var(--accent); }
+[data-design="neubrutalism"] .settings-menu { border-radius: 0; box-shadow: 5px 5px 0 var(--ink); }
+
+/* Design-Schrift gemeinsam anwenden */
+[data-design] body { font-family: var(--design-font); }

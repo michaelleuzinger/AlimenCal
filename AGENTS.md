@@ -75,6 +75,20 @@ wird je Geraetetyp in allen vier Sprachen (de, fr, it, en) erzeugt
 | `06-richtwerte-<lang>.png` | Richtwerte mit Preset-Auswahl und Wertetabelle |
 | `07-themes-classic-<lang>.png` | Themes mit Theme-Editor, Classic |
 | `08-themes-dark-<lang>.png` | Themes, Dark-Theme (Duplikat von 07, legitimiert: dokumentiertes Feature) |
+| `09-themes-designs-apple-<lang>.png` | Themes-Tab mit Design-Stil-Auswahl (Karten), Apple-Stil aktiv |
+| `10-hero-apple-<lang>.png` | Hero-Shot Design-Stil Apple: Kindesunterhalt |
+| `11-hero-material-<lang>.png` | Hero-Shot Design-Stil Material 3: Kindesunterhalt |
+| `12-hero-minimal-<lang>.png` | Hero-Shot Design-Stil Modern Minimal: Kindesunterhalt |
+| `13-hero-bento-<lang>.png` | Hero-Shot Design-Stil Bento (dunkel): Kindesunterhalt |
+| `14-hero-dark-premium-<lang>.png` | Hero-Shot Design-Stil Dark Premium: Kindesunterhalt |
+| `15-hero-neubrutalism-<lang>.png` | Hero-Shot Design-Stil Neo-Brutalismus: Kindesunterhalt |
+
+Hinweis: Alle Standard-App-Ansichten (01–08) werden seit dem Redesign im
+Design-Stil «Apple» erzeugt (`design: 'apple'` in VIEWS,
+`tools/make-screenshots.js`); die Farb-Theme-Screenshots 07/08 bleiben als
+Classic/Dark-Beleg erhalten, da das Farb-Theme dort das Feature ist. Die
+Design-Hero-Shots (10–15) belegen je einen Design-Stil; sie werden wie alle
+Ansichten je Gerätetyp und Sprache erzeugt.
 
 ### Struktur
 

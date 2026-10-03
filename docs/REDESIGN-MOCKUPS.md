@@ -46,15 +46,27 @@ sind aber für ein rechtliches Tool eher sekundär. **Neo-Brutalismus** eignet
 sich nicht für die Zielgruppe (Trennung/Scheidung); er ist als Trend-Beleg
 aufgenommen, aber nicht zur Umsetzung empfohlen.
 
-## Umsetzung (Vorschlag)
+## Umsetzung (Status: umgesetzt)
 
-- Die Mockups sind bewusst nicht in `index.html`/`css/style.css` integriert.
-- Umsetzungspfad: neue vordefinierte Themes in `js/themes.js` plus gezielte
-  CSS-Erweiterungen (z. B. Segmented Control, Switch-Komponente, tabellarische
-  Ziffern) – die bestehende Theme-Editor-Logik (CSS-Variablen inkl.
-  `--radius`) bleibt dabei vollständig kompatibel.
-- Diese Dateien sind reine Design-Konzepte («nicht produktiv») und enthalten
-  keine Berechnungslogik; sie sind vom Screenshot-Inventar ausgenommen.
+Alle sechs Design-Konzepte sind als **Design-Stile in die App eingebaut**:
+
+- **Auswahl**: Themes-Tab, neuer Abschnitt «Design-Stil» mit Karten je Stil
+  (Klassisch, Apple, Material 3, Modern Minimal, Bento, Dark Premium,
+  Neo-Brutalismus) – neben der bestehenden Farb-Theme-Auswahl und dem
+  Theme-Editor.
+- **Technik**: Jeder Stil besteht aus einem Farb-Preset (`js/themes.js`,
+  `PRESETS`) plus Stil-Merkmalen (Typografie, Rahmen, Schatten) über
+  `data-design` am `<html>`-Element (`css/style.css`). Der Theme-Editor
+  (Farb-Feinjustierung) funktioniert in jedem Stil weiter; der gewählte
+  Stil bleibt beim Anpassen erhalten.
+- **Responsiv**: Alle Stile basieren auf dem bestehenden flexiblen Layout;
+  die Design-Karten ordnen sich auf kleinen Bildschirmen zweispaltig an,
+  Smoke-Tests prüfen 375px-Breite ohne horizontalen Overflow.
+- **Screenshots**: `tools/make-screenshots.js` erzeugt die Standard-App-Ansichten
+  im Apple-Stil (`design: 'apple'`) sowie je einen Hero-Shot (Kindesunterhalt)
+  pro weiterem Stil; vgl. Screenshot-Inventar in AGENTS.md.
+- Die Mockup-Dateien unter `design/mockups/` bleiben als ursprüngliche
+  Referenz erhalten.
 
 ## Pflege
 

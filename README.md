@@ -54,9 +54,13 @@ oder beliebiges statisches Hosting (z. B. GitHub Pages) bereitgestellt werden.
   Trennzeichen, Datums- und Betragsformaten; je Transaktion ignorieren,
   anteilsmässig aufteilen (Anteil konfigurierbar) oder voll einer Partei
   zuordnen; Sammelaktionen für die Erstzuordnung
-- **Themes**: vordefinierte Designs (Classic, Dark, High Contrast, Warm, Blue)
-  und ein Theme-Editor, mit dem alle Farben (inklusive Bannerfarbe) und der
-  Eckenradius frei anpassbar sind; Auswahl wird lokal gespeichert
+- **Design-Stile**: neben den Farb-Themes gibt es im Themes-Tab eine Auswahl
+  ganzer Design-Stile (Klassisch, Apple, Material 3, Modern Minimal, Bento,
+  Dark Premium, Neo-Brutalismus) – jeder Stil passt Typografie, Karten, Rahmen
+  und Schatten des kompletten Erscheinungsbildes an; alle responsiv
+- **Themes**: vordefinierte Farb-Designs (Classic, Dark, High Contrast, Warm,
+  Blue) und ein Theme-Editor, mit dem alle Farben (inklusive Bannerfarbe) und
+  der Eckenradius frei anpassbar sind; Auswahl wird lokal gespeichert
 - **Persistenz**: alle Eingaben (inkl. Kinderliste, Kostentrennung mit
   Bankexport und Zuordnungen) werden automatisch gespeichert und nach einem
   Browser-Neustart wiederhergestellt – keine Daten gehen verloren
@@ -127,9 +131,11 @@ funktioniert; `tests/presets.test.js` prüft die Konsistenz zwischen beiden.
 
 ## Redesign-Mockups
 
-Unter [`design/mockups/`](design/mockups/index.html) liegen statische
-HTML/CSS-Mockups als Diskussionsgrundlage für ein UI-Redesign. Details und
-Empfehlung: [`docs/REDESIGN-MOCKUPS.md`](docs/REDESIGN-MOCKUPS.md).
+Die sechs Design-Konzepte aus den statischen Mockups unter
+[`design/mockups/`](design/mockups/index.html) sind als **Design-Stile in die
+App eingebaut** (Themes-Tab, Auswahl per Karten). Die Mockups bleiben als
+Referenz erhalten – Details und Empfehlung:
+[`docs/REDESIGN-MOCKUPS.md`](docs/REDESIGN-MOCKUPS.md).
 
 Vorschau der sechs Konzepte (Screenshots unter `design/mockups/previews/`,
 erzeugt mit `tools/make-mockup-previews.js`):
@@ -150,7 +156,7 @@ erzeugt mit `tools/make-mockup-previews.js`):
 node tests/calculator.test.js   # Berechnungskern (53 Tests)
 node tests/presets.test.js      # Presets: JSON-Gültigkeit, Konsistenz JS/JSON (29 Tests)
 node tests/costsplit.test.js    # Kostentrennung: CSV- und camt-XML-Parsing, Zuordnung, Ausgleich (54 Tests)
-node tests/themes.test.js       # Themes: Presets, Token, Validierung, Sanitizing (123 Tests)
+node tests/themes.test.js       # Themes: Presets, Design-Stile, Token, Validierung, Sanitizing (254 Tests)
 node tests/casedata.test.js     # Falldaten-Austausch: Validierung, Merge, Roundtrip (43 Tests)
 node tests/settings.test.js    # Verbindliche Einstellungen: Two-Party-Lock, Override-Modus, Read-Only-Imports (21 Tests)
 node tests/crypto.test.js      # Serverlose Verbindlichkeit: Hash-Kette, signierte Lock-Dateien (15 Tests)

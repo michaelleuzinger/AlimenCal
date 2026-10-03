@@ -45,14 +45,21 @@ const DEVICES = {
 const DEVICE_KEYS = ['pc', 'iphone', 'ipad'];
 
 const VIEWS = [
-  { n: 1, name: 'kindesunterhalt', langs: LANGS, setup: setupChildren },
-  { n: 2, name: 'ehegattenunterhalt', langs: LANGS, setup: setupSpousal },
-  { n: 3, name: 'kostentrennung', langs: LANGS, setup: setupCostsplit },
-  { n: 4, name: 'austausch', langs: LANGS, setup: setupShare },
-  { n: 5, name: 'hauptmenue', langs: LANGS, setup: setupSettingsMenu },
-  { n: 6, name: 'richtwerte', langs: LANGS, setup: setupSettings },
+  { n: 1, name: 'kindesunterhalt', langs: LANGS, setup: setupChildren, design: 'apple' },
+  { n: 2, name: 'ehegattenunterhalt', langs: LANGS, setup: setupSpousal, design: 'apple' },
+  { n: 3, name: 'kostentrennung', langs: LANGS, setup: setupCostsplit, design: 'apple' },
+  { n: 4, name: 'austausch', langs: LANGS, setup: setupShare, design: 'apple' },
+  { n: 5, name: 'hauptmenue', langs: LANGS, setup: setupSettingsMenu, design: 'apple' },
+  { n: 6, name: 'richtwerte', langs: LANGS, setup: setupSettings, design: 'apple' },
   { n: 7, name: 'themes-classic', langs: LANGS, setup: setupThemesClassic },
-  { n: 8, name: 'themes-dark', langs: LANGS, setup: setupThemesDark }
+  { n: 8, name: 'themes-dark', langs: LANGS, setup: setupThemesDark },
+  { n: 9, name: 'themes-designs-apple', langs: LANGS, setup: setupThemesDesignsApple },
+  { n: 10, name: 'hero-apple', langs: LANGS, setup: setupHeroApple },
+  { n: 11, name: 'hero-material', langs: LANGS, setup: setupHeroMaterial },
+  { n: 12, name: 'hero-minimal', langs: LANGS, setup: setupHeroMinimal },
+  { n: 13, name: 'hero-bento', langs: LANGS, setup: setupHeroBento },
+  { n: 14, name: 'hero-dark-premium', langs: LANGS, setup: setupHeroDarkPremium },
+  { n: 15, name: 'hero-neubrutalism', langs: LANGS, setup: setupHeroNeubrutalism }
 ];
 
 /* ---------- Beispieldaten (anonymisiert, keine echten Personen) ---------- */
@@ -242,6 +249,50 @@ async function setupShare(page) {
   await switchTab(page, 'share');
 }
 
+/* ---------- Design-Stile (Themes-Tab, neue Karten) ---------- */
+
+async function selectDesign(page, design) {
+  await page.evaluate(d => {
+    document.querySelector('#design-grid .design-card[data-design="' + d + '"]').click();
+  }, design);
+  await sleep(200);
+}
+
+async function setupThemesDesignsApple(page) {
+  await switchTab(page, 'themes');
+  await selectDesign(page, 'apple');
+}
+
+async function setupHeroApple(page) {
+  await selectDesign(page, 'apple');
+  await setupChildren(page);
+}
+
+async function setupHeroMaterial(page) {
+  await selectDesign(page, 'material');
+  await setupChildren(page);
+}
+
+async function setupHeroMinimal(page) {
+  await selectDesign(page, 'minimal');
+  await setupChildren(page);
+}
+
+async function setupHeroBento(page) {
+  await selectDesign(page, 'bento');
+  await setupChildren(page);
+}
+
+async function setupHeroDarkPremium(page) {
+  await selectDesign(page, 'dark-premium');
+  await setupChildren(page);
+}
+
+async function setupHeroNeubrutalism(page) {
+  await selectDesign(page, 'neubrutalism');
+  await setupChildren(page);
+}
+
 /* ---------- Hauptprogramm ---------- */
 
 async function run() {
@@ -271,6 +322,7 @@ async function run() {
           await page.goto(APP_URL + '?screenshot=1', { waitUntil: 'networkidle0' });
           await sleep(200);
           await setLang(page, lang);
+          if (view.design) { await selectDesign(page, view.design); }
           await view.setup(page);
           await sleep(300);
 

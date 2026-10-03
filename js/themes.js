@@ -51,6 +51,9 @@ AlimenCal.themes = (function () {
     radius: '--radius'
   };
 
+  /* Design-Stile (neben den Farb-Tokens): steuern Typografie, Schatten,
+     Rahmen und Layout-Dichte ueber data-design am <html>-Element. */
+  var DESIGNS = ['base', 'apple', 'material', 'minimal', 'bento', 'dark-premium', 'neubrutalism'];
   var PRESETS = [
     {
       id: 'classic',
@@ -116,8 +119,96 @@ AlimenCal.themes = (function () {
         line: '#c9d6e8', inputBg: '#f7fafd', btnSecondaryBg: '#dde7f4',
         disclaimerBg: '#fff8e1', disclaimerBorder: '#e8d9a0', radius: 10
       }
+    },
+    {
+      id: 'apple',
+      name: 'Apple',
+      design: 'apple',
+      values: {
+        bg: '#f5f5f7', card: '#ffffff', ink: '#1d1d1f', muted: '#6e6e73',
+        accent: '#0071e3', accentDark: '#0077ed', accentInk: '#ffffff',
+        bannerBg: '#1d1d1f',
+        bannerInk: '#f5f5f7',
+        warn: '#b25000', warnBg: '#fff4e5', warnBorder: '#f0d9b8',
+        line: '#d2d2d7', inputBg: '#ffffff', btnSecondaryBg: '#e8e8ed',
+        disclaimerBg: '#f2f6fc', disclaimerBorder: '#d2d2d7', radius: 18
+      }
+    },
+    {
+      id: 'material',
+      name: 'Material 3',
+      design: 'material',
+      values: {
+        bg: '#fef7ff', card: '#f7f2fa', ink: '#1d1b20', muted: '#49454f',
+        accent: '#6750a4', accentDark: '#4f378b', accentInk: '#ffffff',
+        bannerBg: '#eaddff',
+        bannerInk: '#21005e',
+        warn: '#b3261e', warnBg: '#f9dedc', warnBorder: '#e2b3ae',
+        line: '#cac4d0', inputBg: '#ffffff', btnSecondaryBg: '#e8def8',
+        disclaimerBg: '#ffd8e4', disclaimerBorder: '#cac4d0', radius: 28
+      }
+    },
+    {
+      id: 'minimal',
+      name: 'Modern Minimal',
+      design: 'minimal',
+      values: {
+        bg: '#fafaf9', card: '#ffffff', ink: '#0a0a0a', muted: '#57534e',
+        accent: '#16a34a', accentDark: '#15803d', accentInk: '#ffffff',
+        bannerBg: '#0a0a0a',
+        bannerInk: '#fafaf9',
+        warn: '#b45309', warnBg: '#fef3c7', warnBorder: '#fcd34d',
+        line: '#e7e5e4', inputBg: '#ffffff', btnSecondaryBg: '#f5f5f4',
+        disclaimerBg: '#ffffff', disclaimerBorder: '#e7e5e4', radius: 12
+      }
+    },
+    {
+      id: 'bento',
+      name: 'Bento Dark',
+      design: 'bento',
+      values: {
+        bg: '#0f172a', card: '#1e293b', ink: '#f8fafc', muted: '#94a3b8',
+        accent: '#38bdf8', accentDark: '#0ea5e9', accentInk: '#0f172a',
+        bannerBg: '#1e293b',
+        bannerInk: '#f8fafc',
+        warn: '#fb923c', warnBg: '#2a2416', warnBorder: '#54432a',
+        line: '#2d3b52', inputBg: '#16203a', btnSecondaryBg: '#26334a',
+        disclaimerBg: '#221d2b', disclaimerBorder: '#3d3550', radius: 20
+      }
+    },
+    {
+      id: 'dark-premium',
+      name: 'Dark Premium',
+      design: 'dark-premium',
+      values: {
+        bg: '#09090b', card: '#131316', ink: '#e4e4e7', muted: '#a1a1aa',
+        accent: '#fbbf24', accentDark: '#d97706', accentInk: '#1c1401',
+        bannerBg: '#131316',
+        bannerInk: '#e4e4e7',
+        warn: '#fb923c', warnBg: '#2a2114', warnBorder: '#57431f',
+        line: '#232329', inputBg: '#0e0e11', btnSecondaryBg: '#1b1b1f',
+        disclaimerBg: '#16150d', disclaimerBorder: '#3c3a1f', radius: 14
+      }
+    },
+    {
+      id: 'neubrutalism',
+      name: 'Neo-Brutalismus',
+      design: 'neubrutalism',
+      values: {
+        bg: '#fdf6e3', card: '#ffffff', ink: '#111111', muted: '#4a4a4a',
+        accent: '#ff5c00', accentDark: '#cc4a00', accentInk: '#ffffff',
+        bannerBg: '#ffd41f',
+        bannerInk: '#111111',
+        warn: '#a30000', warnBg: '#ffe1e1', warnBorder: '#111111',
+        line: '#111111', inputBg: '#fdf6e3', btnSecondaryBg: '#3d9dfc',
+        disclaimerBg: '#ffffff', disclaimerBorder: '#111111', radius: 0
+      }
     }
   ];
+
+  function designOfPreset(preset) {
+    return (preset && DESIGNS.indexOf(preset.design) !== -1) ? preset.design : 'base';
+  }
 
   function cssToToken(cssVar) {
     for (var key in TOKEN_TO_CSS) {
@@ -177,12 +268,19 @@ AlimenCal.themes = (function () {
     TOKENS.forEach(function (token) {
       root.style.setProperty(TOKEN_TO_CSS[token.key], String(sanitized[token.key]));
     });
+    var design = 'base';
+    if (values && values.__design && DESIGNS.indexOf(values.__design) !== -1) {
+      design = values.__design;
+    }
+    root.setAttribute('data-design', design);
   }
 
   return {
     TOKENS: TOKENS,
     TOKEN_TO_CSS: TOKEN_TO_CSS,
     PRESETS: PRESETS,
+    DESIGNS: DESIGNS,
+    designOfPreset: designOfPreset,
     cssToToken: cssToToken,
     isValidColor: isValidColor,
     isValidRadius: isValidRadius,

@@ -719,6 +719,9 @@
     document.getElementById('theme-editor-heading').textContent = t('themes', 'editorHeading');
     document.getElementById('theme-editor-hint').textContent = t('themes', 'editorHint');
     document.getElementById('theme-reset').textContent = t('themes', 'reset');
+    document.getElementById('design-heading').textContent = t('themes', 'designHeading');
+    document.getElementById('design-intro').textContent = t('themes', 'designIntro');
+    renderDesignGrid();
     renderThemeEditor();
     document.getElementById('settings-heading').textContent = t('settings', 'heading');
     document.getElementById('settings-intro').textContent = t('settings', 'intro');
@@ -1315,6 +1318,9 @@
   function applyTheme(id, values) {
     var preset = getPresetById(id);
     var vals = values || (preset ? preset.values : AlimenCal.themes.PRESETS[0].values);
+    if (vals && !vals.__design) {
+      vals.__design = AlimenCal.themes.designOfPreset(preset);
+    }
     AlimenCal.themes.applyToDocument(vals);
   }
 
@@ -1322,12 +1328,86 @@
     var raw = null;
     try { raw = localStorage.getItem(LS_THEME_VALUES); } catch (e) {}
     if (raw) {
-      try { return JSON.parse(raw); } catch (e) {}
+      try {
+        var parsed = JSON.parse(raw);
+        if (!parsed.__design) {
+          var preset0 = getPresetById(getThemeId()) || AlimenCal.themes.PRESETS[0];
+          parsed.__design = AlimenCal.themes.designOfPreset(preset0);
+        }
+        return parsed;
+      } catch (e) {}
     }
     var preset = getPresetById(getThemeId()) || AlimenCal.themes.PRESETS[0];
-    return preset.values;
+    var vals = preset.values;
+    vals.__design = AlimenCal.themes.designOfPreset(preset);
+    return vals;
   }
 
+  /* Design-Stil-Auswahl: Karten je Stil, Klick uebernimmt das zugehoerige
+     Preset (Farben + design). Neue Stile werden hier und in
+     AlimenCal.themes.DESIGNS/PRESETS nachgefuehrt. */
+  var DESIGN_LABELS = {
+    base: { de: 'Klassisch', fr: 'Classique', it: 'Classico', en: 'Classic' },
+    apple: { de: 'Apple', fr: 'Apple', it: 'Apple', en: 'Apple' },
+    material: { de: 'Material 3 (Google)', fr: 'Material 3 (Google)', it: 'Material 3 (Google)', en: 'Material 3 (Google)' },
+    minimal: { de: 'Modern Minimal', fr: 'Moderne minimaliste', it: 'Minimal moderno', en: 'Modern Minimal' },
+    bento: { de: 'Bento (dunkel)', fr: 'Bento (sombre)', it: 'Bento (scuro)', en: 'Bento (dark)' },
+    'dark-premium': { de: 'Dark Premium', fr: 'Dark Premium', it: 'Dark Premium', en: 'Dark Premium' },
+    neubrutalism: { de: 'Neo-Brutalismus', fr: 'Néo-brutalisme', it: 'Neo-brutalismo', en: 'Neo-Brutalism' }
+  };
+  function designPresetFor(design) {
+    var preset = (AlimenCal.themes.PRESETS || []).filter(function (p) {
+      return AlimenCal.themes.designOfPreset(p) === design;
+    })[0];
+    return preset || AlimenCal.themes.PRESETS[0];
+  }
+  function currentDesign() {
+    var values = currentThemeValues();
+    if (values && values.__design && AlimenCal.themes.DESIGNS.indexOf(values.__design) !== -1) {
+      return values.__design;
+    }
+    var preset = getPresetById(getThemeId()) || AlimenCal.themes.PRESETS[0];
+    return AlimenCal.themes.designOfPreset(preset);
+  }
+  function renderDesignGrid() {
+    var grid = document.getElementById('design-grid');
+    if (!grid) { return; }
+    grid.innerHTML = '';
+    var active = currentDesign();
+    AlimenCal.themes.DESIGNS.forEach(function (design) {
+      var preset = designPresetFor(design);
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'design-card' + (design === active ? ' active' : '');
+      btn.dataset.design = design;
+      var swatch = document.createElement('span');
+      swatch.className = 'design-swatch';
+      swatch.style.background = preset.values.bannerBg;
+      swatch.style.borderBottomColor = preset.values.accent;
+      btn.appendChild(swatch);
+      var name = document.createElement('span');
+      name.className = 'design-name';
+      name.textContent = (DESIGN_LABELS[design] && DESIGN_LABELS[design][state.lang]) ||
+        (DESIGN_LABELS[design] && DESIGN_LABELS[design].en) || design;
+      btn.appendChild(name);
+      if (design === active) {
+        var cur = document.createElement('span');
+        cur.className = 'design-current';
+        cur.textContent = t('themes', 'designCurrent');
+        btn.appendChild(cur);
+      }
+      btn.addEventListener('click', function () {
+        saveTheme(preset.id, null);
+        applyTheme(preset.id, preset.values);
+        var select = document.getElementById('theme-select');
+        if (select) { select.value = preset.id; }
+        document.getElementById('theme-status').textContent = t('themes', 'saved');
+        renderDesignGrid();
+        renderThemeEditor();
+      });
+      grid.appendChild(btn);
+    });
+  }
   function initThemeSelect() {
     var select = document.getElementById('theme-select');
     select.innerHTML = '';
