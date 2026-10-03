@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup: Bento Grid – AlimenCal</title>
+<style>
+  :root{
+    --bg:#0f172a; --tile:#1e293b; --tile-2:#26334a;
+    --ink:#f8fafc; --ink-2:#94a3b8; --ink-3:#64748b;
+    --accent:#38bdf8; --accent-2:#a78bfa; --good:#34d399;
+    --line:#2d3b52; --radius:20px;
+    --font:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);line-height:1.55}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 1.25rem 3rem}
+
+  nav{display:flex;align-items:center;height:60px;gap:1rem;padding:0 1.25rem;max-width:1040px;margin:0 auto}
+  .logo{font-weight:700;letter-spacing:-.02em}
+  .pill-nav{display:flex;background:var(--tile);border-radius:999px;padding:.25rem;gap:.25rem}
+  .pill-nav button{border:0;background:transparent;color:var(--ink-2);padding:.4rem 1rem;border-radius:999px;font-size:.82rem;font-family:inherit;cursor:pointer}
+  .pill-nav button.active{background:var(--accent);color:#0f172a;font-weight:600}
+  .avatar{margin-left:auto;width:2.2rem;height:2.2rem;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:grid;place-items:center;font-size:.85rem;font-weight:700;color:#0f172a}
+
+  header{padding:2rem 1.25rem 1.25rem;max-width:1040px;margin:0 auto}
+  h1{font-size:1.9rem;letter-spacing:-.02em;margin:0 0 .35rem;font-weight:700}
+  .lead{color:var(--ink-2);margin:0;font-size:.95rem}
+
+  /* Bento Grid */
+  .bento{display:grid;grid-template-columns:repeat(6,1fr);gap:.9rem;margin-top:1.25rem}
+  .tile{background:var(--tile);border:1px solid var(--line);border-radius:var(--radius);padding:1.25rem 1.3rem;position:relative;overflow:hidden}
+  .tile .k{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-3);font-weight:600;margin-bottom:.75rem;display:flex;align-items:center;gap:.4rem}
+  .dot{width:.45rem;height:.45rem;border-radius:50%}
+  .num-xl{font-size:2.6rem;font-weight:750;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
+  .num-xl small{font-size:.9rem;color:var(--ink-2);font-weight:500;letter-spacing:0}
+
+  /* Hero-Tile: Resultat (2 Zeilen hoch, breit) */
+  .t-result{grid-column:span 4;grid-row:span 2;background:linear-gradient(160deg,#1e293b 0%,#243b55 100%)}
+  .t-result .num-xl{font-size:4rem;background:linear-gradient(90deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .bar{height:.5rem;border-radius:999px;background:#0f172a;overflow:hidden;margin:1rem 0 .4rem}
+  .bar i{display:block;height:100%;width:64%;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--accent-2))}
+  .bar-row{display:flex;justify-content:space-between;font-size:.8rem;color:var(--ink-2)}
+  .bar-row b{color:var(--ink)}
+
+  .t-parent{grid-column:span 2}
+  .t-parent .kv{display:flex;justify-content:space-between;padding:.5rem 0;border-bottom:1px solid var(--line);font-size:.85rem}
+  .t-parent .kv:last-child{border-bottom:0}
+  .t-parent .kv span{color:var(--ink-2)}
+  .t-parent .kv b{font-variant-numeric:tabular-nums}
+
+  .t-child{grid-column:span 2}
+  .child-pill{display:flex;justify-content:space-between;align-items:center;background:var(--tile-2);border-radius:14px;padding:.65rem .85rem;margin-bottom:.55rem;font-size:.85rem}
+  .child-add{width:100%;border:1px dashed var(--line);background:transparent;color:var(--accent);border-radius:14px;padding:.65rem;font-family:inherit;font-size:.85rem;cursor:pointer}
+
+  .t-notice{grid-column:span 2;background:rgba(167,139,250,.08);border-color:rgba(167,139,250,.25);font-size:.82rem;color:var(--ink-2)}
+
+  .t-actions{grid-column:span 4;display:flex;gap:.7rem;align-items:center}
+  .btn{border:0;border-radius:999px;padding:.65rem 1.5rem;font-size:.88rem;font-family:inherit;cursor:pointer;font-weight:600}
+  .btn-accent{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#0f172a}
+  .btn-ghost{background:transparent;border:1px solid var(--line);color:var(--ink-2)}
+  .calc-hint{color:var(--ink-3);font-size:.78rem;margin-left:auto}
+
+  .t-kpi{grid-column:span 2}
+  .kpi-row{display:flex;justify-content:space-between;font-size:.85rem;padding:.45rem 0;border-bottom:1px solid var(--line)}
+  .kpi-row:last-child{border-bottom:0}
+  .kpi-row b{font-variant-numeric:tabular-nums}
+  .pos{color:var(--good)}
+
+  @media(max-width:760px){
+    .t-result,.t-actions{grid-column:span 6}
+    .t-parent,.t-child,.t-notice,.t-kpi{grid-column:span 3}
+  }
+  @media(max-width:520px){.bento > .tile{grid-column:span 6 !important}}
+
+  footer{padding-top:2rem;color:var(--ink-3);font-size:.78rem;text-align:center}
+</style>
+</head>
+<body>
+<nav>
+  <span class="logo">AlimenCal</span>
+  <div class="pill-nav">
+    <button class="active">Kindesunterhalt</button><button>Ehegatten</button><button>Kostentrennung</button><button>Austausch</button>
+  </div>
+  <span class="avatar">A</span>
+</nav>
+
+<header>
+  <h1>Kindesunterhalt</h1>
+  <p class="lead">Alle Kennzahlen auf einen Blick – Bento-Layout mit dem Resultat als größter Kachel.</p>
+</header>
+
+<div class="wrap">
+  <div class="bento">
+    <div class="tile t-result">
+      <div class="k"><span class="dot" style="background:var(--accent)"></span>Resultat · Monat</div>
+      <div class="num-xl">CHF 650<small> /Monat</small></div>
+      <div class="bar"><i></i></div>
+      <div class="bar-row"><span>Anteil Elternteil A <b>64 %</b></span><span>Anteil Elternteil B <b>36 %</b></span></div>
+      <p style="color:var(--ink-2);font-size:.85rem;margin:1.25rem 0 0">Barunterhalt CHF 480 + Betreuungsunterhalt CHF 170. Kein Manko-Ausgleich erforderlich – beide Elternteile sind leistungsfähig.</p>
+    </div>
+
+    <div class="tile t-parent">
+      <div class="k"><span class="dot" style="background:var(--accent)"></span>Elternteil A</div>
+      <div class="kv"><span>Einkommen</span><b>CHF 6'800</b></div>
+      <div class="kv"><span>Existenzminimum</span><b>CHF 2'400</b></div>
+      <div class="kv"><span>Erwerbstätig</span><b class="pos">Ja</b></div>
+    </div>
+
+    <div class="tile t-parent">
+      <div class="k"><span class="dot" style="background:var(--accent-2)"></span>Elternteil B</div>
+      <div class="kv"><span>Einkommen</span><b>CHF 4'300</b></div>
+      <div class="kv"><span>Existenzminimum</span><b>CHF 2'550</b></div>
+      <div class="kv"><span>Erwerbstätig</span><b>Nein</b></div>
+    </div>
+
+    <div class="tile t-child">
+      <div class="k"><span class="dot" style="background:var(--good)"></span>Kinder</div>
+      <div class="child-pill"><span><strong>Mia</strong>, 9 J. · 70/30</span><span>CHF 480</span></div>
+      <button class="child-add">＋ Kind hinzufügen</button>
+    </div>
+
+    <div class="tile t-notice">
+      <div class="k"><span class="dot" style="background:var(--accent-2)"></span>Hinweis</div>
+      Orientierungswerkzeug – keine Rechtsberatung. Richtwerte: konfigurierbar, z. B. Zürcher Kinderkosten-Tabelle 1.3.2025.
+    </div>
+
+    <div class="tile t-kpi">
+      <div class="k"><span class="dot" style="background:var(--good)"></span>Leistungsfähigkeit</div>
+      <div class="kpi-row"><span>Überschuss A</span><b class="pos">+CHF 3'570</b></div>
+      <div class="kpi-row"><span>Überschuss B</span><b class="pos">+CHF 1'750</b></div>
+    </div>
+
+    <div class="tile t-actions">
+      <button class="btn btn-accent">Berechnen</button>
+      <button class="btn btn-ghost">Zurücksetzen</button>
+      <span class="calc-hint">Automatisch gespeichert · localStorage</span>
+    </div>
+  </div>
+  <footer>Redesign-Mockup · Bento Grid · nicht produktiv</footer>
+</div>
+</body>
+</html>
