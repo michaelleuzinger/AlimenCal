@@ -59,7 +59,9 @@ const VIEWS = [
   { n: 12, name: 'hero-minimal', langs: ['de'], devices: ['pc'], setup: setupHeroMinimal },
   { n: 13, name: 'hero-bento', langs: ['de'], devices: ['pc'], setup: setupHeroBento },
   { n: 14, name: 'hero-dark-premium', langs: ['de'], devices: ['pc'], setup: setupHeroDarkPremium },
-  { n: 15, name: 'hero-neubrutalism', langs: ['de'], devices: ['pc'], setup: setupHeroNeubrutalism }
+  { n: 15, name: 'hero-neubrutalism', langs: ['de'], devices: ['pc'], setup: setupHeroNeubrutalism },
+  { n: 16, name: 'hero-editorial', langs: ['de'], devices: ['pc'], setup: setupHeroEditorial },
+  { n: 17, name: 'hero-command-center', langs: ['de'], devices: ['pc'], setup: setupHeroCommandCenter }
 ];
 
 /* ---------- Beispieldaten (anonymisiert, keine echten Personen) ---------- */
@@ -346,3 +348,12 @@ async function run() {
 }
 
 run().catch(err => { console.error(err); process.exit(1); });
+
+async function setupHeroEditorial(page) {
+  await selectDesign(page, 'editorial');
+  await setupChildren(page);
+}
+async function setupHeroCommandCenter(page) {
+  await selectDesign(page, 'command-center');
+  await setupChildren(page);
+}

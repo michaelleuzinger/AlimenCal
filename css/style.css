@@ -566,3 +566,49 @@ footer { padding: 1.5rem 0 2.5rem; color: var(--muted); font-size: 0.85rem; }
 @media (max-width: 640px) {
   .sidebar-item { font-size: 0.68rem; padding: 0.3rem 0.4rem; }
 }
+
+/* Design-Stil: Editorial / Legal – Dokument-Anmutung, Serif-Typografie */
+[data-design="editorial"] { --design-shadow: none; --design-font: "Source Serif 4", "Iowan Old Style", Georgia, "Times New Roman", serif; }
+[data-design="editorial"] body { background: var(--bg); color: var(--ink); }
+[data-design="editorial"] header h1,
+[data-design="editorial"] .w-title { font-family: var(--design-font); letter-spacing: 0.01em; font-weight: 600; }
+[data-design="editorial"] .subtitle { letter-spacing: 0.02em; }
+[data-design="editorial"] .sidebar-cap,
+[data-design="editorial"] .intro { letter-spacing: 0.04em; text-transform: uppercase; font-size: 0.82rem; }
+[data-design="editorial"] .card { border: 1px solid var(--line); box-shadow: none; }
+[data-design="editorial"] .card legend { font-family: var(--design-font); letter-spacing: 0.02em; }
+[data-design="editorial"] .tab { border-radius: 4px; background: transparent; font-family: system-ui, -apple-system, sans-serif; }
+[data-design="editorial"] .tab.active { background: var(--accent); color: var(--accent-ink); }
+[data-design="editorial"] input, [data-design="editorial"] select { border-radius: 3px; font-family: system-ui, -apple-system, sans-serif; }
+[data-design="editorial"] .primary { border-radius: 4px; font-family: system-ui, -apple-system, sans-serif; letter-spacing: 0.02em; }
+[data-design="editorial"] .result { background: var(--card); border: 1px solid var(--line); box-shadow: none; }
+[data-design="editorial"] .result h3 { font-family: var(--design-font); }
+[data-design="editorial"] .result-table th { font-family: var(--design-font); letter-spacing: 0.02em; }
+[data-design="editorial"] .disclaimer { background: var(--disclaimer-bg); border-left: 3px solid var(--accent); border-radius: 4px; }
+
+/* Design-Stil: Command-Center – dunkles Dashboard, Monospace-Ziffern */
+[data-design="command-center"] { --design-shadow: 0 1px 0 rgba(255,255,255,0.04) inset; --design-font: "Inter", system-ui, -apple-system, sans-serif; }
+[data-design="command-center"] body { font-family: var(--design-font); letter-spacing: -0.005em; }
+[data-design="command-center"] .totals,
+[data-design="command-center"] .big,
+[data-design="command-center"] .result-table,
+[data-design="command-center"] input,
+[data-design="command-center"] .w-dot { font-variant-numeric: tabular-nums; }
+[data-design="command-center"] input,
+[data-design="command-center"] .result-table td,
+[data-design="command-center"] .w-chips .chip,
+[data-design="command-center"] .sidebar-item { font-family: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace; font-size: 0.92em; }
+[data-design="command-center"] header { border-bottom: 1px solid var(--line); background: var(--card); }
+[data-design="command-center"] .card { border: 1px solid var(--line); box-shadow: none; }
+[data-design="command-center"] .card legend { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); }
+[data-design="command-center"] .tab { border-radius: 6px; background: var(--btn-secondary-bg); border: 1px solid var(--line); }
+[data-design="command-center"] .tab.active { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+[data-design="command-center"] .primary { border-radius: 6px; border: 1px solid var(--accent); background: var(--accent); color: var(--accent-ink); font-weight: 600; }
+[data-design="command-center"] .secondary { border-radius: 6px; border: 1px solid var(--line); background: var(--card); color: var(--ink); }
+[data-design="command-center"] input:focus, [data-design="command-center"] select:focus { box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 40%, transparent); }
+[data-design="command-center"] .result { background: var(--card); border: 1px solid var(--line); box-shadow: none; }
+[data-design="command-center"] .big { color: var(--accent); }
+[data-design="command-center"] .disclaimer { background: var(--disclaimer-bg); border: 1px solid var(--line); border-radius: 6px; }
+[data-design="command-center"] .sidebar-item.active { border-radius: 6px; font-weight: 600; }
+[data-design="command-center"] .sidebar-item { font-size: 0.88rem; }
+[data-design="command-center"] .sidebar-item:hover { background: color-mix(in srgb, var(--accent) 8%, transparent); }

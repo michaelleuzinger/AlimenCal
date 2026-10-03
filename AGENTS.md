@@ -94,13 +94,15 @@ wird je Geraetetyp in allen vier Sprachen (de, fr, it, en) erzeugt
 | `13-hero-bento-de.png` (nur `pc/de`) | Hero-Shot Design-Stil Bento (dunkel): Kindesunterhalt |
 | `14-hero-dark-premium-de.png` (nur `pc/de`) | Hero-Shot Design-Stil Dark Premium: Kindesunterhalt |
 | `15-hero-neubrutalism-de.png` (nur `pc/de`) | Hero-Shot Design-Stil Neo-Brutalismus: Kindesunterhalt |
+| `16-hero-editorial-de.png` (nur `pc/de`) | Hero-Shot Design-Stil Editorial/Legal: Kindesunterhalt |
+| `17-hero-command-center-de.png` (nur `pc/de`) | Hero-Shot Design-Stil Command-Center: Kindesunterhalt |
 
 Hinweis: Alle Standard-App-Ansichten (01–08) werden seit dem Redesign im
 Design-Stil «Apple» erzeugt (`design: 'apple'` in VIEWS,
 `tools/make-screenshots.js`); die Farb-Theme-Screenshots 07/08 bleiben als
 Classic/Dark-Beleg erhalten, da das Farb-Theme dort das Feature ist. Die
 Design-Hero-Shots: 10 (Apple, Standard-Stil) wird wie alle Standard-Ansichten
-je Gerätetyp und Sprache erzeugt; die Nicht-Standard-Stile 11–15 nur als
+je Gerätetyp und Sprache erzeugt; die Nicht-Standard-Stile 11–17 nur als
 `pc/de`-Beleg (`langs: ['de'], devices: ['pc']` in VIEWS).
 
 ### Struktur
@@ -125,7 +127,6 @@ docs/               Benutzerhandbuch, Berechnungslogik, Kostentrennung, Rechtlic
 schema/             Optionales SQL-Referenzschema (Immutability-Trigger) für spätere Persistenz
 screenshots/        Screenshots der App (Inventar-Regel: s. AGENTS.md; Erzeugung tools/make-screenshots.js)
 tools/              make-screenshots.js: Screenshot-Generator (Puppeteer, s. AGENTS.md)
-design/mockups-v2/  Nicht umgesetzte Redesign-V2-Konzepte (Editorial, Command-Center) mit Vorschau-PNGs; Doku: docs/DESIGN.md. Umgesetzte Konzepte (V1-Stile, Sidebar, Wizard, Apple-Empfehlung) sind in der App und wurden aus dem Repository entfernt
 tests/              Unit-Tests (node)
 ```
 

@@ -1359,7 +1359,9 @@
     minimal: { de: 'Modern Minimal', fr: 'Moderne minimaliste', it: 'Minimal moderno', en: 'Modern Minimal' },
     bento: { de: 'Bento (dunkel)', fr: 'Bento (sombre)', it: 'Bento (scuro)', en: 'Bento (dark)' },
     'dark-premium': { de: 'Dark Premium', fr: 'Dark Premium', it: 'Dark Premium', en: 'Dark Premium' },
-    neubrutalism: { de: 'Neo-Brutalismus', fr: 'Néo-brutalisme', it: 'Neo-brutalismo', en: 'Neo-Brutalism' }
+    neubrutalism: { de: 'Neo-Brutalismus', fr: 'Néo-brutalisme', it: 'Neo-brutalismo', en: 'Neo-Brutalism' },
+    editorial: { de: 'Editorial / Legal', fr: 'Editorial / Juridique', it: 'Editoriale / Legale', en: 'Editorial / Legal' },
+    'command-center': { de: 'Command-Center', fr: 'Centre de commande', it: 'Centro di comando', en: 'Command-Center' }
   };
   function designPresetFor(design) {
     var preset = (AlimenCal.themes.PRESETS || []).filter(function (p) {

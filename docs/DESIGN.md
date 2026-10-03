@@ -1,7 +1,8 @@
 # Design
 
-Alle sieben Design-Stile (Apple, Material 3, Modern Minimal, Bento,
-Dark Premium, Neo-Brutalismus, Base) sind im Tab **Themes** wählbar;
+Alle neun Design-Stile (Apple, Material 3, Modern Minimal, Bento,
+Dark Premium, Neo-Brutalismus, Editorial/Legal, Command-Center, Base)
+sind im Tab **Themes** wählbar;
 **Apple ist der Standard**. Der gewählte Stil passt Typografie, Karten,
 Rahmen und Schatten des kompletten Erscheinungsbildes an und ist
 vollständig responsiv; die freie Farb-Feinjustierung im Theme-Editor
@@ -26,13 +27,11 @@ funktioniert in jedem Stil weiter.
   Referenzstand lebt in den Design-Stilen und den Hero-Screenshots
   (Views 10–15 in `screenshots/`).
 - **Runde 2 (Redesign V2):** Vier grundlegend neue Konzepte (Sidebar-Workspace,
-  Wizard, Editorial/Legal, Command-Center) ohne Hamburger-Menü. Davon umgesetzt:
-  Sidebar + Wizard in der Apple-Variante der Empfehlung (heutiges
-  Grundgerüst, siehe oben). Nicht umgesetzt und als statische Referenz
-  erhalten: **Editorial/Legal** und **Command-Center** unter
-  [`design/mockups-v2/`](../design/mockups-v2/index.html) mit je einem
-  Desktop- und Mobile-Vorschau-Bild.
-
-Hinweis fürs Betrachten auf GitHub: `.html`-Dateien werden im Blob-View nur
-als Quellcode angezeigt; die Vorschau-PNGs zeigen das Ergebnis, für die
-interaktive Ansicht die Dateien lokal im Browser (`file://`) öffnen.
+  Wizard, Editorial/Legal, Command-Center) ohne Hamburger-Menü. Alle vier
+  sind umgesetzt: Sidebar + Wizard bilden das heutige Apple-Grundgerüst
+  (siehe oben); **Editorial/Legal** (warme Papier-Töne, Serif-Typografie,
+  Dokument-Anmutung) und **Command-Center** (dunkles Dashboard,
+  Monospace-Ziffern, GitHub-artige Palette) sind als Design-Stile im
+  Themes-Tab wählbar (Hero-Shots 16/17 in `screenshots/pc/`). Die
+  statischen Mockup-Dateien sind nach der Umsetzung aus dem Repository
+  entfernt worden.
