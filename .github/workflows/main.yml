@@ -1,1 +1,23 @@
+name: Tests
 
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  node-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Unit-Tests ausfuehren
+        run: |
+          status=0
+          for f in tests/*.test.js; do
+            echo "== $f"
+            node "$f" || status=1
+          done
+          exit $status
