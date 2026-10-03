@@ -85,26 +85,13 @@ oder beliebiges statisches Hosting (z. B. GitHub Pages) bereitgestellt werden.
 
 ## Nutzung
 
-1. `index.html` im Browser öffnen (beliebiger Hosting-Ordner genügt,
-   z. B. GitHub Pages) – oder die Datei direkt per `file://` starten.
-2. Tab **Kindesunterhalt**: Einkommen und Existenzminima der Eltern erfassen,
-   Kinder hinzufügen (Alter, eigene Einkünfte, Kinderzulagen,
-   Krankenkassenprämie, Fremdbetreuungskosten, Betreuungsanteile); je Kind
-   wählbar: Grundbedarf pauschal (Richtwerttabelle) oder effektive Kosten.
-3. Tab **Ehegattenunterhalt**: falls gewünscht aktivieren, Angaben zu
-   gebührendem Lebensstandard, Mehrkosten und Leistungsfähigkeit erfassen.
-4. Tab **Kostentrennung**: Stichtag wählen, Bankexport (CSV oder camt-XML)
-   hochladen,
-   Kontoinhaber angeben, Transaktionen zuordnen – die App errechnet den
-   Ausgleich. Details: [docs/KOSTENTRENNUNG.md](docs/KOSTENTRENNUNG.md)
-5. Tab **Austausch**: eigene Daten als JSON exportieren, Datei der
-   anderen Partei importieren (Merge).
-6. Über die Sidebar-Navigation (Desktop) bzw. die Tab-Leiste unten
-   (Mobile): Sprachwahl sowie unter **Richtwerte** kantonale Werte
-   anpassen, speichern, exportieren/importieren, Presets laden, und unter
-   **Themes** Design wählen oder im Theme-Editor Farben anpassen.
+Über die Sidebar-Navigation (Desktop) bzw. die Tab-Leiste unten (Mobile)
+sind alle Funktionen erreichbar: Kindesunterhalt, Ehegattenunterhalt,
+Kostentrennung, Austausch sowie Richtwerte, Themes und Über. Die
+Sprachwahl (Deutsch, Français, Italiano, English) liegt in der Sidebar.
 
-Ausführliche Anleitung: [docs/BENUTZERHANDBUCH.md](docs/BENUTZERHANDBUCH.md)
+Schritt-für-Schritt-Anleitung aller Tabs:
+[docs/BENUTZERHANDBUCH.md](docs/BENUTZERHANDBUCH.md)
 
 ## Dokumentation
 
@@ -114,50 +101,28 @@ Ausführliche Anleitung: [docs/BENUTZERHANDBUCH.md](docs/BENUTZERHANDBUCH.md)
 | [docs/KALKULATION.md](docs/KALKULATION.md) | Berechnungslogik Kindes- und Ehegattenunterhalt |
 | [docs/KOSTENTRENNUNG.md](docs/KOSTENTRENNUNG.md) | Modul Kostentrennung: CSV- und camt-XML-Import, Zuordnung, Ausgleich |
 | [docs/RECHTLICHE-GRUNDLAGEN.md](docs/RECHTLICHE-GRUNDLAGEN.md) | Rechtsquellen, Rechtsprechung, kantonale Praxis, Disclaimer |
+| [docs/PRESETS.md](docs/PRESETS.md) | Kantonale Presets: Aufbau, Verifikation, eigene Presets |
+| [docs/ROADMAP.md](docs/ROADMAP.md) | Erledigte und geplante Funktionen |
+| [docs/REDESIGN-MOCKUPS.md](docs/REDESIGN-MOCKUPS.md) | Design-Konzepte V1 (Apple, Material 3, Minimal, Bento, Dark, Neo-Brutalismus) |
+| [docs/REDESIGN-MOCKUPS-V2.md](docs/REDESIGN-MOCKUPS-V2.md) | Design-Konzepte V2 (Sidebar, Wizard, Editorial, Command-Center) |
 
 ## Kantonale Presets
 
-Unter `presets/` liegen kantonsbezogene Richtwertsätze als JSON, auswählbar im
-Tab **Richtwerte**:
+Kantonale Richtwertsätze (z. B. Zürcher Kinderkosten-Tabelle 1.3.2025,
+Schaffhausen-Platzhalter mit Verifikations-Checkliste) liegen unter
+`presets/` und sind im Tab **Richtwerte** ladbar. Eigene Presets sind als
+JSON importierbar – Aufbau und Verifikation:
+[docs/PRESETS.md](docs/PRESETS.md).
 
-- `zuerich-2025.json` – Zürcher Kinderkosten-Tabelle vom 1. März 2025
-  (Referenz, identisch mit App-Default)
-- `schaffhausen-offen.json` – **Platzhalter mit Verifikations-Checkliste**:
-  Der Kanton Schaffhausen hat keine publizierte Tabelle; die effektiven
-  Ansätze von KESB/Kantonsgericht Schaffhausen MÜSSEN vor Verwendung erhoben
-  und eingetragen werden (die Checkliste nennt KESB-Kontakt, Gebühren, Quellen).
+## Design
 
-Jedes Preset enthält `meta` (Name, Kanton, Quelle, URL, Hinweise,
-Verifikations-Checkliste) und die Wertfelder. `js/presets.js` hält eine
-eingebettete Kopie bereit, damit die App auch ohne Webserver via `file://`
-funktioniert; `tests/presets.test.js` prüft die Konsistenz zwischen beiden.
-
-## Redesign-Mockups
-
-Die sechs Design-Konzepte aus den statischen Mockups unter
-[`design/mockups/`](design/mockups/index.html) sind als **Design-Stile in die
-App eingebaut** (Themes-Tab, Auswahl per Karten). Die Mockups bleiben als
-Referenz erhalten – Details und Empfehlung:
-[`docs/REDESIGN-MOCKUPS.md`](docs/REDESIGN-MOCKUPS.md).
-
-**Redesign V2:** Vier grundlegend neue Konzepte (Sidebar-Workspace, geführter
-Wizard, Editorial/Legal, Command-Center) – jeweils ohne Hamburger-Menü und mit
-eigener Navigations-Idee, mit Vorschau-Bildern je Desktop + Mobile unter
-[`design/mockups-v2/`](design/mockups-v2/index.html); Details:
-[`docs/REDESIGN-MOCKUPS-V2.md`](docs/REDESIGN-MOCKUPS-V2.md).
-
-Vorschau der sechs Konzepte (Screenshots unter `design/mockups/previews/`,
-erzeugt mit `tools/make-mockup-previews.js`):
-
-| Mockup | Vorschau |
-|---|---|
-| Apple-Inspired (HIG) | [![Apple-Inspired](design/mockups/previews/mockup-apple.png)](design/mockups/mockup-apple.html) |
-| Google / Material 3 | [![Material 3](design/mockups/previews/mockup-google.png)](design/mockups/mockup-google.html) |
-| Modern Minimal / Calm | [![Minimal](design/mockups/previews/mockup-minimal.png)](design/mockups/mockup-minimal.html) |
-| Bento Grid | [![Bento](design/mockups/previews/mockup-bento.png)](design/mockups/mockup-bento.html) |
-| Dark Premium | [![Dark Premium](design/mockups/previews/mockup-dark.png)](design/mockups/mockup-dark.html) |
-| Neo-Brutalismus | [![Neo-Brutalismus](design/mockups/previews/mockup-neubrutalism.png)](design/mockups/mockup-neubrutalism.html) |
-
+Alle sieben Design-Stile (Apple, Material 3, Modern Minimal, Bento,
+Dark Premium, Neo-Brutalismus, Base) sind im Tab **Themes** wählbar;
+Apple ist der Standard. Design-Konzepte und Mockups als Referenz:
+[docs/REDESIGN-MOCKUPS.md](docs/REDESIGN-MOCKUPS.md),
+[docs/REDESIGN-MOCKUPS-V2.md](docs/REDESIGN-MOCKUPS-V2.md) sowie
+[`design/mockups/`](design/mockups/index.html) und
+[`design/mockups-v2/`](design/mockups-v2/index.html).
 
 ## Tests
 
@@ -181,14 +146,9 @@ Berechnungslogik im Detail: [docs/KALKULATION.md](docs/KALKULATION.md).
 ## Verwendete Richtwerte (Default)
 
 Die Default-Richtwerte (Stand: März 2025) basieren auf der Zürcher
-Kinderkosten-Tabelle vom 1. März 2025, abzüglich der enthaltenen pauschalen
-Kinder-Krankenkassenprämie (CHF 130, da die effektive Prämie separat erfasst
-wird), sowie auf betreibungsrechtlichen Existenzminima (Art. 93 SchKG) als
-Orientierung. Die vollständige Wertetabelle mit Quellen steht in
-[docs/KALKULATION.md](docs/KALKULATION.md); zur Rechtslage seit
-**BGer 147 III 265** (zweistufig-konkrete Methode verbindlich, Zürcher Tabelle
-per 2026 nicht mehr weitergeführt) und zur Praxis im Kanton Schaffhausen
-(keine publizierte Tabelle, Verifikation über die KESB zwingend) siehe
+Kinderkosten-Tabelle vom 1. März 2025 sowie auf betreibungsrechtlichen
+Existenzminima (Art. 93 SchKG) als Orientierung. Wertetabelle mit Quellen:
+[docs/KALKULATION.md](docs/KALKULATION.md); Rechtslage und kantonale Praxis:
 [docs/RECHTLICHE-GRUNDLAGEN.md](docs/RECHTLICHE-GRUNDLAGEN.md).
 
 ## Rechtlicher Hinweis (Disclaimer)
@@ -202,16 +162,11 @@ jedem produktiven Einsatz an die massgebliche kantonale Praxis (z. B.
 KESB/Kantonsgericht Schaffhausen) angepasst und verifiziert werden. Details:
 [docs/RECHTLICHE-GRUNDLAGEN.md](docs/RECHTLICHE-GRUNDLAGEN.md).
 
-## Roadmap
+## Roadmap & Mitmachen
 
-- [x] Kantonal vorkonfigurierte Richtwertsätze (Presets ZH / SH-Platzhalter)
-- [x] Kostentrennung vor der Scheidung (Stichtag, Bankexport CSV/camt-XML, Ausgleich)
-- [x] Themes mit Theme-Editor (vordefinierte Designs, freie Farbanpassung)
-- [x] Persistenz aller Eingaben über Browser-Neustarts
-- [x] Austausch zwischen Parteien (Export/Import mit Merge, serverlos)
-- [x] Verbindliche Einstellungen: Two-Party-Lock, Override-Modus, Read-Only-Imports ([docs/settings-binding-override.md](docs/settings-binding-override.md))
-- [x] Serverlose Verbindlichkeit: Hash-Kette und beidseitig signierte Lock-Dateien (Web Crypto, ohne Server)
-- [x] Public-Key-verschlüsselter Austausch (ECDH P-256 + AES-GCM)
-- [ ] PDF-Export des Berechnungsblatts
-- [ ] BVG-/Vorsorgeabzüge und steuerliche Saldierung
-- [ ] Alimentenindexierung (Art. 129 ZGB)
+Geplante Funktionen (u. a. PDF-Export, BVG-/Vorsorgeabzüge,
+Alimentenindexierung): [docs/ROADMAP.md](docs/ROADMAP.md).
+Fehler und Vorschläge gern als GitHub Issue erfassen.
+
+Beiträge willkommen – Architektur, Regeln (Screenshots, Docs-in-sync) und
+Test-Ausführung: [AGENTS.md](AGENTS.md).
