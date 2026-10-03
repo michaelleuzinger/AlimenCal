@@ -42,6 +42,9 @@ function newSvc() {
 /* ---- Hash-Kette ----------------------------------------------------------- */
 
 (async function chainTests() {
+  function waitForChain(svc) {
+    return svc._chainQueue || Promise.resolve();
+  }
   var svc = newSvc();
   var id = Object.keys(svc.settings)[0];
 
@@ -50,7 +53,7 @@ function newSvc() {
   svc.confirmBinding(id, 'B');
   svc.createOverride(id, 's1', 5000, { party: 'A' });
   svc.deleteOverride(Object.keys(svc.overrides)[0]);
-  await new Promise(function (r) { setTimeout(r, 10); });
+  await waitForChain(svc);
 
   ok('Kette hat Einträge nach Aktionen', svc.chain.length === 5);
 
@@ -67,7 +70,7 @@ function newSvc() {
   var id2 = Object.keys(svc2.settings)[0];
   svc2.confirmBinding(id2, 'A');
   svc2.confirmBinding(id2, 'B');
-  await new Promise(function (r) { setTimeout(r, 10); });
+  await waitForChain(svc2);
   svc2.chain.splice(0, 1);
   var rd = await new Promise(function (res) { svc2.verifyChain(res); });
   ok('Entfernten Eintrag wird erkannt', rd.valid === false);
@@ -78,7 +81,7 @@ function newSvc() {
   svc3.confirmBinding(id3, 'A');
   svc3.confirmBinding(id3, 'B');
   svc3.rebaseSetting(id3, 5000, 'A');
-  await new Promise(function (r) { setTimeout(r, 10); });
+  await waitForChain(svc3);
   ok('Rebase erzeugt Ketten-Eintrag', svc3.chain.length === 3);
 })();
 
