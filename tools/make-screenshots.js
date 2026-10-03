@@ -34,7 +34,7 @@ const ROOT = path.resolve(__dirname, '..');
 const APP_URL = 'file://' + path.join(ROOT, 'index.html');
 const OUT_DIR = path.join(ROOT, 'screenshots');
 
-const LANGS = ['de', 'fr'];
+const LANGS = ['de', 'fr', 'it', 'en'];
 
 /* Vereinbarte Geraetetypen (PC, iPhone, iPad) */
 const DEVICES = {
@@ -45,15 +45,14 @@ const DEVICES = {
 const DEVICE_KEYS = ['pc', 'iphone', 'ipad'];
 
 const VIEWS = [
-  { n: 1, name: 'kindesunterhalt', langs: ['de'], setup: setupChildren },
-  { n: 2, name: 'ehegattenunterhalt', langs: ['de'], setup: setupSpousal },
-  { n: 3, name: 'kostentrennung', langs: ['de'], setup: setupCostsplit },
-  { n: 4, name: 'austausch', langs: ['de'], setup: setupShare },
-  { n: 5, name: 'hauptmenue', langs: ['de'], setup: setupSettingsMenu },
-  { n: 6, name: 'richtwerte', langs: ['de'], setup: setupSettings },
-  { n: 7, name: 'themes-classic', langs: ['de'], setup: setupThemesClassic },
-  { n: 8, name: 'themes-dark', langs: ['de'], setup: setupThemesDark },
-  { n: 9, name: 'pension-enfants', langs: ['fr'], setup: setupChildren }
+  { n: 1, name: 'kindesunterhalt', langs: LANGS, setup: setupChildren },
+  { n: 2, name: 'ehegattenunterhalt', langs: LANGS, setup: setupSpousal },
+  { n: 3, name: 'kostentrennung', langs: LANGS, setup: setupCostsplit },
+  { n: 4, name: 'austausch', langs: LANGS, setup: setupShare },
+  { n: 5, name: 'hauptmenue', langs: LANGS, setup: setupSettingsMenu },
+  { n: 6, name: 'richtwerte', langs: LANGS, setup: setupSettings },
+  { n: 7, name: 'themes-classic', langs: LANGS, setup: setupThemesClassic },
+  { n: 8, name: 'themes-dark', langs: LANGS, setup: setupThemesDark }
 ];
 
 /* ---------- Beispieldaten (anonymisiert, keine echten Personen) ---------- */

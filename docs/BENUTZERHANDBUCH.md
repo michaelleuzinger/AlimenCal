@@ -43,9 +43,10 @@ ist horizontal scrollbar:
 
 ## Sprachen
 
-Beispiel einer fremdsprachigen Ansicht (Français):
+Jede Ansicht existiert in allen vier Sprachen; Beispiel Kindesunterhalt
+auf Französisch:
 
-![Pension alimentaire (FR)](../screenshots/pc/09-pension-enfants-fr.png)
+![Pension alimentaire (FR)](../screenshots/pc/01-kindesunterhalt-fr.png)
 
 Die Sprache wird im Hamburger-Menü oben rechts gewählt: **Deutsch, Français,
 Italiano, English**. Die Auswahl wird im Browser gespeichert (`localStorage`)

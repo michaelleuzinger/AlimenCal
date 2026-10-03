@@ -28,24 +28,23 @@ unvollständig und darf nicht gemergt werden.
 ### Zusätzlich gilt
 
 - **Screenshots**: Sichtbare UI-Änderungen erfordern erneuerte Screenshots
-  der betroffenen Ansichten. Bei geänderten Sprachtexten genügt es, die
-  eine fremdsprachige Beleg-Ansicht (aktuell: FR, `08-pension-enfants-fr.png`)
-  mitzu erneuern – nicht alle vier Sprachen.
+  der betroffenen Ansichten – in allen vier Sprachen und allen drei
+  Geraetetypen (Erzeugung siehe unten).
 - **Screenshot-Erstellung**:
   - Ausführen: `node tools/make-screenshots.js` (erzeugt alle Geraetetypen; mit `--devices pc,iphone,ipad` einschraenkbar; nutzt Puppeteer/Headless-Chromium,
     Installation von Puppeteer ausserhalb des Repos: `npm i puppeteer`)
-  - Erzeugt automatisch die PNGs unter `screenshots/` (fortlaufend nummeriert,
-    Sprache im Suffix, z. B. `01-kindesunterhalt-de.png`)
+  - Erzeugt automatisch die PNGs unter `screenshots/<geraet>/` (fortlaufend
+    nummeriert, Sprache im Suffix, z. B. `pc/01-kindesunterhalt-de.png`),
+    je Ansicht in allen vier Sprachen
   - Bei jeder sichtbaren UI-Änderung neu ausführen und die erzeugten PNGs
     committen
 - **Screenshot-Inventar (Regel)**: Die Anzahl und der Inhalt der Screenshots
   dürfen und sollen bei Änderungen überdacht und angepasst werden. Massgebend:
-  1. **Ein Screenshot pro Ansicht/Feature** (Default-Sprache Deutsch), jeweils
-     mit aussagekräftigen (anonymisierten) Beispieldaten, so dass die Kern-
-     funktion der Ansicht sichtbar ist.
-  2. **Genau eine fremdsprachige Ansicht** als Beleg der Mehrsprachigkeit
-     (aktuell: Français). Keine weiteren Sprach-Duplikate.
-  3. **Duplikate nur bei dokumentiertem Mehrwert** und dann immer aktuell
+  1. **Ein Screenshot pro Ansicht/Feature, Sprache und Geraetetyp** – je
+     in allen vier Sprachen (de, fr, it, en) und allen drei Geraetetypen
+     (pc, iphone, ipad), jeweils mit aussagekräftigen (anonymisierten)
+     Beispieldaten, so dass die Kernfunktion der Ansicht sichtbar ist.
+  2. **Duplikate nur bei dokumentiertem Mehrwert** und dann immer aktuell
      halten (Beispiel: Theme-Varianten Classic/Dark, weil das Theme selbst
      das Feature ist).
   4. **Einbettungsort**: README enthält genau einen Hero-Shot (Tab
@@ -61,20 +60,21 @@ unvollständig und darf nicht gemergt werden.
 
 Screenshots sind nach Geraetetyp gegliedert: `screenshots/pc/` (1395x2084),
 `screenshots/iphone/` (390x844), `screenshots/ipad/` (820x1180).
-Vereinbart sind insgesamt 3 Geraetetypen: PC, iPhone, iPad. Pro Geraetetyp
-wird jeder untenstehende View erzeugt (Views 1-8 Deutsch, View 9 Francais).
+Vereinbart sind insgesamt 3 Geraetetypen: PC, iPhone, iPad. Jede Ansicht
+wird je Geraetetyp in allen vier Sprachen (de, fr, it, en) erzeugt
+(Suffix im Dateinamen); insgesamt 8 Ansichten x 4 Sprachen x 3 Geraete
+= 96 PNGs.
 
-| Screenshot (je `pc/`, `iphone/`, `ipad/`) | Inhalt |
+| Screenshot (je `pc/`, `iphone/`, `ipad/`, Suffix `-de/-fr/-it/-en`) | Inhalt |
 |---|---|
-| `01-kindesunterhalt-de.png` | Kindesunterhalt inkl. Aufwandsmodus und Resultat (Deutsch); Hero-Shot README + Handbuch |
-| `02-ehegattenunterhalt-de.png` | Ehegattenunterhalt mit Bedarf/Leistungsfähigkeit und Resultat (Deutsch) |
-| `03-kostentrennung-de.png` | Kostentrennung mit anonymisiertem Bankexport, Zuordnungen und Ausgleich (Deutsch) |
-| `04-austausch-de.png` | Austausch-Tab mit Export/Import (Deutsch) |
-| `05-hauptmenue-de.png` | Hamburger-Menü geöffnet: alle Navigationseinträge und Sprachwahl (Deutsch) |
-| `06-richtwerte-de.png` | Richtwerte mit Preset-Auswahl und Wertetabelle (Deutsch) |
-| `07-themes-classic-de.png` | Themes mit Theme-Editor, Classic (Deutsch) |
-| `08-themes-dark-de.png` | Themes, Dark-Theme (Duplikat von 07, legitimiert: dokumentiertes Feature) |
-| `09-pension-enfants-fr.png` | Pension alimentaire (Français); einzige fremdsprachige Ansicht als Beleg der Mehrsprachigkeit |
+| `01-kindesunterhalt-<lang>.png` | Kindesunterhalt inkl. Aufwandsmodus und Resultat; Hero-Shot README + Handbuch |
+| `02-ehegattenunterhalt-<lang>.png` | Ehegattenunterhalt mit Bedarf/Leistungsfähigkeit und Resultat |
+| `03-kostentrennung-<lang>.png` | Kostentrennung mit anonymisiertem Bankexport, Zuordnungen und Ausgleich |
+| `04-austausch-<lang>.png` | Austausch-Tab mit Export/Import |
+| `05-hauptmenue-<lang>.png` | Hamburger-Menü geöffnet: alle Navigationseinträge und Sprachwahl |
+| `06-richtwerte-<lang>.png` | Richtwerte mit Preset-Auswahl und Wertetabelle |
+| `07-themes-classic-<lang>.png` | Themes mit Theme-Editor, Classic |
+| `08-themes-dark-<lang>.png` | Themes, Dark-Theme (Duplikat von 07, legitimiert: dokumentiertes Feature) |
 
 ### Struktur
 
