@@ -128,6 +128,8 @@ schema/             Optionales SQL-Referenzschema (Immutability-Trigger) für sp
 screenshots/        Screenshots der App (Inventar-Regel: s. AGENTS.md; Erzeugung tools/make-screenshots.js)
 tools/              make-screenshots.js: Screenshot-Generator (Puppeteer, s. AGENTS.md)
 tools/              check-links.js: Link-/Referenzpruefung fuer Repository-Hygiene (s. AGENTS.md)
+design/mockups-v3/  Runde-3-SOTA-Mockups (Referenz-Kategorie): drei responsive HTML-Konzepte + index.html-Galerie + PNG-Previews; Erzeugung: tools/make-mockup-previews.js; Entscheidung in docs/DESIGN.md, Abschnitt "Runde 3"; werden bei der Umsetzungs-/Verwurfsentscheidung geloescht
+tools/              make-mockup-previews.js: Preview-Generator fuer design/mockups-v3 (Puppeteer, s. docs/DESIGN.md)
 tests/              Unit-Tests (node)
 ```
 
