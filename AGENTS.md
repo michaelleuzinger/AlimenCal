@@ -26,14 +26,15 @@ unvollständig und darf nicht gemergt werden.
 | Rechtliches / Rechtsprechungs-Bezug | `docs/RECHTLICHE-GRUNDLAGEN.md` |
 | Kantonale Presets (`presets/`) | `docs/PRESETS.md`, README-Abschnitt «Richtwerte» |
 | Roadmap / neue geplante Funktionen | `docs/ROADMAP.md`, README-Abschnitt «Roadmap, Design, Tests & Mitmachen» |
-| Design-Stile / Mockups / Redesign | `docs/DESIGN.md` (Verweis auf Redesign-Docs), README-Abschnitt «Roadmap, Design, Tests & Mitmachen» |
+| Design-Stile / Design-Historie | `docs/DESIGN.md`, README-Abschnitt «Roadmap, Design, Tests & Mitmachen» |
 | Tests / neue Testdateien | `docs/TESTS.md`, README-Abschnitt «Roadmap, Design, Tests & Mitmachen» |
 
 ### Zusätzlich gilt
 
 - **Screenshots**: Sichtbare UI-Änderungen erfordern erneuerte Screenshots
-  der betroffenen Ansichten – in allen vier Sprachen und allen drei
-  Geraetetypen (Erzeugung siehe unten).
+  der betroffenen Ansichten – Standard-Ansichten (Views 01–10) in allen
+  vier Sprachen und allen drei Geraetetypen, Design-Hero-Shots der
+  Nicht-Standard-Stile (Views 11–15) nur `pc/de` (Erzeugung siehe unten).
 - **Screenshot-Erstellung**:
   - Ausführen: `node tools/make-screenshots.js` (erzeugt alle Geraetetypen; mit `--devices pc,iphone,ipad` einschraenkbar; nutzt Puppeteer/Headless-Chromium,
     Installation von Puppeteer ausserhalb des Repos: `npm i puppeteer`)
@@ -88,18 +89,19 @@ wird je Geraetetyp in allen vier Sprachen (de, fr, it, en) erzeugt
 | `08-themes-dark-<lang>.png` | Themes, Dark-Theme (Duplikat von 07, legitimiert: dokumentiertes Feature) |
 | `09-themes-designs-apple-<lang>.png` | Themes-Tab mit Design-Stil-Auswahl (Karten), Apple-Stil aktiv |
 | `10-hero-apple-<lang>.png` | Hero-Shot Design-Stil Apple: Kindesunterhalt |
-| `11-hero-material-<lang>.png` | Hero-Shot Design-Stil Material 3: Kindesunterhalt |
-| `12-hero-minimal-<lang>.png` | Hero-Shot Design-Stil Modern Minimal: Kindesunterhalt |
-| `13-hero-bento-<lang>.png` | Hero-Shot Design-Stil Bento (dunkel): Kindesunterhalt |
-| `14-hero-dark-premium-<lang>.png` | Hero-Shot Design-Stil Dark Premium: Kindesunterhalt |
-| `15-hero-neubrutalism-<lang>.png` | Hero-Shot Design-Stil Neo-Brutalismus: Kindesunterhalt |
+| `11-hero-material-de.png` (nur `pc/de`) | Hero-Shot Design-Stil Material 3: Kindesunterhalt |
+| `12-hero-minimal-de.png` (nur `pc/de`) | Hero-Shot Design-Stil Modern Minimal: Kindesunterhalt |
+| `13-hero-bento-de.png` (nur `pc/de`) | Hero-Shot Design-Stil Bento (dunkel): Kindesunterhalt |
+| `14-hero-dark-premium-de.png` (nur `pc/de`) | Hero-Shot Design-Stil Dark Premium: Kindesunterhalt |
+| `15-hero-neubrutalism-de.png` (nur `pc/de`) | Hero-Shot Design-Stil Neo-Brutalismus: Kindesunterhalt |
 
 Hinweis: Alle Standard-App-Ansichten (01–08) werden seit dem Redesign im
 Design-Stil «Apple» erzeugt (`design: 'apple'` in VIEWS,
 `tools/make-screenshots.js`); die Farb-Theme-Screenshots 07/08 bleiben als
 Classic/Dark-Beleg erhalten, da das Farb-Theme dort das Feature ist. Die
-Design-Hero-Shots (10–15) belegen je einen Design-Stil; sie werden wie alle
-Ansichten je Gerätetyp und Sprache erzeugt.
+Design-Hero-Shots: 10 (Apple, Standard-Stil) wird wie alle Standard-Ansichten
+je Gerätetyp und Sprache erzeugt; die Nicht-Standard-Stile 11–15 nur als
+`pc/de`-Beleg (`langs: ['de'], devices: ['pc']` in VIEWS).
 
 ### Struktur
 
@@ -119,12 +121,11 @@ js/storage.js      localStorage-Persistenz: Versionierung, Sanitizing, Migration
 js/app.js           UI-Logik, i18n-Anwendung, localStorage, Import/Export
 js/i18n/{de,fr,it,en}.js  Sprachdateien
 AGENTS.md           Verbindliche Arbeitsregeln (Doku-in-Sync-Regel, Checklisten)
-docs/               Benutzerhandbuch, Berechnungslogik, Kostentrennung, Rechtliches, Verbindliche Einstellungen, Design, Tests, Redesign-Mockups, Presets, Roadmap
+docs/               Benutzerhandbuch, Berechnungslogik, Kostentrennung, Rechtliches, Verbindliche Einstellungen, Design (inkl. Design-Historie), Tests, Presets, Roadmap
 schema/             Optionales SQL-Referenzschema (Immutability-Trigger) für spätere Persistenz
 screenshots/        Screenshots der App (Inventar-Regel: s. AGENTS.md; Erzeugung tools/make-screenshots.js)
 tools/              make-screenshots.js: Screenshot-Generator (Puppeteer, s. AGENTS.md)
-design/mockups/     Statische Redesign-Mockups (reine Konzepte, nicht produktiv; Doku: docs/REDESIGN-MOCKUPS.md)
-design/mockups-v2/  Statische Redesign-V2-Konzepte (Sidebar/Wizard/Editorial/Command-Center; Doku: docs/REDESIGN-MOCKUPS-V2.md)
+design/mockups-v2/  Nicht umgesetzte Redesign-V2-Konzepte (Editorial, Command-Center) mit Vorschau-PNGs; Doku: docs/DESIGN.md. Umgesetzte Konzepte (V1-Stile, Sidebar, Wizard, Apple-Empfehlung) sind in der App und wurden aus dem Repository entfernt
 tests/              Unit-Tests (node)
 ```
 

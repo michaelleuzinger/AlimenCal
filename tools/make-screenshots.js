@@ -55,11 +55,11 @@ const VIEWS = [
   { n: 8, name: 'themes-dark', langs: LANGS, setup: setupThemesDark },
   { n: 9, name: 'themes-designs-apple', langs: LANGS, setup: setupThemesDesignsApple },
   { n: 10, name: 'hero-apple', langs: LANGS, setup: setupHeroApple },
-  { n: 11, name: 'hero-material', langs: LANGS, setup: setupHeroMaterial },
-  { n: 12, name: 'hero-minimal', langs: LANGS, setup: setupHeroMinimal },
-  { n: 13, name: 'hero-bento', langs: LANGS, setup: setupHeroBento },
-  { n: 14, name: 'hero-dark-premium', langs: LANGS, setup: setupHeroDarkPremium },
-  { n: 15, name: 'hero-neubrutalism', langs: LANGS, setup: setupHeroNeubrutalism }
+  { n: 11, name: 'hero-material', langs: ['de'], devices: ['pc'], setup: setupHeroMaterial },
+  { n: 12, name: 'hero-minimal', langs: ['de'], devices: ['pc'], setup: setupHeroMinimal },
+  { n: 13, name: 'hero-bento', langs: ['de'], devices: ['pc'], setup: setupHeroBento },
+  { n: 14, name: 'hero-dark-premium', langs: ['de'], devices: ['pc'], setup: setupHeroDarkPremium },
+  { n: 15, name: 'hero-neubrutalism', langs: ['de'], devices: ['pc'], setup: setupHeroNeubrutalism }
 ];
 
 /* ---------- Beispieldaten (anonymisiert, keine echten Personen) ---------- */
@@ -316,7 +316,8 @@ async function run() {
   try {
     for (const view of VIEWS) {
       if (only && view.n !== only) { continue; }
-      for (const device of devices) {
+      const viewDevices = view.devices ? devices.filter(d => view.devices.includes(d)) : devices;
+      for (const device of viewDevices) {
         for (const lang of view.langs) {
           const page = await browser.newPage();
           await page.setViewport({ ...DEVICES[device], deviceScaleFactor: 1 });
