@@ -70,7 +70,7 @@ wird jeder untenstehende View erzeugt (Views 1-8 Deutsch, View 9 Francais).
 | `02-ehegattenunterhalt-de.png` | Ehegattenunterhalt mit Bedarf/Leistungsfähigkeit und Resultat (Deutsch) |
 | `03-kostentrennung-de.png` | Kostentrennung mit anonymisiertem Bankexport, Zuordnungen und Ausgleich (Deutsch) |
 | `04-austausch-de.png` | Austausch-Tab mit Export/Import (Deutsch) |
-| `05-einstellungen-menue-de.png` | Zahnrad-Menü geöffnet: Einstellungen/Info-Einträge und Sprachwahl (Deutsch) |
+| `05-hauptmenue-de.png` | Hamburger-Menü geöffnet: alle Navigationseinträge und Sprachwahl (Deutsch) |
 | `06-richtwerte-de.png` | Richtwerte mit Preset-Auswahl und Wertetabelle (Deutsch) |
 | `07-themes-classic-de.png` | Themes mit Theme-Editor, Classic (Deutsch) |
 | `08-themes-dark-de.png` | Themes, Dark-Theme (Duplikat von 07, legitimiert: dokumentiertes Feature) |
@@ -79,7 +79,7 @@ wird jeder untenstehende View erzeugt (Views 1-8 Deutsch, View 9 Francais).
 ### Struktur
 
 ```
-index.html          UI (Tab-Navigation mit Funktionen: Kindesunterhalt, Ehegattenunterhalt, Kostentrennung, Austausch; Richtwerte/Themes/Über und Sprachwahl über Zahnrad-Menü oben rechts im Kopf)
+index.html          UI (Hamburger-Menü oben rechts mit Navigation: Kindesunterhalt, Ehegattenunterhalt, Kostentrennung, Austausch, Richtwerte, Themes, Über und Sprachwahl)
 css/style.css       Styles
 js/calculator.js    Berechnungskern (DOM-frei, auch in Node.js lauffähig)
 js/costsplit.js     Kostentrennung: CSV-Import, Zuordnung, Ausgleich (DOM-frei)
