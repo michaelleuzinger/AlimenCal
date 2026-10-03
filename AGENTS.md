@@ -32,7 +32,7 @@ unvollständig und darf nicht gemergt werden.
   eine fremdsprachige Beleg-Ansicht (aktuell: FR, `08-pension-enfants-fr.png`)
   mitzu erneuern – nicht alle vier Sprachen.
 - **Screenshot-Erstellung**:
-  - Ausführen: `node tools/make-screenshots.js` (nutzt Puppeteer/Headless-Chromium,
+  - Ausführen: `node tools/make-screenshots.js` (erzeugt alle Geraetetypen; mit `--devices pc,iphone,ipad` einschraenkbar; nutzt Puppeteer/Headless-Chromium,
     Installation von Puppeteer ausserhalb des Repos: `npm i puppeteer`)
   - Erzeugt automatisch die PNGs unter `screenshots/` (fortlaufend nummeriert,
     Sprache im Suffix, z. B. `01-kindesunterhalt-de.png`)
@@ -59,19 +59,22 @@ unvollständig und darf nicht gemergt werden.
      auch aus README/Handbuch zu löschen (keine toten Links).
 ### Screenshot-Inventar
 
-| Screenshot | Inhalt |
+Screenshots sind nach Geraetetyp gegliedert: `screenshots/pc/` (1395x2084),
+`screenshots/iphone/` (390x844), `screenshots/ipad/` (820x1180).
+Vereinbart sind insgesamt 3 Geraetetypen: PC, iPhone, iPad. Pro Geraetetyp
+wird jeder untenstehende View erzeugt (Views 1-8 Deutsch, View 9 Francais).
+
+| Screenshot (je `pc/`, `iphone/`, `ipad/`) | Inhalt |
 |---|---|
-| [`screenshots/01-kindesunterhalt-de.png`](screenshots/01-kindesunterhalt-de.png) | Kindesunterhalt inkl. Aufwandsmodus und Resultat (Deutsch); Hero-Shot README + Handbuch |
-| [`screenshots/02-ehegattenunterhalt-de.png`](screenshots/02-ehegattenunterhalt-de.png) | Ehegattenunterhalt mit Bedarf/Leistungsfähigkeit und Resultat (Deutsch) |
-| [`screenshots/03-kostentrennung-de.png`](screenshots/03-kostentrennung-de.png) | Kostentrennung mit anonymisiertem Bankexport, Zuordnungen und Ausgleich (Deutsch) |
-| [`screenshots/04-austausch-de.png`](screenshots/04-austausch-de.png) | Austausch-Tab mit Export/Import (Deutsch) |
-| [`screenshots/05-einstellungen-menue-de.png`](screenshots/05-einstellungen-menue-de.png) | Zahnrad-Menü geöffnet: Einstellungen/Info-Einträge und Sprachwahl (Deutsch) |
-| [`screenshots/06-richtwerte-de.png`](screenshots/06-richtwerte-de.png) | Richtwerte mit Preset-Auswahl und Wertetabelle (Deutsch) |
-| [`screenshots/07-themes-classic-de.png`](screenshots/07-themes-classic-de.png) | Themes mit Theme-Editor, Classic (Deutsch) |
-| [`screenshots/08-themes-dark-de.png`](screenshots/08-themes-dark-de.png) | Themes, Dark-Theme (Duplikat von 07, legitimiert: dokumentiertes Feature) |
-| [`screenshots/09-pension-enfants-fr.png`](screenshots/09-pension-enfants-fr.png) | Pension alimentaire (Français); einzige fremdsprachige Ansicht als Beleg der Mehrsprachigkeit |
-| [`screenshots/10-kindesunterhalt-smartphone-de.png`](screenshots/10-kindesunterhalt-smartphone-de.png) | Kindesunterhalt im Smartphone-Viewport (390×844) als Beleg der responsiven Darstellung (Deutsch) |
-| [`screenshots/11-kostentrennung-smartphone-de.png`](screenshots/11-kostentrennung-smartphone-de.png) | Kostentrennung im Smartphone-Viewport (390×844) mit scrollbarer Transaktionstabelle (Deutsch) |
+| `01-kindesunterhalt-de.png` | Kindesunterhalt inkl. Aufwandsmodus und Resultat (Deutsch); Hero-Shot README + Handbuch |
+| `02-ehegattenunterhalt-de.png` | Ehegattenunterhalt mit Bedarf/Leistungsfähigkeit und Resultat (Deutsch) |
+| `03-kostentrennung-de.png` | Kostentrennung mit anonymisiertem Bankexport, Zuordnungen und Ausgleich (Deutsch) |
+| `04-austausch-de.png` | Austausch-Tab mit Export/Import (Deutsch) |
+| `05-einstellungen-menue-de.png` | Zahnrad-Menü geöffnet: Einstellungen/Info-Einträge und Sprachwahl (Deutsch) |
+| `06-richtwerte-de.png` | Richtwerte mit Preset-Auswahl und Wertetabelle (Deutsch) |
+| `07-themes-classic-de.png` | Themes mit Theme-Editor, Classic (Deutsch) |
+| `08-themes-dark-de.png` | Themes, Dark-Theme (Duplikat von 07, legitimiert: dokumentiertes Feature) |
+| `09-pension-enfants-fr.png` | Pension alimentaire (Français); einzige fremdsprachige Ansicht als Beleg der Mehrsprachigkeit |
 
 ### Struktur
 
