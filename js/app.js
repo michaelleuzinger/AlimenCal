@@ -638,6 +638,12 @@
     }
   }
 
+  function setNavLabel(el, text) {
+    var label = el.querySelector('.sidebar-label');
+    if (label) { label.textContent = text; }
+    else if (!el.querySelector('svg')) { el.textContent = text; }
+  }
+
   function applyI18n() {
     var dict = AlimenCal.i18n[state.lang] || AlimenCal.i18n[DEFAULT_LANG];
     document.documentElement.lang = dict.htmlLang;
@@ -646,13 +652,13 @@
     document.getElementById('app-subtitle').textContent = t('subtitle');
     document.getElementById('disclaimer').textContent = t('disclaimerShort');
 
-    document.querySelectorAll('.tab[data-tab="children"]').forEach(function (el) { el.textContent = t('nav', 'children'); });
-    document.querySelectorAll('.tab[data-tab="spousal"]').forEach(function (el) { el.textContent = t('nav', 'spousal'); });
-    document.querySelectorAll('.tab[data-tab="costsplit"]').forEach(function (el) { el.textContent = t('nav', 'costsplit'); });
-    document.querySelectorAll('.tab[data-tab="themes"]').forEach(function (el) { el.textContent = t('nav', 'themes'); });
-    document.querySelectorAll('.tab[data-tab="share"]').forEach(function (el) { el.textContent = t('nav', 'share'); });
-    document.querySelectorAll('.tab[data-tab="settings"]').forEach(function (el) { el.textContent = t('nav', 'settings'); });
-    document.querySelectorAll('.tab[data-tab="about"]').forEach(function (el) { el.textContent = t('nav', 'about'); });
+    document.querySelectorAll('.tab[data-tab="children"]').forEach(function (el) { setNavLabel(el, t('nav', 'children')); });
+    document.querySelectorAll('.tab[data-tab="spousal"]').forEach(function (el) { setNavLabel(el, t('nav', 'spousal')); });
+    document.querySelectorAll('.tab[data-tab="costsplit"]').forEach(function (el) { setNavLabel(el, t('nav', 'costsplit')); });
+    document.querySelectorAll('.tab[data-tab="themes"]').forEach(function (el) { setNavLabel(el, t('nav', 'themes')); });
+    document.querySelectorAll('.tab[data-tab="share"]').forEach(function (el) { setNavLabel(el, t('nav', 'share')); });
+    document.querySelectorAll('.tab[data-tab="settings"]').forEach(function (el) { setNavLabel(el, t('nav', 'settings')); });
+    document.querySelectorAll('.tab[data-tab="about"]').forEach(function (el) { setNavLabel(el, t('nav', 'about')); });
 
     var wizardEl = document.getElementById('children-wizard');
     if (wizardEl) {
@@ -1776,6 +1782,37 @@
   }
 
   /* -------------------------------------------------------------
+   *  Mobile Navigation: «Mehr»-Bottom-Sheet (Richtwerte, Themes,
+   *  Ueber, Sprachwahl) analog zu Apples Mobile-Navigation.
+   * ------------------------------------------------------------- */
+  function initMoreSheet() {
+    var btn = document.getElementById('nav-more-btn');
+    var sheet = document.getElementById('more-sheet');
+    var backdrop = document.getElementById('more-backdrop');
+    if (!btn || !sheet || !backdrop) { return; }
+
+    function openSheet(open) {
+      sheet.classList.toggle('open', open);
+      backdrop.classList.toggle('open', open);
+      sheet.setAttribute('aria-hidden', String(!open));
+      backdrop.setAttribute('aria-hidden', String(!open));
+      btn.setAttribute('aria-expanded', String(open));
+    }
+
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      openSheet(!sheet.classList.contains('open'));
+    });
+    backdrop.addEventListener('click', function () { openSheet(false); });
+    Array.prototype.forEach.call(sheet.querySelectorAll('.tab'), function (tabBtn) {
+      tabBtn.addEventListener('click', function () { openSheet(false); });
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { openSheet(false); }
+    });
+  }
+
+  /* -------------------------------------------------------------
    *  Wizard: gefuehrter Einstieg im Tab Kindesunterhalt.
    * ------------------------------------------------------------- */
   function initWizard() {
@@ -1886,12 +1923,12 @@
       renderThemeEditor();
       document.getElementById('theme-status').textContent = t('themes', 'saved');
     });
-    Array.prototype.forEach.call(document.querySelectorAll('#lang-select, #lang-select-sidebar'), function (sel) {
+    Array.prototype.forEach.call(document.querySelectorAll('.lang-select-sync'), function (sel) {
       sel.value = state.lang;
       sel.addEventListener('change', function () {
         state.lang = this.value;
         try { localStorage.setItem(LS_LANG, state.lang); } catch (e) {}
-        Array.prototype.forEach.call(document.querySelectorAll('#lang-select, #lang-select-sidebar'), function (other) {
+        Array.prototype.forEach.call(document.querySelectorAll('.lang-select-sync'), function (other) {
           other.value = state.lang;
         });
         applyI18n();
@@ -1908,6 +1945,7 @@
     }
 
     initWizard();
+    initMoreSheet();
     switchTab('children');
 
     document.getElementById('keys-generate-a').addEventListener('click', function () { generateKeyFor('A'); });

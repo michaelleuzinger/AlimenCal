@@ -33,14 +33,16 @@ body {
 .wrap { max-width: 960px; margin: 0 auto; padding: 0 1rem; }
 
 header {
-  background: var(--banner-bg);
+  position: sticky; top: 0; z-index: 30;
+  background: color-mix(in srgb, var(--banner-bg) 72%, transparent);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
   color: var(--banner-ink);
-  padding: 1.5rem 0 1.2rem;
-  position: relative;
+  padding: 0.9rem 0 0.85rem;
+  text-align: center;
 }
-header h1 { margin: 0; font-size: 1.6rem; letter-spacing: 0.5px; }
-.subtitle { margin: 0.3rem 0 0; opacity: 0.92; font-weight: 300; }
-
+header h1 { margin: 0; font-size: 1.35rem; font-weight: 600; letter-spacing: -0.022em; }
+.subtitle { margin: 0.15rem 0 0; font-weight: 400; font-size: 0.95rem; color: color-mix(in srgb, var(--banner-ink) 72%, transparent); }
 .lang-switch {
   display: inline-flex;
   align-items: center;
@@ -347,15 +349,6 @@ footer { padding: 1.5rem 0 2.5rem; color: var(--muted); font-size: 0.85rem; }
   --design-shadow: 0 2px 12px rgba(0,0,0,0.07);
 }
 [data-design="apple"] body { letter-spacing: -0.01em; }
-[data-design="apple"] header {
-  background: rgba(245,245,247,0.88);
-  backdrop-filter: saturate(180%) blur(20px);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
-  border-bottom: 1px solid var(--line);
-  padding: 1.3rem 0 1.1rem;
-}
-[data-design="apple"] header h1 { font-weight: 700; letter-spacing: -0.02em; }
-[data-design="apple"] .subtitle { opacity: 0.75; }
 [data-design="apple"] .card { border-color: rgba(0,0,0,0.06); box-shadow: var(--design-shadow); }
 [data-design="apple"] .tab { border-radius: 990px; border: 0; background: var(--btn-secondary-bg); color: var(--ink); }
 [data-design="apple"] .tab.active { background: var(--accent); color: var(--accent-ink); }
@@ -424,61 +417,10 @@ footer { padding: 1.5rem 0 2.5rem; color: var(--muted); font-size: 0.85rem; }
 /* -------------------------------------------------------------
    App-Sidebar (Desktop) und Bottom-Tabbar (Mobile), Apple-Look
    ------------------------------------------------------------- */
-.app-sidebar {
-  position: fixed;
-  top: 0; left: 0; bottom: 0;
-  width: 236px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  padding: 1.25rem 0.9rem;
-  box-sizing: border-box;
-  background: color-mix(in srgb, var(--card) 82%, transparent);
-  backdrop-filter: saturate(180%) blur(20px);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
-  border-right: 1px solid var(--line);
-  overflow-y: auto;
-  z-index: 40;
-}
-.sidebar-brand {
-  display: flex; align-items: center; gap: 0.6rem;
-  padding: 0 0.5rem 0.75rem;
-  font-weight: 700; font-size: 1.1rem; letter-spacing: -0.01em;
-}
-.sidebar-brand .brand-mark {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 1.7rem; height: 1.7rem;
-  border-radius: 8px;
-  background: var(--accent); color: var(--accent-ink);
-  font-size: 0.95rem;
-}
-.sidebar-nav { display: flex; flex-direction: column; gap: 0.2rem; }
-.sidebar-cap {
-  padding: 0.9rem 0.75rem 0.25rem;
-  font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em;
-  color: color-mix(in srgb, var(--ink) 55%, transparent);
-}
-.sidebar-item {
-  display: block; width: 100%;
-  text-align: left;
-  padding: 0.55rem 0.75rem;
-  border: 0; border-radius: 980px;
-  background: transparent; color: var(--ink);
-  font: inherit; font-size: 0.95rem;
-  cursor: pointer;
-}
-.sidebar-item:hover { background: color-mix(in srgb, var(--ink) 7%, transparent); }
-.sidebar-item.active { background: var(--accent); color: var(--accent-ink); font-weight: 600; }
-.sidebar-foot { margin-top: auto; padding: 0.75rem 0.5rem 0; }
-.sidebar-foot .lang-switch { display: flex; flex-direction: column; gap: 0.3rem; font-size: 0.85rem; }
-.sidebar-foot select { padding: 0.4rem 0.5rem; border-radius: 8px; border: 1px solid var(--line); background: var(--input-bg); color: var(--ink); font: inherit; }
-.app-shell { margin-left: 236px; }
-.app-shell > header .header-actions { display: none; }
-
 /* Wizard (Einstiegsassistent im Tab Kindesunterhalt) */
 .wizard { padding: 1.1rem 1.25rem; margin-bottom: 1.25rem; }
 .w-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
-.w-title { font-weight: 700; font-size: 1.05rem; letter-spacing: -0.01em; }
+.w-title { font-weight: 600; font-size: 1.05rem; letter-spacing: -0.018em; }
 .w-skip {
   border: 0; background: transparent; color: color-mix(in srgb, var(--ink) 55%, transparent);
   font: inherit; font-size: 0.85rem; cursor: pointer; text-decoration: underline;
@@ -499,7 +441,7 @@ footer { padding: 1.5rem 0 2.5rem; color: var(--muted); font-size: 0.85rem; }
   background: color-mix(in srgb, var(--ink) 14%, transparent);
   font-size: 0.72rem; font-weight: 600;
 }
-.w-step.done { color: #34752d; background: color-mix(in srgb, #34c759 14%, transparent); }
+.w-step.done { color: #24601e; background: color-mix(in srgb, #34c759 15%, transparent); }
 .w-step.done .w-dot { background: #34c759; color: #fff; }
 .w-step.now { color: var(--ink); background: color-mix(in srgb, var(--accent) 12%, transparent); font-weight: 600; }
 .w-step.now .w-dot { background: var(--accent); color: var(--accent-ink); }
@@ -509,7 +451,7 @@ footer { padding: 1.5rem 0 2.5rem; color: var(--muted); font-size: 0.85rem; }
   display: flex; align-items: flex-start; gap: 0.7rem;
   padding: 0.8rem 0.9rem;
   border: 1px solid var(--line); border-radius: 12px;
-  background: var(--bg); color: var(--ink);
+  background: var(--input-bg); color: var(--ink);
   font: inherit; text-align: left; cursor: pointer;
 }
 .w-choice:hover { border-color: var(--accent); }
@@ -538,35 +480,137 @@ footer { padding: 1.5rem 0 2.5rem; color: var(--muted); font-size: 0.85rem; }
 }
 .w-next:hover { background: var(--accent-dark); }
 
-/* Mobile: Sidebar wird zur Bottom-Tabbar */
+.app-sidebar {
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  width: 248px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.15rem 0.85rem;
+  box-sizing: border-box;
+  background: var(--card);
+  border-right: 1px solid var(--line);
+  overflow-y: auto;
+  z-index: 40;
+}
+.sidebar-brand {
+  display: flex; align-items: center; gap: 0.55rem;
+  padding: 0 0.5rem 0.85rem;
+  font-weight: 600; font-size: 1.15rem; letter-spacing: -0.022em;
+}
+.sidebar-brand .brand-mark {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 1.65rem; height: 1.65rem;
+  border-radius: 7px;
+  background: var(--ink); color: var(--card);
+  font-size: 0.95rem; font-weight: 700;
+}
+.sidebar-nav { display: flex; flex-direction: column; gap: 0.15rem; }
+.sidebar-cap {
+  padding: 0.95rem 0.7rem 0.3rem;
+  font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em;
+  color: color-mix(in srgb, var(--ink) 52%, transparent);
+}
+.sidebar-item {
+  display: flex; align-items: center; gap: 0.55rem;
+  width: 100%;
+  text-align: left;
+  padding: 0.5rem 0.7rem;
+  border: 0; border-radius: 8px;
+  background: transparent; color: var(--ink);
+  font: inherit; font-size: 0.93rem;
+  cursor: pointer;
+}
+.sidebar-item svg { width: 1.15rem; height: 1.15rem; flex: 0 0 auto; opacity: 0.78; }
+.sidebar-item:hover { background: color-mix(in srgb, var(--ink) 5.5%, transparent); }
+.sidebar-item.active { color: var(--accent); font-weight: 600; }
+.sidebar-item.active svg { opacity: 1; }
+.sidebar-foot { margin-top: auto; padding: 0.75rem 0.5rem 0; }
+.sidebar-foot .lang-switch { display: flex; flex-direction: column; gap: 0.3rem; font-size: 0.85rem; }
+.sidebar-foot select { padding: 0.4rem 0.5rem; border-radius: 8px; border: 1px solid var(--line); background: var(--input-bg); color: var(--ink); font: inherit; }
+.app-shell { margin-left: 248px; }
+.app-shell > header .header-actions { display: none; }
+.app-shell > header { margin-bottom: 1.1rem; }
+
+/* Bottom-Sheet «Mehr» (Mobile) */
+.more-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.35);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s ease;
+  z-index: 58;
+}
+.more-backdrop.open { opacity: 1; pointer-events: auto; }
+.more-sheet {
+  position: fixed; left: 0.6rem; right: 0.6rem; bottom: calc(0.6rem + env(safe-area-inset-bottom, 0px));
+  background: var(--card);
+  border-radius: 16px;
+  padding: 0.55rem 0.85rem 0.85rem;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.22);
+  transform: translateY(110%);
+  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+  z-index: 60;
+}
+.more-sheet.open { transform: translateY(0); }
+.sheet-grabber { width: 2.3rem; height: 0.28rem; border-radius: 99px; background: var(--line); margin: 0.2rem auto 0.65rem; }
+.sheet-items { display: flex; flex-direction: column; }
+.sheet-item {
+  display: flex; align-items: center; gap: 0.55rem;
+  width: 100%; text-align: left;
+  padding: 0.75rem 0.5rem;
+  border: 0; background: transparent;
+  font: inherit; font-size: 1.02rem; font-weight: 600; letter-spacing: -0.01em;
+  color: var(--accent); cursor: pointer;
+}
+.sheet-item:active { background: color-mix(in srgb, var(--ink) 6%, transparent); border-radius: 10px; }
+.sheet-sep { height: 1px; background: var(--line); margin: 0.45rem 0; }
+.sheet-lang { display: flex; align-items: center; justify-content: space-between; font-size: 0.95rem; padding: 0.35rem 0.5rem 0; }
+.sheet-lang select { padding: 0.4rem 0.5rem; border-radius: 8px; border: 1px solid var(--line); background: var(--input-bg); color: var(--ink); font: inherit; }
+
+/* Mobile: Sidebar wird zur iOS-Tab-Bar unten (4 Haupttabs + Mehr) */
 @media (max-width: 920px) {
   .app-sidebar {
     top: auto; left: 0; right: 0; bottom: 0;
     width: auto; height: auto;
-    flex-direction: row; align-items: center;
+    flex-direction: row; align-items: stretch;
     gap: 0;
-    padding: 0.35rem 0.5rem calc(0.35rem + env(safe-area-inset-bottom, 0px));
+    padding: 0.3rem 0.4rem calc(0.3rem + env(safe-area-inset-bottom, 0px));
+    background: color-mix(in srgb, var(--card) 78%, transparent);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
     border-right: 0; border-top: 1px solid var(--line);
-    overflow-x: auto; overflow-y: hidden;
     z-index: 50;
   }
   .sidebar-brand, .sidebar-cap, .sidebar-foot { display: none; }
-  .sidebar-nav { flex-direction: row; flex: 1; justify-content: space-around; gap: 0.1rem; }
+  .sidebar-item[data-tab="settings"],
+  .sidebar-item[data-tab="themes"],
+  .sidebar-item[data-tab="about"] { display: none; }
+  .sidebar-nav { flex-direction: row; flex: 1; justify-content: space-around; gap: 0; }
   .sidebar-item {
-    flex: 0 0 auto;
-    display: inline-flex; flex-direction: column; align-items: center; gap: 0.15rem;
-    padding: 0.35rem 0.55rem;
+    flex: 1 1 0; min-width: 0;
+    flex-direction: column; align-items: center; justify-content: center;
+    gap: 0.22rem;
+    padding: 0.3rem 0.1rem;
     border-radius: 10px;
-    font-size: 0.72rem;
+    font-size: 0.62rem; font-weight: 500;
     white-space: nowrap;
   }
-  .sidebar-item.active { background: color-mix(in srgb, var(--accent) 14%, transparent); color: var(--accent); }
-  .app-shell { margin-left: 0; padding-bottom: 3.6rem; }
+  .sidebar-item svg { width: 1.4rem; height: 1.4rem; opacity: 1; }
+  .sidebar-item.active { color: var(--accent); background: transparent; }
+  .app-shell { margin-left: 0; padding-bottom: 4.4rem; }
+  header { padding: 0.7rem 0 0.65rem; }
+  header h1 { font-size: 1.15rem; }
+  .subtitle { font-size: 0.85rem; }
 }
 @media (max-width: 640px) {
-  .sidebar-item { font-size: 0.68rem; padding: 0.3rem 0.4rem; }
+  .sidebar-item { font-size: 0.6rem; }
+  header h1 { font-size: 1.05rem; }
 }
-
+@media (min-width: 921px) {
+  .more-backdrop, .more-sheet { display: none; }
+  .sidebar-more { display: none; }
+}
 /* Design-Stil: Editorial / Legal – Dokument-Anmutung, Serif-Typografie */
 [data-design="editorial"] { --design-shadow: none; --design-font: "Source Serif 4", "Iowan Old Style", Georgia, "Times New Roman", serif; }
 [data-design="editorial"] body { background: var(--bg); color: var(--ink); }

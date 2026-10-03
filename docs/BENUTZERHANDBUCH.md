@@ -57,7 +57,9 @@ und beim nächsten Öffnen wiederhergestellt.
 
 Die komplette Navigation – Funktionen, Einstellungen und Informationen
 sowie die Sprachwahl – ist dauerhaft sichtbar: auf dem Desktop in der
-Sidebar links, auf dem Smartphone als Tab-Leiste am unteren Rand.
+Sidebar links (mit Icons), auf dem Smartphone als Tab-Leiste am unteren
+Rand mit den vier Hauptfunktionen und «Mehr»; Richtwerte, Themes, Über
+und die Sprachwahl liegen dort im «Mehr»-Bottom-Sheet.
 
 **Funktionen (Hauptnavigation):**
 

@@ -36,8 +36,8 @@ Installation, kein Server, keine Abhängigkeiten.
    Kinderzahl wählen (oder den Assistenten überspringen), allenfalls unter
    **Richtwerte** das kantonale Preset laden (z. B. Zürcher
    Kinderkosten-Tabelle 1.3.2025) – die Navigation läuft über die Sidebar
-   (Desktop) bzw. die Tab-Leiste unten (Mobile), die Sprachwahl liegt in
-   der Sidebar.
+   (Desktop) bzw. die Tab-Leiste unten mit «Mehr»-Menü (Mobile), die
+   Sprachwahl liegt in der Sidebar bzw. im «Mehr»-Menü.
 
 Alle Eingaben werden automatisch lokal im Browser (localStorage) gespeichert.
 Optional kann die App statt über `file://` auch über einen lokalen Webserver
@@ -86,10 +86,11 @@ oder beliebiges statisches Hosting (z. B. GitHub Pages) bereitgestellt werden.
 
 ## Nutzung
 
-Über die Sidebar-Navigation (Desktop) bzw. die Tab-Leiste unten (Mobile)
-sind alle Funktionen erreichbar: Kindesunterhalt, Ehegattenunterhalt,
-Kostentrennung, Austausch sowie Richtwerte, Themes und Über. Die
-Sprachwahl (Deutsch, Français, Italiano, English) liegt in der Sidebar.
+Über die Sidebar-Navigation (Desktop) bzw. die Tab-Leiste unten mit
+«Mehr»-Menü (Mobile) sind alle Funktionen erreichbar: Kindesunterhalt,
+Ehegattenunterhalt, Kostentrennung, Austausch sowie Richtwerte, Themes
+und Über. Die Sprachwahl (Deutsch, Français, Italiano, English) liegt
+in der Sidebar bzw. im «Mehr»-Menü.
 
 Schritt-für-Schritt-Anleitung aller Tabs:
 [docs/BENUTZERHANDBUCH.md](docs/BENUTZERHANDBUCH.md)

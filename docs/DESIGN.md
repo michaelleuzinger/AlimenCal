@@ -10,8 +10,12 @@ funktioniert in jedem Stil weiter.
 
 ## Grundgerüst seit dem Apple-Redesign
 
-- **Sidebar-Navigation** (Desktop) bzw. **Tab-Leiste unten** (Mobile) statt
-  Hamburger-Menü; Sprachwahl in der Sidebar
+- **Apple.com-Anmutung**: zentrierter, sticky Kopf mit Frosted-Glass
+  (72% Deckkraft, blur 20px), enge negative Letter-Spacing-Typografik,
+  weisse Karten ohne Schatten auf #f5f5f7, Pill-Buttons in #0071e3
+- **Sidebar-Navigation** (Desktop, mit Icons) bzw. **iOS-Tab-Leiste unten**
+  (Mobile: 4 Hauptfunktionen mit Icons + «Mehr»-Bottom-Sheet für
+  Richtwerte, Themes, Über und Sprachwahl) statt Hamburger-Menü
 - **Schnellstart-Assistent** im Tab Kindesunterhalt (Kinderzahl, Fokus aufs
   erste Einkommensfeld, überspringbar)
 - **Helles Apple-Grau** (`#f5f5f7`) als Header- und Seitenhintergrund,
