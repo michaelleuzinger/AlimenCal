@@ -128,10 +128,21 @@ funktioniert; `tests/presets.test.js` prüft die Konsistenz zwischen beiden.
 ## Redesign-Mockups
 
 Unter [`design/mockups/`](design/mockups/index.html) liegen statische
-HTML/CSS-Mockups als Diskussionsgrundlage für ein UI-Redesign – Apple-Inspired,
-Google/Material 3 sowie vier moderne Best-Practice-/Trend-Richtungen
-(Minimal/Calm, Bento, Dark Premium, Neo-Brutalismus). Details und Empfehlung:
-[`docs/REDESIGN-MOCKUPS.md`](docs/REDESIGN-MOCKUPS.md).
+HTML/CSS-Mockups als Diskussionsgrundlage für ein UI-Redesign. Details und
+Empfehlung: [`docs/REDESIGN-MOCKUPS.md`](docs/REDESIGN-MOCKUPS.md).
+
+Vorschau der sechs Konzepte (Screenshots unter `design/mockups/previews/`,
+erzeugt mit `tools/make-mockup-previews.js`):
+
+| Mockup | Vorschau |
+|---|---|
+| Apple-Inspired (HIG) | [![Apple-Inspired](design/mockups/previews/mockup-apple.png)](design/mockups/mockup-apple.html) |
+| Google / Material 3 | [![Material 3](design/mockups/previews/mockup-google.png)](design/mockups/mockup-google.html) |
+| Modern Minimal / Calm | [![Minimal](design/mockups/previews/mockup-minimal.png)](design/mockups/mockup-minimal.html) |
+| Bento Grid | [![Bento](design/mockups/previews/mockup-bento.png)](design/mockups/mockup-bento.html) |
+| Dark Premium | [![Dark Premium](design/mockups/previews/mockup-dark.png)](design/mockups/mockup-dark.html) |
+| Neo-Brutalismus | [![Neo-Brutalismus](design/mockups/previews/mockup-neubrutalism.png)](design/mockups/mockup-neubrutalism.html) |
+
 
 ## Tests
 

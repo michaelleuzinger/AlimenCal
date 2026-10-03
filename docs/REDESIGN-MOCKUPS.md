@@ -19,6 +19,15 @@ Galerie mit Farbmustern und Kurzbeschreibung: [`design/mockups/index.html`](../d
 | [`mockup-dark.html`](../design/mockups/mockup-dark.html) | Dark Premium (Best Practice) | Dark Mode first, flächige Ebenen, Gold-Akzent, grosse Serifen-Ziffern fürs Resultat |
 | [`mockup-neubrutalism.html`](../design/mockups/mockup-neubrutalism.html) | Neo-Brutalismus (Trend) | Harte Kanten, dicke Border, Offset-Schatten, knallige Akzente (Gumroad-Stil) |
 
+Vorschau-Screenshots (je Mockup, full-page): [`previews/`](../design/mockups/previews/) –
+erzeugt mit `tools/make-mockup-previews.js`, eingebettet in der README
+(Abschnitt «Redesign-Mockups»). Bei Änderungen an den Mockups sind die PNGs
+neu zu erzeugen.
+
+Hinweis fürs Betrachten auf GitHub: `.html`-Dateien werden im Blob-View nur
+als Quellcode angezeigt. Die Screenshots in der README zeigen daher das
+Ergebnis; für die interaktive Ansicht die Dateien lokal im Browser öffnen.
+
 ## Bewertung / Empfehlung
 
 Für den Einsatz in AlimenCal (ernstes, rechtliches Orientierungswerkzeug)
