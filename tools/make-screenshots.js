@@ -45,7 +45,9 @@ const VIEWS = [
   { n: 6, name: 'richtwerte', langs: ['de'], setup: setupSettings },
   { n: 7, name: 'themes-classic', langs: ['de'], setup: setupThemesClassic },
   { n: 8, name: 'themes-dark', langs: ['de'], setup: setupThemesDark },
-  { n: 9, name: 'pension-enfants', langs: ['fr'], setup: setupChildren }
+  { n: 9, name: 'pension-enfants', langs: ['fr'], setup: setupChildren },
+  { n: 10, name: 'kindesunterhalt-smartphone', langs: ['de'], setup: setupChildren, viewport: { width: 390, height: 844 } },
+  { n: 11, name: 'kostentrennung-smartphone', langs: ['de'], setup: setupCostsplit, viewport: { width: 390, height: 844 } }
 ];
 
 /* ---------- Beispieldaten (anonymisiert, keine echten Personen) ---------- */
@@ -254,7 +256,8 @@ async function run() {
       if (only && view.n !== only) { continue; }
       for (const lang of view.langs) {
         const page = await browser.newPage();
-        await page.setViewport({ width: 1395, height: 2084, deviceScaleFactor: 1 });
+        const vp = view.viewport || { width: 1395, height: 2084 };
+        await page.setViewport({ ...vp, deviceScaleFactor: 1 });
         page.on('pageerror', e => console.error('PAGE ERROR:', String(e)));
 
         await page.goto(APP_URL + '?screenshot=1', { waitUntil: 'networkidle0' });

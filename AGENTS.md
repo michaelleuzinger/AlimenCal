@@ -70,6 +70,8 @@ unvollständig und darf nicht gemergt werden.
 | [`screenshots/07-themes-classic-de.png`](screenshots/07-themes-classic-de.png) | Themes mit Theme-Editor, Classic (Deutsch) |
 | [`screenshots/08-themes-dark-de.png`](screenshots/08-themes-dark-de.png) | Themes, Dark-Theme (Duplikat von 07, legitimiert: dokumentiertes Feature) |
 | [`screenshots/09-pension-enfants-fr.png`](screenshots/09-pension-enfants-fr.png) | Pension alimentaire (Français); einzige fremdsprachige Ansicht als Beleg der Mehrsprachigkeit |
+| [`screenshots/10-kindesunterhalt-smartphone-de.png`](screenshots/10-kindesunterhalt-smartphone-de.png) | Kindesunterhalt im Smartphone-Viewport (390×844) als Beleg der responsiven Darstellung (Deutsch) |
+| [`screenshots/11-kostentrennung-smartphone-de.png`](screenshots/11-kostentrennung-smartphone-de.png) | Kostentrennung im Smartphone-Viewport (390×844) mit scrollbarer Transaktionstabelle (Deutsch) |
 
 ### Struktur
 
