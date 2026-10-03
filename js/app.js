@@ -654,11 +654,11 @@
     document.querySelectorAll('.tab[data-tab="settings"]').forEach(function (el) { el.textContent = t('nav', 'settings'); });
     document.querySelectorAll('.tab[data-tab="about"]').forEach(function (el) { el.textContent = t('nav', 'about'); });
 
-    var settingsBtn = document.getElementById('settings-btn');
-    settingsBtn.title = t('nav', 'settingsMenu');
-    settingsBtn.setAttribute('aria-label', t('nav', 'settingsMenu'));
-    if (!settingsBtn.innerHTML) {
-      settingsBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zm7.4-2.5c.04-.33.06-.66.06-1s-.02-.67-.06-1l2.1-1.65a.5.5 0 0 0 .12-.64l-2-3.46a.5.5 0 0 0-.6-.22l-2.5 1a7.3 7.3 0 0 0-1.73-1l-.38-2.65A.5.5 0 0 0 13.9 2h-4a.5.5 0 0 0-.5.42l-.38 2.65c-.63.26-1.2.6-1.73 1l-2.5-1a.5.5 0 0 0-.6.22l-2 3.46a.5.5 0 0 0 .12.64L4.4 11a7.6 7.6 0 0 0 0 2l-2.1 1.65a.5.5 0 0 0-.12.64l2 3.46c.13.22.4.31.6.22l2.5-1c.53.4 1.1.74 1.73 1l.38 2.65c.04.24.25.42.5.42h4c.25 0 .46-.18.5-.42l.38-2.65c.63-.26 1.2-.6 1.73-1l2.5 1c.2.09.47 0 .6-.22l2-3.46a.5.5 0 0 0-.12-.64L19.4 13z"/></svg>';
+    var menuBtn = document.getElementById('menu-btn');
+    menuBtn.title = t('nav', 'settingsMenu');
+    menuBtn.setAttribute('aria-label', t('nav', 'settingsMenu'));
+    if (!menuBtn.innerHTML) {
+      menuBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>';
     }
 
     var ownerSelect = document.getElementById('costsplit-owner');
@@ -1742,27 +1742,27 @@
       })(tabs[i]);
     }
 
-    var settingsBtn = document.getElementById('settings-btn');
-    var settingsMenu = document.getElementById('settings-menu');
+    var menuBtn = document.getElementById('menu-btn');
+    var mainMenu = document.getElementById('main-menu');
     function closeSettingsMenu() {
-      settingsMenu.hidden = true;
-      settingsBtn.setAttribute('aria-expanded', 'false');
+      mainMenu.hidden = true;
+      menuBtn.setAttribute('aria-expanded', 'false');
     }
-    settingsBtn.addEventListener('click', function (e) {
+    menuBtn.addEventListener('click', function (e) {
       e.stopPropagation();
-      settingsMenu.hidden = !settingsMenu.hidden;
-      settingsBtn.setAttribute('aria-expanded', String(!settingsMenu.hidden));
+      mainMenu.hidden = !mainMenu.hidden;
+      menuBtn.setAttribute('aria-expanded', String(!mainMenu.hidden));
     });
-    Array.prototype.forEach.call(settingsMenu.querySelectorAll('.tab'), function (btn) {
+    Array.prototype.forEach.call(mainMenu.querySelectorAll('.tab'), function (btn) {
       btn.addEventListener('click', closeSettingsMenu);
     });
     document.addEventListener('click', function (e) {
-      if (!settingsMenu.hidden && !settingsMenu.contains(e.target) && e.target !== settingsBtn) {
+      if (!mainMenu.hidden && !mainMenu.contains(e.target) && e.target !== menuBtn) {
         closeSettingsMenu();
       }
     });
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && !settingsMenu.hidden) {
+      if (e.key === 'Escape' && !mainMenu.hidden) {
         closeSettingsMenu();
       }
     });
