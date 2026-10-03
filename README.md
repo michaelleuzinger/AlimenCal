@@ -42,6 +42,7 @@ oder beliebiges statisches Hosting (z. B. GitHub Pages) bereitgestellt werden.
 
 ## Eigenschaften
 
+- **Responsive Darstellung**: Die App passt sich an Smartphone-, Tablet- und  Desktop-Bildschirme an – Grids brechen um, Tabellen und Tab-Navigation  sind auf schmalen Displays horizontal scrollbar, Touch-Ziele sind  vergrössert
 - **Vier Sprachen**: Deutsch, Français, Italiano, English – umschaltbar,
   Auswahl wird lokal gespeichert
 - **Konfigurierbare Richtwerte**: Existenzminima, altersgestaffelte

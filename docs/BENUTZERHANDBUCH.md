@@ -10,6 +10,23 @@ Browser; es werden keine Daten übertragen.
 oder von einem beliebigen statischen Webserver (z. B. GitHub Pages). Es gibt
 keine Installation und keine Abhängigkeiten.
 
+## Mobile Nutzung (Smartphone / Tablet)
+
+Die App ist responsiv gestaltet und auf Smartphone, Tablet und Desktop nutzbar:
+
+- Karten und Formular-Grids brechen auf schmalen Displays auf eine Spalte um.
+- Die Tab-Navigation wird auf schmalen Displays horizontal scrollbar, falls
+  nicht alle Tabs Platz finden.
+- Resultat-, Kostentrennungs- und Richtwert-Tabellen sind auf schmalen
+  Displays horizontal scrollbar (Wischen), damit alle Spalten lesbar bleiben.
+- Auf Touch-Geräten sind Schaltflächen, Auswahlmenüs und Checkboxen
+  vergrössert, um eine zuverlässige Bedienung zu ermöglichen.
+- Auf Smartphones empfiehlt sich die Bereitstellung über einen Webserver
+  (z. B. GitHub Pages), da das direkte Öffnen über `file://` dort nicht
+  üblich ist. Gespeicherte Daten bleiben lokal im Browser des jeweiligen
+  Geräts; ein Gerätewechsel erfolgt über den JSON-Export/Import im
+  Austausch-Tab.
+
 ## Sprachen
 
 Beispiel einer fremdsprachigen Ansicht (Français):

@@ -59,6 +59,7 @@ header h1 { margin: 0; font-size: 1.6rem; letter-spacing: 0.5px; }
   gap: 0.4rem;
   margin-top: 1rem;
   flex-wrap: wrap;
+  -webkit-overflow-scrolling: touch;
 }
 /* Kopf-Aktionen: Zahnrad oben rechts + Sprachwahl */
 .header-actions { position: absolute; top: 1rem; right: 1rem; display: flex; align-items: center; gap: 0.75rem; }
@@ -107,7 +108,7 @@ h2 { margin-top: 1.2rem; }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
   gap: 1rem;
   margin: 1rem 0;
 }
@@ -151,7 +152,7 @@ input[type="number"] {
 }
 .child-row .child-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(160px, 100%), 1fr));
   gap: 0.6rem;
 }
 
@@ -241,7 +242,7 @@ footer { padding: 1.5rem 0 2.5rem; color: var(--muted); font-size: 0.85rem; }
 /* Themes / Theme-Editor */
 .theme-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
   gap: 0.6rem 1rem;
   margin: 0.8rem 0;
 }
@@ -269,4 +270,44 @@ footer { padding: 1.5rem 0 2.5rem; color: var(--muted); font-size: 0.85rem; }
   border: 1px solid var(--line);
   border-radius: 6px;
   background: var(--input-bg);
+}
+
+/* Responsive Darstellung fuer schmale Displays (Smartphone) */
+@media (max-width: 640px) {
+  header h1 { font-size: 1.35rem; }
+
+  .tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 0.4rem;
+    scrollbar-width: thin;
+  }
+  .tab { flex: 0 0 auto; padding: 0.5rem 0.8rem; }
+
+  .grid { gap: 0.75rem; }
+  .card, .child-row { padding: 0.75rem 0.8rem; }
+  .result { padding: 0.8rem 0.9rem; }
+
+  .result-table,
+  .costsplit-table,
+  .cfg-table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .actions { gap: 0.5rem; }
+}
+
+/* Touch-Geraete: Mindestgroesse fuer bedienbare Ziele */
+@media (pointer: coarse) {
+  button,
+  .file-label,
+  select,
+  input[type="checkbox"],
+  .costsplit-table select,
+  .costsplit-table input[type="number"] {
+    min-height: 2.4rem;
+  }
+  input[type="checkbox"] { min-width: 2.4rem; }
 }
