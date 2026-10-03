@@ -27,6 +27,15 @@ Die App ist responsiv gestaltet und auf Smartphone, Tablet und Desktop nutzbar:
   Geräts; ein Gerätewechsel erfolgt über den JSON-Export/Import im
   Austausch-Tab.
 
+Beispiel Kindesunterhalt im Smartphone-Viewport (390×844):
+
+![Kindesunterhalt Smartphone (DE)](../screenshots/10-kindesunterhalt-smartphone-de.png)
+
+Beispiel Kostentrennung im Smartphone-Viewport – die Transaktionstabelle
+ist horizontal scrollbar:
+
+![Kostentrennung Smartphone (DE)](../screenshots/11-kostentrennung-smartphone-de.png)
+
 ## Sprachen
 
 Beispiel einer fremdsprachigen Ansicht (Français):
