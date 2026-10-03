@@ -155,7 +155,10 @@ async function setupSpousal(page) {
 }
 
 async function setupSettingsMenu(page) {
-  await page.evaluate(() => document.getElementById('menu-btn').click());
+  /* Hamburger-Menue entfiel im Apple-Redesign: die Sidebar-Navigation
+     ist auf dem Desktop dauerhaft sichtbar, daher bleibt dieser Shot
+     ohne zusaetzliche Interaktion auf dem Kindesunterhalt-Tab. */
+  await switchTab(page, 'children');
 }
 
 async function setupSettings(page) {

@@ -55,6 +55,15 @@ Typografie mit negativem Letter-Spacing, translucente Sidebar
 `apple-empfehlung-1` bis `-5` (Desktop-Top/Eingaben/Resultat, Mobile
 komplett, Mobile-Resultat).
 
+## Umsetzung in der App
+
+Die Apple-Variante der Empfehlung ist als neues Design-Grundgerüst in die
+App übernommen: Sidebar-Navigation (Desktop) bzw. Tab-Leiste unten
+(Mobile) statt Hamburger-Menü, Einstiegs-Assistent «Schnellstart» im Tab
+Kindesunterhalt; `apple` ist seitdem Standard-Design-Stil. Die
+Vorschau-Screenshots der App-Ansichten (01–08) werden entsprechend im
+Apple-Stil erzeugt.
+
 ## Abgrenzung zu V1
 
 - `design/mockups/` (V1, Apple/Material/…-Stile) bleibt als Historie erhalten;

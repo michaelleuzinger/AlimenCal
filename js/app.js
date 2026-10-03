@@ -654,11 +654,17 @@
     document.querySelectorAll('.tab[data-tab="settings"]').forEach(function (el) { el.textContent = t('nav', 'settings'); });
     document.querySelectorAll('.tab[data-tab="about"]').forEach(function (el) { el.textContent = t('nav', 'about'); });
 
-    var menuBtn = document.getElementById('menu-btn');
-    menuBtn.title = t('nav', 'settingsMenu');
-    menuBtn.setAttribute('aria-label', t('nav', 'settingsMenu'));
-    if (!menuBtn.innerHTML) {
-      menuBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>';
+    var wizardEl = document.getElementById('children-wizard');
+    if (wizardEl) {
+      document.getElementById('wizard-title').textContent = t('wizard', 'title');
+      document.getElementById('wizard-skip').textContent = t('wizard', 'skip');
+      document.getElementById('wizard-question').textContent = t('wizard', 'question');
+      document.getElementById('wizard-one').textContent = t('wizard', 'one');
+      document.getElementById('wizard-one-hint').textContent = t('wizard', 'oneHint');
+      document.getElementById('wizard-two').textContent = t('wizard', 'two');
+      document.getElementById('wizard-two-hint').textContent = t('wizard', 'twoHint');
+      var nextBtn = document.getElementById('wizard-next');
+      if (nextBtn) { nextBtn.textContent = t('wizard', 'next'); }
     }
 
     var ownerSelect = document.getElementById('costsplit-owner');
@@ -1301,7 +1307,7 @@
   function getThemeId() {
     var stored = null;
     try { stored = localStorage.getItem(LS_THEME); } catch (e) {}
-    return stored || 'classic';
+    return stored || 'apple';
   }
 
   function saveTheme(id, values) {
@@ -1767,6 +1773,77 @@
     }
   }
 
+  /* -------------------------------------------------------------
+   *  Wizard: gefuehrter Einstieg im Tab Kindesunterhalt.
+   * ------------------------------------------------------------- */
+  function initWizard() {
+    var wizardEl = document.getElementById('children-wizard');
+    if (!wizardEl) { return; }
+    var choices = wizardEl.querySelectorAll('.w-choice');
+    var nextBtn = document.getElementById('wizard-next');
+    var chips = document.getElementById('wizard-chips');
+    var selected = 0;
+    var step3Reached = false;
+
+    function setStep(n) {
+      var step1 = document.getElementById('w-step-1');
+      var step2 = document.getElementById('w-step-2');
+      var step3 = document.getElementById('w-step-3');
+      step1.className = 'w-step done';
+      step2.className = 'w-step' + (n >= 2 ? (n === 2 ? ' now' : ' done') : '');
+      step3.className = 'w-step' + (n >= 3 ? ' now' : '');
+      step2.querySelector('.w-dot').textContent = n > 2 ? '\u2713' : '2';
+      step3.querySelector('.w-dot').textContent = '3';
+    }
+
+    function renderChips() {
+      var out = [];
+      var paIncome = parseFloat((document.getElementById('pa-income') || {}).value) || 0;
+      var pbIncome = parseFloat((document.getElementById('pb-income') || {}).value) || 0;
+      if (paIncome) { out.push(t('common', 'parentA') + ': ' + paIncome); }
+      if (pbIncome) { out.push(t('common', 'parentB') + ': ' + pbIncome); }
+      chips.hidden = out.length === 0;
+      chips.innerHTML = out.map(function (label) {
+        return '<span class="chip">' + label + '</span>';
+      }).join('');
+    }
+
+    Array.prototype.forEach.call(choices, function (btn) {
+      btn.addEventListener('click', function () {
+        Array.prototype.forEach.call(choices, function (b) { b.classList.remove('selected'); });
+        btn.classList.add('selected');
+        selected = parseInt(btn.getAttribute('data-children'), 10) || 0;
+        var currentCount = state.children.length;
+        while (currentCount < selected) { state.children.push(childTemplate()); currentCount++; }
+        while (currentCount > selected && currentCount > 1) { state.children.pop(); currentCount--; }
+        renderChildrenList();
+        nextBtn.hidden = false;
+        saveForm();
+      });
+    });
+
+    nextBtn.addEventListener('click', function () {
+      setStep(3);
+      step3Reached = true;
+      renderChips();
+      var firstIncome = document.getElementById('pa-income');
+      if (firstIncome) { firstIncome.focus(); }
+      nextBtn.hidden = true;
+    });
+
+    document.getElementById('wizard-skip').addEventListener('click', function () {
+      wizardEl.hidden = true;
+      saveForm();
+    });
+
+    document.addEventListener('input', function (e) {
+      if (e.target && (e.target.id === 'pa-income' || e.target.id === 'pb-income') && step3Reached) {
+        renderChips();
+      }
+    });
+    setStep(2);
+  }
+
   function init() {
     state.lang = getLang();
     state.cfg = getCfg();
@@ -1799,7 +1876,7 @@
       this.value = '';
     });
     document.getElementById('theme-reset').addEventListener('click', function () {
-      var id = 'classic';
+      var id = 'apple';
       var preset = getPresetById(id) || AlimenCal.themes.PRESETS[0];
       saveTheme(id, null);
       applyTheme(id, preset.values);
@@ -1807,10 +1884,16 @@
       renderThemeEditor();
       document.getElementById('theme-status').textContent = t('themes', 'saved');
     });
-    document.getElementById('lang-select').addEventListener('change', function () {
-      state.lang = this.value;
-      try { localStorage.setItem(LS_LANG, state.lang); } catch (e) {}
-      applyI18n();
+    Array.prototype.forEach.call(document.querySelectorAll('#lang-select, #lang-select-sidebar'), function (sel) {
+      sel.value = state.lang;
+      sel.addEventListener('change', function () {
+        state.lang = this.value;
+        try { localStorage.setItem(LS_LANG, state.lang); } catch (e) {}
+        Array.prototype.forEach.call(document.querySelectorAll('#lang-select, #lang-select-sidebar'), function (other) {
+          other.value = state.lang;
+        });
+        applyI18n();
+      });
     });
 
     var tabs = document.querySelectorAll('.tab');
@@ -1822,30 +1905,8 @@
       })(tabs[i]);
     }
 
-    var menuBtn = document.getElementById('menu-btn');
-    var mainMenu = document.getElementById('main-menu');
-    function closeSettingsMenu() {
-      mainMenu.hidden = true;
-      menuBtn.setAttribute('aria-expanded', 'false');
-    }
-    menuBtn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      mainMenu.hidden = !mainMenu.hidden;
-      menuBtn.setAttribute('aria-expanded', String(!mainMenu.hidden));
-    });
-    Array.prototype.forEach.call(mainMenu.querySelectorAll('.tab'), function (btn) {
-      btn.addEventListener('click', closeSettingsMenu);
-    });
-    document.addEventListener('click', function (e) {
-      if (!mainMenu.hidden && !mainMenu.contains(e.target) && e.target !== menuBtn) {
-        closeSettingsMenu();
-      }
-    });
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && !mainMenu.hidden) {
-        closeSettingsMenu();
-      }
-    });
+    initWizard();
+    switchTab('children');
 
     document.getElementById('keys-generate-a').addEventListener('click', function () { generateKeyFor('A'); });
     document.getElementById('keys-generate-b').addEventListener('click', function () { generateKeyFor('B'); });

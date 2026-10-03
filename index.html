@@ -7,22 +7,10 @@
   <meta name="description" content="AlimenCal – Orientierungswerkzeug für Kindes- und Ehegattenunterhalt in der Schweiz.">
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body>  <aside id="app-sidebar" class="app-sidebar"><div class="sidebar-brand"><span class="brand-mark">A</span><span class="brand-name">AlimenCal</span></div><nav class="sidebar-nav" aria-label="Hauptnavigation"><button type="button" class="tab sidebar-item" data-tab="children"></button><button type="button" class="tab sidebar-item" data-tab="spousal"></button><button type="button" class="tab sidebar-item" data-tab="costsplit"></button><button type="button" class="tab sidebar-item" data-tab="share"></button><div class="sidebar-cap" data-i18n="nav.settings"></div><button type="button" class="tab sidebar-item" data-tab="settings"></button><button type="button" class="tab sidebar-item" data-tab="themes"></button><button type="button" class="tab sidebar-item" data-tab="about"></button></nav><div class="sidebar-foot"><label class="lang-switch"><span data-i18n="nav.language"></span><select id="lang-select-sidebar"><option value="de">Deutsch</option><option value="fr">Français</option><option value="it">Italiano</option><option value="en">English</option></select></label></div></aside><div class="app-shell">
   <header>
     <div class="wrap">
-      <div class="header-actions">
-        <button type="button" id="menu-btn" class="settings-btn menu-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="main-menu"></button>
-        <div id="main-menu" class="settings-menu main-menu" role="menu" hidden>
-          <button type="button" class="tab settings-menu-item" data-tab="children" role="menuitem"></button>
-          <button type="button" class="tab settings-menu-item" data-tab="spousal" role="menuitem"></button>
-          <button type="button" class="tab settings-menu-item" data-tab="costsplit" role="menuitem"></button>
-          <button type="button" class="tab settings-menu-item" data-tab="share" role="menuitem"></button>
-          <div class="settings-menu-sep"></div>
-          <button type="button" class="tab settings-menu-item" data-tab="settings" role="menuitem"></button>
-          <button type="button" class="tab settings-menu-item" data-tab="themes" role="menuitem"></button>
-          <button type="button" class="tab settings-menu-item" data-tab="about" role="menuitem"></button>
-          <div class="settings-menu-sep"></div>
-          <label class="lang-switch">
+      <div class="header-actions"><span hidden><label class="lang-switch">
             <span data-i18n="nav.language"></span>
             <select id="lang-select">
               <option value="de">Deutsch</option>
@@ -30,10 +18,7 @@
               <option value="it">Italiano</option>
               <option value="en">English</option>
             </select>
-          </label>
-        </div>
-      </div>
-      <h1 id="app-title">AlimenCal</h1>
+          </label></span></div>      <h1 id="app-title">AlimenCal</h1>
       <p id="app-subtitle" class="subtitle"></p>
     </div>
   </header>
@@ -44,7 +29,7 @@
 
     <section id="tab-children" class="tabpanel active">
       <h2 id="children-heading"></h2>
-      <p id="children-intro" class="intro"></p>
+      <p id="children-intro" class="intro"></p>      <div class="wizard card" id="children-wizard"><div class="w-head"><div class="w-title" id="wizard-title"></div><button type="button" class="w-skip" id="wizard-skip"></button></div><div class="w-steps"><div class="w-step done" id="w-step-1"><span class="w-dot">✓</span><span class="w-label" data-i18n="wizard.step1"></span></div><div class="w-step now" id="w-step-2"><span class="w-dot">2</span><span class="w-label" data-i18n="wizard.step2"></span></div><div class="w-step" id="w-step-3"><span class="w-dot">3</span><span class="w-label" data-i18n="wizard.step3"></span></div></div><p class="w-question" id="wizard-question"></p><div class="w-choices" id="wizard-choices"><button type="button" class="w-choice" data-children="1"><span class="w-radio"></span><span><strong id="wizard-one"></strong><span id="wizard-one-hint" class="w-hint"></span></span></button><button type="button" class="w-choice" data-children="2"><span class="w-radio"></span><span><strong id="wizard-two"></strong><span id="wizard-two-hint" class="w-hint"></span></span></button></div><div class="w-chips" id="wizard-chips" hidden></div><div class="w-actions"><button type="button" class="w-next" id="wizard-next" hidden></button></div></div>
 
       <div class="grid parents">
         <fieldset class="card">
@@ -361,5 +346,5 @@
   <script src="js/storage.js"></script>
   <script src="js/casecrypto.js"></script>
   <script src="js/app.js"></script>
-</body>
+</div><!-- /app-shell -->  </body>
 </html>

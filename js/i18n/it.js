@@ -194,6 +194,7 @@ AlimenCal.i18n.it = {
     designIntro: 'Scegli uno stile di design: adatta l’aspetto completo (tipografia, schede, ombre, colori). I dettagli possono poi essere affinati nell’editor dei temi.',
     designCurrent: 'Attuale'
   },
+  wizard: { title: 'Avvio rapido', step1: 'Genitori', step2: 'Figli', step3: 'Redditi', question: 'Quanti figli hai?', one: '1 figlio', oneHint: 'Inserisci eta, costi e reddito', two: '2 figli', twoHint: 'Aggiunta per figli considerata', next: 'Avanti', skip: 'Salta' },
   share: {
     heading: 'Scambio tra le parti',
     intro: 'Se le parti lavorano su PC diversi, ciascuna può inserire solo i propri dati, esportarli in un file e trasmetterlo all’altra parte (ad es. via e-mail o tramite l’avvocato). L’altra parte importa il file; solo le sezioni contenute vengono recepite, tutto il resto rimane invariato.',
