@@ -32,9 +32,12 @@ Installation, kein Server, keine Abhängigkeiten.
 2. `index.html` per Doppelklick im Browser öffnen (Chrome, Firefox, Edge …) –
    die App läuft direkt über `file://`.
 
-3. Über das Hamburger-Menü oben rechts allenfalls unter **Richtwerte** das
-   kantonale Preset laden (z. B. Zürcher Kinderkosten-Tabelle 1.3.2025),
-   dann im Tab **Kindesunterhalt** mit der Erfassung beginnen.
+3. Im Assistenten **Schnellstart** auf dem Tab **Kindesunterhalt** die
+   Kinderzahl wählen (oder den Assistenten überspringen), allenfalls unter
+   **Richtwerte** das kantonale Preset laden (z. B. Zürcher
+   Kinderkosten-Tabelle 1.3.2025) – die Navigation läuft über die Sidebar
+   (Desktop) bzw. die Tab-Leiste unten (Mobile), die Sprachwahl liegt in
+   der Sidebar.
 
 Alle Eingaben werden automatisch lokal im Browser (localStorage) gespeichert.
 Optional kann die App statt über `file://` auch über einen lokalen Webserver
@@ -96,10 +99,10 @@ oder beliebiges statisches Hosting (z. B. GitHub Pages) bereitgestellt werden.
    Ausgleich. Details: [docs/KOSTENTRENNUNG.md](docs/KOSTENTRENNUNG.md)
 5. Tab **Austausch**: eigene Daten als JSON exportieren, Datei der
    anderen Partei importieren (Merge).
-6. Über das Hamburger-Menü oben rechts im Kopf: Sprachwahl sowie unter
-   **Richtwerte** kantonale Werte anpassen, speichern,
-   exportieren/importieren, Presets laden, und unter **Themes** Design
-   wählen oder im Theme-Editor Farben anpassen.
+6. Über die Sidebar-Navigation (Desktop) bzw. die Tab-Leiste unten
+   (Mobile): Sprachwahl sowie unter **Richtwerte** kantonale Werte
+   anpassen, speichern, exportieren/importieren, Presets laden, und unter
+   **Themes** Design wählen oder im Theme-Editor Farben anpassen.
 
 Ausführliche Anleitung: [docs/BENUTZERHANDBUCH.md](docs/BENUTZERHANDBUCH.md)
 

@@ -78,7 +78,7 @@ wird je Geraetetyp in allen vier Sprachen (de, fr, it, en) erzeugt
 | `02-ehegattenunterhalt-<lang>.png` | Ehegattenunterhalt mit Bedarf/Leistungsfähigkeit und Resultat |
 | `03-kostentrennung-<lang>.png` | Kostentrennung mit anonymisiertem Bankexport, Zuordnungen und Ausgleich |
 | `04-austausch-<lang>.png` | Austausch-Tab mit Export/Import |
-| `05-hauptmenue-<lang>.png` | Hamburger-Menü geöffnet: alle Navigationseinträge und Sprachwahl |
+| `05-hauptmenue-<lang>.png` | Navigation: Sidebar mit allen Einträgen (Desktop; Hamburger-Menü entfiel im Apple-Redesign) |
 | `06-richtwerte-<lang>.png` | Richtwerte mit Preset-Auswahl und Wertetabelle |
 | `07-themes-classic-<lang>.png` | Themes mit Theme-Editor, Classic |
 | `08-themes-dark-<lang>.png` | Themes, Dark-Theme (Duplikat von 07, legitimiert: dokumentiertes Feature) |
@@ -100,7 +100,7 @@ Ansichten je Gerätetyp und Sprache erzeugt.
 ### Struktur
 
 ```
-index.html          UI (Hamburger-Menü oben rechts mit Navigation: Kindesunterhalt, Ehegattenunterhalt, Kostentrennung, Austausch, Richtwerte, Themes, Über und Sprachwahl)
+index.html          UI (Sidebar-Navigation links, auf Mobile als Tab-Leiste unten: Kindesunterhalt, Ehegattenunterhalt, Kostentrennung, Austausch, Richtwerte, Themes, Über und Sprachwahl; Einstiegs-Assistent «Schnellstart» im Tab Kindesunterhalt)
 css/style.css       Styles
 js/calculator.js    Berechnungskern (DOM-frei, auch in Node.js lauffähig)
 js/costsplit.js     Kostentrennung: CSV-Import, Zuordnung, Ausgleich (DOM-frei)

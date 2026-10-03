@@ -48,17 +48,16 @@ auf Französisch:
 
 ![Pension alimentaire (FR)](../screenshots/pc/01-kindesunterhalt-fr.png)
 
-Die Sprache wird im Hamburger-Menü oben rechts gewählt: **Deutsch, Français,
-Italiano, English**. Die Auswahl wird im Browser gespeichert (`localStorage`)
+Die Sprache wird in der Sidebar (Desktop) gewählt: **Deutsch, Français,
+Italiano, English**; auf dem Smartphone liegt die Sprachwahl in den
+Einstellungen. Die Auswahl wird im Browser gespeichert (`localStorage`)
 und beim nächsten Öffnen wiederhergestellt.
 
 ## Tabs im Überblick
 
 Die komplette Navigation – Funktionen, Einstellungen und Informationen
-sowie die Sprachwahl – ist über das Hamburger-Menü („Einstellungen und
-Informationen“) oben rechts im Kopf erreichbar. Das Menü schliesst bei
-Auswahl eines Eintrags, Klick ausserhalb des Menüs oder mit der
-Escape-Taste.
+sowie die Sprachwahl – ist dauerhaft sichtbar: auf dem Desktop in der
+Sidebar links, auf dem Smartphone als Tab-Leiste am unteren Rand.
 
 **Funktionen (Hauptnavigation):**
 
@@ -69,9 +68,9 @@ Escape-Taste.
 | Kostentrennung | Laufende Kosten ab einem Stichtag separat abrechnen (Bankexport) |
 | Austausch | Eigene Daten exportieren, Datei der anderen Partei importieren |
 
-**Einstellungen & Info (im Hamburger-Menü):**
+**Einstellungen & Info (in der Sidebar bzw. Tab-Leiste):**
 
-![Hauptmenü (DE)](../screenshots/pc/05-hauptmenue-de.png)
+![Navigation (DE)](../screenshots/pc/05-hauptmenue-de.png)
 
 | Tab | Zweck |
 |---|---|

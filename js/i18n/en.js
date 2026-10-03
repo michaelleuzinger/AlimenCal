@@ -194,6 +194,7 @@ AlimenCal.i18n.en = {
     designIntro: 'Choose a design style: it adjusts the complete look (typography, cards, shadows, colours). Details can be fine-tuned in the theme editor afterwards.',
     designCurrent: 'Current'
   },
+  wizard: { title: 'Quick start', step1: 'Parents', step2: 'Children', step3: 'Income', question: 'How many children do you have?', one: '1 child', oneHint: 'Enter age, costs and income', two: '2 children', twoHint: 'Family supplement is considered', next: 'Continue', skip: 'Skip' },
   share: {
     heading: 'Exchange between the parties',
     intro: 'If the parties work on separate PCs, each party can enter only their own data, export it as a file and send it to the other party (e.g. via e-mail or through the lawyer). The other party imports the file; only the contained sections are applied, everything else remains unchanged.',
