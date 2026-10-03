@@ -120,6 +120,7 @@ schema/             Optionales SQL-Referenzschema (Immutability-Trigger) für sp
 screenshots/        Screenshots der App (Inventar-Regel: s. AGENTS.md; Erzeugung tools/make-screenshots.js)
 tools/              make-screenshots.js: Screenshot-Generator (Puppeteer, s. AGENTS.md)
 design/mockups/     Statische Redesign-Mockups (reine Konzepte, nicht produktiv; Doku: docs/REDESIGN-MOCKUPS.md)
+design/mockups-v2/  Statische Redesign-V2-Konzepte (Sidebar/Wizard/Editorial/Command-Center; Doku: docs/REDESIGN-MOCKUPS-V2.md)
 tests/              Unit-Tests (node)
 ```
 

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Redesign V2 – Vier neue Konzepte</title>
+<style>
+  :root{--bg:#fff;--ink:#111;--muted:#666;--line:#e5e5e5;--accent:#4f46e5}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+  .wrap{max-width:1000px;margin:0 auto;padding:2.5rem 1.25rem 4rem}
+  h1{font-size:1.8rem;letter-spacing:-.02em;margin:0 0 .3rem}
+  .lead{color:var(--muted);max-width:65ch}
+  .note{background:#f6f7ff;border:1px solid #dbe0ff;border-radius:10px;padding:.8rem 1rem;font-size:.88rem;margin:1.25rem 0 2rem}
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
+  @media(max-width:720px){.cards{grid-template-columns:1fr}}
+  a.c{display:block;border:1px solid var(--line);border-radius:14px;overflow:hidden;text-decoration:none;color:inherit;transition:box-shadow .15s}
+  a.c:hover{box-shadow:0 6px 24px rgba(0,0,0,.1)}
+  .shots{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--line)}
+  .shots img{width:100%;display:block}
+  .c h2{margin:1rem 1.1rem .3rem;font-size:1.1rem}
+  .c p{margin:0 1.1rem 1.1rem;color:var(--muted);font-size:.88rem}
+  .k{display:inline-block;background:var(--accent);color:#fff;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border-radius:4px;padding:.15rem .5rem;margin:0 .5rem 1rem 0}
+  footer{margin-top:3rem;color:var(--muted);font-size:.8rem;border-top:1px solid var(--line);padding-top:1rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>AlimenCal – Redesign V2</h1>
+  <p class="lead">Vier grundlegend neue Design-Konzepte nach dem Main-Update. Alle ohne Hamburger-Menü – jedes Konzept denkt Navigation, Layout und Informationsdarstellung komplett neu.</p>
+  <div class="note"><b>Zeigbar direkt hier:</b> Jedes Konzept hat mehrere Vorschau-Bilder (Desktop + Mobile), darunter je ein anklickbarer Link zum interaktiven Mockup.</div>
+  <div class="cards">
+    <a class="c" href="mockup-sidebar.html">
+      <div class="shots"><img src="previews/sidebar-desktop.png" alt="Sidebar Desktop"><img src="previews/sidebar-mobile.png" alt="Sidebar Mobile"></div>
+      <span class="k" style="margin-top:1rem">Konzept 1</span>
+      <h2>Sidebar-Workspace</h2>
+      <p>Feste Navigationsleiste links (Desktop), die zu einer Bottom-Tabbar auf dem Smartphone wird. Alle Funktionen immer sichtbar – kein verstecktes Menü. Ruhiges SaaS-Layout mit Kennzahlen-Karten.</p>
+    </a>
+    <a class="c" href="mockup-wizard.html">
+      <div class="shots"><img src="previews/wizard-desktop.png" alt="Wizard Desktop"><img src="previews/wizard-mobile.png" alt="Wizard Mobile"></div>
+      <span class="k" style="margin-top:1rem">Konzept 2</span>
+      <h2>Geführter Wizard</h2>
+      <p>Fragen-Antwort-Fluss mit Stepper statt Formular-Tabellen: „Wie viele Kinder?", eine Frage nach der anderen. Live-Vorschau des Resultats unten, Expertenmodus optional. Minimalistisch, keine Menüstruktur nötig.</p>
+    </a>
+    <a class="c" href="mockup-editorial.html">
+      <div class="shots"><img src="previews/editorial-desktop.png" alt="Editorial Desktop"><img src="previews/editorial-mobile.png" alt="Editorial Mobile"></div>
+      <span class="k" style="margin-top:1rem">Konzept 3</span>
+      <h2>Editorial / Legal</h2>
+      <p>Serifen-Typografie, Gliederung nach römischen Ziffern, eine Textnavigation statt Icon-Menü – wie ein juristisches Dokument. Passt zur rechtlichen Natur der App; Resultat-„Urkunde“ rechts als Sticky-Karte.</p>
+    </a>
+    <a class="c" href="mockup-command.html">
+      <div class="shots"><img src="previews/command-desktop.png" alt="Command-Center Desktop"><img src="previews/command-mobile.png" alt="Command-Center Mobile"></div>
+      <span class="k" style="margin-top:1rem">Konzept 4</span>
+      <h2>Taskboard / Command-Center</h2>
+      <p>Drei-Spalten-Workspace (Bausteine / Arbeitsfläche / Live-Inspector) mit Registerkarten-Leiste statt Menü: für die Parteien wie ein „Fall-Dashboard“. Erst genommen für Power-User, dunkel und datengetrieben.</p>
+    </a>
+  </div>
+  <footer>Vorschauen erzeugt mit tools/make-mockup-previews.js (design/mockups-v2). Alles statisch, kein JS, läuft über file://.</footer>
+</div>
+</body>
+</html>

@@ -137,6 +137,12 @@ App eingebaut** (Themes-Tab, Auswahl per Karten). Die Mockups bleiben als
 Referenz erhalten – Details und Empfehlung:
 [`docs/REDESIGN-MOCKUPS.md`](docs/REDESIGN-MOCKUPS.md).
 
+**Redesign V2:** Vier grundlegend neue Konzepte (Sidebar-Workspace, geführter
+Wizard, Editorial/Legal, Command-Center) – jeweils ohne Hamburger-Menü und mit
+eigener Navigations-Idee, mit Vorschau-Bildern je Desktop + Mobile unter
+[`design/mockups-v2/`](design/mockups-v2/index.html); Details:
+[`docs/REDESIGN-MOCKUPS-V2.md`](docs/REDESIGN-MOCKUPS-V2.md).
+
 Vorschau der sechs Konzepte (Screenshots unter `design/mockups/previews/`,
 erzeugt mit `tools/make-mockup-previews.js`):
 
