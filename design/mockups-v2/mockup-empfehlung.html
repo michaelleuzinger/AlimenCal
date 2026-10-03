@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Empfehlung: Kombination – AlimenCal Redesign V2</title>
+<style>
+  :root{
+    --bg:#f7f6f3; --panel:#fffdfb; --sidebar:#1e2a1e...;
+  }
+  :root{
+    --bg:#f6f5f1; --panel:#fffefc; --sidebar:#20291f; --sidebar-ink:#c9d3c6;
+    --sidebar-active:#2e3a2c; --accent:#3f6b4f; --accent-soft:#edf3ee;
+    --ink:#22271f; --muted:#6f7566; --line:#e4e2d8; --gold:#a8813c;
+    --ok:#2f7d4f; --ok-soft:#ecf5ef;
+    --radius:12px;
+    --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+    --sans:"Inter",system-ui,-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{font-family:var(--sans);background:var(--bg);color:var(--ink);line-height:1.55;display:flex;min-height:100vh}
+  /* ---------- Sidebar (Konzept 1) ---------- */
+  aside{width:232px;background:var(--sidebar);color:#fff;position:fixed;top:0;bottom:0;left:0;display:flex;flex-direction:column}
+  .brand{display:flex;align-items:center;gap:.6rem;padding:1.15rem 1.25rem .9rem}
+  .brand .mark{width:1.7rem;height:1.7rem;border-radius:8px;background:var(--gold);display:grid;place-items:center;font-family:var(--serif);font-weight:700;color:#fff;font-size:.95rem}
+  .brand .nm{font-family:var(--serif);font-size:1.12rem;font-weight:600;letter-spacing:.01em}
+  nav.side{display:flex;flex-direction:column;gap:.15rem;padding:.4rem .7rem;flex:1}
+  .side a{display:flex;align-items:center;gap:.6rem;color:var(--sidebar-ink);text-decoration:none;padding:.5rem .7rem;border-radius:8px;font-size:.85rem}
+  .side a:hover{background:var(--sidebar-active);color:#fff}
+  .side a.active{background:var(--sidebar-active);color:#fff;font-weight:600;box-shadow:inset 2px 0 0 var(--gold)}
+  .side .cap{font-size:.65rem;text-transform:uppercase;letter-spacing:.14em;color:#5b675a;padding:.85rem .7rem .3rem}
+  .side-foot{padding:.8rem 1rem;border-top:1px solid #2e3a2c;font-size:.78rem;color:var(--sidebar-ink)}
+  .side-foot select{background:#2e3a2c;border:1px solid #42503f;color:#fff;border-radius:6px;padding:.2rem .35rem;font-family:inherit;font-size:.78rem;margin-left:.4rem}
+  /* ---------- Content ---------- */
+  main{margin-left:232px;flex:1;padding:1.9rem 2.2rem 4rem;max-width:1080px}
+  .crumb{font-size:.76rem;color:var(--muted);margin:0 0 .4rem}
+  h1{font-family:var(--serif);font-size:1.55rem;font-weight:600;margin:0 0 .3rem}
+  .intro{color:var(--muted);margin:0 0 1.2rem;max-width:62ch;font-size:.94rem}
+  /* ---------- Wizard-Einstieg (Konzept 2) ---------- */
+  .wizard{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:1.5rem 1.6rem;margin-bottom:1.4rem;box-shadow:0 1px 3px rgba(34,39,31,.05)}
+  .w-cap{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.1rem}
+  .w-cap .t{font-size:.78rem;text-transform:uppercase;letter-spacing:.12em;color:var(--gold);font-weight:700}
+  .w-cap .skip{font-size:.78rem;color:var(--muted)}
+  .steps{display:flex;align-items:center;margin-bottom:1.3rem}
+  .step{display:flex;align-items:center;gap:.5rem}
+  .step .b{width:1.7rem;height:1.7rem;border-radius:50%;display:grid;place-items:center;font-size:.78rem;font-weight:700;border:2px solid var(--line);color:var(--muted);background:var(--panel)}
+  .step.done .b{background:var(--ok);border-color:var(--ok);color:#fff}
+  .step.now .b{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 0 0 4px var(--accent-soft)}
+  .step .t{font-size:.78rem;color:var(--muted)}
+  .step.now .t{color:var(--ink);font-weight:600}
+  .steps i{flex:1;height:2px;background:var(--line);margin:0 .55rem;border-radius:2px}
+  .steps i.done{background:var(--ok)}
+  .q{font-size:1.08rem;font-weight:700;margin:0 0 .8rem;letter-spacing:-.01em}
+  .choices{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+  .choice{display:flex;align-items:flex-start;gap:.7rem;border:2px solid var(--line);border-radius:12px;padding:.85rem 1rem;cursor:pointer;background:var(--panel)}
+  .choice:hover{border-color:var(--accent)}
+  .choice.sel{border-color:var(--accent);background:var(--accent-soft)}
+  .choice .radio{width:1.1rem;height:1.1rem;border-radius:50%;border:2px solid var(--line);margin-top:.2rem;flex-shrink:0;position:relative}
+  .choice.sel .radio{border-color:var(--accent)}
+  .choice.sel .radio::after{content:"";position:absolute;inset:2.5px;border-radius:50%;background:var(--accent)}
+  .choice h4{margin:0 0 .1rem;font-size:.9rem}
+  .choice p{margin:0;font-size:.76rem;color:var(--muted)}
+  .chips{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:1.1rem}
+  .chip{background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:.3rem .8rem;font-size:.76rem;color:var(--muted)}
+  .chip b{color:var(--ink);font-variant-numeric:tabular-nums}
+  .chip.edit{border-style:dashed;color:var(--accent);cursor:pointer}
+  .w-nav{display:flex;justify-content:flex-end;gap:.7rem;margin-top:1.25rem}
+  .btn{border:0;border-radius:999px;padding:.62rem 1.5rem;font-family:inherit;font-size:.87rem;font-weight:600;cursor:pointer}
+  .btn-primary{background:var(--accent);color:#fff}
+  .btn-primary:hover{filter:brightness(1.06)}
+  .btn-ghost{background:transparent;border:1px solid var(--line);color:var(--muted)}
+  /* ---------- Eltern/Kinder-Karten (Konzept-1-Grid, Editorial-Beschriftung) ---------- */
+  .sec-cap{font-family:var(--serif);font-size:1.05rem;font-weight:600;margin:1.6rem 0 .7rem;display:flex;align-items:baseline;gap:.6rem}
+  .sec-cap .rule{flex:1;border-bottom:1px solid var(--line);transform:translateY(-3px)}
+  .sec-cap .n{color:var(--gold);font-size:.8rem}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:1.1rem 1.2rem}
+  .card h3{margin:0 0 .8rem;font-size:.92rem;display:flex;justify-content:space-between;align-items:center}
+  .card h3 .share{font-size:.7rem;color:var(--muted);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:.1rem .55rem}
+  .row{display:flex;justify-content:space-between;align-items:center;padding:.45rem 0;border-bottom:1px solid var(--line);font-size:.87rem}
+  .row:last-child{border-bottom:0}
+  .row label{color:var(--muted)}
+  .row input{width:8rem;text-align:right;border:0;border-bottom:1px solid var(--line);background:transparent;font-family:inherit;font-size:.87rem;font-variant-numeric:tabular-nums;padding:.12rem .05rem}
+  .row input:focus{outline:none;border-bottom:2px solid var(--gold)}
+  .kids-strip{display:flex;gap:.75rem;flex-wrap:wrap}
+  .kid{flex:1;min-width:200px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:.95rem 1.05rem}
+  .kid .nm{font-weight:700;font-size:.9rem;display:flex;justify-content:space-between}
+  .kid .nm .x{color:var(--muted);font-weight:400;font-size:.75rem;cursor:pointer}
+  .kid .meta{font-size:.76rem;color:var(--muted);margin:.25rem 0 .5rem}
+  .kid .val{font-family:var(--serif);font-size:1.25rem;font-weight:600;font-variant-numeric:tabular-nums}
+  .kid .val small{font-size:.7rem;color:var(--muted);font-family:var(--sans);font-weight:400}
+  .add-kid{display:flex;align-items:center;justify-content:center;border:1.5px dashed var(--line);border-radius:var(--radius);padding:.8rem;color:var(--accent);font-size:.84rem;cursor:pointer;flex:1;min-width:200px;background:transparent}
+  /* ---------- Editorial-Ergebniskarte (Konzept 3) ---------- */
+  .result-row{display:grid;grid-template-columns:1fr 340px;gap:1.4rem;align-items:start;margin-top:1.6rem}
+  .urkunde{background:#1f2a20;color:#eef2ec;border-radius:14px;padding:1.6rem 1.5rem;position:sticky;top:1.5rem;box-shadow:0 10px 30px rgba(31,42,32,.25)}
+  .urkunde .k{font-size:.68rem;text-transform:uppercase;letter-spacing:.18em;color:#a8b8a5}
+  .urkunde .v{font-family:var(--serif);font-size:2.5rem;font-weight:600;color:#fff;margin:.4rem 0 .15rem;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+  .urkunde .sub{font-size:.78rem;color:#a8b8a5}
+  .urkunde .rule{border:0;border-top:1px solid rgba(255,255,255,.16);margin:1.1rem 0}
+  .urkunde .mini{display:flex;justify-content:space-between;font-size:.8rem;color:#c5d0c2;margin:.32rem 0}
+  .urkunde .mini b{color:#fff;font-variant-numeric:tabular-nums}
+  .urkunde .seal{display:flex;justify-content:space-between;align-items:center;margin-top:1.2rem}
+  .urkunde .seal .badge-ok{background:var(--ok);color:#fff;font-size:.7rem;font-weight:700;border-radius:999px;padding:.22rem .75rem}
+  .urkunde .seal .gold-dot{width:2.1rem;height:2.1rem;border-radius:50%;border:2px solid var(--gold);display:grid;place-items:center;color:var(--gold);font-size:.7rem;font-weight:700;letter-spacing:.05em}
+  .result-side p.note{font-size:.74rem;color:var(--muted);margin-top:.7rem}
+  .result-side .actions{display:flex;gap:.65rem;margin-top:1rem}
+  .btn-gold{background:var(--gold);color:#fff}
+  .btn-gold:hover{filter:brightness(1.07)}
+  .btn-outline{background:transparent;border:1px solid var(--ink);color:var(--ink)}
+  .method{font-size:.72rem;color:var(--muted);font-style:italic;margin-top:1rem;border-top:1px solid var(--line);padding-top:.7rem}
+  /* ---------- Responsive ---------- */
+  @media (max-width: 920px){
+    body{flex-direction:column}
+    aside{position:fixed;top:auto;bottom:0;left:0;right:0;width:100%;flex-direction:row;align-items:center;padding:.25rem .4rem}
+    .brand,.side .cap,.side-foot{display:none}
+    nav.side{flex-direction:row;justify-content:space-around;padding:.25rem}
+    .side a{flex-direction:column;gap:.12rem;font-size:.6rem;padding:.4rem .35rem;text-align:center}
+    .side a.active{box-shadow:inset 0 -2px 0 var(--gold)}
+    main{margin-left:0;padding:1.2rem 1rem 6.5rem}
+    .grid,.choices,.result-row{grid-template-columns:1fr}
+    .urkunde{position:static}
+    .urkunde .v{font-size:2rem}
+  }
+</style>
+</head>
+<body>
+<aside>
+  <div class="brand"><span class="mark">§</span><span class="nm">AlimenCal</span></div>
+  <nav class="side">
+    <a href="#" class="active">● Kindesunterhalt</a>
+    <a href="#">Ehegattenunterhalt</a>
+    <a href="#">Kostentrennung</a>
+    <a href="#">Austausch</a>
+    <div class="cap">Einstellungen</div>
+    <a href="#">Richtwerte</a>
+    <a href="#">Themes</a>
+    <a href="#">Über</a>
+  </nav>
+  <div class="side-foot">Sprache <select><option>DE</option><option>FR</option><option>IT</option><option>EN</option></select></div>
+</aside>
+<main>
+  <p class="crumb">Berechnung · Kindesunterhalt</p>
+  <h1>Kindesunterhalt</h1>
+  <p class="intro">Geführter Einstieg in drei Schritten – oder direkt in den Feldern arbeiten. Das Resultat aktualisiert sich live.</p>
+
+  <!-- Wizard -->
+  <div class="wizard">
+    <div class="w-cap">
+      <span class="t">Geführter Einstieg</span>
+      <span class="skip">Expertenmodus: alle Felder sichtbar</span>
+    </div>
+    <div class="steps">
+      <div class="step done"><span class="b">✓</span><span class="t">Eltern</span></div>
+      <i class="done"></i>
+      <div class="step now"><span class="b">2</span><span class="t">Kinder</span></div>
+      <i></i>
+      <div class="step"><span class="b">3</span><span class="t">Feinschliff</span></div>
+    </div>
+    <p class="q">Wie viele Kinder haben Sie gemeinsam?</p>
+    <div class="choices">
+      <label class="choice"><span class="radio"></span><span><h4>Ein Kind</h4><p>Grundbedarf pauschal oder effektive Kosten</p></span></label>
+      <label class="choice sel"><span class="radio"></span><span><h4>Zwei Kinder</h4><p>Je Kind eigenes Alter und Betreuungsschlüssel</p></span></label>
+    </div>
+    <div class="chips">
+      <span class="chip">Einkommen A <b>CHF 6'800</b></span>
+      <span class="chip">Einkommen B <b>CHF 4'300</b></span>
+      <span class="chip edit">✎ Schritt 1 ändern</span>
+    </div>
+    <div class="w-nav"><button class="btn btn-primary">Weiter →</button></div>
+  </div>
+
+  <!-- Eltern -->
+  <div class="sec-cap"><span class="n">I.</span> Angaben der Eltern <span class="rule"></span></div>
+  <div class="grid">
+    <div class="card">
+      <h3>Elternteil A <span class="share">70 % Betreuung</span></h3>
+      <div class="row"><label>Einkommen</label><input value="CHF 6'800"></div>
+      <div class="row"><label>Existenzminimum</label><input value="CHF 2'400"></div>
+      <div class="row"><label>Erwerbstätig</label><input type="checkbox" checked style="width:auto"></div>
+    </div>
+    <div class="card">
+      <h3>Elternteil B <span class="share">30 % Betreuung</span></h3>
+      <div class="row"><label>Einkommen</label><input value="CHF 4'300"></div>
+      <div class="row"><label>Existenzminimum</label><input value="CHF 2'550"></div>
+      <div class="row"><label>Erwerbstätig</label><input type="checkbox" style="width:auto"></div>
+    </div>
+  </div>
+
+  <!-- Kinder -->
+  <div class="sec-cap"><span class="n">II.</span> Kinder <span class="rule"></span></div>
+  <div class="kids-strip">
+    <div class="kid">
+      <div class="nm">Mia, 9 Jahre <span class="x">✕ entfernen</span></div>
+      <div class="meta">Betreuung 70/30 · Grundbedarf pauschal (ZH 1.3.2025)</div>
+      <div class="val">CHF 480 <small>/Monat</small></div>
+    </div>
+    <div class="kid">
+      <div class="nm">Ben, 14 Jahre <span class="x">✕ entfernen</span></div>
+      <div class="meta">Betreuung 70/30 · Grundbedarf pauschal (ZH 1.3.2025)</div>
+      <div class="val">CHF 620 <small>/Monat</small></div>
+    </div>
+    <button class="add-kid">＋ Kind hinzufügen</button>
+  </div>
+
+  <!-- Resultat (Editorial-Urkunde) -->
+  <div class="result-row">
+    <div class="result-side">
+      <div class="sec-cap" style="margin-top:0"><span class="n">III.</span> Berechnung <span class="rule"></span></div>
+      <p style="font-size:.86rem;color:var(--muted);margin:0 0 1rem">Die zweistufige Methode prüft Leistungsfähigkeit und verteilt den überschüssigen Teil des Einkommens im Verhältnis der Existenzminima. Die Werte unten aktualisieren sich live mit jeder Eingabe.</p>
+      <div class="urkunde">
+        <div class="k">Resultat · pro Monat</div>
+        <div class="v">CHF 1'440</div>
+        <div class="sub">Total für beide Kinder (Bar- und Betreuungsunterhalt)</div>
+        <hr class="rule">
+        <div class="mini"><span>Barunterhalt</span><b>CHF 1'100</b></div>
+        <div class="mini"><span>Betreuungsunterhalt</span><b>CHF 340</b></div>
+        <div class="mini"><span>Anteil A / B</span><b>64 / 36 %</b></div>
+        <div class="mini"><span>Mankoverteilung</span><b>nicht aktiv</b></div>
+        <div class="seal">
+          <span class="badge-ok">✓ beide leistungsfähig</span>
+          <span class="gold-dot">A·C</span>
+        </div>
+      </div>
+      <p class="note">Orientierungswerkzeug – ersetzt keine Rechtsberatung. Alle Eingaben bleiben lokal auf diesem Gerät.</p>
+    </div>
+    <div>
+      <div class="actions" style="display:flex;flex-direction:column;gap:.6rem">
+        <button class="btn btn-gold" style="width:100%">Export / Austausch mit Partei B</button>
+        <button class="btn btn-outline" style="width:100%">Zurücksetzen</button>
+      </div>
+      <p class="method">Berechnungsgrundlage: zweistufig-konkrete Methode (BGE 140 III 337) mit Überschuss- und Mankoverteilung (BGE 135 III 66). Richtwerte: Zürcher Kinderkosten-Tabelle 1.3.2025, konfigurierbar unter „Richtwerte“.</p>
+    </div>
+  </div>
+</main>
+</body>
+</html>

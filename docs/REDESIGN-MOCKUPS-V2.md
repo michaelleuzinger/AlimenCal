@@ -38,6 +38,13 @@ Empfohlene Kombination für die Umsetzung: **Konzept 1 als Gerüst** (Sidebar /
 Tabbar), mit dem **Wizard als geführtem Einstieg** und der
 **Editorial-Ergebniskarte** für das Resultat.
 
+Die Empfehlung ist als eigenes, komplettes Mockup umgesetzt:
+[`mockup-empfehlung.html`](../design/mockups-v2/mockup-empfehlung.html) mit
+fünf Vorschau-Screenshots (Desktop: Navigation/Wizard, Eingaben, Resultat;
+Mobile: komplette Ansicht und Resultat) unter
+[`previews/`](../design/mockups-v2/previews/) (Dateien `empfehlung-1` bis
+`empfehlung-5`).
+
 ## Abgrenzung zu V1
 
 - `design/mockups/` (V1, Apple/Material/…-Stile) bleibt als Historie erhalten;

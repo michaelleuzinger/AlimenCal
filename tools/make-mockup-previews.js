@@ -46,6 +46,9 @@ const V2_SHOTS = [
   { f: 'mockup-command', out: 'command-desktop', w: 1280, h: 800, full: false },
   { f: 'mockup-command', out: 'command-mobile', w: 640, h: 700, full: true },
   { f: 'index', out: 'gallery', w: 1280, h: 900, full: false },
+  /* Empfehlung (Kombination): Desktop-Sektionen + Mobile */
+  { f: 'mockup-empfehlung', out: 'empfehlung-1-desktop-top', w: 1280, h: 900, full: false, scrollTo: 0 },
+  { f: 'mockup-empfehlung', out: 'empfehlung-4-mobile-full', w: 400, h: 780, full: true },
 ];
 
 (async () => {
@@ -68,6 +71,7 @@ const V2_SHOTS = [
     await page.setViewport({ width: s.w, height: s.h, deviceScaleFactor: 2 });
     await page.goto('file://' + path.join(V2_DIR, `${s.f}.html`), { waitUntil: 'networkidle0' });
     await new Promise((r) => setTimeout(r, 350));
+    if (s.scrollTo != null) { await page.evaluate((y) => window.scrollTo(0, y), s.scrollTo); await new Promise((r) => setTimeout(r, 250)); }
     await page.screenshot({ path: path.join(V2_OUT, `${s.out}.png`), fullPage: s.full });
     console.log('OK', s.out);
   }
