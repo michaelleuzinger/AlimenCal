@@ -127,8 +127,8 @@ AlimenCal.themes = (function () {
       values: {
         bg: '#f5f5f7', card: '#ffffff', ink: '#1d1d1f', muted: '#6e6e73',
         accent: '#0071e3', accentDark: '#0077ed', accentInk: '#ffffff',
-        bannerBg: '#1d1d1f',
-        bannerInk: '#f5f5f7',
+        bannerBg: '#f5f5f7',
+        bannerInk: '#1d1d1f',
         warn: '#b25000', warnBg: '#fff4e5', warnBorder: '#f0d9b8',
         line: '#d2d2d7', inputBg: '#ffffff', btnSecondaryBg: '#e8e8ed',
         disclaimerBg: '#f2f6fc', disclaimerBorder: '#d2d2d7', radius: 18

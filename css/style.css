@@ -347,7 +347,15 @@ footer { padding: 1.5rem 0 2.5rem; color: var(--muted); font-size: 0.85rem; }
   --design-shadow: 0 2px 12px rgba(0,0,0,0.07);
 }
 [data-design="apple"] body { letter-spacing: -0.01em; }
+[data-design="apple"] header {
+  background: rgba(245,245,247,0.88);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid var(--line);
+  padding: 1.3rem 0 1.1rem;
+}
 [data-design="apple"] header h1 { font-weight: 700; letter-spacing: -0.02em; }
+[data-design="apple"] .subtitle { opacity: 0.75; }
 [data-design="apple"] .card { border-color: rgba(0,0,0,0.06); box-shadow: var(--design-shadow); }
 [data-design="apple"] .tab { border-radius: 990px; border: 0; background: var(--btn-secondary-bg); color: var(--ink); }
 [data-design="apple"] .tab.active { background: var(--accent); color: var(--accent-ink); }
