@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AlimenCal SOTA 2 – Guidance Flow (kontextuelles Rechnen als geführter Fluss)</title>
+<style>
+  :root {
+    --bg: #f6f5f1;
+    --surface: #ffffff;
+    --border: #e6e3db;
+    --text: #211f1c;
+    --text-2: #6b675f;
+    --accent: #1d4d4b;
+    --accent-2: #f2b544;
+    --good: #2e7d5b;
+    --radius: 10px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Söhne", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 15px; line-height: 1.55; color: var(--text); background: var(--bg);
+  }
+  .num { font-variant-numeric: tabular-nums; }
+  a { color: var(--accent); }
+
+  /* ---------- Minimale Kopfzeile: Marke, Sprache, Fortschritt ---------- */
+  .top {
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    padding: 14px 24px; display: flex; align-items: center; gap: 16px; max-width: 1080px; margin: 0 auto;
+  }
+  .brand { font-weight: 650; letter-spacing: -0.01em; display: flex; align-items: center; gap: 9px; }
+  .brand-mark { width: 26px; height: 26px; border-radius: 8px; background: var(--accent); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; }
+  .top .spacer { flex: 1; }
+  .lang {
+    height: 32px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface);
+    color: var(--text-2); font-size: 13px; padding: 0 10px; display: flex; align-items: center; gap: 6px;
+  }
+
+  .progress { height: 4px; background: var(--border); max-width: 1080px; margin: 0 auto; border-radius: 2px; overflow: hidden; }
+  .progress > div { height: 100%; width: 50%; background: var(--accent); }
+
+  /* ---------- Flow: Frage-Antwort-Blöcke, Eingabe immer im Kontext der Frage ---------- */
+  .flow { max-width: 640px; margin: 40px auto 80px; padding: 0 20px; }
+
+  .intro { text-align: center; margin-bottom: 36px; }
+  .intro .eyebrow { font-size: 12px; font-weight: 650; letter-spacing: .12em; text-transform: uppercase; color: var(--accent-2); }
+  .intro h1 { font-size: 28px; font-weight: 650; letter-spacing: -0.02em; margin: 8px 0 6px; }
+  .intro p { color: var(--text-2); font-size: 14.5px; }
+
+  .qa { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 24px; margin-bottom: 18px; box-shadow: 0 1px 2px rgba(33,31,28,.04); }
+  .qa .step { font-size: 12px; font-weight: 600; color: var(--text-2); margin-bottom: 10px; display: flex; justify-content: space-between; }
+  .qa .step .edit { color: var(--accent); cursor: pointer; }
+  .qa h2 { font-size: 17px; font-weight: 600; margin-bottom: 6px; letter-spacing: -0.01em; }
+  .qa .expl { font-size: 13.5px; color: var(--text-2); margin-bottom: 16px; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    border: 1.5px solid var(--border); background: var(--surface); border-radius: 8px;
+    padding: 9px 14px; font-size: 14px; font-weight: 500; cursor: pointer; color: var(--text-2); font-family: inherit;
+  }
+  .chip.selected { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 7%, white); color: var(--text); }
+
+  .money-input { display: flex; align-items: center; border: 1.5px solid var(--border); border-radius: 8px; background: var(--surface); padding: 0 14px; height: 46px; }
+  .money-input .cur { color: var(--text-2); font-size: 14px; margin-right: 8px; }
+  .money-input input { border: 0; font-size: 17px; font-weight: 600; width: 100%; outline: none; background: transparent; color: var(--text); font-family: inherit; }
+  .money-input:focus-within { border-color: var(--accent); }
+  .money-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 560px) { .money-grid { grid-template-columns: 1fr; } }
+  .money-grid .lbl { font-size: 12.5px; font-weight: 600; color: var(--text-2); margin-bottom: 6px; }
+
+  .qa .mini-row { display: flex; align-items: center; gap: 12px; background: #faf9f5; border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; }
+  .mini-row .who { width: 34px; height: 34px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 13px; font-weight: 650; display: inline-flex; align-items: center; justify-content: center; }
+  .mini-row .who.dad { background: var(--accent-2); color: #211f1c; }
+  .mini-row .info { flex: 1; font-size: 13.5px; }
+  .mini-row .info b { display: block; font-size: 14px; }
+  .mini-row .info span { color: var(--text-2); font-size: 12.5px; }
+  .mini-row .amt { font-size: 14px; font-weight: 650; }
+
+  /* ---------- Laufendes Ergebnis als einbettbare Karte, kein separater Tab ---------- */
+  .result-inline {
+    background: var(--text); color: #f6f5f1; border-radius: 14px; padding: 26px;
+    margin-top: 28px;
+  }
+  .result-inline .eyebrow { font-size: 12px; text-transform: uppercase; letter-spacing: .1em; color: #b9b4a6; }
+  .result-inline .big { font-size: 40px; font-weight: 650; letter-spacing: -0.03em; margin: 10px 0 4px; }
+  .result-inline .sub { color: #b9b4a6; font-size: 13.5px; margin-bottom: 18px; }
+  .result-inline .bars { display: flex; height: 10px; border-radius: 5px; overflow: hidden; margin-bottom: 10px; }
+  .result-inline .bars .m { background: var(--accent-2); width: 62%; }
+  .result-inline .bars .v { background: #4e5b52; flex: 1; }
+  .legend { display: flex; gap: 18px; font-size: 12.5px; color: #d8d3c6; margin-bottom: 16px; }
+  .legend .dot { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 6px; }
+  .result-inline .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn {
+    height: 40px; padding: 0 16px; border-radius: 8px; font-size: 14px; font-weight: 600;
+    cursor: pointer; font-family: inherit; border: 1px solid transparent; display: inline-flex; align-items: center;
+  }
+  .btn.light { background: #f6f5f1; color: var(--text); }
+  .btn.outline { background: transparent; border-color: #4a463e; color: #f6f5f1; }
+  .btn.accent { background: var(--accent); color: #fff; }
+
+  .nav-flow { display: flex; justify-content: space-between; align-items: center; margin-top: 22px; }
+  .nav-flow .back { color: var(--text-2); font-size: 14px; cursor: pointer; }
+  .nav-flow .next { background: var(--accent); color: #fff; border: 0; height: 44px; padding: 0 22px; border-radius: 9px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit; }
+  .skip-note { text-align: center; color: var(--text-2); font-size: 12.5px; margin-top: 14px; }
+
+  .footer-note { max-width: 640px; margin: 0 auto 60px; padding: 0 20px; text-align: center; color: var(--text-2); font-size: 12.5px; }
+</style>
+</head>
+<body>
+  <header>
+    <div class="top">
+      <div class="brand"><span class="brand-mark">A</span>AlimenCal</div>
+      <span style="font-size:13px;color:var(--text-2)">Falldaten bleiben auf Ihrem Gerät</span>
+      <div class="spacer"></div>
+      <span class="lang">Deutsch ▾</span>
+    </div>
+    <div class="progress"><div></div></div>
+  </header>
+
+  <main class="flow">
+    <div class="intro">
+      <div class="eyebrow">Unterhaltsrechnung · Zürich</div>
+      <h1>Wer verdient wie viel?</h1>
+      <p>Wir berechnen den Kindesunterhalt Schritt für Schritt. Jede Angabe sofort mit Begründung – Sie sehen, wie das Ergebnis entsteht.</p>
+    </div>
+
+    <section class="qa">
+      <div class="step"><span>Schritt 2 von 4 · Einkommen</span><span class="edit">Bearbeiten</span></div>
+      <h2>Nettoeinkommen der Eltern</h2>
+      <p class="expl">Massgebend ist das monatliche Nettoeinkommen nach den Abzügen gemäss Zürcher Richtlinien (Berufskosten, AHV/IV, Steuern).</p>
+      <div class="money-grid">
+        <div>
+          <div class="lbl">Mutter</div>
+          <div class="money-input"><span class="cur">CHF</span><input class="num" value="5 400"></div>
+        </div>
+        <div>
+          <div class="lbl">Vater</div>
+          <div class="money-input"><span class="cur">CHF</span><input class="num" value="7 200"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="qa">
+      <div class="step"><span>Schritt 3 von 4 · Kinder</span><span class="edit">Bearbeiten</span></div>
+      <h2>Für welche Kinder wird Unterhalt berechnet?</h2>
+      <p class="expl">Alter und Betreuungsaufteilung bestimmen den Bedarf. Sie können jederzeit Kinder ergänzen.</p>
+      <div class="mini-row">
+        <span class="who">L</span>
+        <span class="info"><b>Lina, 8 Jahre</b><span>Betreuung: 60 % Mutter / 40 % Vater</span></span>
+        <span class="amt num">CHF 538</span>
+      </div>
+      <div class="mini-row">
+        <span class="who">N</span>
+        <span class="info"><b>Noah, 12 Jahre</b><span>Betreuung: 60 % Mutter / 40 % Vater</span></span>
+        <span class="amt num">CHF 736</span>
+      </div>
+      <button class="btn accent" style="margin-top:6px">+ Kind hinzufügen</button>
+    </section>
+
+    <section class="qa">
+      <div class="step"><span>Schritt 4 von 4 · Grundsätze</span><span class="edit">Bearbeiten</span></div>
+      <h2>Wird die halbe Steuerlast angerechnet?</h2>
+      <p class="expl">Gemäss Zürcher Rechtsprechung wird beiden Elternteilen die halbe Steuerlast angerechnet, unabhängig vom effektiven Steuersatz.</p>
+      <div class="chips">
+        <button class="chip selected">Ja, gemäss Richtlinien</button>
+        <button class="chip">Nein, selbst bestimmen</button>
+      </div>
+    </section>
+
+    <section class="result-inline">
+      <div class="eyebrow">Ihr Ergebnis auf einen Blick</div>
+      <div class="big num">CHF 1 274 <span style="font-size:15px;color:#b9b4a6">/ Monat</span></div>
+      <div class="sub">Zahlbar durch den Vater · Leistungsfähigkeit ist gegeben</div>
+      <div class="bars"><div class="m"></div><div class="v"></div></div>
+      <div class="legend">
+        <span><span class="dot" style="background:var(--accent-2)"></span>Mutter · 42.9 %</span>
+        <span><span class="dot" style="background:#4e5b52"></span>Vater · 57.1 %</span>
+      </div>
+      <div class="actions">
+        <button class="btn light">Berechnung im Detail</button>
+        <button class="btn outline">Als Bericht speichern</button>
+        <button class="btn outline">Falldaten verschlüsselt teilen</button>
+      </div>
+    </section>
+
+    <div class="nav-flow">
+      <span class="back">← Zurück</span>
+      <button class="next">Weiter zu Ehegattenunterhalt</button>
+    </div>
+    <p class="skip-note">Sie können jeden Schritt jederzeit ändern – das Ergebnis passt sich sofort an.</p>
+  </main>
+
+  <p class="footer-note">AlimenCal ist ein Rechner und keine Rechtsberatung · <a href="#">Quellen &amp; Richtwerte (Stand 1.3.2025)</a></p>
+</body>
+</html>

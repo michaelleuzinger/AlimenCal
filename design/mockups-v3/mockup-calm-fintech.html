@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AlimenCal SOTA 1 – Calm Fintech (Linear/Stripe-Schule)</title>
+<style>
+  :root {
+    --bg: #fafafa;
+    --surface: #ffffff;
+    --border: #e4e4e7;
+    --border-strong: #d4d4d8;
+    --text: #18181b;
+    --text-2: #71717a;
+    --text-3: #a1a1aa;
+    --accent: #635bff;
+    --accent-soft: #f0efff;
+    --good: #16a34a;
+    --warn: #d97706;
+    --radius: 8px;
+    --shadow: 0 1px 2px rgba(0,0,0,.04);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0b0b0d; --surface: #131316; --border: #26262b;
+      --border-strong: #33333c; --text: #f4f4f5; --text-2: #9d9da8;
+      --text-3: #6b6b76; --accent: #8b85ff; --accent-soft: #1d1b33;
+      --shadow: none;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: "Inter", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 14px; line-height: 1.5; color: var(--text);
+    background: var(--bg); font-feature-settings: "cv05", "ss01";
+  }
+  .num { font-variant-numeric: tabular-nums; }
+
+  /* ---------- Topbar: schmale, nicht-modale Navigation (kein Hamburger, kein Sticky-Glas) ---------- */
+  .topbar {
+    background: var(--bg); border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 20;
+  }
+  .topbar-in {
+    max-width: 1200px; margin: 0 auto; padding: 0 24px;
+    height: 56px; display: flex; align-items: center; gap: 24px;
+  }
+  .brand { font-weight: 600; letter-spacing: -0.01em; font-size: 15px; display: flex; align-items: center; gap: 8px; }
+  .brand .dot { width: 18px; height: 18px; border-radius: 5px; background: var(--accent); }
+  .nav { display: flex; gap: 2px; }
+  .nav a {
+    color: var(--text-2); text-decoration: none; font-size: 13px; font-weight: 500;
+    padding: 6px 10px; border-radius: 6px;
+  }
+  .nav a.active { color: var(--text); background: var(--surface); border: 1px solid var(--border); }
+  .topbar-right { margin-left: auto; display: flex; gap: 10px; align-items: center; }
+  .ghost-btn {
+    font-size: 13px; font-weight: 500; color: var(--text-2); background: none;
+    border: 1px solid transparent; border-radius: 6px; padding: 6px 10px; cursor: pointer;
+    text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
+  }
+  .ghost-btn:hover { color: var(--text); background: var(--surface); border-color: var(--border); }
+  .kbd-hint { color: var(--text-3); font-size: 12px; border: 1px solid var(--border); border-radius: 4px; padding: 1px 6px; }
+
+  /* ---------- Layout: Zweispalter, Inhalt links, Ergebnis rechts ---------- */
+  .main { max-width: 1200px; margin: 0 auto; padding: 32px 24px 80px; display: grid; grid-template-columns: minmax(0,1fr) 360px; gap: 32px; align-items: start; }
+  @media (max-width: 960px) { .main { grid-template-columns: 1fr; } .nav { display: none; } }
+
+  .pagehead { margin-bottom: 24px; }
+  .pagehead h1 { font-size: 22px; font-weight: 600; letter-spacing: -0.02em; }
+  .pagehead p { color: var(--text-2); margin-top: 4px; font-size: 13px; }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
+  .card + .card { margin-top: 16px; }
+  .card-head { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-bottom: 1px solid var(--border); }
+  .card-head h2 { font-size: 13px; font-weight: 600; letter-spacing: 0; }
+  .card-head .hint { font-size: 12px; color: var(--text-3); }
+  .card-body { padding: 16px; }
+
+  /* Schlanke Form-Controls, 32px hoch – bewusst KEINE Pill-Buttons, KEIN Glas */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 560px) { .grid2 { grid-template-columns: 1fr; } }
+  .field label { display: block; font-size: 12px; font-weight: 500; color: var(--text-2); margin-bottom: 5px; }
+  .field input, .field select {
+    width: 100%; height: 32px; padding: 0 10px; font-size: 13px; color: var(--text);
+    background: var(--surface); border: 1px solid var(--border-strong); border-radius: 6px;
+    font-family: inherit;
+  }
+  .field input:focus { outline: 2px solid var(--accent); outline-offset: -1px; border-color: var(--accent); }
+  .field .suffix-note { font-size: 11px; color: var(--text-3); margin-top: 4px; }
+
+  /* Kind als kompakte Zeile (Tabellen-Denkweise statt grosser Karten) */
+  .row-item {
+    display: grid; grid-template-columns: 1.2fr 1fr 1fr 1fr 32px; gap: 10px; align-items: center;
+    padding: 10px 16px; border-bottom: 1px solid var(--border);
+  }
+  .row-item:last-child { border-bottom: 0; }
+  .row-item .name { font-weight: 500; font-size: 13px; display: flex; align-items: center; gap: 8px; }
+  .row-item .avatar { width: 22px; height: 22px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; }
+  .row-item input, .row-item select {
+    height: 30px; font-size: 12.5px; padding: 0 8px; width: 100%;
+    border: 1px solid var(--border-strong); border-radius: 6px; background: var(--surface); color: var(--text); font-family: inherit;
+  }
+  .row-head { font-size: 11px; font-weight: 500; color: var(--text-3); text-transform: uppercase; letter-spacing: .04em; padding: 8px 16px; border-bottom: 1px solid var(--border); }
+  .grid-row { display: grid; grid-template-columns: 1.2fr 1fr 1fr 1fr 32px; gap: 10px; padding: 0 16px; }
+  @media (max-width: 720px) {
+    .row-head, .grid-row { display: none; }
+    .row-item { grid-template-columns: 1fr; gap: 8px; }
+    .row-item .fieldline { display: grid; grid-template-columns: 110px 1fr; gap: 10px; align-items: center; }
+  }
+  .icon-btn { width: 30px; height: 30px; border: 0; background: none; color: var(--text-3); cursor: pointer; border-radius: 6px; font-size: 15px; }
+  .icon-btn:hover { background: var(--bg); color: var(--text); }
+
+  .btn {
+    height: 32px; padding: 0 12px; border-radius: 6px; font-size: 13px; font-weight: 500;
+    border: 1px solid var(--border-strong); background: var(--surface); color: var(--text); cursor: pointer; font-family: inherit;
+  }
+  .btn:hover { background: var(--bg); }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .btn.primary:hover { filter: brightness(1.08); }
+  .add-row { padding: 10px 16px; display: flex; gap: 8px; }
+
+  /* ---------- Ergebnis-Panel: immer sichtbar, keine Wizard-Zwischenschritte ---------- */
+  .result-panel { position: sticky; top: 72px; }
+  .result-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
+  .result-label { font-size: 12px; font-weight: 500; color: var(--text-2); text-transform: uppercase; letter-spacing: .05em; }
+  .result-main { font-size: 34px; font-weight: 650; letter-spacing: -0.03em; margin: 8px 0 2px; }
+  .result-sub { font-size: 12.5px; color: var(--text-3); margin-bottom: 20px; }
+  .rrow { display: flex; justify-content: space-between; padding: 9px 0; border-top: 1px solid var(--border); font-size: 13px; }
+  .rrow .k { color: var(--text-2); }
+  .rrow .v { font-weight: 550; }
+  .rrow.total { border-top: 1px solid var(--text); padding-top: 12px; margin-top: 4px; }
+  .rrow.total .v { font-weight: 650; font-size: 15px; }
+  .result-actions { display: flex; gap: 8px; margin-top: 16px; }
+  .result-actions .btn { flex: 1; }
+  .badge { font-size: 11px; font-weight: 600; color: var(--good); background: color-mix(in srgb, var(--good) 12%, transparent); padding: 2px 8px; border-radius: 4px; }
+  .badge.warn { color: var(--warn); background: color-mix(in srgb, var(--warn) 12%, transparent); }
+
+  .toast {
+    margin-top: 14px; font-size: 12.5px; color: var(--text-2); background: var(--surface);
+    border: 1px solid var(--border); border-left: 2px solid var(--accent); border-radius: 6px; padding: 10px 12px;
+  }
+  footer { max-width: 1200px; margin: 0 auto; padding: 0 24px 40px; color: var(--text-3); font-size: 12px; }
+  footer a { color: var(--text-2); }
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-in">
+      <div class="brand"><span class="dot"></span>AlimenCal</div>
+      <nav class="nav">
+        <a class="active" href="#">Kindesunterhalt</a>
+        <a href="#">Ehegattenunterhalt</a>
+        <a href="#">Kostentrennung</a>
+        <a href="#">Austausch</a>
+      </nav>
+      <div class="topbar-right">
+        <span class="kbd-hint">⌘K</span>
+        <a class="ghost-btn" href="#">Richtwerte</a>
+        <select style="height:30px;font-size:12.5px;border:1px solid var(--border-strong);border-radius:6px;background:var(--surface);color:var(--text)">
+          <option>DE</option><option>FR</option><option>IT</option><option>EN</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <section>
+      <div class="pagehead">
+        <h1>Kindesunterhalt</h1>
+        <p>Zürcher Richtwerte, Stand 1. März 2025 · Ergebnis aktualisiert sich live mit</p>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h2>Eltern</h2><span class="hint">Monatliche Nettoeinkommen</span></div>
+        <div class="card-body">
+          <div class="grid2">
+            <div class="field">
+              <label>Einkommen Mutter</label>
+              <input class="num" value="5 400">
+              <div class="suffix-note">nach Abzügen gemäss Richtlinien</div>
+            </div>
+            <div class="field">
+              <label>Einkommen Vater</label>
+              <input class="num" value="7 200">
+              <div class="suffix-note">nach Abzügen gemäss Richtlinien</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h2>Kinder</h2><span class="hint">2 Kinder erfasst</span></div>
+        <div class="grid-row row-head">
+          <span>Name</span><span>Alter</span><span>Betreuungsanteil Mutter</span><span>Betreuungsanteil Vater</span><span></span>
+        </div>
+        <div class="row-item">
+          <span class="name"><span class="avatar">L</span>Lina</span>
+          <span class="fieldline"><input class="num" value="8"></span>
+          <span class="fieldline"><input class="num" value="60%"></span>
+          <span class="fieldline"><input class="num" value="40%"></span>
+          <button class="icon-btn">⋯</button>
+        </div>
+        <div class="row-item">
+          <span class="name"><span class="avatar">N</span>Noah</span>
+          <span class="fieldline"><input class="num" value="12"></span>
+          <span class="fieldline"><input class="num" value="60%"></span>
+          <span class="fieldline"><input class="num" value="40%"></span>
+          <button class="icon-btn">⋯</button>
+        </div>
+        <div class="add-row">
+          <button class="btn primary">+ Kind hinzufügen</button>
+          <button class="btn">Interne Kosten erfassen</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h2>Abzüge &amp; Rollen</h2><span class="hint">Wer zahlt an wen?</span></div>
+        <div class="card-body grid2">
+          <div class="field">
+            <label>Die Kinder leben bei</label>
+            <select><option>Mutter (60 %)</option><option>Vater (40 %)</option></select>
+          </div>
+          <div class="field">
+            <label>Halbe Steuerlast anrechnen</label>
+            <select><option>Ja, gemäss Richtlinien</option><option>Nein</option></select>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="result-panel">
+      <div class="result-card">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span class="result-label">Unterhaltsbeitrag total</span>
+          <span class="badge">Leistungsfähig</span>
+        </div>
+        <div class="result-main num">CHF 1 274</div>
+        <div class="result-sub">pro Monat, alle Kinder zusammen</div>
+        <div class="rrow"><span class="k">Lina (8)</span><span class="v num">CHF 538</span></div>
+        <div class="rrow"><span class="k">Noah (12)</span><span class="v num">CHF 736</span></div>
+        <div class="rrow"><span class="k">Zahlbar von</span><span class="v">Vater</span></div>
+        <div class="rrow"><span class="k">Einkommensquote Vater</span><span class="v num">57.1 %</span></div>
+        <div class="rrow total"><span class="k">Total pro Monat</span><span class="v num">CHF 1 274</span></div>
+        <div class="result-actions">
+          <button class="btn primary">Bericht als PDF</button>
+          <button class="btn">Teilen</button>
+        </div>
+      </div>
+      <div class="toast">💡 Resultate werden lokal berechnet – keine Daten verlassen dieses Gerät. <b>Details der Berechnung</b> zeigen die verwendeten Richtwerte.</div>
+    </aside>
+  </main>
+
+  <footer>
+    AlimenCal ist ein Rechner und keine Rechtsberatung · <a href="#">Richtwerte &amp; Quellen</a> · <a href="#">GitHub</a>
+  </footer>
+</body>
+</html>
