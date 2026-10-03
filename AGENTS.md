@@ -108,7 +108,7 @@ je Gerätetyp und Sprache erzeugt; die Nicht-Standard-Stile 11–17 nur als
 ### Struktur
 
 ```
-index.html          UI (Sidebar-Navigation links, auf Mobile als Tab-Leiste unten: Kindesunterhalt, Ehegattenunterhalt, Kostentrennung, Austausch, Richtwerte, Themes, Über und Sprachwahl; Einstiegs-Assistent «Schnellstart» im Tab Kindesunterhalt)
+index.html          UI (Sidebar-Navigation links mit Icons, auf Mobile als iOS-Tab-Leiste unten – 4 Hauptfunktionen + «Mehr»-Bottom-Sheet mit Richtwerte, Themes, Über, Sprachwahl; Einstiegs-Assistent «Schnellstart» im Tab Kindesunterhalt)
 css/style.css       Styles
 js/calculator.js    Berechnungskern (DOM-frei, auch in Node.js lauffähig)
 js/costsplit.js     Kostentrennung: CSV-Import, Zuordnung, Ausgleich (DOM-frei)

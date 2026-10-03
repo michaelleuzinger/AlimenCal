@@ -70,7 +70,8 @@ AlimenCal.i18n.fr = {
     share: 'Échange',
     about: 'À propos',
     settingsMenu: 'Paramètres et informations',
-    language: 'Langue'
+    language: 'Langue',
+    more: 'Plus'
   },
   common: {
     parentA: 'Parent A',

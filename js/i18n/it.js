@@ -70,7 +70,8 @@ AlimenCal.i18n.it = {
     share: 'Scambio',
     about: 'Informazioni',
     settingsMenu: 'Impostazioni e informazioni',
-    language: 'Lingua'
+    language: 'Lingua',
+    more: 'Altro'
   },
   common: {
     parentA: 'Genitore A',

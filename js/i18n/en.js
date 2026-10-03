@@ -70,7 +70,8 @@ AlimenCal.i18n.en = {
     share: 'Exchange',
     about: 'About',
     settingsMenu: 'Settings and information',
-    language: 'Language'
+    language: 'Language',
+    more: 'More'
   },
   common: {
     parentA: 'Parent A',
