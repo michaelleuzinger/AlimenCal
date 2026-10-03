@@ -639,9 +639,9 @@
   }
 
   function setNavLabel(el, text) {
-    var label = el.querySelector('.sidebar-label');
+    var label = el.querySelector('.nav-label');
     if (label) { label.textContent = text; }
-    else if (!el.querySelector('svg')) { el.textContent = text; }
+    else { el.textContent = text; }
   }
 
   function applyI18n() {
@@ -659,19 +659,6 @@
     document.querySelectorAll('.tab[data-tab="share"]').forEach(function (el) { setNavLabel(el, t('nav', 'share')); });
     document.querySelectorAll('.tab[data-tab="settings"]').forEach(function (el) { setNavLabel(el, t('nav', 'settings')); });
     document.querySelectorAll('.tab[data-tab="about"]').forEach(function (el) { setNavLabel(el, t('nav', 'about')); });
-
-    var wizardEl = document.getElementById('children-wizard');
-    if (wizardEl) {
-      document.getElementById('wizard-title').textContent = t('wizard', 'title');
-      document.getElementById('wizard-skip').textContent = t('wizard', 'skip');
-      document.getElementById('wizard-question').textContent = t('wizard', 'question');
-      document.getElementById('wizard-one').textContent = t('wizard', 'one');
-      document.getElementById('wizard-one-hint').textContent = t('wizard', 'oneHint');
-      document.getElementById('wizard-two').textContent = t('wizard', 'two');
-      document.getElementById('wizard-two-hint').textContent = t('wizard', 'twoHint');
-      var nextBtn = document.getElementById('wizard-next');
-      if (nextBtn) { nextBtn.textContent = t('wizard', 'next'); }
-    }
 
     var ownerSelect = document.getElementById('costsplit-owner');
     var ownerVal = ownerSelect.value;
@@ -1313,7 +1300,7 @@
   function getThemeId() {
     var stored = null;
     try { stored = localStorage.getItem(LS_THEME); } catch (e) {}
-    return stored || 'apple';
+    return stored || 'calm';
   }
 
   function saveTheme(id, values) {
@@ -1360,14 +1347,10 @@
      AlimenCal.themes.DESIGNS/PRESETS nachgefuehrt. */
   var DESIGN_LABELS = {
     base: { de: 'Klassisch', fr: 'Classique', it: 'Classico', en: 'Classic' },
-    apple: { de: 'Apple', fr: 'Apple', it: 'Apple', en: 'Apple' },
-    material: { de: 'Material 3 (Google)', fr: 'Material 3 (Google)', it: 'Material 3 (Google)', en: 'Material 3 (Google)' },
-    minimal: { de: 'Modern Minimal', fr: 'Moderne minimaliste', it: 'Minimal moderno', en: 'Modern Minimal' },
-    bento: { de: 'Bento (dunkel)', fr: 'Bento (sombre)', it: 'Bento (scuro)', en: 'Bento (dark)' },
-    'dark-premium': { de: 'Dark Premium', fr: 'Dark Premium', it: 'Dark Premium', en: 'Dark Premium' },
-    neubrutalism: { de: 'Neo-Brutalismus', fr: 'Néo-brutalisme', it: 'Neo-brutalismo', en: 'Neo-Brutalism' },
+    calm: { de: 'Calm', fr: 'Calm', it: 'Calm', en: 'Calm' },
+    'calm-dark': { de: 'Calm Dark', fr: 'Calm Dark', it: 'Calm Dark', en: 'Calm Dark' },
     editorial: { de: 'Editorial / Legal', fr: 'Editorial / Juridique', it: 'Editoriale / Legale', en: 'Editorial / Legal' },
-    'command-center': { de: 'Command-Center', fr: 'Centre de commande', it: 'Centro di comando', en: 'Command-Center' }
+    neubrutalism: { de: 'Neo-Brutalismus', fr: 'N\u00e9o-brutalisme', it: 'Neo-brutalismo', en: 'Neo-Brutalism' }
   };
   function designPresetFor(design) {
     var preset = (AlimenCal.themes.PRESETS || []).filter(function (p) {
@@ -1782,105 +1765,137 @@
   }
 
   /* -------------------------------------------------------------
-   *  Mobile Navigation: «Mehr»-Bottom-Sheet (Richtwerte, Themes,
-   *  Ueber, Sprachwahl) analog zu Apples Mobile-Navigation.
+   *  Command-Palette (Ctrl+K): Navigation und Aktionen per Tastatur.
    * ------------------------------------------------------------- */
-  function initMoreSheet() {
-    var btn = document.getElementById('nav-more-btn');
-    var sheet = document.getElementById('more-sheet');
-    var backdrop = document.getElementById('more-backdrop');
-    if (!btn || !sheet || !backdrop) { return; }
-
-    function openSheet(open) {
-      sheet.classList.toggle('open', open);
-      backdrop.classList.toggle('open', open);
-      sheet.setAttribute('aria-hidden', String(!open));
-      backdrop.setAttribute('aria-hidden', String(!open));
-      btn.setAttribute('aria-expanded', String(open));
+  function initCmdPalette() {
+    var trigger = document.getElementById('cmdk-trigger');
+    var palette = document.getElementById('cmdk-palette');
+    var backdrop = document.getElementById('cmdk-backdrop');
+    var input = document.getElementById('cmdk-input');
+    var list = document.getElementById('cmdk-list');
+    if (!trigger || !palette || !backdrop || !input || !list) { return; }
+    var selIndex = 0;
+    var items = [];
+    function commands() {
+      return [
+        { tab: 'children', label: t('nav', 'children'), hint: 'Tab' },
+        { tab: 'spousal', label: t('nav', 'spousal'), hint: 'Tab' },
+        { tab: 'costsplit', label: t('nav', 'costsplit'), hint: 'Tab' },
+        { tab: 'share', label: t('nav', 'share'), hint: 'Tab' },
+        { tab: 'settings', label: t('nav', 'settings'), hint: 'Tab' },
+        { tab: 'themes', label: t('nav', 'themes'), hint: 'Tab' },
+        { tab: 'about', label: t('nav', 'about'), hint: 'Tab' }
+      ];
     }
-
-    btn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      openSheet(!sheet.classList.contains('open'));
-    });
-    backdrop.addEventListener('click', function () { openSheet(false); });
-    Array.prototype.forEach.call(sheet.querySelectorAll('.tab'), function (tabBtn) {
-      tabBtn.addEventListener('click', function () { openSheet(false); });
+    function render() {
+      var q = (input.value || '').toLowerCase();
+      items = commands().filter(function (c) {
+        return !q || c.label.toLowerCase().indexOf(q) !== -1;
+      });
+      if (selIndex >= items.length) { selIndex = 0; }
+      list.innerHTML = '';
+      if (!items.length) {
+        var empty = document.createElement('div');
+        empty.className = 'cmdk-empty';
+        empty.textContent = t('palette', 'empty');
+        list.appendChild(empty);
+        return;
+      }
+      items.forEach(function (c, i) {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'cmdk-item' + (i === selIndex ? ' sel' : '');
+        var label = document.createElement('span');
+        label.textContent = c.label;
+        btn.appendChild(label);
+        var hint = document.createElement('span');
+        hint.className = 'cmdk-hint';
+        hint.textContent = c.hint;
+        btn.appendChild(hint);
+        btn.addEventListener('click', function () {
+          close();
+          switchTab(c.tab);
+        });
+        list.appendChild(btn);
+      });
+    }
+    function open() {
+      palette.classList.add('open');
+      backdrop.classList.add('open');
+      palette.setAttribute('aria-hidden', 'false');
+      backdrop.setAttribute('aria-hidden', 'false');
+      trigger.setAttribute('aria-expanded', 'true');
+      input.value = '';
+      selIndex = 0;
+      render();
+      setTimeout(function () { input.focus(); }, 30);
+    }
+    function close() {
+      palette.classList.remove('open');
+      backdrop.classList.remove('open');
+      palette.setAttribute('aria-hidden', 'true');
+      backdrop.setAttribute('aria-hidden', 'true');
+      trigger.setAttribute('aria-expanded', 'false');
+    }
+    trigger.addEventListener('click', open);
+    backdrop.addEventListener('click', close);
+    input.addEventListener('input', function () { selIndex = 0; render(); });
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowDown') { selIndex = Math.min(selIndex + 1, items.length - 1); render(); e.preventDefault(); }
+      else if (e.key === 'ArrowUp') { selIndex = Math.max(selIndex - 1, 0); render(); e.preventDefault(); }
+      else if (e.key === 'Enter' && items[selIndex]) { close(); switchTab(items[selIndex].tab); e.preventDefault(); }
     });
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') { openSheet(false); }
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K')) {
+        e.preventDefault();
+        if (palette.classList.contains('open')) { close(); } else { open(); }
+      } else if (e.key === 'Escape' && palette.classList.contains('open')) {
+        close();
+      }
     });
   }
 
   /* -------------------------------------------------------------
-   *  Wizard: gefuehrter Einstieg im Tab Kindesunterhalt.
+   *  Live-Ergebnis (Kindesunterhalt): aktualisiert das sticky
+   *  Ergebnis-Panel bei jeder Eingabe statt nur auf Klick.
    * ------------------------------------------------------------- */
-  function initWizard() {
-    var wizardEl = document.getElementById('children-wizard');
-    if (!wizardEl) { return; }
-    var choices = wizardEl.querySelectorAll('.w-choice');
-    var nextBtn = document.getElementById('wizard-next');
-    var chips = document.getElementById('wizard-chips');
-    var selected = 0;
-    var step3Reached = false;
-
-    function setStep(n) {
-      var step1 = document.getElementById('w-step-1');
-      var step2 = document.getElementById('w-step-2');
-      var step3 = document.getElementById('w-step-3');
-      step1.className = 'w-step done';
-      step2.className = 'w-step' + (n >= 2 ? (n === 2 ? ' now' : ' done') : '');
-      step3.className = 'w-step' + (n >= 3 ? ' now' : '');
-      step2.querySelector('.w-dot').textContent = n > 2 ? '\u2713' : '2';
-      step3.querySelector('.w-dot').textContent = '3';
+  function updateChildrenLiveResult() {
+    var calcBtn = document.getElementById('calc-children');
+    if (!calcBtn) { return; }
+    var panel = document.getElementById('children-result');
+    var empty = document.getElementById('children-result-empty');
+    var paIncome = parseFloat((document.getElementById('pa-income') || {}).value) || 0;
+    var pbIncome = parseFloat((document.getElementById('pb-income') || {}).value) || 0;
+    if (paIncome > 0 && pbIncome > 0) {
+      calculateChildren();
+      if (empty) { empty.hidden = true; }
+      panel.hidden = false;
+    } else {
+      panel.hidden = true;
+      if (empty) { empty.hidden = false; }
     }
-
-    function renderChips() {
-      var out = [];
-      var paIncome = parseFloat((document.getElementById('pa-income') || {}).value) || 0;
-      var pbIncome = parseFloat((document.getElementById('pb-income') || {}).value) || 0;
-      if (paIncome) { out.push(t('common', 'parentA') + ': ' + paIncome); }
-      if (pbIncome) { out.push(t('common', 'parentB') + ': ' + pbIncome); }
-      chips.hidden = out.length === 0;
-      chips.innerHTML = out.map(function (label) {
-        return '<span class="chip">' + label + '</span>';
-      }).join('');
-    }
-
-    Array.prototype.forEach.call(choices, function (btn) {
-      btn.addEventListener('click', function () {
-        Array.prototype.forEach.call(choices, function (b) { b.classList.remove('selected'); });
-        btn.classList.add('selected');
-        selected = parseInt(btn.getAttribute('data-children'), 10) || 0;
-        var currentCount = state.children.length;
-        while (currentCount < selected) { state.children.push(childTemplate()); currentCount++; }
-        while (currentCount > selected && currentCount > 1) { state.children.pop(); currentCount--; }
-        renderChildrenList();
-        nextBtn.hidden = false;
-        saveForm();
-      });
+  }
+  function initLiveResult() {
+    var ids = ['pa-income', 'pb-income', 'pa-em', 'pb-em'];
+    ids.forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) { el.addEventListener('input', updateChildrenLiveResult); }
     });
+    document.getElementById('children-list').addEventListener('input', updateChildrenLiveResult);
+    var empty = document.getElementById('children-result-empty');
+    if (empty) { empty.hidden = true; }
+  }
 
-    nextBtn.addEventListener('click', function () {
-      setStep(3);
-      step3Reached = true;
-      renderChips();
-      var firstIncome = document.getElementById('pa-income');
-      if (firstIncome) { firstIncome.focus(); }
-      nextBtn.hidden = true;
+  /* -------------------------------------------------------------
+   *  Mobile: «Mehr»-Klappteil in der unteren Tab-Leiste.
+   * ------------------------------------------------------------- */
+  function initMobileMore() {
+    var btn = document.getElementById('mob-more-btn');
+    if (!btn) { return; }
+    btn.addEventListener('click', function () {
+      var trigger = document.getElementById('cmdk-trigger');
+      if (trigger) { trigger.click(); }
     });
-
-    document.getElementById('wizard-skip').addEventListener('click', function () {
-      wizardEl.hidden = true;
-      saveForm();
-    });
-
-    document.addEventListener('input', function (e) {
-      if (e.target && (e.target.id === 'pa-income' || e.target.id === 'pb-income') && step3Reached) {
-        renderChips();
-      }
-    });
-    setStep(2);
   }
 
   function init() {
@@ -1915,7 +1930,7 @@
       this.value = '';
     });
     document.getElementById('theme-reset').addEventListener('click', function () {
-      var id = 'apple';
+      var id = 'calm';
       var preset = getPresetById(id) || AlimenCal.themes.PRESETS[0];
       saveTheme(id, null);
       applyTheme(id, preset.values);
@@ -1944,8 +1959,9 @@
       })(tabs[i]);
     }
 
-    initWizard();
-    initMoreSheet();
+    initCmdPalette();
+    initLiveResult();
+    initMobileMore();
     switchTab('children');
 
     document.getElementById('keys-generate-a').addEventListener('click', function () { generateKeyFor('A'); });

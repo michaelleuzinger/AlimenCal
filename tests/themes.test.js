@@ -83,25 +83,28 @@ themes.PRESETS.forEach(function (preset) {
       themes.DESIGNS.indexOf(preset.design) !== -1);
   }
 });
-var applePreset = themes.PRESETS.filter(function (p) { return p.id === 'apple'; })[0];
-ok('Apple-Preset vorhanden', !!applePreset);
-ok('designOfPreset: Apple erkannt', themes.designOfPreset(applePreset) === 'apple');
+var applePreset = themes.PRESETS.filter(function (p) { return p.id === 'calm'; })[0];
+ok('Calm-Preset vorhanden (neuer Standard)', !!applePreset);
+ok('designOfPreset: Calm erkannt', themes.designOfPreset(applePreset) === 'calm');
+ok('Calm-Dark-Preset vorhanden und Stil erkannt', (function () {
+  var p = themes.PRESETS.filter(function (q) { return q.id === 'calm-dark'; })[0];
+  return !!p && themes.designOfPreset(p) === 'calm-dark';
+})());
 ok('Editorial-Preset vorhanden und Stil erkannt', (function () {
   var p = themes.PRESETS.filter(function (q) { return q.id === 'editorial'; })[0];
   return !!p && themes.designOfPreset(p) === 'editorial';
 })());
-ok('Command-Center-Preset vorhanden und Stil erkannt', (function () {
-  var p = themes.PRESETS.filter(function (q) { return q.id === 'command-center'; })[0];
-  return !!p && themes.designOfPreset(p) === 'command-center';
-})());
+ok('Alte Design-Stile entfernt (apple, material, minimal, bento, dark-premium, command-center)',
+  !themes.DESIGNS.some(function (d) {
+    return ['apple','material','minimal','bento','dark-premium','command-center'].indexOf(d) !== -1;
+  }));
 ok('designOfPreset: ohne design => base', themes.designOfPreset({ id: 'x' }) === 'base');
 ok('designOfPreset: null => base', themes.designOfPreset(null) === 'base');
-var designIds = ['material','minimal','bento','dark-premium','neubrutalism'];
+var designIds = ['calm','calm-dark','neubrutalism'];
 designIds.forEach(function (id) {
   ok('Design-Preset ' + id + ' vorhanden',
     themes.PRESETS.some(function (p) { return p.id === id && p.design; }));
 });
-
 /* ---------- Anwendung (DOM-frei) ---------- */
 ok('applyToDocument ohne DOM wirft nicht', themes.applyToDocument(base.values) === undefined);
 

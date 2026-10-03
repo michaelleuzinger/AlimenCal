@@ -73,6 +73,7 @@ AlimenCal.i18n.fr = {
     language: 'Langue',
     more: 'Plus'
   },
+  palette: { placeholder: 'Rechercher ou aller à …', empty: 'Aucun résultat' },
   common: {
     parentA: 'Parent A',
     parentB: 'Parent B',
@@ -104,6 +105,7 @@ AlimenCal.i18n.fr = {
     modeEffectiveShort: 'coûts effectifs',
     careShareA: 'Part de garde parent A (%)',
     careShareB: 'Part de garde parent B (%)',
+    resultEmpty: 'Le résultat apparaîtra ici dès que les deux revenus seront saisis.',
     resultsHeading: 'Résultat pension pour enfants',
     tableChild: 'Enfant',
     tableBasicNeed: 'Besoin de base',

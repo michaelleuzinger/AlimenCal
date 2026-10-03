@@ -73,6 +73,7 @@ AlimenCal.i18n.de = {
     language: 'Sprache',
     more: 'Mehr'
   },
+  palette: { placeholder: 'Suchen oder Sprung zu …', empty: 'Kein Treffer' },
   common: {
     parentA: 'Elternteil A',
     parentB: 'Elternteil B',
@@ -104,6 +105,7 @@ AlimenCal.i18n.de = {
     modeEffectiveShort: 'eff. Kosten',
     careShareA: 'Betreuungsanteil Elternteil A (%)',
     careShareB: 'Betreuungsanteil Elternteil B (%)',
+    resultEmpty: 'Das Resultat erscheint hier, sobald beide Einkommen erfasst sind.',
     resultsHeading: 'Resultat Kindesunterhalt',
     tableChild: 'Kind',
     tableBasicNeed: 'Grundbedarf',

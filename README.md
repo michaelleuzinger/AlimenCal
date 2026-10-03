@@ -32,12 +32,13 @@ Installation, kein Server, keine Abhängigkeiten.
 2. `index.html` per Doppelklick im Browser öffnen (Chrome, Firefox, Edge …) –
    die App läuft direkt über `file://`.
 
-3. Im Assistenten **Schnellstart** auf dem Tab **Kindesunterhalt** die
-   Kinderzahl wählen (oder den Assistenten überspringen), allenfalls unter
-   **Richtwerte** das kantonale Preset laden (z. B. Zürcher
-   Kinderkosten-Tabelle 1.3.2025) – die Navigation läuft über die Sidebar
-   (Desktop) bzw. die Tab-Leiste unten mit «Mehr»-Menü (Mobile), die
-   Sprachwahl liegt in der Sidebar bzw. im «Mehr»-Menü.
+3. Einkommen der Eltern erfassen – das Resultat des Kindesunterhalts
+   erscheint live im Seitenpanel; Kinder über «Kind hinzufügen» ergänzen,
+   allenfalls unter **Richtwerte** (Befehlspalette Ctrl+K bzw. «Mehr»)
+   das kantonale Preset laden (z. B. Zürcher Kinderkosten-Tabelle
+   1.3.2025); die Navigation läuft über die Topbar (Desktop) bzw. die
+   Tab-Leiste unten mit «Mehr» (Mobile), die Sprachwahl liegt in der
+   Topbar.
 
 Alle Eingaben werden automatisch lokal im Browser (localStorage) gespeichert.
 Optional kann die App statt über `file://` auch über einen lokalen Webserver
@@ -58,10 +59,9 @@ oder beliebiges statisches Hosting (z. B. GitHub Pages) bereitgestellt werden.
   anteilsmässig aufteilen (Anteil konfigurierbar) oder voll einer Partei
   zuordnen; Sammelaktionen für die Erstzuordnung
 - **Design-Stile**: neben den Farb-Themes gibt es im Themes-Tab eine Auswahl
-  ganzer Design-Stile (Klassisch, Apple, Material 3, Modern Minimal, Bento,
-  Dark Premium, Neo-Brutalismus, Editorial/Legal, Command-Center) – jeder
-  Stil passt Typografie, Karten, Rahmen und Schatten des kompletten
-  Erscheinungsbildes an; alle responsiv
+  ganzer Design-Stile (Calm, Klassisch, Calm Dark, Editorial/Legal,
+  Neo-Brutalismus) – jeder Stil passt Typografie, Karten, Rahmen und
+  Schatten des kompletten Erscheinungsbildes an; alle responsiv
 - **Themes**: vordefinierte Farb-Designs (Classic, Dark, High Contrast, Warm,
   Blue) und ein Theme-Editor, mit dem alle Farben (inklusive Bannerfarbe) und
   der Eckenradius frei anpassbar sind; Auswahl wird lokal gespeichert
@@ -86,11 +86,11 @@ oder beliebiges statisches Hosting (z. B. GitHub Pages) bereitgestellt werden.
 
 ## Nutzung
 
-Über die Sidebar-Navigation (Desktop) bzw. die Tab-Leiste unten mit
-«Mehr»-Menü (Mobile) sind alle Funktionen erreichbar: Kindesunterhalt,
-Ehegattenunterhalt, Kostentrennung, Austausch sowie Richtwerte, Themes
-und Über. Die Sprachwahl (Deutsch, Français, Italiano, English) liegt
-in der Sidebar bzw. im «Mehr»-Menü.
+Über die Topbar (Desktop) bzw. die Tab-Leiste unten mit «Mehr»
+(Mobile) sind alle Funktionen erreichbar: Kindesunterhalt,
+Ehegattenunterhalt, Kostentrennung, Austausch; Richtwerte, Themes und
+Über über die Befehlspalette (Ctrl+K). Die Sprachwahl (Deutsch,
+Français, Italiano, English) liegt in der Topbar.
 
 Schritt-für-Schritt-Anleitung aller Tabs:
 [docs/BENUTZERHANDBUCH.md](docs/BENUTZERHANDBUCH.md)
@@ -106,7 +106,7 @@ Schritt-für-Schritt-Anleitung aller Tabs:
 | [docs/PRESETS.md](docs/PRESETS.md) | Kantonale Presets: Aufbau, Verifikation, eigene Presets |
 | [docs/ROADMAP.md](docs/ROADMAP.md) | Erledigte und geplante Funktionen |
 | [docs/TESTS.md](docs/TESTS.md) | Test-Übersicht und Ausführung |
-| [docs/DESIGN.md](docs/DESIGN.md) | Design-Stile, Apple-Redesign-Grundgerüst, Design-Historie |
+| [docs/DESIGN.md](docs/DESIGN.md) | Design-Stile, SOTA-Grundgerüst, Design-Historie |
 
 ## Richtwerte
 
@@ -142,10 +142,9 @@ Alimentenindexierung): [docs/ROADMAP.md](docs/ROADMAP.md).
 
 ### Design
 
-Alle neun Design-Stile (Apple, Material 3, Modern Minimal, Bento,
-Dark Premium, Neo-Brutalismus, Editorial/Legal, Command-Center, Base)
-sind im Tab **Themes** wählbar;
-Apple ist der Standard. Grundgerüst, Stile und Design-Historie:
+Die vier Design-Stile (Calm, Calm Dark, Editorial/Legal,
+Neo-Brutalismus; Calm ist der Standard) sind im Tab **Themes** wählbar.
+Grundgerüst, Stile und Design-Historie:
 [docs/DESIGN.md](docs/DESIGN.md).
 
 ### Tests
