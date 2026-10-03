@@ -52,7 +52,14 @@ unvollständig und darf nicht gemergt werden.
      `docs/BENUTZERHANDBUCH.md` jeweils im zugehörigen Abschnitt eingebettet
      (Pfad von docs/ aus: `../screenshots/…`). Keine Doppel-Einbettungen
      derselben Datei an mehreren Orten ausser dem Hero-Shot im README.
-  5. **Nachführung im selben Change**: `tools/make-screenshots.js` (VIEWS),
+  5. **Hero-Shot im README immer aktuell**: Der Hero-Shot im README
+     (aktuell `screenshots/pc/01-kindesunterhalt-de.png`) ist bei JEDER
+     sichtbaren UI-Änderung (Layout, Navigation, Design-Stil, Farben,
+     Typografie) zwingend im selben Change neu zu erzeugen und zu
+     committen – auch wenn die Ansicht selbst unverändert wirkt. Der
+     Hero-Shot ist das Aushängeschild des Repos und darf nie einen
+     veralteten Stand zeigen.
+  6. **Nachführung im selben Change**: `tools/make-screenshots.js` (VIEWS),
      Inventar-Tabelle (unten) und die Einbettungen im
      BENUTZERHANDBUCH sind konsistent zu halten; entfernte Screenshots sind
      auch aus README/Handbuch zu löschen (keine toten Links).
