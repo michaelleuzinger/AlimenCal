@@ -15,7 +15,7 @@ Unterhaltsfragen bei Trennung und Scheidung in der Schweiz:
   hochladen, Transaktionen zuordnen (ignorieren / anteilsmässig / voll durch
   eine Partei) – mit automatischem Ausgleich
 
-![Kindesunterhalt (DE)](screenshots/01-kindesunterhalt-de.png)
+![Kindesunterhalt (DE)](screenshots/pc/01-kindesunterhalt-de.png)
 
 ## QuickStart
 
@@ -32,7 +32,7 @@ Installation, kein Server, keine Abhängigkeiten.
 2. `index.html` per Doppelklick im Browser öffnen (Chrome, Firefox, Edge …) –
    die App läuft direkt über `file://`.
 
-3. Über das Zahnrad-Menü oben rechts allenfalls unter **Richtwerte** das
+3. Über das Hamburger-Menü oben rechts allenfalls unter **Richtwerte** das
    kantonale Preset laden (z. B. Zürcher Kinderkosten-Tabelle 1.3.2025),
    dann im Tab **Kindesunterhalt** mit der Erfassung beginnen.
 
@@ -42,6 +42,7 @@ oder beliebiges statisches Hosting (z. B. GitHub Pages) bereitgestellt werden.
 
 ## Eigenschaften
 
+- **Responsive Darstellung**: Die App passt sich an Smartphone-, Tablet- und  Desktop-Bildschirme an – Grids brechen um, Tabellen und Tab-Navigation  sind auf schmalen Displays horizontal scrollbar, Touch-Ziele sind  vergrössert
 - **Vier Sprachen**: Deutsch, Français, Italiano, English – umschaltbar,
   Auswahl wird lokal gespeichert
 - **Konfigurierbare Richtwerte**: Existenzminima, altersgestaffelte
@@ -91,7 +92,7 @@ oder beliebiges statisches Hosting (z. B. GitHub Pages) bereitgestellt werden.
    Ausgleich. Details: [docs/KOSTENTRENNUNG.md](docs/KOSTENTRENNUNG.md)
 5. Tab **Austausch**: eigene Daten als JSON exportieren, Datei der
    anderen Partei importieren (Merge).
-6. Über das Zahnrad-Menü oben rechts im Kopf: Sprachwahl sowie unter
+6. Über das Hamburger-Menü oben rechts im Kopf: Sprachwahl sowie unter
    **Richtwerte** kantonale Werte anpassen, speichern,
    exportieren/importieren, Presets laden, und unter **Themes** Design
    wählen oder im Theme-Editor Farben anpassen.
