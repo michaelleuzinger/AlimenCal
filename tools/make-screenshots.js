@@ -36,6 +36,14 @@ const OUT_DIR = path.join(ROOT, 'screenshots');
 
 const LANGS = ['de', 'fr'];
 
+/* Vereinbarte Geraetetypen (PC, iPhone, iPad) */
+const DEVICES = {
+  pc:     { width: 1395, height: 2084 },
+  iphone: { width: 390,  height: 844 },
+  ipad:   { width: 820,  height: 1180 }
+};
+const DEVICE_KEYS = ['pc', 'iphone', 'ipad'];
+
 const VIEWS = [
   { n: 1, name: 'kindesunterhalt', langs: ['de'], setup: setupChildren },
   { n: 2, name: 'ehegattenunterhalt', langs: ['de'], setup: setupSpousal },
@@ -45,9 +53,7 @@ const VIEWS = [
   { n: 6, name: 'richtwerte', langs: ['de'], setup: setupSettings },
   { n: 7, name: 'themes-classic', langs: ['de'], setup: setupThemesClassic },
   { n: 8, name: 'themes-dark', langs: ['de'], setup: setupThemesDark },
-  { n: 9, name: 'pension-enfants', langs: ['fr'], setup: setupChildren },
-  { n: 10, name: 'kindesunterhalt-smartphone', langs: ['de'], setup: setupChildren, viewport: { width: 390, height: 844 } },
-  { n: 11, name: 'kostentrennung-smartphone', langs: ['de'], setup: setupCostsplit, viewport: { width: 390, height: 844 } }
+  { n: 9, name: 'pension-enfants', langs: ['fr'], setup: setupChildren }
 ];
 
 /* ---------- Beispieldaten (anonymisiert, keine echten Personen) ---------- */
@@ -243,6 +249,9 @@ async function run() {
   const only = process.argv.includes('--only')
     ? parseInt(process.argv[process.argv.indexOf('--only') + 1], 10)
     : null;
+  const devices = process.argv.includes('--devices')
+    ? process.argv[process.argv.indexOf('--devices') + 1].split(',').filter(d => DEVICE_KEYS.includes(d))
+    : DEVICE_KEYS;
 
   fs.mkdirSync(OUT_DIR, { recursive: true });
 
@@ -254,23 +263,26 @@ async function run() {
   try {
     for (const view of VIEWS) {
       if (only && view.n !== only) { continue; }
-      for (const lang of view.langs) {
-        const page = await browser.newPage();
-        const vp = view.viewport || { width: 1395, height: 2084 };
-        await page.setViewport({ ...vp, deviceScaleFactor: 1 });
-        page.on('pageerror', e => console.error('PAGE ERROR:', String(e)));
+      for (const device of devices) {
+        for (const lang of view.langs) {
+          const page = await browser.newPage();
+          await page.setViewport({ ...DEVICES[device], deviceScaleFactor: 1 });
+          page.on('pageerror', e => console.error('PAGE ERROR:', String(e)));
 
-        await page.goto(APP_URL + '?screenshot=1', { waitUntil: 'networkidle0' });
-        await sleep(200);
-        await setLang(page, lang);
-        await view.setup(page);
-        await sleep(300);
+          await page.goto(APP_URL + '?screenshot=1', { waitUntil: 'networkidle0' });
+          await sleep(200);
+          await setLang(page, lang);
+          await view.setup(page);
+          await sleep(300);
 
-        const num = String(view.n).padStart(2, '0');
-        const file = path.join(OUT_DIR, num + '-' + view.name + '-' + lang + '.png');
-        await page.screenshot({ path: file, fullPage: false });
-        console.log('created', path.relative(ROOT, file));
-        await page.close();
+          const num = String(view.n).padStart(2, '0');
+          const deviceDir = path.join(OUT_DIR, device);
+          fs.mkdirSync(deviceDir, { recursive: true });
+          const file = path.join(deviceDir, num + '-' + view.name + '-' + lang + '.png');
+          await page.screenshot({ path: file, fullPage: false });
+          console.log('created', path.relative(ROOT, file));
+          await page.close();
+        }
       }
     }
   } finally {

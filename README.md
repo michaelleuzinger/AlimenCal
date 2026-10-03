@@ -15,7 +15,7 @@ Unterhaltsfragen bei Trennung und Scheidung in der Schweiz:
   hochladen, Transaktionen zuordnen (ignorieren / anteilsmässig / voll durch
   eine Partei) – mit automatischem Ausgleich
 
-![Kindesunterhalt (DE)](screenshots/01-kindesunterhalt-de.png)
+![Kindesunterhalt (DE)](screenshots/pc/01-kindesunterhalt-de.png)
 
 ## QuickStart
 

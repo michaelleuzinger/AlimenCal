@@ -27,20 +27,25 @@ Die App ist responsiv gestaltet und auf Smartphone, Tablet und Desktop nutzbar:
   Geräts; ein Gerätewechsel erfolgt über den JSON-Export/Import im
   Austausch-Tab.
 
-Beispiel Kindesunterhalt im Smartphone-Viewport (390×844):
+Die Screenshots in diesem Handbuch zeigen die PC-Ansicht (1395×2084).
+Die gleichen Ansichten im iPhone- (390×844) und iPad-Viewport (820×1180)
+liegen unter `screenshots/iphone/` bzw. `screenshots/ipad/` im Repository.
 
-![Kindesunterhalt Smartphone (DE)](../screenshots/10-kindesunterhalt-smartphone-de.png)
+Beispiel Kindesunterhalt im iPhone-Viewport – Grids brechen auf eine
+Spalte um, die Tab-Navigation bleibt scrollbar:
 
-Beispiel Kostentrennung im Smartphone-Viewport – die Transaktionstabelle
+![Kindesunterhalt iPhone (DE)](../screenshots/iphone/01-kindesunterhalt-de.png)
+
+Beispiel Kostentrennung im iPhone-Viewport – die Transaktionstabelle
 ist horizontal scrollbar:
 
-![Kostentrennung Smartphone (DE)](../screenshots/11-kostentrennung-smartphone-de.png)
+![Kostentrennung iPhone (DE)](../screenshots/iphone/03-kostentrennung-de.png)
 
 ## Sprachen
 
 Beispiel einer fremdsprachigen Ansicht (Français):
 
-![Pension alimentaire (FR)](../screenshots/09-pension-enfants-fr.png)
+![Pension alimentaire (FR)](../screenshots/pc/09-pension-enfants-fr.png)
 
 Die Sprache wird im Zahnrad-Menü oben rechts gewählt: **Deutsch, Français,
 Italiano, English**. Die Auswahl wird im Browser gespeichert (`localStorage`)
@@ -65,7 +70,7 @@ ausserhalb des Menüs oder mit der Escape-Taste.
 
 **Einstellungen & Info (Zahnrad-Menü im Kopf):**
 
-![Einstellungen-Menü (DE)](../screenshots/05-einstellungen-menue-de.png)
+![Einstellungen-Menü (DE)](../screenshots/pc/05-einstellungen-menue-de.png)
 
 | Tab | Zweck |
 |---|---|
@@ -75,7 +80,7 @@ ausserhalb des Menüs oder mit der Escape-Taste.
 
 ## Tab «Kindesunterhalt»
 
-![Kindesunterhalt (DE)](../screenshots/01-kindesunterhalt-de.png)
+![Kindesunterhalt (DE)](../screenshots/pc/01-kindesunterhalt-de.png)
 
 1. **Eltern**: Nettoeinkommen und allfälliges abweichendes Existenzminimum
    je Partei erfassen (Defaults: CHF 2200 erwerbstätig / CHF 2000 nicht
@@ -104,7 +109,7 @@ Hinweise:
 
 ## Tab «Ehegattenunterhalt»
 
-![Ehegattenunterhalt (DE)](../screenshots/02-ehegattenunterhalt-de.png)
+![Ehegattenunterhalt (DE)](../screenshots/pc/02-ehegattenunterhalt-de.png)
 
 1. Checkbox aktivieren, falls ein Ehegattenunterhalt geprüft werden soll.
 2. Angaben zum gebührenden Lebensstandard (Bedarf), allfällige Mehrkosten
@@ -116,7 +121,7 @@ Hinweise:
 
 ## Tab «Kostentrennung»
 
-![Kostentrennung (DE)](../screenshots/03-kostentrennung-de.png)
+![Kostentrennung (DE)](../screenshots/pc/03-kostentrennung-de.png)
 
 Für Paare, die ihre laufenden Kosten schon **vor** der Scheidung separat
 abrechnen wollen – ausführlich beschrieben in
@@ -136,7 +141,7 @@ Kurz:
 
 ## Tab «Richtwerte»
 
-![Richtwerte (DE)](../screenshots/06-richtwerte-de.png)
+![Richtwerte (DE)](../screenshots/pc/06-richtwerte-de.png)
 
 - Alle Richtwerte (Existenzminima, Grundbedarfe, Betreuungsunterhalt) sind
   hier sichtbar und anpassbar – vgl. die Default-Quellen im README.
@@ -175,7 +180,7 @@ Kurz:
 
 ## Tab «Austausch» (zwei Parteien, zwei PCs)
 
-![Austausch (DE)](../screenshots/04-austausch-de.png)
+![Austausch (DE)](../screenshots/pc/04-austausch-de.png)
 
 Arbeiten die Parteien **nicht am selben PC**, trägt jede Partei nur ihre
 eigenen Angaben ein und stellt sie der anderen Partei als Datei zu (z. B. per
@@ -225,9 +230,9 @@ B importiert, rechnet).
 
 ## Tab «Themes»
 
-![Themes Classic (DE)](../screenshots/07-themes-classic-de.png)
+![Themes Classic (DE)](../screenshots/pc/07-themes-classic-de.png)
 
-![Themes Dark (DE)](../screenshots/08-themes-dark-de.png)
+![Themes Dark (DE)](../screenshots/pc/08-themes-dark-de.png)
 
 - **Vordefinierte Themes**: Classic (Default), Dark, High Contrast (barrierefrei,
   für Sehbehinderte geeignet), Warm und Blue – Auswahl wirkt sofort.
