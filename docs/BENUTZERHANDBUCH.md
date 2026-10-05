@@ -50,12 +50,16 @@ Files-App oder iCloud Drive («In Dateien sichern») gespeichert werden.
 Die Datei übersteht das Löschen der App. Empfehlung: nach jeder
 wesentlichen Änderung ein neues Backup erstellen.
 
+![Backup erstellen (DE)](../screenshots/pc/15-backup-de.png)
+
 **Restore («Backup wiederherstellen»):** Die Backup-Datei direkt unter
 der Backup-Funktion im Austausch-Tab auswählen («Backup-Datei wählen»).
 Es werden alle enthaltenen Falldaten, Sprache, Design-Stil/Theme,
 Richtwerte sowie die verbindlichen Einstellungen inklusive Lock-Zustand
 (Two-Party-Lock) und die Schlüssel für signierte Lock-Dateien in einem
 Schritt wiederhergestellt.
+
+![Backup wiederherstellen (DE)](../screenshots/pc/16-restore-de.png)
 
 **Gesperrte Abschnitte (unveränderbar):** Nach dem Import einer
 Parteien-Datei oder dem Restore werden die übernommenen Abschnitte als
