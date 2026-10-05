@@ -708,6 +708,11 @@
     document.getElementById('share-export-hint').textContent = t('share', 'exportHint');
     document.getElementById('share-export').textContent = t('share', 'exportButton');
     document.getElementById('share-export-encrypt-label').textContent = t('share', 'encryptLabel');
+    document.getElementById('share-backup-heading').textContent = t('share', 'backupHeading');
+    document.getElementById('share-backup-hint').textContent = t('share', 'backupHint');
+    document.getElementById('share-backup').textContent = t('share', 'backupButton');
+    var backupStatus = document.getElementById('share-backup-status');
+    if (backupStatus) { backupStatus.textContent = ''; }
     document.getElementById('share-import-heading').textContent = t('share', 'importHeading');
     document.getElementById('share-import-hint').textContent = t('share', 'importHint');
     document.getElementById('share-import-label').textContent = t('share', 'importLabel');
@@ -1582,6 +1587,32 @@
     }
     download(file, 'alimencal-case.json');
   }
+  function backupFileName() {
+    var d = new Date();
+    function pad(n) { return (n < 10 ? '0' : '') + n; }
+    return 'alimencal-backup-' + d.getFullYear() + pad(d.getMonth() + 1) +
+      pad(d.getDate()) + '-' + pad(d.getHours()) + pad(d.getMinutes()) + '.json';
+  }
+  function doBackup() {
+    var current = collectCurrentSections();
+    var file = AlimenCal.casedata.buildFile(current);
+    var status = document.getElementById('share-backup-status');
+    var blob = new Blob([JSON.stringify(file, null, 2)], { type: 'application/json' });
+    function done() {
+      if (status) { status.textContent = t('share', 'backupOk'); }
+    }
+    if (navigator.canShare && navigator.canShare({ files: [new File([], backupFileName())] })) {
+      var f = new File([blob], backupFileName(), { type: 'application/json' });
+      navigator.share({ files: [f], title: 'AlimenCal' }).then(done, function () {});
+      return;
+    }
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = backupFileName();
+    a.click();
+    URL.revokeObjectURL(a.href);
+    done();
+  }
 
   function applySectionsToForm(sections) {
     if (sections.parentA) {
@@ -1918,6 +1949,7 @@
     });
 
     document.getElementById('share-export').addEventListener('click', doShareExport);
+    document.getElementById('share-backup').addEventListener('click', doBackup);
     document.getElementById('share-import').addEventListener('change', function () {
       var file = this.files && this.files[0];
       if (file) { handleShareImport(file); }

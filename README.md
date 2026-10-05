@@ -58,7 +58,10 @@ App (PWA) installierbar und danach auch offline nutzbar:
 - **Android/Chrome**: Browser-Menü «App installieren» bzw. Installations-
   Banner.
 - Gespeicherte Daten bleiben auch in der installierten App lokal im
-  Browser-Speicher des jeweiligen Geräts.
+  Browser-Speicher des jeweiligen Geräts. Für das Überstehen einer
+  De-/Neuinstallation steht im Austausch-Tab ein Backup-Export zur
+  Verfügung: Datei in die Files-App/iCloud Drive speichern und nach der
+  Neuinstallation wieder importieren.
 
 ## Eigenschaften
 
