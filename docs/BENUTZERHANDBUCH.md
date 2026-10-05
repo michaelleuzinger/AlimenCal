@@ -40,6 +40,15 @@ Progressive Web App installiert und anschliessend offline genutzt werden:
 3. Die App öffnet sich daraufhin im Vollbildmodus ohne Browserleiste; das
    Icon liegt auf dem Home-Bildschirm.
 
+**Backup für Neuinstallation:** Da iOS beim Löschen einer Home-Screen-App
+auch deren lokale Daten entfernt, bietet der Austausch-Tab eine
+Backup-Funktion: «Backup erstellen (JSON)» exportiert alle Abschnitte als
+Datei; auf iPhone/iPad kann sie im Share-Dialog direkt in die Files-App
+oder iCloud Drive («In Dateien sichern») gespeichert werden. Die Datei
+übersteht das Löschen der App und lässt sich nach einer Neuinstallation
+über den Import im Austausch-Tab wiederherstellen. Empfehlung: nach jeder
+wesentlichen Änderung ein neues Backup erstellen.
+
 Technische Grundlage sind `manifest.json` und der Service Worker `sw.js`
 im Repository-Root, der alle App-Dateien für die Offline-Nutzung cacht.
 Die Service-Worker-Registrierung erfolgt automatisch, wenn die App über
