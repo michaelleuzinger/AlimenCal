@@ -23,13 +23,17 @@ Farb-Feinjustierung im Theme-Editor funktioniert in jedem Stil weiter.
 - **Werkzeug-Ästhetik**: 32px-Inputs, tabellarische Ziffern,
   Fokus-Ringe, feine Linien – Hierarchie durch Dichte und Typografie
   statt durch Dekor
-- **Resultat-Tabellen im System-Stil**: Die Ergebnis-Tabellen
-  (Kindesunterhalt, Kostentrennung) folgen derselben Werkzeug-Ästhetik
-  wie die Karten – kompakte Caps-Kopfzeile in Sekundärfarbe mit feiner
-  Kante, Zebrastreifen über `--btn-secondary-bg`, rechtbündige
-  tabellarische Ziffern – mit passenden Overrides je Design-Stil
-  (Calm Dark: Kante über `--muted`; Neo-Brutalismus: 2px-Kante, kein
-  Radius)
+- **Resultat-Aufschlüsselung statt Breitband-Tabelle**: Das Kindesunterhalt-
+  Resultat zeigt pro Kind eine kompakte Key-Value-Aufschlüsselung
+  (`.result-breakdown`): Caps-Kopfzeile je Kind, feine Zeilen mit
+  Label links / tabellarischem Wert rechts, Totals mit Kante und
+  Akzentfarbe – die 11-spaltige Matrix sass nie im 340px-Panel und
+  lief horizontal aus dem Layout. Die Kostentrennungs-Tabelle (5
+  Spalten) bleibt als `.result-table` im System-Stil: kompakte Caps-
+  Kopfzeile in Sekundärfarbe mit feiner Kante, Zebrastreifen über
+  `--btn-secondary-bg`, rechtbündige tabellarische Ziffern – mit
+  passenden Overrides je Design-Stil (Calm Dark: Kante über
+  `--muted`; Neo-Brutalismus: 2px-Kante, kein Radius)
 - **Dunkelmodus als eigener Stil** (Calm Dark) statt verstecktem
   prefers-color-Schema-Fallback, da Nutzer aktiv hell/dunkel wählen
 

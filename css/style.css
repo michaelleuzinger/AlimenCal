@@ -239,6 +239,29 @@ button.danger { background: transparent; color: var(--warn); text-decoration: un
 .result-table th:first-child, .result-table td:first-child { text-align: left; }
 .result-table tbody tr:nth-child(even) { background: var(--btn-secondary-bg); }
 .result-table tfoot td { font-weight: 700; border-top: 2px solid var(--line); }
+/* Ergebnis-Aufschlüsselung (Key-Value je Kind) im Live-Ergebnis-Panel */
+.result-breakdown-block { margin: 0 0 0.9rem; }
+.result-breakdown-block:last-child { margin-bottom: 0; }
+.result-breakdown-head {
+  margin: 0 0 0.35rem; font-size: 0.72rem; font-weight: 600;
+  color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em;
+}
+.result-breakdown-row {
+  display: flex; justify-content: space-between; gap: 0.75rem;
+  margin: 0; padding: 0.25rem 0;
+  font-size: 0.85rem;
+  border-bottom: 1px solid var(--line);
+}
+.result-breakdown-row:last-child { border-bottom: 0; }
+.result-breakdown-label { color: var(--muted); }
+.result-breakdown-value { font-weight: 500; white-space: nowrap; }
+.result-breakdown-row-total {
+  font-weight: 700; padding-top: 0.4rem;
+  border-top: 1px solid var(--line);
+  border-bottom: 0;
+}
+.result-breakdown-row-total .result-breakdown-label { color: var(--ink); }
+.result-breakdown-row-total .result-breakdown-value { color: var(--accent-dark); }
 
 .big { font-size: 1.3rem; font-weight: 700; color: var(--accent-dark); }
 .totals { font-size: 0.95rem; }
