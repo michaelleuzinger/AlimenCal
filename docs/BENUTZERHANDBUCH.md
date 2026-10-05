@@ -96,11 +96,12 @@ unteren Rand; «Mehr» öffnet die Befehlspalette.
    Krankenkassenprämie und Fremdbetreuungskosten werden daraus abgezogen
    (separate Erfassung als direkte Kosten), um Doppelerfassungen zu vermeiden.
    Die Wahl gilt pro Kind und ist im Resultat ausgewiesen.
-4. **Resultat**: Grundbedarf (altersgestaffelt oder effektive Kosten),
-   Barunterhalt je Partei (aufgeteilt nach wirtschaftlicher
-   Leistungsfähigkeit) und Betreuungsunterhalt (netto verrechnet zwischen
-   den Parteien). Bei Unterdeckung wird eine Mangellage mit Mankobetrag
-   ausgewiesen.
+4. **Resultat**: Pro Kind eine kompakte Aufschlüsselung mit Grundbedarf
+   (altersgestaffelt oder effektive Kosten), Barunterhalt je Partei
+   (aufgeteilt nach wirtschaftlicher Leistungsfähigkeit) und
+   Betreuungsunterhalt (netto verrechnet zwischen den Parteien); je
+   Kind sind die Totals je Partei ausgewiesen. Bei Unterdeckung wird
+   eine Mangellage mit Mankobetrag ausgewiesen.
 
 Hinweise:
 
