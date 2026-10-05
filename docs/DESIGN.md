@@ -36,6 +36,10 @@ Farb-Feinjustierung im Theme-Editor funktioniert in jedem Stil weiter.
   `--muted`; Neo-Brutalismus: 2px-Kante, kein Radius)
 - **Dunkelmodus als eigener Stil** (Calm Dark) statt verstecktem
   prefers-color-Schema-Fallback, da Nutzer aktiv hell/dunkel wählen
+- **Topbar-Text über `--banner-ink`**: Marke, Navigation und Sprachumschalter
+  folgen der Banner-Schriftfarbe des Themes (im Klassisch-Stil weiss auf
+  dunkelgrüner Leiste, sonst wie `--ink`) – vorher lag dort hartes
+  `--ink`/`--muted` mit unzureichendem Kontrast (1.4–2:1)
 
 ## Design-Stile
 
@@ -45,7 +49,7 @@ Farb-Feinjustierung im Theme-Editor funktioniert in jedem Stil weiter.
 | Klassisch (Base) | Ursprüngliches Projekt-Aussehen als Referenz |
 | Calm Dark | Dieselbe Anmutung dunkel (#0b0b0d/#131316) |
 | Editorial/Legal | Warme Papier-Töne, Serif-Typografie – Dokument-Anmutung für den Rechtskontext |
-| Neo-Brutalismus | Harte Schatten, dicke Ränder, kein Radius – der bewusste Kontrapunkt |
+| Neo-Brutalismus | Harte Schatten, dicke Ränder, kein Radius – der bewusste Kontrapunkt; Text auf Akzentflächen in dunkler Tinte (#111) statt weiss, Sekundärflächen in gedecktem Gelb (#ffe9a8) für ausreichenden Kontrast |
 
 Gestrichen wurden Apple, Material 3, Modern Minimal, Bento, Dark Premium
 und Command-Center (Runde 3: sechs Stile mit starker Überschneidung;
