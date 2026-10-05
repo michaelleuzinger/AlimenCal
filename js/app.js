@@ -652,11 +652,11 @@
     document.getElementById('app-subtitle').textContent = t('subtitle');
     document.getElementById('disclaimer').textContent = t('disclaimerShort');
 
-    document.querySelectorAll('.tab[data-tab="children"]').forEach(function (el) { setNavLabel(el, t('nav', 'children')); });
-    document.querySelectorAll('.tab[data-tab="spousal"]').forEach(function (el) { setNavLabel(el, t('nav', 'spousal')); });
-    document.querySelectorAll('.tab[data-tab="costsplit"]').forEach(function (el) { setNavLabel(el, t('nav', 'costsplit')); });
+    document.querySelectorAll('.tab[data-tab="children"]').forEach(function (el) { setNavLabel(el, el.classList.contains('mob-item') ? t('nav', 'childrenShort') : t('nav', 'children')); });
+    document.querySelectorAll('.tab[data-tab="spousal"]').forEach(function (el) { setNavLabel(el, el.classList.contains('mob-item') ? t('nav', 'spousalShort') : t('nav', 'spousal')); });
+    document.querySelectorAll('.tab[data-tab="costsplit"]').forEach(function (el) { setNavLabel(el, el.classList.contains('mob-item') ? t('nav', 'costsplitShort') : t('nav', 'costsplit')); });
     document.querySelectorAll('.tab[data-tab="themes"]').forEach(function (el) { setNavLabel(el, t('nav', 'themes')); });
-    document.querySelectorAll('.tab[data-tab="share"]').forEach(function (el) { setNavLabel(el, t('nav', 'share')); });
+    document.querySelectorAll('.tab[data-tab="share"]').forEach(function (el) { setNavLabel(el, el.classList.contains('mob-item') ? t('nav', 'shareShort') : t('nav', 'share')); });
     document.querySelectorAll('.tab[data-tab="settings"]').forEach(function (el) { setNavLabel(el, t('nav', 'settings')); });
     document.querySelectorAll('.tab[data-tab="about"]').forEach(function (el) { setNavLabel(el, t('nav', 'about')); });
 

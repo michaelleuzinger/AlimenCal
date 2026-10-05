@@ -71,7 +71,8 @@ AlimenCal.i18n.it = {
     about: 'Informazioni',
     settingsMenu: 'Impostazioni e informazioni',
     language: 'Lingua',
-    more: 'Altro'
+    more: 'Altro',
+    childrenShort: 'Figli', spousalShort: 'Coniuge', costsplitShort: 'Costi', shareShort: 'Scambio'
   },
   palette: { placeholder: 'Cercare o passare a …', empty: 'Nessun risultato' },
   common: {

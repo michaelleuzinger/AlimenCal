@@ -49,7 +49,7 @@ body {
   width: 1.4rem; height: 1.4rem; border-radius: 0.4rem;
   background: var(--accent); color: var(--accent-ink); font-size: 0.85rem; font-weight: 700;
 }
-.topnav { display: flex; gap: 0.15rem; }
+.topnav { display: flex; gap: 0.4rem; }
 .nav-item {
   border: 1px solid transparent; background: transparent;
   color: var(--banner-ink); padding: 0.35rem 0.65rem;
@@ -108,17 +108,18 @@ body {
 @media (max-width: 920px) {
   .topnav, .cmdk-trigger, .topbar .lang-switch { display: none; }
   .mobile-tabs {
-    display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
+    display: flex; gap: 0.25rem; position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
     background: var(--card); border-top: 1px solid var(--line);
-    padding: 0.25rem 0.35rem calc(0.25rem + env(safe-area-inset-bottom, 0px));
+    padding: 0.3rem 0.4rem calc(0.3rem + env(safe-area-inset-bottom, 0px));
   }
-  .mob-item {
+  .mobile-tabs .mob-item {
     flex: 1; min-width: 0; border: 0; background: transparent;
     color: var(--muted); font: inherit; font-size: 0.68rem; font-weight: 500;
-    padding: 0.35rem 0.1rem; border-radius: 8px; cursor: pointer; white-space: nowrap;
+    padding: 0.45rem 0.15rem; border-radius: 8px; cursor: pointer;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
-  .mob-item.active { color: var(--ink); background: var(--btn-secondary-bg); font-weight: 600; }
-  .app-shell { padding-bottom: 3.6rem; }
+  .mobile-tabs .mob-item.active { color: var(--ink); background: var(--btn-secondary-bg); font-weight: 600; }
+  .app-shell { padding-bottom: 4rem; }
 }
 @media (max-width: 560px) {
   .topbar-in { gap: 0.6rem; }
