@@ -711,6 +711,9 @@
     document.getElementById('share-backup-heading').textContent = t('share', 'backupHeading');
     document.getElementById('share-backup-hint').textContent = t('share', 'backupHint');
     document.getElementById('share-backup').textContent = t('share', 'backupButton');
+    document.getElementById('share-restore-heading').textContent = t('share', 'restoreHeading');
+    document.getElementById('share-restore-hint').textContent = t('share', 'restoreHint');
+    document.getElementById('share-restore-label').textContent = t('share', 'restoreLabel');
     var backupStatus = document.getElementById('share-backup-status');
     if (backupStatus) { backupStatus.textContent = ''; }
     document.getElementById('share-import-heading').textContent = t('share', 'importHeading');
@@ -1595,7 +1598,16 @@
   }
   function doBackup() {
     var current = collectCurrentSections();
-    var file = AlimenCal.casedata.buildFile(current);
+    var themeValues = null;
+    try {
+      var rawValues = localStorage.getItem(LS_THEME_VALUES);
+      if (rawValues) { themeValues = JSON.parse(rawValues); }
+    } catch (e) {}
+    var file = AlimenCal.casedata.buildBackupFile(current, {
+      lang: state.lang,
+      theme: { id: getThemeId(), values: themeValues },
+      config: state.cfg
+    });
     var status = document.getElementById('share-backup-status');
     var blob = new Blob([JSON.stringify(file, null, 2)], { type: 'application/json' });
     function done() {
@@ -1614,6 +1626,44 @@
     done();
   }
 
+  function handleBackupRestore(file) {
+    var reader = new FileReader();
+    reader.onload = function () {
+      var raw;
+      try { raw = JSON.parse(reader.result); } catch (e) { raw = null; }
+      var status = document.getElementById('share-restore-status');
+      var result = raw ? AlimenCal.casedata.sanitizeBackup(raw) : null;
+      if (!result || !result.valid) {
+        status.textContent = t('share', 'restoreInvalid');
+        return;
+      }
+      applySectionsToForm(result.sections);
+      var restored = [];
+      if (result.settings.lang) {
+        state.lang = result.settings.lang;
+        try { localStorage.setItem(LS_LANG, state.lang); } catch (e) {}
+        Array.prototype.forEach.call(document.querySelectorAll('.lang-select-sync'), function (sel) {
+          sel.value = state.lang;
+        });
+        restored.push(t('share', 'restorePartLang'));
+      }
+      if (result.settings.theme) {
+        saveTheme(result.settings.theme.id, result.settings.theme.values);
+        applyTheme(result.settings.theme.id, result.settings.theme.values);
+        restored.push(t('share', 'restorePartTheme'));
+      }
+      if (result.settings.config) {
+        state.cfg = result.settings.config;
+        saveCfg(state.cfg);
+        fillCfgForm();
+        restored.push(t('share', 'restorePartConfig'));
+      }
+      applyI18n();
+      var parts = restored.length ? ' ' + t('share', 'restoreSettingsOk', [restored.join(', ')]) : '';
+      status.textContent = t('share', 'restoreOk', [String(Object.keys(result.sections).length), parts]);
+    };
+    reader.readAsText(file);
+  }
   function applySectionsToForm(sections) {
     if (sections.parentA) {
       document.getElementById('pa-income').value = sections.parentA.income;
@@ -1950,6 +2000,11 @@
 
     document.getElementById('share-export').addEventListener('click', doShareExport);
     document.getElementById('share-backup').addEventListener('click', doBackup);
+    document.getElementById('share-restore').addEventListener('change', function () {
+      var file = this.files && this.files[0];
+      this.value = '';
+      if (file) { handleBackupRestore(file); }
+    });
     document.getElementById('share-import').addEventListener('change', function () {
       var file = this.files && this.files[0];
       if (file) { handleShareImport(file); }

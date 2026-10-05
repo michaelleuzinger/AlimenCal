@@ -42,12 +42,22 @@ Progressive Web App installiert und anschliessend offline genutzt werden:
 
 **Backup für Neuinstallation:** Da iOS beim Löschen einer Home-Screen-App
 auch deren lokale Daten entfernt, bietet der Austausch-Tab eine
-Backup-Funktion: «Backup erstellen (JSON)» exportiert alle Abschnitte als
-Datei; auf iPhone/iPad kann sie im Share-Dialog direkt in die Files-App
-oder iCloud Drive («In Dateien sichern») gespeichert werden. Die Datei
-übersteht das Löschen der App und lässt sich nach einer Neuinstallation
-über den Import im Austausch-Tab wiederherstellen. Empfehlung: nach jeder
+Backup-Funktion: «Backup erstellen (JSON)» exportiert **alle** Daten –
+sämtliche Falldaten (beide Parteien, Kinder, Ehegattenunterhalt,
+Kostentrennung) sowie Sprache, Design-Stil/Theme und die Richtwerte –
+als eine Datei; auf iPhone/iPad kann sie im Share-Dialog direkt in die
+Files-App oder iCloud Drive («In Dateien sichern») gespeichert werden.
+Die Datei übersteht das Löschen der App. Empfehlung: nach jeder
 wesentlichen Änderung ein neues Backup erstellen.
+
+**Restore («Backup wiederherstellen»):** Die Backup-Datei direkt unter
+der Backup-Funktion im Austausch-Tab auswählen («Backup-Datei wählen»).
+Es werden alle enthaltenen Falldaten, Sprache, Design-Stil/Theme und
+Richtwerte in einem Schritt wiederhergestellt. Das Format ist getrennt
+vom Parteien-Austausch (`alimencal-backup` statt `alimencal`) und wird
+eigens validiert; der Parteien-Import bleibt unverändert. Die
+Wiederherstellung überschreibt die aktuellen Werte mit denjenigen aus
+der Datei – also nur mit einem Backup des gewünschten Stands durchführen.
 
 Technische Grundlage sind `manifest.json` und der Service Worker `sw.js`
 im Repository-Root, der alle App-Dateien für die Offline-Nutzung cacht.

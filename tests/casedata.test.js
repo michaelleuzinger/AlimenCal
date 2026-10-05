@@ -119,6 +119,49 @@ var roundtrip = casedata.sanitizeCase(exported);
 ok('Roundtrip: valid', roundtrip.valid === true);
 ok('Roundtrip: income erhalten', roundtrip.sections.parentA.income === 7800);
 
+/* ---------- Backup/Restore ---------- */
+var backup = casedata.buildBackupFile(
+  { parentA: { income: 7800, existenzminimum: '', employed: true } },
+  { lang: 'fr', theme: { id: 'dark', values: null }, config: { defaultExistenzminimumEmployed: 1800 } }
+);
+ok('Backup: app=alimencal-backup', backup.app === 'alimencal-backup');
+ok('Backup: version=1', backup.version === 1);
+ok('Backup: eingebettete Falldatei app=alimencal', backup.case.app === 'alimencal');
+ok('Backup: settings.lang', backup.settings.lang === 'fr');
+ok('Backup: settings.theme.id', backup.settings.theme.id === 'dark');
+var restored = casedata.sanitizeBackup(backup);
+ok('Restore: valid', restored.valid === true);
+ok('Restore: sections uebernommen', restored.sections.parentA.income === 7800);
+ok('Restore: lang', restored.settings.lang === 'fr');
+ok('Restore: theme.id', restored.settings.theme.id === 'dark');
+ok('Restore: config ohne AlimenCal.config verworfen (Node-Kontext)', !restored.settings.config || typeof restored.settings.config === 'object');
+ok('Restore: Falldatei ohne Extras => settings leer aber valid', (function () {
+  var b = casedata.sanitizeBackup(casedata.buildBackupFile({ spousalEnabled: true }, {}));
+  return b.valid === true && b.settings.lang === undefined;
+})());
+ok('Restore: falsche APP-ID => invalid', casedata.sanitizeBackup({ app: 'other', version: 1 }).valid === false);
+ok('Restore: falsche Version => invalid', casedata.sanitizeBackup({ app: 'alimencal-backup', version: 9 }).valid === false);
+ok('Restore: ungueltige Sprache verworfen', (function () {
+  var b = casedata.buildBackupFile({ spousalEnabled: true }, { lang: 'xx' });
+  var r = casedata.sanitizeBackup(b);
+  return r.valid === true && r.settings.lang === undefined;
+})());
+ok('Restore: ungueltiges Theme verworfen', (function () {
+  var b = casedata.buildBackupFile({ spousalEnabled: true }, { theme: { id: '' } });
+  var r = casedata.sanitizeBackup(b);
+  return r.valid === true && r.settings.theme === undefined;
+})());
+ok('Restore: ungueltige Falldaten => invalid', (function () {
+  var b = casedata.buildBackupFile({}, {});
+  var r = casedata.sanitizeBackup(b);
+  return r.valid === false;
+})());
+ok('Restore: Backup ohne Settings bleibt valid', (function () {
+  var b = casedata.buildBackupFile({ spousalEnabled: true }, {});
+  var r = casedata.sanitizeBackup(b);
+  return r.valid === true;
+})());
+
 /* ---------- Zusammenfassung ---------- */
 console.log('\n' + passed + ' Tests bestanden' +
   (process.exitCode ? ', FEHLER vorhanden' : ', keine Fehler'));
