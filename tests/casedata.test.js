@@ -162,6 +162,42 @@ ok('Restore: Backup ohne Settings bleibt valid', (function () {
   return r.valid === true;
 })());
 
+/* ---------- Backup/Restore: Binding & Keys ---------- */
+var backupBK = casedata.buildBackupFile(
+  { spousalEnabled: true },
+  {
+    binding: { settings: { defaultSpousalStandard: { valueBase: 4200, lockedA: true, lockedB: true } }, overrides: {}, chain: [] },
+    keys: { partyA: { importedParty: false, publicKey: 'pub-a', privateKey: 'priv-a' }, partyB: null }
+  }
+);
+var restoredBK = casedata.sanitizeBackup(backupBK);
+ok('Backup: binding uebernommen', restoredBK.settings.binding.settings.defaultSpousalStandard.lockedB === true);
+ok('Backup: binding chain leer ok', Array.isArray(restoredBK.settings.binding.chain));
+ok('Backup: keys partyA uebernommen', restoredBK.settings.keys.partyA.publicKey === 'pub-a');
+ok('Backup: keys partyB null ok', restoredBK.settings.keys.partyB === null);
+ok('Backup: ungueltiges binding verworfen', (function () {
+  var b = casedata.buildBackupFile({ spousalEnabled: true }, { binding: { settings: {} } });
+  var r = casedata.sanitizeBackup(b);
+  return r.valid === true && r.settings.binding === undefined;
+})());
+ok('Backup: binding mit non-number valueBase => null', (function () {
+  var b = casedata.buildBackupFile({ spousalEnabled: true },
+    { binding: { settings: { k: { valueBase: 'x', lockedA: true, lockedB: false } } } });
+  var r = casedata.sanitizeBackup(b);
+  return r.settings.binding.settings.k.valueBase === null;
+})());
+ok('Backup: keys nur mit ungueltigen Eintraegen verworfen', (function () {
+  var b = casedata.buildBackupFile({ spousalEnabled: true }, { keys: { partyA: 5, partyB: 'x' } });
+  var r = casedata.sanitizeBackup(b);
+  return r.valid === true && r.settings.keys === undefined;
+})());
+ok('Backup: overrides uebernommen', (function () {
+  var b = casedata.buildBackupFile({ spousalEnabled: true },
+    { binding: { settings: { k: { valueBase: 1, lockedA: false, lockedB: false } }, overrides: { s1: { key: 'k', valueOverride: 2, reason: 'r' } } } });
+  var r = casedata.sanitizeBackup(b);
+  return r.settings.binding.overrides.s1.valueOverride === 2;
+})());
+
 /* ---------- Zusammenfassung ---------- */
 console.log('\n' + passed + ' Tests bestanden' +
   (process.exitCode ? ', FEHLER vorhanden' : ', keine Fehler'));

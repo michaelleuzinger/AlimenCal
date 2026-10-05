@@ -16,6 +16,15 @@
     'sp-app-extra', 'sp-res-income', 'sp-res-em', 'sp-res-childpaid',
     'costsplit-date', 'costsplit-owner'
   ];
+  var SECTION_FIELDS = {
+    parentA: ['pa-income', 'pa-em', 'pa-employed'],
+    parentB: ['pb-income', 'pb-em', 'pb-employed'],
+    children: [],
+    spousalApplicant: ['sp-app-income', 'sp-app-em', 'sp-app-standard', 'sp-app-extra'],
+    spousalRespondent: ['sp-res-income', 'sp-res-em', 'sp-res-childpaid'],
+    spousalEnabled: ['spousal-enabled'],
+    costsplit: ['costsplit-date', 'costsplit-owner']
+  };
   var DEFAULT_LANG = 'de';
   var LANGS = ['de', 'fr', 'it', 'en'];
 
@@ -23,6 +32,7 @@
     lang: DEFAULT_LANG,
     cfg: null,
     keys: null,
+    sectionLocks: [],
     children: [],
     costsplit: {
       transactions: [],
@@ -714,6 +724,13 @@
     document.getElementById('share-restore-heading').textContent = t('share', 'restoreHeading');
     document.getElementById('share-restore-hint').textContent = t('share', 'restoreHint');
     document.getElementById('share-restore-label').textContent = t('share', 'restoreLabel');
+    var lockHeading = document.getElementById('section-lock-heading');
+    if (lockHeading) { lockHeading.textContent = t('share', 'sectionLockHeading'); }
+    var lockHint = document.getElementById('section-lock-hint');
+    if (lockHint) { lockHint.textContent = t('share', 'sectionLockHint'); }
+    var lockEmpty = document.getElementById('section-lock-empty');
+    if (lockEmpty) { lockEmpty.textContent = t('share', 'sectionLockEmpty'); }
+    renderSectionLockList();
     var backupStatus = document.getElementById('share-backup-status');
     if (backupStatus) { backupStatus.textContent = ''; }
     document.getElementById('share-import-heading').textContent = t('share', 'importHeading');
@@ -1106,10 +1123,12 @@
       var el = document.getElementById(b.uiId);
       if (el) {
         var locked = setting.lockedA && setting.lockedB;
+        el.dataset.bindingLocked = locked ? '1' : '';
         el.disabled = locked;
         el.title = locked ? t('binding', 'lockedFieldHint') : '';
       }
     });
+    applySectionLocks();
   }
 
   function fillCfgForm() {
@@ -1603,10 +1622,14 @@
       var rawValues = localStorage.getItem(LS_THEME_VALUES);
       if (rawValues) { themeValues = JSON.parse(rawValues); }
     } catch (e) {}
+    var binding = null;
+    try { binding = JSON.parse(localStorage.getItem(LS_BINDING)); } catch (e) {}
     var file = AlimenCal.casedata.buildBackupFile(current, {
       lang: state.lang,
       theme: { id: getThemeId(), values: themeValues },
-      config: state.cfg
+      config: state.cfg,
+      binding: binding,
+      keys: loadKeys()
     });
     var status = document.getElementById('share-backup-status');
     var blob = new Blob([JSON.stringify(file, null, 2)], { type: 'application/json' });
@@ -1639,6 +1662,7 @@
       }
       applySectionsToForm(result.sections);
       var restored = [];
+      lockImportedSections(result.sections);
       if (result.settings.lang) {
         state.lang = result.settings.lang;
         try { localStorage.setItem(LS_LANG, state.lang); } catch (e) {}
@@ -1658,11 +1682,80 @@
         fillCfgForm();
         restored.push(t('share', 'restorePartConfig'));
       }
+      if (result.settings.binding) {
+        try { localStorage.setItem(LS_BINDING, JSON.stringify(result.settings.binding)); } catch (e) {}
+        if (state.settingsService) {
+          state.settingsService = new AlimenCal.settings.SettingsService();
+          initSettingsService(state.settingsService);
+        }
+        fillCfgForm();
+        restored.push(t('share', 'restorePartBinding'));
+      }
+      if (result.settings.keys) {
+        state.keys = result.settings.keys;
+        saveKeys();
+        restored.push(t('share', 'restorePartKeys'));
+      }
       applyI18n();
       var parts = restored.length ? ' ' + t('share', 'restoreSettingsOk', [restored.join(', ')]) : '';
       status.textContent = t('share', 'restoreOk', [String(Object.keys(result.sections).length), parts]);
     };
     reader.readAsText(file);
+  }
+  function applySectionLocks() {
+    Object.keys(SECTION_FIELDS).forEach(function (key) {
+      var locked = state.sectionLocks.indexOf(key) >= 0;
+      SECTION_FIELDS[key].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (!el) { return; }
+        if (el.dataset.bindingLocked === '1') { return; }
+        el.disabled = locked;
+        el.title = locked ? t('share', 'sectionLockedHint') : '';
+      });
+    });
+    renderSectionLockList();
+  }
+  function setSectionLock(key, locked) {
+    var i = state.sectionLocks.indexOf(key);
+    if (locked && i < 0) { state.sectionLocks.push(key); }
+    if (!locked && i >= 0) { state.sectionLocks.splice(i, 1); }
+    applySectionLocks();
+    saveForm();
+  }
+  function renderSectionLockList() {
+    var host = document.getElementById('section-lock-list');
+    if (!host) { return; }
+    host.innerHTML = '';
+    state.sectionLocks.slice().sort().forEach(function (key) {
+      var wrap = document.createElement('div');
+      wrap.className = 'section-lock-row';
+      var label = document.createElement('span');
+      label.textContent = t('share', 'section' + key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, function (m) { return m; })) || key;
+      label.textContent = key;
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'primary';
+      btn.textContent = t('share', 'unlockButton');
+      btn.addEventListener('click', function () { setSectionLock(key, false); });
+      wrap.appendChild(label);
+      wrap.appendChild(btn);
+      host.appendChild(wrap);
+    });
+    var heading = document.getElementById('section-lock-heading');
+    var empty = document.getElementById('section-lock-empty');
+    if (empty) { empty.hidden = state.sectionLocks.length > 0; }
+    if (heading) { heading.hidden = state.sectionLocks.length === 0; }
+  }
+  function lockImportedSections(sections) {
+    var locked = [];
+    Object.keys(SECTION_FIELDS).forEach(function (key) {
+      if (sections[key] != null) { locked.push(key); }
+    });
+    locked.forEach(function (key) {
+      if (state.sectionLocks.indexOf(key) < 0) { state.sectionLocks.push(key); }
+    });
+    applySectionLocks();
+    saveForm();
   }
   function applySectionsToForm(sections) {
     if (sections.parentA) {
@@ -1725,6 +1818,7 @@
             return;
           }
           applySectionsToForm(decResult.sections);
+          lockImportedSections(decResult.sections);
           var decPartial = decResult.invalid.length
             ? t('share', 'importPartial', [decResult.invalid.join(', ')])
             : '';
@@ -1739,6 +1833,7 @@
         return;
       }
       applySectionsToForm(result.sections);
+      lockImportedSections(result.sections);
       var partial = result.invalid.length
         ? t('share', 'importPartial', [result.invalid.join(', ')])
         : '';
@@ -1766,6 +1861,7 @@
     });
     form.__children = state.children;
     form.__costsplit = state.costsplit;
+    form.__sectionLocks = state.sectionLocks;
     return form;
   }
 
@@ -1817,6 +1913,10 @@
     if (Array.isArray(form.__children) && form.__children.length) {
       state.children = form.__children;
       renderChildrenList();
+    }
+    if (Array.isArray(form.__sectionLocks)) {
+      state.sectionLocks = form.__sectionLocks;
+      applySectionLocks();
     }
     if (form.__costsplit && Array.isArray(form.__costsplit.transactions) && form.__costsplit.transactions.length) {
       state.costsplit = form.__costsplit;

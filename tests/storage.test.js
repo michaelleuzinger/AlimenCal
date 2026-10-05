@@ -105,6 +105,21 @@ var v1Parsed = storage.parseStored(versionedV1);
 ok('Versionierter v1-Payload: ok', v1Parsed.status === 'ok');
 ok('Versionierter v1-Payload: Re-Save markiert', v1Parsed.changed === true);
 
+
+/* ---------- v3-Migration: Abschnitt-Locks ---------- */
+var v2Payload = JSON.stringify({ app: 'alimencal', kind: 'form', version: 2, form: { 'pa-income': '5000', __sectionLocks: ['parentA', 'bogus', 'children'] } });
+var v2Parsed = storage.parseStored(v2Payload);
+ok('v3-Migration: v2-Payload lesbar', v2Parsed.status === 'ok');
+ok('v3-Migration: ungueltige Lock-Keys entfernt', v2Parsed.form.__sectionLocks.indexOf('parentA') >= 0 && v2Parsed.form.__sectionLocks.indexOf('bogus') < 0);
+ok('v3-Migration: changed gesetzt', v2Parsed.changed === true);
+var v3Payload = storage.buildFormPayload({ 'pa-income': '5000', __sectionLocks: ['parentB'] });
+ok('v3: buildFormPayload version=3', v3Payload.version === 3);
+var v3Parsed = storage.parseStored(JSON.stringify(v3Payload));
+ok('v3: Roundtrip sectionLocks', v3Parsed.form.__sectionLocks[0] === 'parentB');
+ok('v3: Altdaten ohne sectionLocks => kein Lock-Array', (function () {
+  var p = storage.parseStored(JSON.stringify({ app: 'alimencal', kind: 'form', version: 2, form: { 'pa-income': '1' } }));
+  return p.status === 'ok' && !Array.isArray(p.form.__sectionLocks);
+})());
 /* ---------- Normalisierungs-Einzelne ---------- */
 ok('Kind ohne Alter -> null', storage.normalizeChild({ costMode: 'pauschal' }) === null);
 ok('Kind mit Alter 100 -> null', storage.normalizeChild({ age: 100 }) === null);

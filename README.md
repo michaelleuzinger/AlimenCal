@@ -60,7 +60,8 @@ App (PWA) installierbar und danach auch offline nutzbar:
 - Gespeicherte Daten bleiben auch in der installierten App lokal im
   Browser-Speicher des jeweiligen Geräts. Für das Überstehen einer
   De-/Neuinstallation steht im Austausch-Tab ein Backup-Export zur
-  Verfügung (alle Falldaten plus Sprache, Theme und Richtwerte): Datei
+  Verfügung (alle Falldaten plus Sprache, Theme, Richtwerte, Lock-Zustand
+  und Schlüssel): Datei
   in die Files-App/iCloud Drive speichern und nach der Neuinstallation
   über die integrierte Restore-Funktion wiederherstellen.
 

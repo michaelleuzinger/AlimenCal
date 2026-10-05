@@ -232,6 +232,50 @@ AlimenCal.casedata = (function () {
     return seen > 0 ? cfg : null;
   }
 
+  function sanitizeBackupBinding(data) {
+    if (!data || typeof data !== 'object' || !data.settings || typeof data.settings !== 'object') {
+      return null;
+    }
+    var out = { settings: {}, overrides: {}, chain: [] };
+    for (var key in data.settings) {
+      if (!Object.prototype.hasOwnProperty.call(data.settings, key)) { continue; }
+      var s = data.settings[key];
+      if (!s || typeof s !== 'object') { continue; }
+      out.settings[key] = {
+        valueBase: typeof s.valueBase === 'number' ? s.valueBase : null,
+        lockedA: s.lockedA === true,
+        lockedB: s.lockedB === true
+      };
+    }
+    if (Object.keys(out.settings).length === 0) { return null; }
+    for (var sid in (data.overrides || {})) {
+      if (!Object.prototype.hasOwnProperty.call(data.overrides, sid)) { continue; }
+      var ov = data.overrides[sid];
+      if (ov && typeof ov.valueOverride === 'number') {
+        out.overrides[sid] = {
+          key: typeof ov.key === 'string' ? ov.key : null,
+          valueOverride: ov.valueOverride,
+          reason: ov.reason || null
+        };
+      }
+    }
+    out.chain = Array.isArray(data.chain) ? data.chain : [];
+    return out;
+  }
+  function sanitizeBackupKeys(data) {
+    if (!data || typeof data !== 'object') { return null; }
+    var out = { partyA: null, partyB: null };
+    ['partyA', 'partyB'].forEach(function (party) {
+      var k = data[party];
+      if (!k || typeof k !== 'object') { return; }
+      out[party] = {
+        importedParty: k.importedParty === true,
+        publicKey: typeof k.publicKey === 'string' ? k.publicKey : null,
+        privateKey: typeof k.privateKey === 'string' ? k.privateKey : null
+      };
+    });
+    return (out.partyA || out.partyB) ? out : null;
+  }
   function buildBackupFile(sections, extras) {
     var extra = extras || {};
     return {
@@ -242,7 +286,9 @@ AlimenCal.casedata = (function () {
       settings: {
         lang: extra.lang || null,
         theme: extra.theme || null,
-        config: extra.config || null
+        config: extra.config || null,
+        binding: extra.binding || null,
+        keys: extra.keys || null
       }
     };
   }
@@ -263,6 +309,10 @@ AlimenCal.casedata = (function () {
     if (theme) { result.settings.theme = theme; }
     var config = sanitizeBackupConfig(settings.config);
     if (config) { result.settings.config = config; }
+    var binding = sanitizeBackupBinding(settings.binding);
+    if (binding) { result.settings.binding = binding; }
+    var keys = sanitizeBackupKeys(settings.keys);
+    if (keys) { result.settings.keys = keys; }
     result.valid = true;
     return result;
   }
