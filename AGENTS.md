@@ -120,7 +120,10 @@ js/config.js        Default-Richtwerte (Zürcher Kinderkosten-Tabelle 1.3.2025)
 js/presets.js       Eingebettete Kopie der kantonalen Presets (file://-fähig)
 presets/*.json      Kantonale Richtwertsätze inkl. Quellen und Checklisten
 js/storage.js      localStorage-Persistenz: Versionierung, Sanitizing, Migration (DOM-frei)
-js/app.js           UI-Logik, i18n-Anwendung, localStorage, Import/Export
+js/app.js           UI-Logik, i18n-Anwendung, localStorage, Import/Export, Service-Worker-Registrierung (PWA)
+manifest.json       Web-App-Manifest (PWA-Installation, Icons, Farbschema)
+sw.js               Service Worker: Cache der App-Dateien für Offline-Nutzung (PWA)
+icons/*.png         App-Icons für PWA-Installation und Home-Bildschirm (192/512 px, maskierbar, apple-touch)
 js/i18n/{de,fr,it,en}.js  Sprachdateien
 AGENTS.md           Verbindliche Arbeitsregeln (Doku-in-Sync-Regel, Checklisten)
 docs/               Benutzerhandbuch, Berechnungslogik, Kostentrennung, Rechtliches, Verbindliche Einstellungen, Design (inkl. Design-Historie), Tests, Presets, Roadmap

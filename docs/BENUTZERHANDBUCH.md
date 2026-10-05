@@ -29,6 +29,24 @@ Die App ist responsiv gestaltet und auf Smartphone, Tablet und Desktop nutzbar:
   Geräts; ein Gerätewechsel erfolgt über den JSON-Export/Import im
   Austausch-Tab.
 
+### Installation als App (PWA)
+
+Bei Bereitstellung über HTTPS (z. B. GitHub Pages) kann AlimenCal als
+Progressive Web App installiert und anschliessend offline genutzt werden:
+
+1. Die App-URL in **Safari** öffnen (iOS/iPadOS) bzw. in Chrome (Android).
+2. **Teilen-Taste** → **«Zum Home-Bildschirm hinzufügen»** (iOS) bzw.
+   Menü → **«App installieren»** (Android).
+3. Die App öffnet sich daraufhin im Vollbildmodus ohne Browserleiste; das
+   Icon liegt auf dem Home-Bildschirm.
+
+Technische Grundlage sind `manifest.json` und der Service Worker `sw.js`
+im Repository-Root, der alle App-Dateien für die Offline-Nutzung cacht.
+Die Service-Worker-Registrierung erfolgt automatisch, wenn die App über
+HTTPS aufgerufen wird (nicht bei `file://`). Gespeicherte Daten bleiben
+auch in der installierten App lokal im Browser-Speicher des jeweiligen
+Geräts.
+
 Die Screenshots in diesem Handbuch zeigen die PC-Ansicht (1395×2084).
 Die gleichen Ansichten im iPhone- (390×844) und iPad-Viewport (820×1180)
 liegen unter `screenshots/iphone/` bzw. `screenshots/ipad/` im Repository.
