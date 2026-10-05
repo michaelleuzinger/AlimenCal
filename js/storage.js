@@ -26,7 +26,7 @@ AlimenCal.storage = (function () {
    *   2 - versionierter Payload (app/kind/version), Kinder und
    *       Kostentrennung werden beim Laden normalisiert
    */
-  var FORM_VERSION = 2;
+  var FORM_VERSION = 3;
 
   var CHILD_DEFAULTS = {
     age: 8,
@@ -175,6 +175,19 @@ AlimenCal.storage = (function () {
       } else if (form.__costsplit) {
         delete form.__costsplit;
         changed = true;
+      }
+    }
+    if (fromVersion < 3) {
+      /* v3: Abschnitt-Locks (importierte Abschnitte read-only). */
+      var locks = form.__sectionLocks;
+      if (!Array.isArray(locks)) {
+        if (locks) { delete form.__sectionLocks; changed = true; }
+      } else {
+        var validLockKeys = ['parentA', 'parentB', 'children', 'spousalApplicant',
+          'spousalRespondent', 'spousalEnabled', 'costsplit'];
+        var cleanLocks = locks.filter(function (k) { return validLockKeys.indexOf(k) >= 0; });
+        if (cleanLocks.length !== locks.length) { changed = true; }
+        form.__sectionLocks = cleanLocks;
       }
     }
 

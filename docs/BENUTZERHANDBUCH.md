@@ -52,8 +52,21 @@ wesentlichen Änderung ein neues Backup erstellen.
 
 **Restore («Backup wiederherstellen»):** Die Backup-Datei direkt unter
 der Backup-Funktion im Austausch-Tab auswählen («Backup-Datei wählen»).
-Es werden alle enthaltenen Falldaten, Sprache, Design-Stil/Theme und
-Richtwerte in einem Schritt wiederhergestellt. Das Format ist getrennt
+Es werden alle enthaltenen Falldaten, Sprache, Design-Stil/Theme,
+Richtwerte sowie die verbindlichen Einstellungen inklusive Lock-Zustand
+(Two-Party-Lock) und die Schlüssel für signierte Lock-Dateien in einem
+Schritt wiederhergestellt.
+
+**Gesperrte Abschnitte (unveränderbar):** Nach dem Import einer
+Parteien-Datei oder dem Restore werden die übernommenen Abschnitte als
+unveränderbar gekennzeichnet – ihre Felder sind gesperrt und mit einem
+Hinweis versehen. Die Sperre gilt pro Abschnitt und wird im localStorage
+persistiert (FORM_VERSION 3); sie übersteht also einen Browser-Neustart.
+Im Austausch-Tab listet die Karte «Gesperrte Abschnitte (unveränderbar)»
+alle gesperrten Abschnitte; mit «Bearbeitung erlauben» wird die Sperre
+eines Abschnitts aufgehoben (bewusstes Freigeben, danach normal
+editierbar). Vom Two-Party-Lock (verbindliche Einstellungen) gesperrte
+Richtwert-Felder bleiben davon unberührt und haben Vorrang. Das Format ist getrennt
 vom Parteien-Austausch (`alimencal-backup` statt `alimencal`) und wird
 eigens validiert; der Parteien-Import bleibt unverändert. Die
 Wiederherstellung überschreibt die aktuellen Werte mit denjenigen aus
