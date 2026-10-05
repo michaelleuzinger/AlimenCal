@@ -15,8 +15,10 @@ keine Installation und keine Abhängigkeiten.
 Die App ist responsiv gestaltet und auf Smartphone, Tablet und Desktop nutzbar:
 
 - Karten und Formular-Grids brechen auf schmalen Displays auf eine Spalte um.
-- Die Tab-Navigation wird auf schmalen Displays horizontal scrollbar, falls
-  nicht alle Tabs Platz finden.
+- Die Mobile-Tab-Leiste (4 Hauptfunktionen + «Mehr») nutzt sprachspezifische
+  Kurzlabels («Kind», «Ehegatte», «Kosten», «Fall»), damit die Buttons auch auf
+  schmalen Displays (ab 320px) sauber getrennt bleiben; überlange Labels
+  werden mit Auslassungspunkten gekürzt.
 - Resultat-, Kostentrennungs- und Richtwert-Tabellen sind auf schmalen
   Displays horizontal scrollbar (Wischen), damit alle Spalten lesbar bleiben.
 - Auf Touch-Geräten sind Schaltflächen, Auswahlmenüs und Checkboxen
