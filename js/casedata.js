@@ -196,7 +196,82 @@ AlimenCal.casedata = (function () {
     };
   }
 
+  var BACKUP_ID = 'alimencal-backup';
+  var BACKUP_VERSION = 1;
+  var BACKUP_LANGS = ['de', 'fr', 'it', 'en'];
+
+  function sanitizeBackupLang(data) {
+    return BACKUP_LANGS.indexOf(data) >= 0 ? data : null;
+  }
+
+  function sanitizeBackupTheme(data) {
+    if (!data || typeof data !== 'object') { return null; }
+    var id = typeof data.id === 'string' && data.id ? data.id : null;
+    if (!id) { return null; }
+    var values = null;
+    if (data.values != null) {
+      values = (AlimenCal.themes && AlimenCal.themes.sanitizeValues)
+        ? AlimenCal.themes.sanitizeValues(data.values)
+        : null;
+    }
+    return { id: id, values: values };
+  }
+
+  function sanitizeBackupConfig(data) {
+    if (!data || typeof data !== 'object') { return null; }
+    if (!AlimenCal.config) { return null; }
+    var base = AlimenCal.config;
+    var cfg = {};
+    var seen = 0;
+    for (var k in base) {
+      if (Object.prototype.hasOwnProperty.call(base, k)) {
+        cfg[k] = Object.prototype.hasOwnProperty.call(data, k) ? data[k] : base[k];
+        seen++;
+      }
+    }
+    return seen > 0 ? cfg : null;
+  }
+
+  function buildBackupFile(sections, extras) {
+    var extra = extras || {};
+    return {
+      app: BACKUP_ID,
+      version: BACKUP_VERSION,
+      exportedAt: new Date().toISOString(),
+      case: buildFile(sections),
+      settings: {
+        lang: extra.lang || null,
+        theme: extra.theme || null,
+        config: extra.config || null
+      }
+    };
+  }
+
+  function sanitizeBackup(raw) {
+    var result = { valid: false, sections: {}, invalid: [], settings: {} };
+    if (!raw || typeof raw !== 'object') { return result; }
+    if (raw.app !== BACKUP_ID) { return result; }
+    if (raw.version !== BACKUP_VERSION) { return result; }
+    var inner = raw.case ? sanitizeCase(raw.case) : null;
+    if (!inner || !inner.valid) { return result; }
+    result.sections = inner.sections;
+    result.invalid = inner.invalid;
+    var settings = raw.settings || {};
+    var lang = sanitizeBackupLang(settings.lang);
+    if (lang) { result.settings.lang = lang; }
+    var theme = sanitizeBackupTheme(settings.theme);
+    if (theme) { result.settings.theme = theme; }
+    var config = sanitizeBackupConfig(settings.config);
+    if (config) { result.settings.config = config; }
+    result.valid = true;
+    return result;
+  }
+
   return {
+    BACKUP_ID: BACKUP_ID,
+    BACKUP_VERSION: BACKUP_VERSION,
+    buildBackupFile: buildBackupFile,
+    sanitizeBackup: sanitizeBackup,
     SECTIONS: SECTIONS,
     sanitizeCase: sanitizeCase,
     mergeCase: mergeCase,
