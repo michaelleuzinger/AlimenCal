@@ -1,5 +1,8 @@
 # AlimenCal – Unterhaltsrechner für die Schweiz
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Tests](https://github.com/michaelleuzinger/AlimenCal/actions/workflows/tests.yml/badge.svg)](https://github.com/michaelleuzinger/AlimenCal/actions/workflows/tests.yml)
+
 **AlimenCal** ist ein mehrsprachiges Orientierungswerkzeug (Web-App) für
 Unterhaltsfragen bei Trennung und Scheidung in der Schweiz:
 
@@ -197,3 +200,27 @@ Beiträge sind willkommen:
 
 Vor dem ersten Beitrag [AGENTS.md](AGENTS.md) lesen: Architektur,
 Screenshot-Regeln und Test-Ausführung sind dort verbindlich beschrieben.
+Beitragsrichtlinien im Detail: [CONTRIBUTING.md](CONTRIBUTING.md).
+Sicherheitslücken bitte nicht öffentlich melden, sondern über
+[SECURITY.md](SECURITY.md).
+
+## Rechtlicher Hinweis (Disclaimer)
+
+AlimenCal ist ein **Orientierungswerkzeug** und ersetzt keine rechtliche
+Beratung. Alle Berechnungen basieren auf den in
+[docs/RECHTLICHE-GRUNDLAGEN.md](docs/RECHTLICHE-GRUNDLAGEN.md) aufgeführten
+Quellen (ZGB, BGE, kantonale bzw. gerichtliche Richtlinien); für den
+konkreten Fall massgeblich ist ausschliesslich die Beurteilung durch eine
+fachkundige Person (Anwältin/Anwalt, Gericht). Keine Haftung für die
+Richtigkeit oder Vollständigkeit der Ergebnisse.
+
+## Datenschutz
+
+Alle Eingaben (Einkommen, Ausgaben, Bankexporte) werden ausschliesslich
+**lokal im Browser** verarbeitet und gespeichert (localStorage bzw.
+verschlüsselter Export). Es gibt keinen Server, kein Tracking und keine
+Analyse-Funktionen.
+
+## Lizenz
+
+Dieses Projekt steht unter der [MIT-Lizenz](LICENSE).
