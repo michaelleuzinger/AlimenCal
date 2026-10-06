@@ -24,6 +24,9 @@
         <button type="button" class="cmdk-trigger" id="cmdk-trigger" aria-haspopup="dialog" aria-expanded="false">
           <span data-i18n="palette.placeholder"></span><span class="kbd">Ctrl K</span>
         </button>
+        <button type="button" class="settings-btn" id="settings-btn" aria-haspopup="dialog" aria-expanded="false" title="Einstellungen und Informationen">
+          <span class="settings-gear" aria-hidden="true">⚙</span><span data-i18n="nav.settingsMenu"></span>
+        </button>
         <label class="lang-switch"><span data-i18n="nav.language"></span>
           <select id="lang-select" class="lang-select-sync">
             <option value="de">Deutsch</option>
@@ -45,7 +48,7 @@
     <button type="button" class="tab mob-item" data-tab="spousal"><span class="nav-label"></span></button>
     <button type="button" class="tab mob-item" data-tab="costsplit"><span class="nav-label"></span></button>
     <button type="button" class="tab mob-item" data-tab="share"><span class="nav-label"></span></button>
-    <button type="button" class="mob-item" id="mob-more-btn" aria-haspopup="dialog" aria-expanded="false"><span data-i18n="nav.more"></span></button>
+    <button type="button" class="mob-item" id="mob-settings-btn" aria-haspopup="dialog" aria-expanded="false"><span class="settings-gear" aria-hidden="true">⚙</span><span data-i18n="nav.settingsMenu"></span></button>
   </nav>
 <div class="app-shell">
   <header>
@@ -245,12 +248,6 @@
         <h3 id="design-heading"></h3>
         <p id="design-intro" class="hint"></p>
         <div id="design-grid" class="design-grid"></div>
-      </div>
-      <div class="card preset-card">
-        <label>
-          <span id="theme-select-label"></span>
-          <select id="theme-select"></select>
-        </label>
       </div>
       <div class="card preset-card">
         <h3 id="theme-editor-heading"></h3>

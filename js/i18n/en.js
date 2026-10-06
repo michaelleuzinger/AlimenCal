@@ -71,7 +71,6 @@ AlimenCal.i18n.en = {
     about: 'About',
     settingsMenu: 'Settings and information',
     language: 'Language',
-    more: 'More',
     childrenShort: 'Child', spousalShort: 'Spousal', costsplitShort: 'Costs', shareShort: 'Share'
   },
   palette: { placeholder: 'Search or jump to …', empty: 'No results' },
@@ -186,14 +185,10 @@ AlimenCal.i18n.en = {
   themes: {
     heading: 'Design / Themes',
     intro: 'Choose a predefined theme or adjust colours manually in the theme editor. The selection is stored locally in your browser.',
-    select: 'Theme',
     editorHeading: 'Theme editor',
     editorHint: 'Every colour and the corner radius can be adjusted freely. Changes apply immediately.',
     reset: 'Reset to theme default',
     saved: 'Theme saved.',
-    editor: 'Open editor',
-    custom: 'Custom (adjusted)',
-    presetLabel: 'Predefined theme',
     designHeading: 'Design style',
     designIntro: 'Choose a design style: it adjusts the complete look (typography, cards, shadows, colours). Details can be fine-tuned in the theme editor afterwards.',
     designCurrent: 'Current'

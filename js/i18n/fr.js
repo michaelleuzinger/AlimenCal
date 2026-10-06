@@ -71,7 +71,6 @@ AlimenCal.i18n.fr = {
     about: 'À propos',
     settingsMenu: 'Paramètres et informations',
     language: 'Langue',
-    more: 'Plus',
     childrenShort: 'Enfants', spousalShort: 'Époux', costsplitShort: 'Coûts', shareShort: 'Échange'
   },
   palette: { placeholder: 'Rechercher ou aller à …', empty: 'Aucun résultat' },
@@ -186,14 +185,10 @@ AlimenCal.i18n.fr = {
   themes: {
     heading: 'Design / Thèmes',
     intro: 'Choisissez un thème prédéfini ou adaptez manuellement les couleurs dans l’éditeur de thème. Le choix est enregistré localement dans le navigateur.',
-    select: 'Thème',
     editorHeading: 'Éditeur de thème',
     editorHint: 'Chaque couleur et le rayon des coins sont librement modifiables. Les changements sont appliqués immédiatement.',
     reset: 'Réinitialiser au thème par défaut',
     saved: 'Thème enregistré.',
-    editor: 'Ouvrir l’éditeur',
-    custom: 'Personnalisé (adapté)',
-    presetLabel: 'Thème prédéfini',
     designHeading: 'Style de design',
     designIntro: 'Choisissez un style de design : il adapte l’apparence complète (typographie, cartes, ombres, couleurs). Les détails peuvent ensuite être ajustés dans l’éditeur de thème.',
     designCurrent: 'Actuel'

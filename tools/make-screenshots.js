@@ -31,7 +31,7 @@ const os = require('os');
 const puppeteer = require('puppeteer');
 
 const ROOT = path.resolve(__dirname, '..');
-const APP_URL = 'file://' + path.join(ROOT, 'index.html');
+const APP_URL = process.env.APP_URL || 'file://' + path.join(ROOT, 'index.html');
 const OUT_DIR = path.join(ROOT, 'screenshots');
 
 const LANGS = ['de', 'fr', 'it', 'en'];
@@ -248,8 +248,12 @@ async function setupThemesClassic(page) {
 
 async function setupThemesDark(page) {
   await switchTab(page, 'themes');
-  await page.select('#theme-select', 'dark');
-  await sleep(200);
+  await page.evaluate(() => {
+    localStorage.setItem('alimencal.theme', 'dark');
+  });
+  await page.reload({ waitUntil: 'networkidle0' });
+  await sleep(300);
+  await switchTab(page, 'themes');
 }
 
 async function setupShare(page) {
