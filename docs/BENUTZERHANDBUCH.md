@@ -15,8 +15,10 @@ keine Installation und keine Abhängigkeiten.
 Die App ist responsiv gestaltet und auf Smartphone, Tablet und Desktop nutzbar:
 
 - Karten und Formular-Grids brechen auf schmalen Displays auf eine Spalte um.
-- Die Tab-Navigation wird auf schmalen Displays horizontal scrollbar, falls
-  nicht alle Tabs Platz finden.
+- Die Mobile-Tab-Leiste (4 Hauptfunktionen + «Mehr») nutzt sprachspezifische
+  Kurzlabels («Kind», «Ehegatte», «Kosten», «Export»), damit die Buttons auch auf
+  schmalen Displays (ab 320px) sauber getrennt bleiben; überlange Labels
+  werden mit Auslassungspunkten gekürzt.
 - Resultat-, Kostentrennungs- und Richtwert-Tabellen sind auf schmalen
   Displays horizontal scrollbar (Wischen), damit alle Spalten lesbar bleiben.
 - Auf Touch-Geräten sind Schaltflächen, Auswahlmenüs und Checkboxen
@@ -96,11 +98,12 @@ unteren Rand; «Mehr» öffnet die Befehlspalette.
    Krankenkassenprämie und Fremdbetreuungskosten werden daraus abgezogen
    (separate Erfassung als direkte Kosten), um Doppelerfassungen zu vermeiden.
    Die Wahl gilt pro Kind und ist im Resultat ausgewiesen.
-4. **Resultat**: Grundbedarf (altersgestaffelt oder effektive Kosten),
-   Barunterhalt je Partei (aufgeteilt nach wirtschaftlicher
-   Leistungsfähigkeit) und Betreuungsunterhalt (netto verrechnet zwischen
-   den Parteien). Bei Unterdeckung wird eine Mangellage mit Mankobetrag
-   ausgewiesen.
+4. **Resultat**: Pro Kind eine kompakte Aufschlüsselung mit Grundbedarf
+   (altersgestaffelt oder effektive Kosten), Barunterhalt je Partei
+   (aufgeteilt nach wirtschaftlicher Leistungsfähigkeit) und
+   Betreuungsunterhalt (netto verrechnet zwischen den Parteien); je
+   Kind sind die Totals je Partei ausgewiesen. Bei Unterdeckung wird
+   eine Mangellage mit Mankobetrag ausgewiesen.
 
 Hinweise:
 

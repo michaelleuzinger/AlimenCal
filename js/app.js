@@ -652,11 +652,11 @@
     document.getElementById('app-subtitle').textContent = t('subtitle');
     document.getElementById('disclaimer').textContent = t('disclaimerShort');
 
-    document.querySelectorAll('.tab[data-tab="children"]').forEach(function (el) { setNavLabel(el, t('nav', 'children')); });
-    document.querySelectorAll('.tab[data-tab="spousal"]').forEach(function (el) { setNavLabel(el, t('nav', 'spousal')); });
-    document.querySelectorAll('.tab[data-tab="costsplit"]').forEach(function (el) { setNavLabel(el, t('nav', 'costsplit')); });
+    document.querySelectorAll('.tab[data-tab="children"]').forEach(function (el) { setNavLabel(el, el.classList.contains('mob-item') ? t('nav', 'childrenShort') : t('nav', 'children')); });
+    document.querySelectorAll('.tab[data-tab="spousal"]').forEach(function (el) { setNavLabel(el, el.classList.contains('mob-item') ? t('nav', 'spousalShort') : t('nav', 'spousal')); });
+    document.querySelectorAll('.tab[data-tab="costsplit"]').forEach(function (el) { setNavLabel(el, el.classList.contains('mob-item') ? t('nav', 'costsplitShort') : t('nav', 'costsplit')); });
     document.querySelectorAll('.tab[data-tab="themes"]').forEach(function (el) { setNavLabel(el, t('nav', 'themes')); });
-    document.querySelectorAll('.tab[data-tab="share"]').forEach(function (el) { setNavLabel(el, t('nav', 'share')); });
+    document.querySelectorAll('.tab[data-tab="share"]').forEach(function (el) { setNavLabel(el, el.classList.contains('mob-item') ? t('nav', 'shareShort') : t('nav', 'share')); });
     document.querySelectorAll('.tab[data-tab="settings"]').forEach(function (el) { setNavLabel(el, t('nav', 'settings')); });
     document.querySelectorAll('.tab[data-tab="about"]').forEach(function (el) { setNavLabel(el, t('nav', 'about')); });
 
@@ -936,57 +936,51 @@
     var result = AlimenCal.calculator.calculateChildSupport(input, effectiveCfg());
     renderChildrenResult(result);
   }
+  function renderBreakdownRow(label, value, isTotal) {
+    var line = document.createElement('p');
+    line.className = isTotal ? 'result-breakdown-row result-breakdown-row-total' : 'result-breakdown-row';
+    var l = document.createElement('span');
+    l.className = 'result-breakdown-label';
+    l.textContent = label;
+    var v = document.createElement('span');
+    v.className = 'result-breakdown-value';
+    v.textContent = value;
+    line.appendChild(l);
+    line.appendChild(v);
+    return line;
+  }
 
   function renderChildrenResult(result) {
     var box = document.getElementById('children-result');
     box.hidden = false;
-
-    var thead = document.getElementById('children-thead');
-    thead.innerHTML = '';
-    var trh = document.createElement('tr');
-    [
-      t('children', 'tableChild'),
-      t('children', 'tableBasicNeed'),
-      t('children', 'tableDirect'),
-      t('children', 'tableChildIncome'),
-      t('children', 'tableBarTotal'),
-      t('children', 'tableBarA'),
-      t('children', 'tableBarB'),
-      t('children', 'tableManko'),
-      t('children', 'tableCareNet'),
-      t('children', 'tableTotalA'),
-      t('children', 'tableTotalB')
-    ].forEach(function (h) {
-      var th = document.createElement('th');
-      th.textContent = h;
-      trh.appendChild(th);
-    });
-    thead.appendChild(trh);
-
-    var tbody = document.getElementById('children-tbody');
-    tbody.innerHTML = '';
+    var breakdown = document.getElementById('children-breakdown');
+    breakdown.innerHTML = '';
     result.perChild.forEach(function (c) {
-      var tr = document.createElement('tr');
-      [
+      var block = document.createElement('div');
+      block.className = 'result-breakdown-block';
+      var head = document.createElement('p');
+      head.className = 'result-breakdown-head';
+      head.textContent =
         t('children', 'childLabel').replace('{n}', String(c.index + 1)) + ' (' + c.age + ')' +
-          (c.costMode === 'effective' ? ' [' + t('children', 'modeEffectiveShort') + ' ' + fmt(c.effectiveCosts) + ']' : ''),
-        fmt(c.basicNeed),
-        fmt(c.directCosts),
-        fmt(c.childIncome),
-        fmt(c.barTotal),
-        fmt(c.barFromA),
-        fmt(c.barFromB),
-        c.barManko > 0 ? fmt(c.barManko) : '–',
-        (c.careNetFromAToB > 0 ? fmt(c.careNetFromAToB) + ' A→B' : '') +
-          (c.careNetFromBToA > 0 ? fmt(c.careNetFromBToA) + ' B→A' : '') || '–',
-        fmt(c.totalFromA),
-        fmt(c.totalFromB)
-      ].forEach(function (v) {
-        var td = document.createElement('td');
-        td.textContent = v;
-        tr.appendChild(td);
+        (c.costMode === 'effective' ? ' – ' + t('children', 'modeEffectiveShort') + ' ' + fmt(c.effectiveCosts) : '');
+      block.appendChild(head);
+      [
+        [t('children', 'tableBasicNeed'), fmt(c.basicNeed)],
+        [t('children', 'tableDirect'), fmt(c.directCosts)],
+        [t('children', 'tableChildIncome'), fmt(c.childIncome)],
+        [t('children', 'tableBarTotal'), fmt(c.barTotal)],
+        [t('children', 'tableBarA'), fmt(c.barFromA)],
+        [t('children', 'tableBarB'), fmt(c.barFromB)],
+        [t('children', 'tableManko'), c.barManko > 0 ? fmt(c.barManko) : '–'],
+        [t('children', 'tableCareNet'),
+          ((c.careNetFromAToB > 0 ? fmt(c.careNetFromAToB) + ' A→B' : '') +
+            (c.careNetFromBToA > 0 ? fmt(c.careNetFromBToA) + ' B→A' : '')) || '–']
+      ].forEach(function (r) {
+        block.appendChild(renderBreakdownRow(r[0], r[1]));
       });
-      tbody.appendChild(tr);
+      block.appendChild(renderBreakdownRow(t('children', 'tableTotalA'), fmt(c.totalFromA), true));
+      block.appendChild(renderBreakdownRow(t('children', 'tableTotalB'), fmt(c.totalFromB), true));
+      breakdown.appendChild(block);
     });
 
     var totals = result.totals;

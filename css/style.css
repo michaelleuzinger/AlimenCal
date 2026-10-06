@@ -43,20 +43,20 @@ body {
   max-width: 1080px; margin: 0 auto; padding: 0 1.25rem;
   height: 3.25rem; display: flex; align-items: center; gap: 1.25rem;
 }
-.brand { display: flex; align-items: center; gap: 0.5rem; font-weight: 600; font-size: 0.95rem; white-space: nowrap; }
+.brand { display: flex; align-items: center; gap: 0.5rem; font-weight: 600; font-size: 0.95rem; white-space: nowrap; color: var(--banner-ink); }
 .brand .brand-mark {
   display: inline-flex; align-items: center; justify-content: center;
   width: 1.4rem; height: 1.4rem; border-radius: 0.4rem;
   background: var(--accent); color: var(--accent-ink); font-size: 0.85rem; font-weight: 700;
 }
-.topnav { display: flex; gap: 0.15rem; }
+.topnav { display: flex; gap: 0.4rem; }
 .nav-item {
   border: 1px solid transparent; background: transparent;
-  color: var(--muted); padding: 0.35rem 0.65rem;
-  border-radius: 6px; cursor: pointer; font: inherit; font-size: 0.85rem; font-weight: 500;
+  color: var(--banner-ink); padding: 0.35rem 0.65rem;
+  border-radius: 6px; cursor: pointer; font: inherit; font-size: 0.85rem; font-weight: 500; opacity: 0.75;
 }
-.nav-item:hover { color: var(--ink); background: var(--card); border-color: var(--line); }
-.nav-item.active { color: var(--ink); background: var(--card); border-color: var(--line); font-weight: 600; }
+.nav-item:hover { color: var(--ink); background: var(--card); border-color: var(--line); opacity: 1; }
+.nav-item.active { color: var(--ink); background: var(--card); border-color: var(--line); font-weight: 600; opacity: 1; }
 .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 0.75rem; }
 .cmdk-trigger {
   display: inline-flex; align-items: center; gap: 0.6rem;
@@ -69,7 +69,7 @@ body {
   margin-left: auto; font-family: ui-monospace, "SF Mono", Menlo, monospace;
   font-size: 0.68rem; border: 1px solid var(--line); border-radius: 4px; padding: 0 0.3rem; color: var(--muted);
 }
-.lang-switch { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.82rem; color: var(--muted); }
+.lang-switch { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.82rem; color: var(--banner-ink); }
 .lang-switch select { padding: 0.25rem 0.4rem; border-radius: 6px; border: 1px solid var(--line); background: var(--card); color: var(--ink); font: inherit; font-size: 0.8rem; }
 
 /* ---------- Command-Palette (Ctrl+K) ---------- */
@@ -108,17 +108,18 @@ body {
 @media (max-width: 920px) {
   .topnav, .cmdk-trigger, .topbar .lang-switch { display: none; }
   .mobile-tabs {
-    display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
+    display: flex; gap: 0.25rem; position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
     background: var(--card); border-top: 1px solid var(--line);
-    padding: 0.25rem 0.35rem calc(0.25rem + env(safe-area-inset-bottom, 0px));
+    padding: 0.3rem 0.4rem calc(0.3rem + env(safe-area-inset-bottom, 0px));
   }
-  .mob-item {
+  .mobile-tabs .mob-item {
     flex: 1; min-width: 0; border: 0; background: transparent;
     color: var(--muted); font: inherit; font-size: 0.68rem; font-weight: 500;
-    padding: 0.35rem 0.1rem; border-radius: 8px; cursor: pointer; white-space: nowrap;
+    padding: 0.45rem 0.15rem; border-radius: 8px; cursor: pointer;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
-  .mob-item.active { color: var(--ink); background: var(--btn-secondary-bg); font-weight: 600; }
-  .app-shell { padding-bottom: 3.6rem; }
+  .mobile-tabs .mob-item.active { color: var(--ink); background: var(--btn-secondary-bg); font-weight: 600; }
+  .app-shell { padding-bottom: 4rem; }
 }
 @media (max-width: 560px) {
   .topbar-in { gap: 0.6rem; }
@@ -170,6 +171,7 @@ h2 { margin-top: 1rem; font-size: 1.15rem; letter-spacing: -0.01em; }
 .card legend { font-weight: 600; padding: 0 0.4rem; font-size: 0.92rem; }
 label { display: block; margin: 0.5rem 0; }
 label span { display: block; font-size: 0.82rem; color: var(--muted); margin-bottom: 0.2rem; }
+.topbar label span { color: inherit; margin: 0; }
 
 input[type="number"], input[type="text"], input[type="date"], select {
   width: 100%;
@@ -224,10 +226,44 @@ button.danger { background: transparent; color: var(--warn); text-decoration: un
 }
 .result h3 { margin-top: 0; }
 
-.result-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-.result-table th, .result-table td { text-align: right; padding: 0.4rem 0.5rem; border-bottom: 1px solid var(--line); }
+.result-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.result-table th {
+  text-align: right; padding: 0.4rem 0.5rem;
+  font-size: 0.72rem; font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--ink);
+  background: var(--btn-secondary-bg);
+}
+.result-table thead th:first-child { border-top-left-radius: 6px; }
+.result-table thead th:last-child { border-top-right-radius: 6px; }
+.result-table td { text-align: right; padding: 0.4rem 0.5rem; border-bottom: 1px solid var(--line); }
 .result-table th:first-child, .result-table td:first-child { text-align: left; }
+.result-table tbody tr:nth-child(even) { background: var(--btn-secondary-bg); }
 .result-table tfoot td { font-weight: 700; border-top: 2px solid var(--line); }
+/* Ergebnis-Aufschlüsselung (Key-Value je Kind) im Live-Ergebnis-Panel */
+.result-breakdown-block { margin: 0 0 0.9rem; }
+.result-breakdown-block:last-child { margin-bottom: 0; }
+.result-breakdown-head {
+  margin: 0 0 0.35rem; font-size: 0.72rem; font-weight: 600;
+  color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em;
+}
+.result-breakdown-row {
+  display: flex; justify-content: space-between; gap: 0.75rem;
+  margin: 0; padding: 0.25rem 0;
+  font-size: 0.85rem;
+  border-bottom: 1px solid var(--line);
+}
+.result-breakdown-row:last-child { border-bottom: 0; }
+.result-breakdown-label { color: var(--muted); }
+.result-breakdown-value { font-weight: 500; white-space: nowrap; }
+.result-breakdown-row-total {
+  font-weight: 700; padding-top: 0.4rem;
+  border-top: 1px solid var(--line);
+  border-bottom: 0;
+}
+.result-breakdown-row-total .result-breakdown-label { color: var(--ink); }
+.result-breakdown-row-total .result-breakdown-value { color: var(--accent-dark); }
 
 .big { font-size: 1.3rem; font-weight: 700; color: var(--accent-dark); }
 .totals { font-size: 0.95rem; }
@@ -323,6 +359,9 @@ footer { padding: 1.5rem 0 2.5rem; color: var(--muted); font-size: 0.85rem; }
 [data-design="editorial"] .primary { border-radius: 4px; font-family: system-ui, -apple-system, sans-serif; }
 [data-design="editorial"] .result h3 { font-family: var(--design-font); }
 [data-design="editorial"] .result-table th { font-family: var(--design-font); letter-spacing: 0.02em; }
+[data-design="calm-dark"] .result-table th { border-bottom-color: var(--muted); }
+[data-design="calm-dark"] .result-table thead th:first-child,
+[data-design="calm-dark"] .result-table thead th:last-child { border-radius: 0; }
 [data-design="editorial"] .disclaimer { border-left: 3px solid var(--accent); border-radius: 4px; }
 
 /* neubrutalism: harte Schatten, dicke Ränder, kein Radius */
@@ -340,6 +379,9 @@ footer { padding: 1.5rem 0 2.5rem; color: var(--muted); font-size: 0.85rem; }
 [data-design="neubrutalism"] input, [data-design="neubrutalism"] select { border-width: 2px; border-style: solid; border-radius: 0; font-weight: 600; }
 [data-design="neubrutalism"] .disclaimer { border-width: 2px; border-style: solid; border-radius: 0; box-shadow: var(--design-shadow); }
 [data-design="neubrutalism"] .result-panel, [data-design="neubrutalism"] .result { border-width: 2px; border-style: solid; box-shadow: 6px 6px 0 var(--accent); border-radius: 0; }
+[data-design="neubrutalism"] .result-table th { border-bottom-width: 2px; border-bottom-style: solid; text-transform: uppercase; }
+[data-design="neubrutalism"] .result-table thead th:first-child,
+[data-design="neubrutalism"] .result-table thead th:last-child { border-radius: 0; }
 [data-design="neubrutalism"] .cmdk-palette { border-width: 2px; border-style: solid; border-radius: 0; box-shadow: 8px 8px 0 var(--ink); }
 [data-design="neubrutalism"] .cmdk-input { border-bottom-width: 2px; }
 [data-design="neubrutalism"] .mob-item { font-weight: 700; }

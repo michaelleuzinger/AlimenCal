@@ -154,11 +154,11 @@ AlimenCal.themes = (function () {
       design: 'neubrutalism',
       values: {
         bg: '#fdf6e3', card: '#ffffff', ink: '#111111', muted: '#4a4a4a',
-        accent: '#ff5c00', accentDark: '#cc4a00', accentInk: '#ffffff',
+        accent: '#ff5c00', accentDark: '#cc4a00', accentInk: '#111111',
         bannerBg: '#ffd41f',
         bannerInk: '#111111',
         warn: '#a30000', warnBg: '#ffe1e1', warnBorder: '#111111',
-        line: '#111111', inputBg: '#fdf6e3', btnSecondaryBg: '#3d9dfc',
+        line: '#111111', inputBg: '#fdf6e3', btnSecondaryBg: '#ffe9a8',
         disclaimerBg: '#ffffff', disclaimerBorder: '#111111', radius: 0
       }
     },
