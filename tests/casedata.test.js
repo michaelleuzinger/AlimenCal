@@ -119,6 +119,85 @@ var roundtrip = casedata.sanitizeCase(exported);
 ok('Roundtrip: valid', roundtrip.valid === true);
 ok('Roundtrip: income erhalten', roundtrip.sections.parentA.income === 7800);
 
+/* ---------- Backup/Restore ---------- */
+var backup = casedata.buildBackupFile(
+  { parentA: { income: 7800, existenzminimum: '', employed: true } },
+  { lang: 'fr', theme: { id: 'dark', values: null }, config: { defaultExistenzminimumEmployed: 1800 } }
+);
+ok('Backup: app=alimencal-backup', backup.app === 'alimencal-backup');
+ok('Backup: version=1', backup.version === 1);
+ok('Backup: eingebettete Falldatei app=alimencal', backup.case.app === 'alimencal');
+ok('Backup: settings.lang', backup.settings.lang === 'fr');
+ok('Backup: settings.theme.id', backup.settings.theme.id === 'dark');
+var restored = casedata.sanitizeBackup(backup);
+ok('Restore: valid', restored.valid === true);
+ok('Restore: sections uebernommen', restored.sections.parentA.income === 7800);
+ok('Restore: lang', restored.settings.lang === 'fr');
+ok('Restore: theme.id', restored.settings.theme.id === 'dark');
+ok('Restore: config ohne AlimenCal.config verworfen (Node-Kontext)', !restored.settings.config || typeof restored.settings.config === 'object');
+ok('Restore: Falldatei ohne Extras => settings leer aber valid', (function () {
+  var b = casedata.sanitizeBackup(casedata.buildBackupFile({ spousalEnabled: true }, {}));
+  return b.valid === true && b.settings.lang === undefined;
+})());
+ok('Restore: falsche APP-ID => invalid', casedata.sanitizeBackup({ app: 'other', version: 1 }).valid === false);
+ok('Restore: falsche Version => invalid', casedata.sanitizeBackup({ app: 'alimencal-backup', version: 9 }).valid === false);
+ok('Restore: ungueltige Sprache verworfen', (function () {
+  var b = casedata.buildBackupFile({ spousalEnabled: true }, { lang: 'xx' });
+  var r = casedata.sanitizeBackup(b);
+  return r.valid === true && r.settings.lang === undefined;
+})());
+ok('Restore: ungueltiges Theme verworfen', (function () {
+  var b = casedata.buildBackupFile({ spousalEnabled: true }, { theme: { id: '' } });
+  var r = casedata.sanitizeBackup(b);
+  return r.valid === true && r.settings.theme === undefined;
+})());
+ok('Restore: ungueltige Falldaten => invalid', (function () {
+  var b = casedata.buildBackupFile({}, {});
+  var r = casedata.sanitizeBackup(b);
+  return r.valid === false;
+})());
+ok('Restore: Backup ohne Settings bleibt valid', (function () {
+  var b = casedata.buildBackupFile({ spousalEnabled: true }, {});
+  var r = casedata.sanitizeBackup(b);
+  return r.valid === true;
+})());
+
+/* ---------- Backup/Restore: Binding & Keys ---------- */
+var backupBK = casedata.buildBackupFile(
+  { spousalEnabled: true },
+  {
+    binding: { settings: { defaultSpousalStandard: { valueBase: 4200, lockedA: true, lockedB: true } }, overrides: {}, chain: [] },
+    keys: { partyA: { importedParty: false, publicKey: 'pub-a', privateKey: 'priv-a' }, partyB: null }
+  }
+);
+var restoredBK = casedata.sanitizeBackup(backupBK);
+ok('Backup: binding uebernommen', restoredBK.settings.binding.settings.defaultSpousalStandard.lockedB === true);
+ok('Backup: binding chain leer ok', Array.isArray(restoredBK.settings.binding.chain));
+ok('Backup: keys partyA uebernommen', restoredBK.settings.keys.partyA.publicKey === 'pub-a');
+ok('Backup: keys partyB null ok', restoredBK.settings.keys.partyB === null);
+ok('Backup: ungueltiges binding verworfen', (function () {
+  var b = casedata.buildBackupFile({ spousalEnabled: true }, { binding: { settings: {} } });
+  var r = casedata.sanitizeBackup(b);
+  return r.valid === true && r.settings.binding === undefined;
+})());
+ok('Backup: binding mit non-number valueBase => null', (function () {
+  var b = casedata.buildBackupFile({ spousalEnabled: true },
+    { binding: { settings: { k: { valueBase: 'x', lockedA: true, lockedB: false } } } });
+  var r = casedata.sanitizeBackup(b);
+  return r.settings.binding.settings.k.valueBase === null;
+})());
+ok('Backup: keys nur mit ungueltigen Eintraegen verworfen', (function () {
+  var b = casedata.buildBackupFile({ spousalEnabled: true }, { keys: { partyA: 5, partyB: 'x' } });
+  var r = casedata.sanitizeBackup(b);
+  return r.valid === true && r.settings.keys === undefined;
+})());
+ok('Backup: overrides uebernommen', (function () {
+  var b = casedata.buildBackupFile({ spousalEnabled: true },
+    { binding: { settings: { k: { valueBase: 1, lockedA: false, lockedB: false } }, overrides: { s1: { key: 'k', valueOverride: 2, reason: 'r' } } } });
+  var r = casedata.sanitizeBackup(b);
+  return r.settings.binding.overrides.s1.valueOverride === 2;
+})());
+
 /* ---------- Zusammenfassung ---------- */
 console.log('\n' + passed + ' Tests bestanden' +
   (process.exitCode ? ', FEHLER vorhanden' : ', keine Fehler'));

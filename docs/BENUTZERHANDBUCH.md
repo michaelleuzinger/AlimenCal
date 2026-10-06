@@ -29,6 +29,78 @@ Die App ist responsiv gestaltet und auf Smartphone, Tablet und Desktop nutzbar:
   Geräts; ein Gerätewechsel erfolgt über den JSON-Export/Import im
   Austausch-Tab.
 
+### Installation als App (PWA)
+
+Bei Bereitstellung über HTTPS (z. B. GitHub Pages) kann AlimenCal als
+Progressive Web App installiert und anschliessend offline genutzt werden:
+
+1. Die App-URL in **Safari** öffnen (iOS/iPadOS) bzw. in Chrome (Android).
+2. **Teilen-Taste** → **«Zum Home-Bildschirm hinzufügen»** (iOS) bzw.
+   Menü → **«App installieren»** (Android).
+3. Die App öffnet sich daraufhin im Vollbildmodus ohne Browserleiste; das
+   Icon liegt auf dem Home-Bildschirm.
+
+**Backup für Neuinstallation:** Da iOS beim Löschen einer Home-Screen-App
+auch deren lokale Daten entfernt, bietet der Austausch-Tab eine
+Backup-Funktion: «Backup erstellen (JSON)» exportiert **alle** Daten –
+sämtliche Falldaten (beide Parteien, Kinder, Ehegattenunterhalt,
+Kostentrennung) sowie Sprache, Design-Stil/Theme und die Richtwerte –
+als eine Datei; auf iPhone/iPad kann sie im Share-Dialog direkt in die
+Files-App oder iCloud Drive («In Dateien sichern») gespeichert werden.
+Die Datei übersteht das Löschen der App. Empfehlung: nach jeder
+wesentlichen Änderung ein neues Backup erstellen.
+
+**Tägliche Backup-Erinnerung:** iOS erlaubt einer PWA keine
+Hintergrund-Exporte; die App erinnert daher selbst daran: Sobald das
+letzte Backup länger als 24 Stunden zurückliegt oder seitdem viele
+Änderungen (≥ 25) vorgenommen wurden, erscheint beim Öffnen der App ein
+Hinweisbanner mit «Backup jetzt erstellen» (Ein-Tipp-Export, danach
+verschwindet das Banner wieder). «Später erinnern» blendet das Banner
+für die aktuelle Sitzung aus. Der Zähler wird bei jedem erstellten
+Backup zurückgesetzt.
+
+**Erste Erinnerung (noch kein Backup):** Wer noch nie ein Backup
+erstellt, aber bereits Daten erfasst hat (ab 5 Änderungen), erhält
+dieselbe Erinnerung mit dem Hinweis, dass die Daten ohne Backup eine
+De-/Neuinstallation nicht überstehen.
+
+![Erst-Erinnerung (DE)](../screenshots/pc/18-backup-reminder-initial-de.png)
+
+![Backup-Erinnerung (DE)](../screenshots/pc/17-backup-reminder-de.png)
+
+![Backup erstellen (DE)](../screenshots/pc/15-backup-de.png)
+
+**Restore («Backup wiederherstellen»):** Die Backup-Datei direkt unter
+der Backup-Funktion im Austausch-Tab auswählen («Backup-Datei wählen»).
+Es werden alle enthaltenen Falldaten, Sprache, Design-Stil/Theme,
+Richtwerte sowie die verbindlichen Einstellungen inklusive Lock-Zustand
+(Two-Party-Lock) und die Schlüssel für signierte Lock-Dateien in einem
+Schritt wiederhergestellt.
+
+![Backup wiederherstellen (DE)](../screenshots/pc/16-restore-de.png)
+
+**Gesperrte Abschnitte (unveränderbar):** Nach dem Import einer
+Parteien-Datei oder dem Restore werden die übernommenen Abschnitte als
+unveränderbar gekennzeichnet – ihre Felder sind gesperrt und mit einem
+Hinweis versehen. Die Sperre gilt pro Abschnitt und wird im localStorage
+persistiert (FORM_VERSION 3); sie übersteht also einen Browser-Neustart.
+Im Austausch-Tab listet die Karte «Gesperrte Abschnitte (unveränderbar)»
+alle gesperrten Abschnitte; mit «Bearbeitung erlauben» wird die Sperre
+eines Abschnitts aufgehoben (bewusstes Freigeben, danach normal
+editierbar). Vom Two-Party-Lock (verbindliche Einstellungen) gesperrte
+Richtwert-Felder bleiben davon unberührt und haben Vorrang. Das Format ist getrennt
+vom Parteien-Austausch (`alimencal-backup` statt `alimencal`) und wird
+eigens validiert; der Parteien-Import bleibt unverändert. Die
+Wiederherstellung überschreibt die aktuellen Werte mit denjenigen aus
+der Datei – also nur mit einem Backup des gewünschten Stands durchführen.
+
+Technische Grundlage sind `manifest.json` und der Service Worker `sw.js`
+im Repository-Root, der alle App-Dateien für die Offline-Nutzung cacht.
+Die Service-Worker-Registrierung erfolgt automatisch, wenn die App über
+HTTPS aufgerufen wird (nicht bei `file://`). Gespeicherte Daten bleiben
+auch in der installierten App lokal im Browser-Speicher des jeweiligen
+Geräts.
+
 Die Screenshots in diesem Handbuch zeigen die PC-Ansicht (1395×2084).
 Die gleichen Ansichten im iPhone- (390×844) und iPad-Viewport (820×1180)
 liegen unter `screenshots/iphone/` bzw. `screenshots/ipad/` im Repository.

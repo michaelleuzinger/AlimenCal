@@ -58,7 +58,11 @@ const VIEWS = [
   { n: 11, name: 'hero-classic', langs: ['de'], devices: ['pc'], setup: setupHeroClassic },
   { n: 12, name: 'hero-calm-dark', langs: ['de'], devices: ['pc'], setup: setupHeroCalmDark },
   { n: 13, name: 'hero-editorial', langs: ['de'], devices: ['pc'], setup: setupHeroEditorial },
-  { n: 14, name: 'hero-neubrutalism', langs: ['de'], devices: ['pc'], setup: setupHeroNeubrutalism }
+  { n: 14, name: 'hero-neubrutalism', langs: ['de'], devices: ['pc'], setup: setupHeroNeubrutalism },
+  { n: 15, name: 'backup', langs: LANGS, setup: setupBackup, design: 'calm' },
+  { n: 16, name: 'restore', langs: LANGS, setup: setupRestore, design: 'calm' },
+  { n: 17, name: 'backup-reminder', langs: LANGS, setup: setupBackupReminder, design: 'calm' },
+  { n: 18, name: 'backup-reminder-initial', langs: LANGS, setup: setupBackupReminderInitial, design: 'calm' }
 ];
 
 /* ---------- Beispieldaten (anonymisiert, keine echten Personen) ---------- */
@@ -250,6 +254,61 @@ async function setupThemesDark(page) {
 
 async function setupShare(page) {
   await switchTab(page, 'share');
+}
+
+async function setupBackup(page) {
+  await switchTab(page, 'share');
+  await setupChildren(page);
+  await switchTab(page, 'share');
+  /* Download-Dialog unterdruecken; Statusmeldung ("Backup erstellt") bleibt sichtbar */
+  const cdp = await page.createCDPSession();
+  await cdp.send('Browser.setDownloadBehavior', {
+    behavior: 'allow', downloadPath: os.tmpdir()
+  });
+  await page.evaluate(() => document.getElementById('share-backup').click());
+  await sleep(400);
+}
+
+async function setupBackupReminder(page) {
+  /* Erinnerungs-Banner: Backup liegt 3 Tage zurueck -> Hinweis sichtbar */
+  await page.evaluate(() => {
+    localStorage.setItem('alimencal.backupmeta', JSON.stringify({
+      lastAt: Date.now() - 3 * 24 * 60 * 60 * 1000,
+      changes: 2
+    }));
+  });
+  await page.reload({ waitUntil: 'networkidle0' });
+  await sleep(200);
+}
+
+async function setupBackupReminderInitial(page) {
+  /* Erst-Erinnerung: noch kein Backup, aber bereits Daten erfasst */
+  await page.evaluate(() => {
+    localStorage.setItem('alimencal.backupmeta', JSON.stringify({
+      lastAt: null,
+      changes: 7
+    }));
+  });
+  await page.reload({ waitUntil: 'networkidle0' });
+  await sleep(200);
+}
+
+async function setupRestore(page) {
+  await switchTab(page, 'share');
+  /* Vollstaendiges Beispiel-Backup (alle Abschnitte + Einstellungen)
+     mit denselben anonymisierten Demo-Daten wie View 01 */
+  const casedata = require(path.join(ROOT, 'js', 'casedata.js'));
+  const backup = casedata.buildBackupFile({
+    parentA: { name: 'Beispiel A', income: 6800 },
+    parentB: { name: 'Beispiel B', income: 4200 },
+    children: [],
+    spousalEnabled: false
+  }, { lang: 'de', theme: { id: 'calm' } });
+  const tmp = path.join(os.tmpdir(), 'alimencal-demo-backup.json');
+  fs.writeFileSync(tmp, JSON.stringify(backup, null, 2), 'utf8');
+  const input = await page.$('#share-restore');
+  await input.uploadFile(tmp);
+  await sleep(500);
 }
 
 /* ---------- Design-Stile (Themes-Tab, neue Karten) ---------- */

@@ -26,7 +26,7 @@ AlimenCal.storage = (function () {
    *   2 - versionierter Payload (app/kind/version), Kinder und
    *       Kostentrennung werden beim Laden normalisiert
    */
-  var FORM_VERSION = 2;
+  var FORM_VERSION = 3;
 
   var CHILD_DEFAULTS = {
     age: 8,
@@ -177,6 +177,19 @@ AlimenCal.storage = (function () {
         changed = true;
       }
     }
+    if (fromVersion < 3) {
+      /* v3: Abschnitt-Locks (importierte Abschnitte read-only). */
+      var locks = form.__sectionLocks;
+      if (!Array.isArray(locks)) {
+        if (locks) { delete form.__sectionLocks; changed = true; }
+      } else {
+        var validLockKeys = ['parentA', 'parentB', 'children', 'spousalApplicant',
+          'spousalRespondent', 'spousalEnabled', 'costsplit'];
+        var cleanLocks = locks.filter(function (k) { return validLockKeys.indexOf(k) >= 0; });
+        if (cleanLocks.length !== locks.length) { changed = true; }
+        form.__sectionLocks = cleanLocks;
+      }
+    }
 
     return { form: form, changed: changed };
   }
@@ -235,6 +248,42 @@ AlimenCal.storage = (function () {
     };
   }
 
+  /* ---------- Backup-Erinnerung (taeglich / viele Aenderungen) ----------
+   *
+   * Rein lokale Entscheidungsfunktionen; die App (app.js) speichert die
+   * Metadaten (Zeitpunkt des letzten Backups, Anzahl Aenderungen seitdem)
+   * unter LS_BACKUP_META und rendert danach das Erinnerungs-Banner.
+   */
+  var BACKUP_INTERVAL_MS = 24 * 60 * 60 * 1000;
+  var BACKUP_CHANGES_THRESHOLD = 25;
+  var BACKUP_INITIAL_CHANGES_THRESHOLD = 5;
+
+  function sanitizeBackupMeta(raw) {
+    if (!raw || typeof raw !== 'object') { return null; }
+    return {
+      lastAt: typeof raw.lastAt === 'number' && isFinite(raw.lastAt) ? raw.lastAt : null,
+      changes: typeof raw.changes === 'number' && isFinite(raw.changes) && raw.changes >= 0
+        ? Math.floor(raw.changes) : 0
+    };
+  }
+
+  function backupReminderDue(meta, now) {
+    return backupReminderKind(meta, now) !== null;
+  }
+
+  function backupReminderKind(meta, now) {
+    var m = sanitizeBackupMeta(meta);
+    if (!m) { return null; }
+    /* Erste Erinnerung: noch kein Backup, aber bereits Daten erfasst */
+    if (!m.lastAt) {
+      return m.changes >= BACKUP_INITIAL_CHANGES_THRESHOLD ? 'initial' : null;
+    }
+    if (m.changes >= BACKUP_CHANGES_THRESHOLD) { return 'many'; }
+    now = typeof now === 'number' ? now : Date.now();
+    if (now - m.lastAt >= BACKUP_INTERVAL_MS) { return 'old'; }
+    return null;
+  }
+
   return {
     FORM_VERSION: FORM_VERSION,
     CHILD_DEFAULTS: CHILD_DEFAULTS,
@@ -244,7 +293,13 @@ AlimenCal.storage = (function () {
     normalizeCostsplit: normalizeCostsplit,
     migrateForm: migrateForm,
     parseStored: parseStored,
-    buildFormPayload: buildFormPayload
+    buildFormPayload: buildFormPayload,
+    BACKUP_INTERVAL_MS: BACKUP_INTERVAL_MS,
+    BACKUP_CHANGES_THRESHOLD: BACKUP_CHANGES_THRESHOLD,
+    BACKUP_INITIAL_CHANGES_THRESHOLD: BACKUP_INITIAL_CHANGES_THRESHOLD,
+    sanitizeBackupMeta: sanitizeBackupMeta,
+    backupReminderDue: backupReminderDue,
+    backupReminderKind: backupReminderKind
   };
 })();
 if (typeof module !== 'undefined' && module.exports) {

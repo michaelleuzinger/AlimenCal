@@ -10,12 +10,22 @@
   var LS_THEME_VALUES = 'alimencal.themevalues';
   var LS_BINDING = 'alimencal.binding';
   var LS_KEYS = 'alimencal.keys';
+  var LS_BACKUP_META = 'alimencal.backupmeta';
   var FORM_FIELD_IDS = [
     'pa-income', 'pa-em', 'pa-employed', 'pb-income', 'pb-em', 'pb-employed',
     'spousal-enabled', 'sp-app-income', 'sp-app-em', 'sp-app-standard',
     'sp-app-extra', 'sp-res-income', 'sp-res-em', 'sp-res-childpaid',
     'costsplit-date', 'costsplit-owner'
   ];
+  var SECTION_FIELDS = {
+    parentA: ['pa-income', 'pa-em', 'pa-employed'],
+    parentB: ['pb-income', 'pb-em', 'pb-employed'],
+    children: [],
+    spousalApplicant: ['sp-app-income', 'sp-app-em', 'sp-app-standard', 'sp-app-extra'],
+    spousalRespondent: ['sp-res-income', 'sp-res-em', 'sp-res-childpaid'],
+    spousalEnabled: ['spousal-enabled'],
+    costsplit: ['costsplit-date', 'costsplit-owner']
+  };
   var DEFAULT_LANG = 'de';
   var LANGS = ['de', 'fr', 'it', 'en'];
 
@@ -23,6 +33,7 @@
     lang: DEFAULT_LANG,
     cfg: null,
     keys: null,
+    sectionLocks: [],
     children: [],
     costsplit: {
       transactions: [],
@@ -31,6 +42,77 @@
   };
 
   function clone(obj) { return JSON.parse(JSON.stringify(obj)); }
+
+  /* ---------- Backup-Erinnerung (taeglich / viele Aenderungen) ----------
+   *
+   * iOS/PWA erlaubt keine Hintergrund-Exports; die App zaehlt daher
+   * Datenveraenderungen und speichert den Zeitpunkt des letzten Backups.
+   * Beim Oeffnen (und nach jeder Aenderung) prueft renderBackupReminder(),
+   * ob das letzte Backup laenger als BACKUP_INTERVAL_MS zurueckliegt oder
+   * seitdem viele Aenderungen (>= BACKUP_CHANGES_THRESHOLD) erfolgt sind,
+   * und blendet dann ein Banner mit Ein-Tipp-Backup ein.
+   */
+  function loadBackupMeta() {
+    try {
+      var raw = localStorage.getItem(LS_BACKUP_META);
+      if (!raw) { return null; }
+      return AlimenCal.storage.sanitizeBackupMeta(JSON.parse(raw));
+    } catch (e) { return null; }
+  }
+
+  function saveBackupMeta(meta) {
+    try { localStorage.setItem(LS_BACKUP_META, JSON.stringify(meta)); } catch (e) {}
+  }
+
+  var backupReminderDismissed = false;
+  var lastFormSnapshot = null;
+
+  function bumpBackupChanges() {
+    var snapshot = null;
+    try { snapshot = localStorage.getItem(LS_FORM); } catch (e) {}
+    if (snapshot === null || snapshot === lastFormSnapshot) { return; }
+    lastFormSnapshot = snapshot;
+    var meta = loadBackupMeta() || { lastAt: null, changes: 0 };
+    meta.changes += 1;
+    saveBackupMeta(meta);
+    renderBackupReminder();
+  }
+
+  function backupReminderDue() {
+    var meta = loadBackupMeta();
+    return meta ? AlimenCal.storage.backupReminderDue(meta) : false;
+  }
+
+  var BACKUP_TEXT_KEYS = { initial: 'backupReminderInitial', old: 'backupReminderOld', many: 'backupReminderMany' };
+
+  function backupReminderText() {
+    var meta = loadBackupMeta();
+    if (!meta) { return ''; }
+    var kind = AlimenCal.storage.backupReminderKind(meta);
+    if (!kind) { return ''; }
+    var text = t('share', BACKUP_TEXT_KEYS[kind]);
+    if (kind === 'initial' || kind === 'many') {
+      return text.replace('{0}', String(meta.changes));
+    }
+    var days = meta.lastAt ? Math.floor((Date.now() - meta.lastAt) / (24 * 60 * 60 * 1000)) : 0;
+    return text.replace('{0}', String(days));
+  }
+
+  function renderBackupReminder() {
+    var banner = document.getElementById('backup-reminder');
+    if (!banner) { return; }
+    var due = !backupReminderDismissed && backupReminderDue();
+    banner.hidden = !due;
+    if (!due) { return; }
+    document.getElementById('backup-reminder-text').textContent = backupReminderText();
+    document.getElementById('backup-reminder-action').textContent = t('share', 'backupReminderAction');
+    document.getElementById('backup-reminder-dismiss').textContent = t('share', 'backupReminderDismiss');
+  }
+
+  function markBackupDone() {
+    saveBackupMeta({ lastAt: Date.now(), changes: 0 });
+    renderBackupReminder();
+  }
 
   function getLang() {
     var stored = null;
@@ -708,6 +790,21 @@
     document.getElementById('share-export-hint').textContent = t('share', 'exportHint');
     document.getElementById('share-export').textContent = t('share', 'exportButton');
     document.getElementById('share-export-encrypt-label').textContent = t('share', 'encryptLabel');
+    document.getElementById('share-backup-heading').textContent = t('share', 'backupHeading');
+    document.getElementById('share-backup-hint').textContent = t('share', 'backupHint');
+    document.getElementById('share-backup').textContent = t('share', 'backupButton');
+    document.getElementById('share-restore-heading').textContent = t('share', 'restoreHeading');
+    document.getElementById('share-restore-hint').textContent = t('share', 'restoreHint');
+    document.getElementById('share-restore-label').textContent = t('share', 'restoreLabel');
+    var lockHeading = document.getElementById('section-lock-heading');
+    if (lockHeading) { lockHeading.textContent = t('share', 'sectionLockHeading'); }
+    var lockHint = document.getElementById('section-lock-hint');
+    if (lockHint) { lockHint.textContent = t('share', 'sectionLockHint'); }
+    var lockEmpty = document.getElementById('section-lock-empty');
+    if (lockEmpty) { lockEmpty.textContent = t('share', 'sectionLockEmpty'); }
+    renderSectionLockList();
+    var backupStatus = document.getElementById('share-backup-status');
+    if (backupStatus) { backupStatus.textContent = ''; }
     document.getElementById('share-import-heading').textContent = t('share', 'importHeading');
     document.getElementById('share-import-hint').textContent = t('share', 'importHint');
     document.getElementById('share-import-label').textContent = t('share', 'importLabel');
@@ -1098,10 +1195,12 @@
       var el = document.getElementById(b.uiId);
       if (el) {
         var locked = setting.lockedA && setting.lockedB;
+        el.dataset.bindingLocked = locked ? '1' : '';
         el.disabled = locked;
         el.title = locked ? t('binding', 'lockedFieldHint') : '';
       }
     });
+    applySectionLocks();
   }
 
   function fillCfgForm() {
@@ -1582,7 +1681,155 @@
     }
     download(file, 'alimencal-case.json');
   }
+  function backupFileName() {
+    var d = new Date();
+    function pad(n) { return (n < 10 ? '0' : '') + n; }
+    return 'alimencal-backup-' + d.getFullYear() + pad(d.getMonth() + 1) +
+      pad(d.getDate()) + '-' + pad(d.getHours()) + pad(d.getMinutes()) + '.json';
+  }
+  function doBackup() {
+    var current = collectCurrentSections();
+    var themeValues = null;
+    try {
+      var rawValues = localStorage.getItem(LS_THEME_VALUES);
+      if (rawValues) { themeValues = JSON.parse(rawValues); }
+    } catch (e) {}
+    var binding = null;
+    try { binding = JSON.parse(localStorage.getItem(LS_BINDING)); } catch (e) {}
+    var file = AlimenCal.casedata.buildBackupFile(current, {
+      lang: state.lang,
+      theme: { id: getThemeId(), values: themeValues },
+      config: state.cfg,
+      binding: binding,
+      keys: loadKeys()
+    });
+    var status = document.getElementById('share-backup-status');
+    var blob = new Blob([JSON.stringify(file, null, 2)], { type: 'application/json' });
+    function done() {
+      if (status) { status.textContent = t('share', 'backupOk'); }
+      markBackupDone();
+    }
+    if (navigator.canShare && navigator.canShare({ files: [new File([], backupFileName())] })) {
+      var f = new File([blob], backupFileName(), { type: 'application/json' });
+      navigator.share({ files: [f], title: 'AlimenCal' }).then(done, function () {});
+      return;
+    }
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = backupFileName();
+    a.click();
+    URL.revokeObjectURL(a.href);
+    done();
+  }
 
+  function handleBackupRestore(file) {
+    var reader = new FileReader();
+    reader.onload = function () {
+      var raw;
+      try { raw = JSON.parse(reader.result); } catch (e) { raw = null; }
+      var status = document.getElementById('share-restore-status');
+      var result = raw ? AlimenCal.casedata.sanitizeBackup(raw) : null;
+      if (!result || !result.valid) {
+        status.textContent = t('share', 'restoreInvalid');
+        return;
+      }
+      applySectionsToForm(result.sections);
+      var restored = [];
+      lockImportedSections(result.sections);
+      if (result.settings.lang) {
+        state.lang = result.settings.lang;
+        try { localStorage.setItem(LS_LANG, state.lang); } catch (e) {}
+        Array.prototype.forEach.call(document.querySelectorAll('.lang-select-sync'), function (sel) {
+          sel.value = state.lang;
+        });
+        restored.push(t('share', 'restorePartLang'));
+      }
+      if (result.settings.theme) {
+        saveTheme(result.settings.theme.id, result.settings.theme.values);
+        applyTheme(result.settings.theme.id, result.settings.theme.values);
+        restored.push(t('share', 'restorePartTheme'));
+      }
+      if (result.settings.config) {
+        state.cfg = result.settings.config;
+        saveCfg(state.cfg);
+        fillCfgForm();
+        restored.push(t('share', 'restorePartConfig'));
+      }
+      if (result.settings.binding) {
+        try { localStorage.setItem(LS_BINDING, JSON.stringify(result.settings.binding)); } catch (e) {}
+        if (state.settingsService) {
+          state.settingsService = new AlimenCal.settings.SettingsService();
+          initSettingsService(state.settingsService);
+        }
+        fillCfgForm();
+        restored.push(t('share', 'restorePartBinding'));
+      }
+      if (result.settings.keys) {
+        state.keys = result.settings.keys;
+        saveKeys();
+        restored.push(t('share', 'restorePartKeys'));
+      }
+      applyI18n();
+      var parts = restored.length ? ' ' + t('share', 'restoreSettingsOk', [restored.join(', ')]) : '';
+      status.textContent = t('share', 'restoreOk', [String(Object.keys(result.sections).length), parts]);
+    };
+    reader.readAsText(file);
+  }
+  function applySectionLocks() {
+    Object.keys(SECTION_FIELDS).forEach(function (key) {
+      var locked = state.sectionLocks.indexOf(key) >= 0;
+      SECTION_FIELDS[key].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (!el) { return; }
+        if (el.dataset.bindingLocked === '1') { return; }
+        el.disabled = locked;
+        el.title = locked ? t('share', 'sectionLockedHint') : '';
+      });
+    });
+    renderSectionLockList();
+  }
+  function setSectionLock(key, locked) {
+    var i = state.sectionLocks.indexOf(key);
+    if (locked && i < 0) { state.sectionLocks.push(key); }
+    if (!locked && i >= 0) { state.sectionLocks.splice(i, 1); }
+    applySectionLocks();
+    saveForm();
+  }
+  function renderSectionLockList() {
+    var host = document.getElementById('section-lock-list');
+    if (!host) { return; }
+    host.innerHTML = '';
+    state.sectionLocks.slice().sort().forEach(function (key) {
+      var wrap = document.createElement('div');
+      wrap.className = 'section-lock-row';
+      var label = document.createElement('span');
+      label.textContent = t('share', 'section' + key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, function (m) { return m; })) || key;
+      label.textContent = key;
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'primary';
+      btn.textContent = t('share', 'unlockButton');
+      btn.addEventListener('click', function () { setSectionLock(key, false); });
+      wrap.appendChild(label);
+      wrap.appendChild(btn);
+      host.appendChild(wrap);
+    });
+    var heading = document.getElementById('section-lock-heading');
+    var empty = document.getElementById('section-lock-empty');
+    if (empty) { empty.hidden = state.sectionLocks.length > 0; }
+    if (heading) { heading.hidden = state.sectionLocks.length === 0; }
+  }
+  function lockImportedSections(sections) {
+    var locked = [];
+    Object.keys(SECTION_FIELDS).forEach(function (key) {
+      if (sections[key] != null) { locked.push(key); }
+    });
+    locked.forEach(function (key) {
+      if (state.sectionLocks.indexOf(key) < 0) { state.sectionLocks.push(key); }
+    });
+    applySectionLocks();
+    saveForm();
+  }
   function applySectionsToForm(sections) {
     if (sections.parentA) {
       document.getElementById('pa-income').value = sections.parentA.income;
@@ -1644,6 +1891,7 @@
             return;
           }
           applySectionsToForm(decResult.sections);
+          lockImportedSections(decResult.sections);
           var decPartial = decResult.invalid.length
             ? t('share', 'importPartial', [decResult.invalid.join(', ')])
             : '';
@@ -1658,6 +1906,7 @@
         return;
       }
       applySectionsToForm(result.sections);
+      lockImportedSections(result.sections);
       var partial = result.invalid.length
         ? t('share', 'importPartial', [result.invalid.join(', ')])
         : '';
@@ -1685,6 +1934,7 @@
     });
     form.__children = state.children;
     form.__costsplit = state.costsplit;
+    form.__sectionLocks = state.sectionLocks;
     return form;
   }
 
@@ -1697,6 +1947,7 @@
 
   function scheduleSaveForm() {
     saveForm();
+    bumpBackupChanges();
   }
 
   /* Selbsttest beim Start: der aktuelle Zustand wird einmal gespeichert,
@@ -1736,6 +1987,10 @@
     if (Array.isArray(form.__children) && form.__children.length) {
       state.children = form.__children;
       renderChildrenList();
+    }
+    if (Array.isArray(form.__sectionLocks)) {
+      state.sectionLocks = form.__sectionLocks;
+      applySectionLocks();
     }
     if (form.__costsplit && Array.isArray(form.__costsplit.transactions) && form.__costsplit.transactions.length) {
       state.costsplit = form.__costsplit;
@@ -1907,6 +2162,15 @@
     fillCfgForm();
     addChildRow();
     restoreForm();
+    try { lastFormSnapshot = localStorage.getItem(LS_FORM); } catch (e) {}
+    renderBackupReminder();
+    document.getElementById('backup-reminder-action').addEventListener('click', function () {
+      doBackup();
+    });
+    document.getElementById('backup-reminder-dismiss').addEventListener('click', function () {
+      backupReminderDismissed = true;
+      renderBackupReminder();
+    });
     document.addEventListener('input', scheduleSaveForm);
     document.addEventListener('change', scheduleSaveForm);
     document.addEventListener('click', scheduleSaveForm);
@@ -1918,6 +2182,12 @@
     });
 
     document.getElementById('share-export').addEventListener('click', doShareExport);
+    document.getElementById('share-backup').addEventListener('click', doBackup);
+    document.getElementById('share-restore').addEventListener('change', function () {
+      var file = this.files && this.files[0];
+      this.value = '';
+      if (file) { handleBackupRestore(file); }
+    });
     document.getElementById('share-import').addEventListener('change', function () {
       var file = this.files && this.files[0];
       if (file) { handleShareImport(file); }
@@ -2087,6 +2357,9 @@
     });
   }
 
+  if ('serviceWorker' in navigator && location.protocol === 'https:') {
+    navigator.serviceWorker.register('./sw.js');
+  }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {

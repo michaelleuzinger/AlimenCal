@@ -7,11 +7,11 @@ node tests/calculator.test.js   # Berechnungskern (53 Tests)
 node tests/presets.test.js      # Presets: JSON-Gültigkeit, Konsistenz JS/JSON (29 Tests)
 node tests/costsplit.test.js    # Kostentrennung: CSV- und camt-XML-Parsing, Zuordnung, Ausgleich (54 Tests)
 node tests/themes.test.js       # Themes: Presets, Design-Stile, Token, Validierung, Sanitizing (254 Tests)
-node tests/casedata.test.js     # Falldaten-Austausch: Validierung, Merge, Roundtrip (43 Tests)
+node tests/casedata.test.js     # Falldaten-Austausch und Backup/Restore inkl. Binding/Keys: Validierung, Merge, Roundtrip (68 Tests)
 node tests/settings.test.js     # Verbindliche Einstellungen: Two-Party-Lock, Override-Modus, Read-Only-Imports (21 Tests)
 node tests/crypto.test.js       # Serverlose Verbindlichkeit: Hash-Kette, signierte Lock-Dateien (15 Tests)
 node tests/casecrypto.test.js   # Verschlüsselter Austausch: ECDH/AES-GCM-Export (14 Tests)
-node tests/storage.test.js      # localStorage-Persistenz: Versionierung, Migration, Sanitizing (35 Tests)
+node tests/storage.test.js      # localStorage-Persistenz: Versionierung, Migration v3 (Abschnitt-Locks), Sanitizing, Backup-Erinnerung inkl. Erst-Erinnerung (56 Tests)
 ```
 
 Oder alle auf einmal:

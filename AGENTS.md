@@ -76,8 +76,8 @@ Vereinbart sind insgesamt 3 Geraetetypen: PC, iPhone, iPad. Die
 Standard-Ansichten (Views 01-10) werden je Geraetetyp in allen vier
 Sprachen (de, fr, it, en) erzeugt (Suffix im Dateinamen); die
 Design-Hero-Shots der Nicht-Standard-Stile (Views 11-14) nur `pc/de`.
-Insgesamt 10 Ansichten x 4 Sprachen x 3 Geraete + 4 Hero-Shots
-= 124 PNGs.
+Insgesamt 14 Ansichten x 4 Sprachen x 3 Geraete + 4 Hero-Shots
+= 172 PNGs.
 
 | Screenshot (je `pc/`, `iphone/`, `ipad/`, Suffix `-de/-fr/-it/-en`) | Inhalt |
 |---|---|
@@ -95,6 +95,10 @@ Insgesamt 10 Ansichten x 4 Sprachen x 3 Geraete + 4 Hero-Shots
 | `12-hero-calm-dark-de.png` (nur `pc/de`) | Hero-Shot Design-Stil Calm Dark: Kindesunterhalt |
 | `13-hero-editorial-de.png` (nur `pc/de`) | Hero-Shot Design-Stil Editorial/Legal: Kindesunterhalt |
 | `14-hero-neubrutalism-de.png` (nur `pc/de`) | Hero-Shot Design-Stil Neo-Brutalismus: Kindesunterhalt |
+| `15-backup-<lang>.png` | Austausch-Tab mit Backup-Funktion: Statusmeldung nach erstelltem Backup |
+| `16-restore-<lang>.png` | Austausch-Tab mit Restore-Funktion: Statusmeldung nach importiertem Backup |
+| `17-backup-reminder-<lang>.png` | Backup-Erinnerungs-Banner (altes Backup / viele Änderungen) mit Ein-Tipp-Backup |
+| `18-backup-reminder-initial-<lang>.png` | Erst-Erinnerung: noch kein Backup, aber bereits Daten erfasst |
 
 Hinweis: Alle Standard-App-Ansichten (01–08) werden seit dem
 SOTA-Redesign im Design-Stil «Calm» erzeugt (`design: 'calm'` in
@@ -113,14 +117,17 @@ css/style.css       Styles
 js/calculator.js    Berechnungskern (DOM-frei, auch in Node.js lauffähig)
 js/costsplit.js     Kostentrennung: CSV-Import, Zuordnung, Ausgleich (DOM-frei)
 js/themes.js       Theme-Definitionen und -Validierung (DOM-frei, auch in Node.js lauffähig)
-js/casedata.js     Falldaten-Austausch: Validierung und Merge (DOM-frei)
+js/casedata.js     Falldaten-Austausch und Backup/Restore: Validierung und Merge (DOM-frei)
 js/settings.js     Verbindliche Einstellungen: Two-Party-Lock, Override-Modus, Read-Only-Imports (DOM-frei)
 js/casecrypto.js   Verschlüsselter Austausch-Export: ECDH P-256 + AES-GCM (DOM-frei, auch in Node.js lauffähig)
 js/config.js        Default-Richtwerte (Zürcher Kinderkosten-Tabelle 1.3.2025)
 js/presets.js       Eingebettete Kopie der kantonalen Presets (file://-fähig)
 presets/*.json      Kantonale Richtwertsätze inkl. Quellen und Checklisten
 js/storage.js      localStorage-Persistenz: Versionierung, Sanitizing, Migration (DOM-frei)
-js/app.js           UI-Logik, i18n-Anwendung, localStorage, Import/Export
+js/app.js           UI-Logik, i18n-Anwendung, localStorage, Import/Export, Service-Worker-Registrierung (PWA)
+manifest.json       Web-App-Manifest (PWA-Installation, Icons, Farbschema)
+sw.js               Service Worker: Cache der App-Dateien für Offline-Nutzung (PWA)
+icons/*.png         App-Icons für PWA-Installation und Home-Bildschirm (192/512 px, maskierbar, apple-touch)
 js/i18n/{de,fr,it,en}.js  Sprachdateien
 AGENTS.md           Verbindliche Arbeitsregeln (Doku-in-Sync-Regel, Checklisten)
 docs/               Benutzerhandbuch, Berechnungslogik, Kostentrennung, Rechtliches, Verbindliche Einstellungen, Design (inkl. Design-Historie), Tests, Presets, Roadmap

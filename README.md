@@ -44,6 +44,27 @@ Alle Eingaben werden automatisch lokal im Browser (localStorage) gespeichert.
 Optional kann die App statt über `file://` auch über einen lokalen Webserver
 oder beliebiges statisches Hosting (z. B. GitHub Pages) bereitgestellt werden.
 
+### Als App installieren (PWA)
+
+Über HTTPS-Hosting (z. B. GitHub Pages) ist AlimenCal als Progressive Web
+App (PWA) installierbar und danach auch offline nutzbar:
+
+- `manifest.json` (Web-App-Manifest) und `sw.js` (Service Worker mit Cache)
+  liegen im Repository-Root; die Registrierung erfolgt automatisch bei
+  HTTPS-Aufruf.
+- **iPhone/iPad**: In Safari die App-URL öffnen, Teilen-Taste → «Zum
+  Home-Bildschirm hinzufügen» → die App startet dann im Vollbildmodus ohne
+  Browserleiste.
+- **Android/Chrome**: Browser-Menü «App installieren» bzw. Installations-
+  Banner.
+- Gespeicherte Daten bleiben auch in der installierten App lokal im
+  Browser-Speicher des jeweiligen Geräts. Für das Überstehen einer
+  De-/Neuinstallation steht im Austausch-Tab ein Backup-Export zur
+  Verfügung (alle Falldaten plus Sprache, Theme, Richtwerte, Lock-Zustand
+  und Schlüssel): Datei
+  in die Files-App/iCloud Drive speichern und nach der Neuinstallation
+  über die integrierte Restore-Funktion wiederherstellen.- **Tägliche Backup-Erinnerung**: Ist das letzte Backup älter als 24  Stunden oder wurden seitdem viele Änderungen (≥ 25) vorgenommen,  erinnert ein Banner mit Ein-Tipp-Backup daran (iOS erlaubt einer PWA  keine Hintergrund-Exporte).
+
 ## Eigenschaften
 
 - **Responsive Darstellung**: Die App passt sich an Smartphone-, Tablet- und  Desktop-Bildschirme an – Grids brechen um, Tabellen und Tab-Navigation  sind auf schmalen Displays horizontal scrollbar, Touch-Ziele sind  vergrössert
