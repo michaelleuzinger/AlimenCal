@@ -131,7 +131,11 @@ var NOW = 1700000000000;
 var DAY = storage.BACKUP_INTERVAL_MS;
 ok('Intervall betraegt 24h', storage.BACKUP_INTERVAL_MS === 24 * 60 * 60 * 1000);
 ok('Aenderungs-Schwelle betraegt 25', storage.BACKUP_CHANGES_THRESHOLD === 25);
+ok('Erst-Erinnerung: Schwelle betraegt 5', storage.BACKUP_INITIAL_CHANGES_THRESHOLD === 5);
 ok('Meta: kein Backup bisher -> keine Erinnerung', storage.backupReminderDue(null, NOW) === false);
+ok('Erst-Erinnerung: noch kein Backup, 4 Aenderungen -> nein', storage.backupReminderDue({ lastAt: null, changes: 4 }, NOW) === false);
+ok('Erst-Erinnerung: noch kein Backup, 5 Aenderungen -> ja', storage.backupReminderDue({ lastAt: null, changes: 5 }, NOW) === true);
+ok('Erst-Erinnerung: Art -> initial', storage.backupReminderKind({ lastAt: null, changes: 7 }, NOW) === 'initial');
 ok('Meta: ungueltiges Objekt -> sanitisiert null/0', (function () {
   var m = storage.sanitizeBackupMeta({ lastAt: 'x', changes: -3 });
   return m !== null && m.lastAt === null && m.changes === 0;

@@ -227,6 +227,7 @@ AlimenCal.i18n.fr = {
     backupButton: 'Créer une sauvegarde (JSON)',
     backupOk: 'Sauvegarde créée. Conservez le fichier en lieu sûr (p. ex. iCloud Drive).',
     backupReminderOld: 'La derni\u00e8re sauvegarde date de {0} jour(s) \u2013 cr\u00e9ez une nouvelle sauvegarde maintenant.',
+    backupReminderInitial: 'Aucune sauvegarde cr\u00e9\u00e9e pour l\u2019instant \u2013 {0} modifications effectu\u00e9es depuis la saisie. Cr\u00e9ez une premi\u00e8re sauvegarde pour que les donn\u00e9es survivent \u00e0 une d\u00e9sinstallation/r\u00e9installation.',
     backupReminderMany: '{0} modifications effectu\u00e9es depuis la derni\u00e8re sauvegarde \u2013 cr\u00e9ez une nouvelle sauvegarde maintenant.',
     backupReminderAction: 'Cr\u00e9er la sauvegarde',
     backupReminderDismiss: 'Me le rappeler plus tard',

@@ -227,6 +227,7 @@ AlimenCal.i18n.en = {
     backupButton: 'Create backup (JSON)',
     backupOk: 'Backup created. Keep the file in a safe place (e.g. iCloud Drive).',
     backupReminderOld: 'Last backup is {0} day(s) old \u2013 create a new backup now.',
+    backupReminderInitial: 'No backup created yet \u2013 {0} changes made since you started entering data. Create a first backup now so your data survives a reinstall.',
     backupReminderMany: '{0} changes made since the last backup \u2013 create a new backup now.',
     backupReminderAction: 'Create backup now',
     backupReminderDismiss: 'Remind me later',

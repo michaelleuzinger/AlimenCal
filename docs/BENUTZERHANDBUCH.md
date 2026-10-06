@@ -59,6 +59,13 @@ verschwindet das Banner wieder). «Später erinnern» blendet das Banner
 für die aktuelle Sitzung aus. Der Zähler wird bei jedem erstellten
 Backup zurückgesetzt.
 
+**Erste Erinnerung (noch kein Backup):** Wer noch nie ein Backup
+erstellt, aber bereits Daten erfasst hat (ab 5 Änderungen), erhält
+dieselbe Erinnerung mit dem Hinweis, dass die Daten ohne Backup eine
+De-/Neuinstallation nicht überstehen.
+
+![Erst-Erinnerung (DE)](../screenshots/pc/18-backup-reminder-initial-de.png)
+
 ![Backup-Erinnerung (DE)](../screenshots/pc/17-backup-reminder-de.png)
 
 ![Backup erstellen (DE)](../screenshots/pc/15-backup-de.png)
