@@ -105,10 +105,47 @@ var v1Parsed = storage.parseStored(versionedV1);
 ok('Versionierter v1-Payload: ok', v1Parsed.status === 'ok');
 ok('Versionierter v1-Payload: Re-Save markiert', v1Parsed.changed === true);
 
+
+/* ---------- v3-Migration: Abschnitt-Locks ---------- */
+var v2Payload = JSON.stringify({ app: 'alimencal', kind: 'form', version: 2, form: { 'pa-income': '5000', __sectionLocks: ['parentA', 'bogus', 'children'] } });
+var v2Parsed = storage.parseStored(v2Payload);
+ok('v3-Migration: v2-Payload lesbar', v2Parsed.status === 'ok');
+ok('v3-Migration: ungueltige Lock-Keys entfernt', v2Parsed.form.__sectionLocks.indexOf('parentA') >= 0 && v2Parsed.form.__sectionLocks.indexOf('bogus') < 0);
+ok('v3-Migration: changed gesetzt', v2Parsed.changed === true);
+var v3Payload = storage.buildFormPayload({ 'pa-income': '5000', __sectionLocks: ['parentB'] });
+ok('v3: buildFormPayload version=3', v3Payload.version === 3);
+var v3Parsed = storage.parseStored(JSON.stringify(v3Payload));
+ok('v3: Roundtrip sectionLocks', v3Parsed.form.__sectionLocks[0] === 'parentB');
+ok('v3: Altdaten ohne sectionLocks => kein Lock-Array', (function () {
+  var p = storage.parseStored(JSON.stringify({ app: 'alimencal', kind: 'form', version: 2, form: { 'pa-income': '1' } }));
+  return p.status === 'ok' && !Array.isArray(p.form.__sectionLocks);
+})());
 /* ---------- Normalisierungs-Einzelne ---------- */
 ok('Kind ohne Alter -> null', storage.normalizeChild({ costMode: 'pauschal' }) === null);
 ok('Kind mit Alter 100 -> null', storage.normalizeChild({ age: 100 }) === null);
 ok('Kinder ohne Array -> null', storage.normalizeChildren('x') === null);
 ok('Kostentrennung ohne transactions -> null', storage.normalizeCostsplit({}) === null);
+
+/* ---------- Backup-Erinnerung (taeglich / viele Aenderungen) ---------- */
+var NOW = 1700000000000;
+var DAY = storage.BACKUP_INTERVAL_MS;
+ok('Intervall betraegt 24h', storage.BACKUP_INTERVAL_MS === 24 * 60 * 60 * 1000);
+ok('Aenderungs-Schwelle betraegt 25', storage.BACKUP_CHANGES_THRESHOLD === 25);
+ok('Erst-Erinnerung: Schwelle betraegt 5', storage.BACKUP_INITIAL_CHANGES_THRESHOLD === 5);
+ok('Meta: kein Backup bisher -> keine Erinnerung', storage.backupReminderDue(null, NOW) === false);
+ok('Erst-Erinnerung: noch kein Backup, 4 Aenderungen -> nein', storage.backupReminderDue({ lastAt: null, changes: 4 }, NOW) === false);
+ok('Erst-Erinnerung: noch kein Backup, 5 Aenderungen -> ja', storage.backupReminderDue({ lastAt: null, changes: 5 }, NOW) === true);
+ok('Erst-Erinnerung: Art -> initial', storage.backupReminderKind({ lastAt: null, changes: 7 }, NOW) === 'initial');
+ok('Meta: ungueltiges Objekt -> sanitisiert null/0', (function () {
+  var m = storage.sanitizeBackupMeta({ lastAt: 'x', changes: -3 });
+  return m !== null && m.lastAt === null && m.changes === 0;
+})());
+ok('Erinnerung: frisches Backup (23h) -> nein', storage.backupReminderDue({ lastAt: NOW - 23 * 3600 * 1000, changes: 0 }, NOW) === false);
+ok('Erinnerung: altes Backup (25h) -> ja', storage.backupReminderDue({ lastAt: NOW - 25 * 3600 * 1000, changes: 0 }, NOW) === true);
+ok('Erinnerung: 24 Aenderungen -> nein', storage.backupReminderDue({ lastAt: NOW, changes: 24 }, NOW) === false);
+ok('Erinnerung: 25 Aenderungen -> ja', storage.backupReminderDue({ lastAt: NOW, changes: 25 }, NOW) === true);
+ok('Art: altes Backup -> old', storage.backupReminderKind({ lastAt: NOW - DAY, changes: 0 }, NOW) === 'old');
+ok('Art: viele Aenderungen (Vorrang) -> many', storage.backupReminderKind({ lastAt: NOW - DAY, changes: 30 }, NOW) === 'many');
+ok('Art: frisches Backup, wenige Aenderungen -> null', storage.backupReminderKind({ lastAt: NOW, changes: 3 }, NOW) === null);
 
 console.log(passed + ' Tests bestanden');

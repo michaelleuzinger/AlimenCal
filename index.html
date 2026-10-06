@@ -6,6 +6,9 @@
   <title>AlimenCal – Unterhaltsrechner</title>
   <meta name="description" content="AlimenCal – Orientierungswerkzeug für Kindes- und Ehegattenunterhalt in der Schweiz.">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#635bff">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 </head>
 <body>
   <div class="topbar">
@@ -55,6 +58,11 @@
 
   <main class="wrap">
     <p id="disclaimer" class="disclaimer"></p>
+    <div id="backup-reminder" class="backup-reminder" hidden>
+      <span id="backup-reminder-text"></span>
+      <button type="button" id="backup-reminder-action" class="primary"></button>
+      <button type="button" id="backup-reminder-dismiss" class="ghost"></button>
+    </div>
 
     <section id="tab-children" class="tabpanel active">
       <h2 id="children-heading"></h2>
@@ -200,6 +208,21 @@
         </div>
       </div>
       <div class="card preset-card">
+        <h3 id="share-backup-heading"></h3>
+        <p id="share-backup-hint" class="hint"></p>
+        <div class="actions">
+          <button id="share-backup" class="primary"></button>
+        </div>
+        <p id="share-backup-status" class="hint"></p>
+        <h3 id="share-restore-heading"></h3>
+        <p id="share-restore-hint" class="hint"></p>
+        <label class="file-label">
+          <span id="share-restore-label"></span>
+          <input type="file" id="share-restore" accept="application/json,.json">
+        </label>
+        <p id="share-restore-status" class="hint"></p>
+      </div>
+      <div class="card preset-card">
         <h3 id="share-import-heading"></h3>
         <p id="share-import-hint" class="hint"></p>
         <label class="file-label">
@@ -207,6 +230,12 @@
           <input type="file" id="share-import" accept="application/json,.json">
         </label>
         <p id="share-import-status" class="hint"></p>
+      </div>
+      <div class="card preset-card">
+        <h3 id="section-lock-heading" hidden></h3>
+        <p id="section-lock-hint" class="hint"></p>
+        <div id="section-lock-list"></div>
+        <p id="section-lock-empty" class="hint" hidden></p>
       </div>
     </section>
     <section id="tab-themes" class="tabpanel">
