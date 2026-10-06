@@ -16,7 +16,7 @@ Die App ist responsiv gestaltet und auf Smartphone, Tablet und Desktop nutzbar:
 
 - Karten und Formular-Grids brechen auf schmalen Displays auf eine Spalte um.
 - Die Mobile-Tab-Leiste (4 Hauptfunktionen + «Mehr») nutzt sprachspezifische
-  Kurzlabels («Kind», «Ehegatte», «Kosten», «Fall»), damit die Buttons auch auf
+  Kurzlabels («Kind», «Ehegatte», «Kosten», «Export»), damit die Buttons auch auf
   schmalen Displays (ab 320px) sauber getrennt bleiben; überlange Labels
   werden mit Auslassungspunkten gekürzt.
 - Resultat-, Kostentrennungs- und Richtwert-Tabellen sind auf schmalen
