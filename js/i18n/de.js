@@ -227,6 +227,7 @@ AlimenCal.i18n.de = {
     backupButton: 'Backup erstellen (JSON)',
     backupOk: 'Backup erstellt. Datei an einem sicheren Ort aufbewahren (z. B. iCloud Drive).',
     backupReminderOld: 'Letztes Backup ist {0} Tag(e) alt \u2013 jetzt ein neues Backup erstellen.',
+    backupReminderInitial: 'Noch kein Backup erstellt \u2013 seit der Erfassung wurden {0} \u00c4nderungen vorgenommen. Jetzt ein erstes Backup erstellen, damit die Daten eine De-/Neuinstallation \u00fcberstehen.',
     backupReminderMany: 'Seit dem letzten Backup wurden {0} \u00c4nderungen vorgenommen \u2013 jetzt ein neues Backup erstellen.',
     backupReminderAction: 'Backup jetzt erstellen',
     backupReminderDismiss: 'Sp\u00e4ter erinnern',

@@ -227,6 +227,7 @@ AlimenCal.i18n.it = {
     backupButton: 'Crea copia di sicurezza (JSON)',
     backupOk: 'Copia di sicurezza creata. Conservare il file in un luogo sicuro (p. es. iCloud Drive).',
     backupReminderOld: 'L\u2019ultima copia di sicurezza risale a {0} giorno/i \u2013 creare ora una nuova copia.',
+    backupReminderInitial: 'Nessuna copia di sicurezza ancora creata \u2013 dall\u2019inserimento sono state apportate {0} modifiche. Creare ora una prima copia, cos\u00ec i dati sopravvivono a una disinstallazione/reinstallazione.',
     backupReminderMany: 'Dall\u2019ultima copia di sicurezza sono state apportate {0} modifiche \u2013 creare ora una nuova copia.',
     backupReminderAction: 'Crea copia di sicurezza',
     backupReminderDismiss: 'Ricorda pi\u00f9 tardi',

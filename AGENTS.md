@@ -76,8 +76,8 @@ Vereinbart sind insgesamt 3 Geraetetypen: PC, iPhone, iPad. Die
 Standard-Ansichten (Views 01-10) werden je Geraetetyp in allen vier
 Sprachen (de, fr, it, en) erzeugt (Suffix im Dateinamen); die
 Design-Hero-Shots der Nicht-Standard-Stile (Views 11-14) nur `pc/de`.
-Insgesamt 13 Ansichten x 4 Sprachen x 3 Geraete + 4 Hero-Shots
-= 160 PNGs.
+Insgesamt 14 Ansichten x 4 Sprachen x 3 Geraete + 4 Hero-Shots
+= 172 PNGs.
 
 | Screenshot (je `pc/`, `iphone/`, `ipad/`, Suffix `-de/-fr/-it/-en`) | Inhalt |
 |---|---|
@@ -98,6 +98,7 @@ Insgesamt 13 Ansichten x 4 Sprachen x 3 Geraete + 4 Hero-Shots
 | `15-backup-<lang>.png` | Austausch-Tab mit Backup-Funktion: Statusmeldung nach erstelltem Backup |
 | `16-restore-<lang>.png` | Austausch-Tab mit Restore-Funktion: Statusmeldung nach importiertem Backup |
 | `17-backup-reminder-<lang>.png` | Backup-Erinnerungs-Banner (altes Backup / viele Änderungen) mit Ein-Tipp-Backup |
+| `18-backup-reminder-initial-<lang>.png` | Erst-Erinnerung: noch kein Backup, aber bereits Daten erfasst |
 
 Hinweis: Alle Standard-App-Ansichten (01–08) werden seit dem
 SOTA-Redesign im Design-Stil «Calm» erzeugt (`design: 'calm'` in

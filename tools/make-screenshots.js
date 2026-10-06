@@ -61,7 +61,8 @@ const VIEWS = [
   { n: 14, name: 'hero-neubrutalism', langs: ['de'], devices: ['pc'], setup: setupHeroNeubrutalism },
   { n: 15, name: 'backup', langs: LANGS, setup: setupBackup, design: 'calm' },
   { n: 16, name: 'restore', langs: LANGS, setup: setupRestore, design: 'calm' },
-  { n: 17, name: 'backup-reminder', langs: LANGS, setup: setupBackupReminder, design: 'calm' }
+  { n: 17, name: 'backup-reminder', langs: LANGS, setup: setupBackupReminder, design: 'calm' },
+  { n: 18, name: 'backup-reminder-initial', langs: LANGS, setup: setupBackupReminderInitial, design: 'calm' }
 ];
 
 /* ---------- Beispieldaten (anonymisiert, keine echten Personen) ---------- */
@@ -274,6 +275,18 @@ async function setupBackupReminder(page) {
     localStorage.setItem('alimencal.backupmeta', JSON.stringify({
       lastAt: Date.now() - 3 * 24 * 60 * 60 * 1000,
       changes: 2
+    }));
+  });
+  await page.reload({ waitUntil: 'networkidle0' });
+  await sleep(200);
+}
+
+async function setupBackupReminderInitial(page) {
+  /* Erst-Erinnerung: noch kein Backup, aber bereits Daten erfasst */
+  await page.evaluate(() => {
+    localStorage.setItem('alimencal.backupmeta', JSON.stringify({
+      lastAt: null,
+      changes: 7
     }));
   });
   await page.reload({ waitUntil: 'networkidle0' });

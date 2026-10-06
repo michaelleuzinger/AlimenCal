@@ -256,6 +256,7 @@ AlimenCal.storage = (function () {
    */
   var BACKUP_INTERVAL_MS = 24 * 60 * 60 * 1000;
   var BACKUP_CHANGES_THRESHOLD = 25;
+  var BACKUP_INITIAL_CHANGES_THRESHOLD = 5;
 
   function sanitizeBackupMeta(raw) {
     if (!raw || typeof raw !== 'object') { return null; }
@@ -267,16 +268,16 @@ AlimenCal.storage = (function () {
   }
 
   function backupReminderDue(meta, now) {
-    var m = sanitizeBackupMeta(meta);
-    if (!m || !m.lastAt) { return false; }
-    now = typeof now === 'number' ? now : Date.now();
-    return (now - m.lastAt >= BACKUP_INTERVAL_MS) ||
-      (m.changes >= BACKUP_CHANGES_THRESHOLD);
+    return backupReminderKind(meta, now) !== null;
   }
 
   function backupReminderKind(meta, now) {
     var m = sanitizeBackupMeta(meta);
-    if (!m || !m.lastAt) { return null; }
+    if (!m) { return null; }
+    /* Erste Erinnerung: noch kein Backup, aber bereits Daten erfasst */
+    if (!m.lastAt) {
+      return m.changes >= BACKUP_INITIAL_CHANGES_THRESHOLD ? 'initial' : null;
+    }
     if (m.changes >= BACKUP_CHANGES_THRESHOLD) { return 'many'; }
     now = typeof now === 'number' ? now : Date.now();
     if (now - m.lastAt >= BACKUP_INTERVAL_MS) { return 'old'; }
@@ -295,6 +296,7 @@ AlimenCal.storage = (function () {
     buildFormPayload: buildFormPayload,
     BACKUP_INTERVAL_MS: BACKUP_INTERVAL_MS,
     BACKUP_CHANGES_THRESHOLD: BACKUP_CHANGES_THRESHOLD,
+    BACKUP_INITIAL_CHANGES_THRESHOLD: BACKUP_INITIAL_CHANGES_THRESHOLD,
     sanitizeBackupMeta: sanitizeBackupMeta,
     backupReminderDue: backupReminderDue,
     backupReminderKind: backupReminderKind

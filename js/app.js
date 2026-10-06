@@ -83,13 +83,15 @@
     return meta ? AlimenCal.storage.backupReminderDue(meta) : false;
   }
 
+  var BACKUP_TEXT_KEYS = { initial: 'backupReminderInitial', old: 'backupReminderOld', many: 'backupReminderMany' };
+
   function backupReminderText() {
     var meta = loadBackupMeta();
     if (!meta) { return ''; }
     var kind = AlimenCal.storage.backupReminderKind(meta);
     if (!kind) { return ''; }
-    var text = t('share', kind === 'many' ? 'backupReminderMany' : 'backupReminderOld');
-    if (kind === 'many') {
+    var text = t('share', BACKUP_TEXT_KEYS[kind]);
+    if (kind === 'initial' || kind === 'many') {
       return text.replace('{0}', String(meta.changes));
     }
     var days = meta.lastAt ? Math.floor((Date.now() - meta.lastAt) / (24 * 60 * 60 * 1000)) : 0;
