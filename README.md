@@ -63,7 +63,7 @@ App (PWA) installierbar und danach auch offline nutzbar:
   Verfügung (alle Falldaten plus Sprache, Theme, Richtwerte, Lock-Zustand
   und Schlüssel): Datei
   in die Files-App/iCloud Drive speichern und nach der Neuinstallation
-  über die integrierte Restore-Funktion wiederherstellen.
+  über die integrierte Restore-Funktion wiederherstellen.- **Tägliche Backup-Erinnerung**: Ist das letzte Backup älter als 24  Stunden oder wurden seitdem viele Änderungen (≥ 25) vorgenommen,  erinnert ein Banner mit Ein-Tipp-Backup daran (iOS erlaubt einer PWA  keine Hintergrund-Exporte).
 
 ## Eigenschaften
 

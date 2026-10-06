@@ -11,7 +11,7 @@ node tests/casedata.test.js     # Falldaten-Austausch und Backup/Restore inkl. B
 node tests/settings.test.js     # Verbindliche Einstellungen: Two-Party-Lock, Override-Modus, Read-Only-Imports (21 Tests)
 node tests/crypto.test.js       # Serverlose Verbindlichkeit: Hash-Kette, signierte Lock-Dateien (15 Tests)
 node tests/casecrypto.test.js   # Verschlüsselter Austausch: ECDH/AES-GCM-Export (14 Tests)
-node tests/storage.test.js      # localStorage-Persistenz: Versionierung, Migration v3 (Abschnitt-Locks), Sanitizing (41 Tests)
+node tests/storage.test.js      # localStorage-Persistenz: Versionierung, Migration v3 (Abschnitt-Locks), Sanitizing, Backup-Erinnerung (52 Tests)
 ```
 
 Oder alle auf einmal:

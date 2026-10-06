@@ -50,6 +50,17 @@ Files-App oder iCloud Drive («In Dateien sichern») gespeichert werden.
 Die Datei übersteht das Löschen der App. Empfehlung: nach jeder
 wesentlichen Änderung ein neues Backup erstellen.
 
+**Tägliche Backup-Erinnerung:** iOS erlaubt einer PWA keine
+Hintergrund-Exporte; die App erinnert daher selbst daran: Sobald das
+letzte Backup länger als 24 Stunden zurückliegt oder seitdem viele
+Änderungen (≥ 25) vorgenommen wurden, erscheint beim Öffnen der App ein
+Hinweisbanner mit «Backup jetzt erstellen» (Ein-Tipp-Export, danach
+verschwindet das Banner wieder). «Später erinnern» blendet das Banner
+für die aktuelle Sitzung aus. Der Zähler wird bei jedem erstellten
+Backup zurückgesetzt.
+
+![Backup-Erinnerung (DE)](../screenshots/pc/17-backup-reminder-de.png)
+
 ![Backup erstellen (DE)](../screenshots/pc/15-backup-de.png)
 
 **Restore («Backup wiederherstellen»):** Die Backup-Datei direkt unter

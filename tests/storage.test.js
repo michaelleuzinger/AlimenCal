@@ -126,4 +126,22 @@ ok('Kind mit Alter 100 -> null', storage.normalizeChild({ age: 100 }) === null);
 ok('Kinder ohne Array -> null', storage.normalizeChildren('x') === null);
 ok('Kostentrennung ohne transactions -> null', storage.normalizeCostsplit({}) === null);
 
+/* ---------- Backup-Erinnerung (taeglich / viele Aenderungen) ---------- */
+var NOW = 1700000000000;
+var DAY = storage.BACKUP_INTERVAL_MS;
+ok('Intervall betraegt 24h', storage.BACKUP_INTERVAL_MS === 24 * 60 * 60 * 1000);
+ok('Aenderungs-Schwelle betraegt 25', storage.BACKUP_CHANGES_THRESHOLD === 25);
+ok('Meta: kein Backup bisher -> keine Erinnerung', storage.backupReminderDue(null, NOW) === false);
+ok('Meta: ungueltiges Objekt -> sanitisiert null/0', (function () {
+  var m = storage.sanitizeBackupMeta({ lastAt: 'x', changes: -3 });
+  return m !== null && m.lastAt === null && m.changes === 0;
+})());
+ok('Erinnerung: frisches Backup (23h) -> nein', storage.backupReminderDue({ lastAt: NOW - 23 * 3600 * 1000, changes: 0 }, NOW) === false);
+ok('Erinnerung: altes Backup (25h) -> ja', storage.backupReminderDue({ lastAt: NOW - 25 * 3600 * 1000, changes: 0 }, NOW) === true);
+ok('Erinnerung: 24 Aenderungen -> nein', storage.backupReminderDue({ lastAt: NOW, changes: 24 }, NOW) === false);
+ok('Erinnerung: 25 Aenderungen -> ja', storage.backupReminderDue({ lastAt: NOW, changes: 25 }, NOW) === true);
+ok('Art: altes Backup -> old', storage.backupReminderKind({ lastAt: NOW - DAY, changes: 0 }, NOW) === 'old');
+ok('Art: viele Aenderungen (Vorrang) -> many', storage.backupReminderKind({ lastAt: NOW - DAY, changes: 30 }, NOW) === 'many');
+ok('Art: frisches Backup, wenige Aenderungen -> null', storage.backupReminderKind({ lastAt: NOW, changes: 3 }, NOW) === null);
+
 console.log(passed + ' Tests bestanden');
