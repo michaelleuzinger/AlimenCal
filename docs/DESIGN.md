@@ -23,8 +23,23 @@ Farb-Feinjustierung im Theme-Editor funktioniert in jedem Stil weiter.
 - **Werkzeug-Ästhetik**: 32px-Inputs, tabellarische Ziffern,
   Fokus-Ringe, feine Linien – Hierarchie durch Dichte und Typografie
   statt durch Dekor
+- **Resultat-Aufschlüsselung statt Breitband-Tabelle**: Das Kindesunterhalt-
+  Resultat zeigt pro Kind eine kompakte Key-Value-Aufschlüsselung
+  (`.result-breakdown`): Caps-Kopfzeile je Kind, feine Zeilen mit
+  Label links / tabellarischem Wert rechts, Totals mit Kante und
+  Akzentfarbe – die 11-spaltige Matrix sass nie im 340px-Panel und
+  lief horizontal aus dem Layout. Die Kostentrennungs-Tabelle (5
+  Spalten) bleibt als `.result-table` im System-Stil: kompakte Caps-
+  Kopfzeile in Sekundärfarbe mit feiner Kante, Zebrastreifen über
+  `--btn-secondary-bg`, rechtbündige tabellarische Ziffern – mit
+  passenden Overrides je Design-Stil (Calm Dark: Kante über
+  `--muted`; Neo-Brutalismus: 2px-Kante, kein Radius)
 - **Dunkelmodus als eigener Stil** (Calm Dark) statt verstecktem
   prefers-color-Schema-Fallback, da Nutzer aktiv hell/dunkel wählen
+- **Topbar-Text über `--banner-ink`**: Marke, Navigation und Sprachumschalter
+  folgen der Banner-Schriftfarbe des Themes (im Klassisch-Stil weiss auf
+  dunkelgrüner Leiste, sonst wie `--ink`) – vorher lag dort hartes
+  `--ink`/`--muted` mit unzureichendem Kontrast (1.4–2:1)
 
 ## Design-Stile
 
@@ -34,7 +49,7 @@ Farb-Feinjustierung im Theme-Editor funktioniert in jedem Stil weiter.
 | Klassisch (Base) | Ursprüngliches Projekt-Aussehen als Referenz |
 | Calm Dark | Dieselbe Anmutung dunkel (#0b0b0d/#131316) |
 | Editorial/Legal | Warme Papier-Töne, Serif-Typografie – Dokument-Anmutung für den Rechtskontext |
-| Neo-Brutalismus | Harte Schatten, dicke Ränder, kein Radius – der bewusste Kontrapunkt |
+| Neo-Brutalismus | Harte Schatten, dicke Ränder, kein Radius – der bewusste Kontrapunkt; Text auf Akzentflächen in dunkler Tinte (#111) statt weiss, Sekundärflächen in gedecktem Gelb (#ffe9a8) für ausreichenden Kontrast |
 
 Gestrichen wurden Apple, Material 3, Modern Minimal, Bento, Dark Premium
 und Command-Center (Runde 3: sechs Stile mit starker Überschneidung;
