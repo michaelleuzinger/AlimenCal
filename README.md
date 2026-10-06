@@ -44,6 +44,11 @@ Alle Eingaben werden automatisch lokal im Browser (localStorage) gespeichert.
 Optional kann die App statt über `file://` auch über einen lokalen Webserver
 oder beliebiges statisches Hosting (z. B. GitHub Pages) bereitgestellt werden.
 
+Dieses Repository deployt automatisch auf GitHub Pages: Der Workflow
+`.github/workflows/pages.yml` veröffentlicht bei jedem Push auf `main` den
+Repository-Inhalt unter der App-URL
+<https://michaelleuzinger.github.io/AlimenCal/>.
+
 ### Als App installieren (PWA)
 
 Über HTTPS-Hosting (z. B. GitHub Pages) ist AlimenCal als Progressive Web

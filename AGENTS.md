@@ -136,6 +136,7 @@ screenshots/        Screenshots der App (Inventar-Regel: s. AGENTS.md; Erzeugung
 tools/              make-screenshots.js: Screenshot-Generator (Puppeteer, s. AGENTS.md)
 tools/              check-links.js: Link-/Referenzpruefung fuer Repository-Hygiene (s. AGENTS.md)
 tests/              Unit-Tests (node)
+.github/workflows/  CI: tests.yml (Unit-Tests), pages.yml (Deployment auf GitHub Pages)
 ```
 
 - **Tests**: Neue Funktionalität erhält Unit-Tests; wird die Anzahl/geprüfte
