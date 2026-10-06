@@ -148,6 +148,22 @@ h2 { margin-top: 1rem; font-size: 1.15rem; letter-spacing: -0.01em; }
   font-size: 0.88rem;
 }
 
+.backup-reminder {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--disclaimer-bg);
+  border: 1px solid var(--disclaimer-border);
+  padding: 0.6rem 0.9rem;
+  border-radius: var(--radius);
+  margin: 0 0 1rem;
+  font-size: 0.88rem;
+}
+.backup-reminder span { flex: 1 1 12rem; }
+.backup-reminder button { flex: 0 0 auto; }
+.backup-reminder[hidden] { display: none; }
+
 /* ---------- Zweispalter: Formular links, Live-Ergebnis rechts ---------- */
 .tab-columns { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 1.5rem; align-items: start; margin-top: 1.25rem; }
 .result-col { position: sticky; top: 4.5rem; }

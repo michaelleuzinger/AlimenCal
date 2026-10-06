@@ -60,7 +60,8 @@ const VIEWS = [
   { n: 13, name: 'hero-editorial', langs: ['de'], devices: ['pc'], setup: setupHeroEditorial },
   { n: 14, name: 'hero-neubrutalism', langs: ['de'], devices: ['pc'], setup: setupHeroNeubrutalism },
   { n: 15, name: 'backup', langs: LANGS, setup: setupBackup, design: 'calm' },
-  { n: 16, name: 'restore', langs: LANGS, setup: setupRestore, design: 'calm' }
+  { n: 16, name: 'restore', langs: LANGS, setup: setupRestore, design: 'calm' },
+  { n: 17, name: 'backup-reminder', langs: LANGS, setup: setupBackupReminder, design: 'calm' }
 ];
 
 /* ---------- Beispieldaten (anonymisiert, keine echten Personen) ---------- */
@@ -265,6 +266,18 @@ async function setupBackup(page) {
   });
   await page.evaluate(() => document.getElementById('share-backup').click());
   await sleep(400);
+}
+
+async function setupBackupReminder(page) {
+  /* Erinnerungs-Banner: Backup liegt 3 Tage zurueck -> Hinweis sichtbar */
+  await page.evaluate(() => {
+    localStorage.setItem('alimencal.backupmeta', JSON.stringify({
+      lastAt: Date.now() - 3 * 24 * 60 * 60 * 1000,
+      changes: 2
+    }));
+  });
+  await page.reload({ waitUntil: 'networkidle0' });
+  await sleep(200);
 }
 
 async function setupRestore(page) {

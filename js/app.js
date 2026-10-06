@@ -10,6 +10,7 @@
   var LS_THEME_VALUES = 'alimencal.themevalues';
   var LS_BINDING = 'alimencal.binding';
   var LS_KEYS = 'alimencal.keys';
+  var LS_BACKUP_META = 'alimencal.backupmeta';
   var FORM_FIELD_IDS = [
     'pa-income', 'pa-em', 'pa-employed', 'pb-income', 'pb-em', 'pb-employed',
     'spousal-enabled', 'sp-app-income', 'sp-app-em', 'sp-app-standard',
@@ -41,6 +42,75 @@
   };
 
   function clone(obj) { return JSON.parse(JSON.stringify(obj)); }
+
+  /* ---------- Backup-Erinnerung (taeglich / viele Aenderungen) ----------
+   *
+   * iOS/PWA erlaubt keine Hintergrund-Exports; die App zaehlt daher
+   * Datenveraenderungen und speichert den Zeitpunkt des letzten Backups.
+   * Beim Oeffnen (und nach jeder Aenderung) prueft renderBackupReminder(),
+   * ob das letzte Backup laenger als BACKUP_INTERVAL_MS zurueckliegt oder
+   * seitdem viele Aenderungen (>= BACKUP_CHANGES_THRESHOLD) erfolgt sind,
+   * und blendet dann ein Banner mit Ein-Tipp-Backup ein.
+   */
+  function loadBackupMeta() {
+    try {
+      var raw = localStorage.getItem(LS_BACKUP_META);
+      if (!raw) { return null; }
+      return AlimenCal.storage.sanitizeBackupMeta(JSON.parse(raw));
+    } catch (e) { return null; }
+  }
+
+  function saveBackupMeta(meta) {
+    try { localStorage.setItem(LS_BACKUP_META, JSON.stringify(meta)); } catch (e) {}
+  }
+
+  var backupReminderDismissed = false;
+  var lastFormSnapshot = null;
+
+  function bumpBackupChanges() {
+    var snapshot = null;
+    try { snapshot = localStorage.getItem(LS_FORM); } catch (e) {}
+    if (snapshot === null || snapshot === lastFormSnapshot) { return; }
+    lastFormSnapshot = snapshot;
+    var meta = loadBackupMeta() || { lastAt: null, changes: 0 };
+    meta.changes += 1;
+    saveBackupMeta(meta);
+    renderBackupReminder();
+  }
+
+  function backupReminderDue() {
+    var meta = loadBackupMeta();
+    return meta ? AlimenCal.storage.backupReminderDue(meta) : false;
+  }
+
+  function backupReminderText() {
+    var meta = loadBackupMeta();
+    if (!meta) { return ''; }
+    var kind = AlimenCal.storage.backupReminderKind(meta);
+    if (!kind) { return ''; }
+    var text = t('share', kind === 'many' ? 'backupReminderMany' : 'backupReminderOld');
+    if (kind === 'many') {
+      return text.replace('{0}', String(meta.changes));
+    }
+    var days = meta.lastAt ? Math.floor((Date.now() - meta.lastAt) / (24 * 60 * 60 * 1000)) : 0;
+    return text.replace('{0}', String(days));
+  }
+
+  function renderBackupReminder() {
+    var banner = document.getElementById('backup-reminder');
+    if (!banner) { return; }
+    var due = !backupReminderDismissed && backupReminderDue();
+    banner.hidden = !due;
+    if (!due) { return; }
+    document.getElementById('backup-reminder-text').textContent = backupReminderText();
+    document.getElementById('backup-reminder-action').textContent = t('share', 'backupReminderAction');
+    document.getElementById('backup-reminder-dismiss').textContent = t('share', 'backupReminderDismiss');
+  }
+
+  function markBackupDone() {
+    saveBackupMeta({ lastAt: Date.now(), changes: 0 });
+    renderBackupReminder();
+  }
 
   function getLang() {
     var stored = null;
@@ -1635,6 +1705,7 @@
     var blob = new Blob([JSON.stringify(file, null, 2)], { type: 'application/json' });
     function done() {
       if (status) { status.textContent = t('share', 'backupOk'); }
+      markBackupDone();
     }
     if (navigator.canShare && navigator.canShare({ files: [new File([], backupFileName())] })) {
       var f = new File([blob], backupFileName(), { type: 'application/json' });
@@ -1874,6 +1945,7 @@
 
   function scheduleSaveForm() {
     saveForm();
+    bumpBackupChanges();
   }
 
   /* Selbsttest beim Start: der aktuelle Zustand wird einmal gespeichert,
@@ -2088,6 +2160,15 @@
     fillCfgForm();
     addChildRow();
     restoreForm();
+    try { lastFormSnapshot = localStorage.getItem(LS_FORM); } catch (e) {}
+    renderBackupReminder();
+    document.getElementById('backup-reminder-action').addEventListener('click', function () {
+      doBackup();
+    });
+    document.getElementById('backup-reminder-dismiss').addEventListener('click', function () {
+      backupReminderDismissed = true;
+      renderBackupReminder();
+    });
     document.addEventListener('input', scheduleSaveForm);
     document.addEventListener('change', scheduleSaveForm);
     document.addEventListener('click', scheduleSaveForm);
