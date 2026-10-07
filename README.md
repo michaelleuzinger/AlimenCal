@@ -56,8 +56,11 @@ Zusätzlich gibt es eine **Live-Vorschau für Pull Requests**: Jeder offene
 PR aus diesem Repository wird automatisch unter
 `https://michaelleuzinger.github.io/AlimenCal/pr-<PR-Nr>/` deployt –
 so lassen sich Änderungen im Browser prüfen, bevor sie in `main`
-committet sind. Der Workflow kommentiert die Preview-URL im PR; nach
-Merge in `main` übernimmt der reguläre Deploy die Haupt-URL.
+committet sind. Der Workflow kommentiert die Preview-URL im PR. Da ein
+GitHub-Pages-Deployment immer die komplette Seite atomar ersetzt, baut
+jeder Deploy (main und Preview) den Root aus `main` plus die
+`pr-<Nr>/`-Unterordner der offenen PRs; nach Merge verschwindet die
+Vorschau mit dem nächsten `main`-Deploy.
 
 ### Als App installieren (PWA)
 

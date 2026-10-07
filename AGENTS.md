@@ -51,9 +51,13 @@ unvollständig und darf nicht gemergt werden.
   diesem Repository wird automatisch als Live-Vorschau unter
   `https://michaelleuzinger.github.io/AlimenCal/pr-<PR-Nr>/` deployt
   (Job `deploy-pr-preview` in `.github/workflows/pages.yml`); der
-  Bot kommentiert die URL im PR. Nach Merge wird die Vorschau durch
-  den regulären `main`-Deploy abgelöst; Nachfolgenutzung: UI-Änderungen im
-  PR direkt im Browser prüfen, bevor sie in `main` committet sind.
+  Bot kommentiert die URL im PR. Ein Pages-Deployment ist immer die
+  komplette Seite (atomare Kopie): Der `main`-Deploy baut daher den
+  Root aus `main` plus Unterordner `pr-<Nr>/` aller offenen PRs, der
+  Preview-Deploy den Root aus `main` plus den Unterordner des PRs.
+  Nach Merge wird die Vorschau mit dem nächsten `main`-Deploy entfernt;
+  Nachfolgenutzung: UI-Änderungen im PR direkt im Browser prüfen, bevor
+  sie in `main` committet sind.
 - **Screenshot-Inventar (Regel)**: Die Anzahl und der Inhalt der Screenshots
   dürfen und sollen bei Änderungen überdacht und angepasst werden. Massgebend:
   1. **Ein Screenshot pro Ansicht/Feature, Sprache und Geraetetyp** – je
