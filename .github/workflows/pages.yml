@@ -3,6 +3,7 @@ name: GitHub Pages
 on:
   push:
     branches: [main]
+  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -11,11 +12,12 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
+  group: pages-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   deploy:
+    if: github.event_name != 'pull_request'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -28,3 +30,62 @@ jobs:
           path: .
       - id: deployment
         uses: actions/deploy-pages@v4
+
+  deploy-pr-preview:
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.preview_url.outputs.url }}
+    permissions:
+      pages: write
+      id-token: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/configure-pages@v5
+      - name: Preview-Artifact hochladen
+        uses: actions/upload-pages-artifact@v3
+        with:
+          name: pr-preview-${{ github.event.number }}
+          path: .
+      - name: Preview deployen
+        id: deploy_preview
+        uses: actions/deploy-pages@v4
+        with:
+          artifact_name: pr-preview-${{ github.event.number }}
+      - name: Preview-URL bestimmen
+        id: preview_url
+        run: |
+          base="${{ steps.deploy_preview.outputs.page_url }}"
+          echo "url=${base}pr-${{ github.event.number }}/" >> "$GITHUB_OUTPUT"
+      - name: Hinweis als PR-Kommentar
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const url = `${{ steps.preview_url.outputs.url }}`;
+            const body = `Live-Vorschau dieses PR-Stands auf GitHub Pages: ${url}`;
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number
+            });
+            const marker = 'Live-Vorschau dieses PR-Stands auf GitHub Pages:';
+            const existing = comments.find(c => c.user.login === 'github-actions[bot]' && c.body.includes(marker));
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body
+              });
+            }

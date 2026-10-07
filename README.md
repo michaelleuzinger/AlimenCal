@@ -52,6 +52,13 @@ Dieses Repository deployt automatisch auf GitHub Pages: Der Workflow
 Repository-Inhalt unter der App-URL
 <https://michaelleuzinger.github.io/AlimenCal/>.
 
+Zusätzlich gibt es eine **Live-Vorschau für Pull Requests**: Jeder offene
+PR aus diesem Repository wird automatisch unter
+`https://michaelleuzinger.github.io/AlimenCal/pr-<PR-Nr>/` deployt –
+so lassen sich Änderungen im Browser prüfen, bevor sie in `main`
+committet sind. Der Workflow kommentiert die Preview-URL im PR; nach
+Merge in `main` übernimmt der reguläre Deploy die Haupt-URL.
+
 ### Als App installieren (PWA)
 
 Über HTTPS-Hosting (z. B. GitHub Pages) ist AlimenCal als Progressive Web

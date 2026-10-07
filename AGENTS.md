@@ -22,7 +22,7 @@ unvollständig und darf nicht gemergt werden.
 | Sprachen / i18n (`js/i18n/*`) | `docs/BENUTZERHANDBUCH.md` (Sprachliste), ggf. README |
 | Struktur / neue Dateien | Struktur-Übersicht unten |
 | localStorage-Persistenz (`js/storage.js`) | Regel-Abschnitt «Lesbarkeit der Nutzerdaten nach Updates» unten, `docs/BENUTZERHANDBUCH.md` (Datenhaltung), README-Abschnitt «Tests» |
-| Screenshots (UI-Änderungen) | `screenshots/` erneuern; Inventar-Tabelle unten **und** Einbettungen im BENUTZERHANDBUCH synchron halten (Inventar-Regel, s. u.) |
+| Screenshots (nur auf Anfrage oder UI-Änderungen in `main`) | `screenshots/` erneuern; Inventar-Tabelle unten **und** Einbettungen im BENUTZERHANDBUCH synchron halten (Inventar-Regel, s. u.) |
 | Rechtliches / Rechtsprechungs-Bezug | `docs/RECHTLICHE-GRUNDLAGEN.md` |
 | Kantonale Presets (`presets/`) | `docs/PRESETS.md`, README-Abschnitt «Richtwerte» |
 | Roadmap / neue geplante Funktionen | `docs/ROADMAP.md`, README-Abschnitt «Roadmap, Design, Tests & Mitmachen» |
@@ -31,8 +31,12 @@ unvollständig und darf nicht gemergt werden.
 
 ### Zusätzlich gilt
 
-- **Screenshots**: Sichtbare UI-Änderungen erfordern erneuerte Screenshots
-  der betroffenen Ansichten – Standard-Ansichten (Views 01–10) in allen
+- **Screenshots (nur auf explizite Anforderung oder bei Main-Merges)**:
+  Screenshots werden nur noch erstellt, wenn explizit danach gefragt
+  wird, oder wenn UI-relevante Änderungen in `main` committet wurden
+  (Vorher-nachher-Prüfung von UI-Änderungen erfolgt über die
+  PR-Live-Vorschau auf GitHub Pages, s. u.). Beim Erstellen gelten die
+  betroffenen Ansichten – Standard-Ansichten (Views 01–10) in allen
   vier Sprachen und allen drei Geraetetypen, Design-Hero-Shots der
   Nicht-Standard-Stile (Views 11–14) nur `pc/de` (Erzeugung siehe unten).
 - **Screenshot-Erstellung**:
@@ -43,6 +47,13 @@ unvollständig und darf nicht gemergt werden.
     je Ansicht in allen vier Sprachen
   - Bei jeder sichtbaren UI-Änderung neu ausführen und die erzeugten PNGs
     committen
+- **PR-Live-Vorschau (GitHub Pages)**: Jeder offene Pull Request aus
+  diesem Repository wird automatisch als Live-Vorschau unter
+  `https://michaelleuzinger.github.io/AlimenCal/pr-<PR-Nr>/` deployt
+  (Job `deploy-pr-preview` in `.github/workflows/pages.yml`); der
+  Bot kommentiert die URL im PR. Nach Merge wird die Vorschau durch
+  den regulären `main`-Deploy abgelöst; Nachfolgenutzung: UI-Änderungen im
+  PR direkt im Browser prüfen, bevor sie in `main` committet sind.
 - **Screenshot-Inventar (Regel)**: Die Anzahl und der Inhalt der Screenshots
   dürfen und sollen bei Änderungen überdacht und angepasst werden. Massgebend:
   1. **Ein Screenshot pro Ansicht/Feature, Sprache und Geraetetyp** – je
@@ -136,7 +147,7 @@ screenshots/        Screenshots der App (Inventar-Regel: s. AGENTS.md; Erzeugung
 tools/              make-screenshots.js: Screenshot-Generator (Puppeteer, s. AGENTS.md)
 tools/              check-links.js: Link-/Referenzpruefung fuer Repository-Hygiene (s. AGENTS.md)
 tests/              Unit-Tests (node)
-.github/workflows/  CI: tests.yml (Unit-Tests), pages.yml (Deployment auf GitHub Pages)
+.github/workflows/  CI: tests.yml (Unit-Tests), pages.yml (Deployment auf GitHub Pages inkl. PR-Live-Vorschau pr-<PR-Nr>/)
 ```
 
 - **Tests**: Neue Funktionalität erhält Unit-Tests; wird die Anzahl/geprüfte
