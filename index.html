@@ -58,7 +58,13 @@
 
 
   <main class="wrap">
-    <p id="disclaimer" class="disclaimer"></p>
+    <div id="disclaimer" class="disclaimer">
+      <button type="button" id="disclaimer-toggle" class="disclaimer-toggle" aria-expanded="true" aria-controls="disclaimer-text">
+        <span id="disclaimer-toggle-label"></span>
+        <span class="disclaimer-toggle-icon" aria-hidden="true">▾</span>
+      </button>
+      <p id="disclaimer-text"></p>
+    </div>
     <div id="backup-reminder" class="backup-reminder" hidden>
       <span id="backup-reminder-text"></span>
       <button type="button" id="backup-reminder-action" class="primary"></button>

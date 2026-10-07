@@ -156,6 +156,17 @@ h2 { margin-top: 1rem; font-size: 1.15rem; letter-spacing: -0.01em; }
   margin: 1rem 0;
   font-size: 0.88rem;
 }
+.disclaimer-toggle {
+  display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;
+  width: 100%; padding: 0; border: 0; background: transparent;
+  color: var(--ink); font: inherit; font-size: 0.88rem; font-weight: 600;
+  cursor: pointer; text-align: left;
+}
+.disclaimer-toggle:hover { color: var(--accent); }
+.disclaimer-toggle-icon { transition: transform 0.15s ease; color: var(--muted); }
+.disclaimer.collapsed .disclaimer-toggle-icon { transform: rotate(-90deg); }
+.disclaimer.collapsed #disclaimer-text { display: none; }
+#disclaimer-text { margin: 0.35rem 0 0; }
 
 .backup-reminder {
   display: flex;

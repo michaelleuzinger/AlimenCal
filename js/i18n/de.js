@@ -8,6 +8,7 @@ AlimenCal.i18n.de = {
   title: 'AlimenCal – Unterhaltsrechner',
   subtitle: 'Orientierungswerkzeug für Kindes- und Ehegattenunterhalt (Schweiz)',
   disclaimerShort: 'Keine Rechtsberatung. Die Berechnung dient nur der Orientierung und ersetzt keine individuelle Prüfung durch Anwältinnen/Anwälte oder die KESB.',
+  disclaimerToggle: 'Keine Rechtsberatung – Hinweis zeigen/ausblenden',
   binding: {
     heading: 'Verbindliche Einstellungen',
     intro: 'Werte mit beidseitiger Bestätigung (Partei A und B) sind verbindlich festgelegt und können nicht mehr geändert werden. Mit dem Override-Modus können abweichende Werte erfasst werden, ohne die verbindlichen Originalwerte zu ändern; die Berechnung nutzt dann die Override-Werte.',

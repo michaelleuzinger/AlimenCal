@@ -219,7 +219,10 @@ Sicherheitslücken bitte nicht öffentlich melden, sondern über
 ## Rechtlicher Hinweis (Disclaimer)
 
 AlimenCal ist ein **Orientierungswerkzeug** und ersetzt keine rechtliche
-Beratung. Alle Berechnungen basieren auf den in
+Beratung.
+Der Hinweis «Keine Rechtsberatung» auf der Startseite lässt sich
+über seine Titelzeile ein- und ausblenden; die Einstellung wird lokal
+im Browser gespeichert. Alle Berechnungen basieren auf den in
 [docs/RECHTLICHE-GRUNDLAGEN.md](docs/RECHTLICHE-GRUNDLAGEN.md) aufgeführten
 Quellen (ZGB, BGE, kantonale bzw. gerichtliche Richtlinien); für den
 konkreten Fall massgeblich ist ausschliesslich die Beurteilung durch eine
