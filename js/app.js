@@ -1999,7 +1999,7 @@
     function commands() {
       return [
         { tab: 'share', label: t('nav', 'share'), hint: t('nav', 'settingsMenu') },
-        { tab: 'share', label: t('nav', 'backup'), hint: t('nav', 'settingsMenu') },
+        { tab: 'share', anchor: 'share-backup-card', label: t('nav', 'backup'), hint: t('nav', 'settingsMenu') },
         { tab: 'settings', label: t('nav', 'settings'), hint: t('nav', 'settingsMenu') },
         { tab: 'themes', label: t('nav', 'themes'), hint: t('nav', 'settingsMenu') },
         { tab: 'about', label: t('nav', 'about'), hint: t('nav', 'settingsMenu') }
@@ -2033,6 +2033,10 @@
         btn.addEventListener('click', function () {
           close();
           switchTab(c.tab);
+          if (c.anchor) {
+            var target = document.getElementById(c.anchor);
+            if (target) { target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+          }
         });
         list.appendChild(btn);
       });
@@ -2061,7 +2065,16 @@
     input.addEventListener('keydown', function (e) {
       if (e.key === 'ArrowDown') { selIndex = Math.min(selIndex + 1, items.length - 1); render(); e.preventDefault(); }
       else if (e.key === 'ArrowUp') { selIndex = Math.max(selIndex - 1, 0); render(); e.preventDefault(); }
-      else if (e.key === 'Enter' && items[selIndex]) { close(); switchTab(items[selIndex].tab); e.preventDefault(); }
+      else if (e.key === 'Enter' && items[selIndex]) {
+        var sel = items[selIndex];
+        close();
+        switchTab(sel.tab);
+        if (sel.anchor) {
+          var target = document.getElementById(sel.anchor);
+          if (target) { target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+        }
+        e.preventDefault();
+      }
     });
     document.addEventListener('keydown', function (e) {
       if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K')) {
