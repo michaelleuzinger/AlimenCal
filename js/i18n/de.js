@@ -71,7 +71,8 @@ AlimenCal.i18n.de = {
     about: 'Über',
     settingsMenu: 'Einstellungen und Informationen',
     language: 'Sprache',
-    childrenShort: 'Kind', spousalShort: 'Ehegatte', costsplitShort: 'Kosten', shareShort: 'Export'
+    childrenShort: 'Kind', spousalShort: 'Ehegatte', costsplitShort: 'Kosten', shareShort: 'Export',
+    backup: 'Backup'
   },
   palette: { placeholder: 'Suchen oder Sprung zu …', empty: 'Kein Treffer' },
   common: {

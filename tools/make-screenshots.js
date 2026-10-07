@@ -78,7 +78,14 @@ async function switchTab(page, name) {
   await page.evaluate(n => {
     const el = document.querySelector('.tab[data-tab="' + n + '"]');
     if (el) { el.click(); return; }
-    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true, metaKey: true, bubbles: true }));
+    const tabs = document.querySelectorAll('.tab');
+    for (let i = 0; i < tabs.length; i++) {
+      tabs[i].classList.toggle('active', tabs[i].getAttribute('data-tab') === n);
+    }
+    const panels = document.querySelectorAll('.tabpanel');
+    for (let j = 0; j < panels.length; j++) {
+      panels[j].classList.toggle('active', panels[j].id === 'tab-' + n);
+    }
   }, name);
   await sleep(150);
 }

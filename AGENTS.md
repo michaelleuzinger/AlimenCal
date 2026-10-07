@@ -130,7 +130,7 @@ devices: ['pc']` in VIEWS).
 ### Struktur
 
 ```
-index.html          UI (Topbar-Navigation mit 4 Hauptfunktionen + sichtbarem Einstellungs-Knopf «Einstellungen und Informationen» (Zahnrad) und Befehlspalette Ctrl+K fuer alle Tabs; auf Mobile task-first Tab-Leiste unten mit 4 Hauptfunktionen + «Einstellungen» (oeffnet Palette); Tab Kindesunterhalt mit Live-Ergebnis-Panel)
+index.html          UI (Topbar-Navigation mit 3 Hauptfunktionen (Kind, Ehegatten, Kosten) + sichtbarem Einstellungs-Knopf «Einstellungen und Informationen» (Zahnrad) und Befehlspalette Ctrl+K fuer Einstellungs-Tabs (Austausch, Backup, Richtwerte, Themes, Ueber); auf Mobile task-first Tab-Leiste unten mit 3 Hauptfunktionen + «Einstellungen» (oeffnet Palette); Tab Kindesunterhalt mit Live-Ergebnis-Panel)
 css/style.css       Styles
 js/calculator.js    Berechnungskern (DOM-frei, auch in Node.js lauffähig)
 js/costsplit.js     Kostentrennung: CSV-Import, Zuordnung, Ausgleich (DOM-frei)

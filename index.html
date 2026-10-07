@@ -18,7 +18,6 @@
         <button type="button" class="tab nav-item" data-tab="children"><span class="nav-label"></span></button>
         <button type="button" class="tab nav-item" data-tab="spousal"><span class="nav-label"></span></button>
         <button type="button" class="tab nav-item" data-tab="costsplit"><span class="nav-label"></span></button>
-        <button type="button" class="tab nav-item" data-tab="share"><span class="nav-label"></span></button>
       </nav>
       <div class="topbar-right">
         <button type="button" class="cmdk-trigger" id="cmdk-trigger" aria-haspopup="dialog" aria-expanded="false">
@@ -47,7 +46,6 @@
     <button type="button" class="tab mob-item" data-tab="children"><span class="nav-label"></span></button>
     <button type="button" class="tab mob-item" data-tab="spousal"><span class="nav-label"></span></button>
     <button type="button" class="tab mob-item" data-tab="costsplit"><span class="nav-label"></span></button>
-    <button type="button" class="tab mob-item" data-tab="share"><span class="nav-label"></span></button>
     <button type="button" class="mob-item" id="mob-settings-btn" aria-haspopup="dialog" aria-expanded="false"><span class="settings-gear" aria-hidden="true">⚙</span><span data-i18n="nav.settingsMenu"></span></button>
   </nav>
 <div class="app-shell">
@@ -198,7 +196,7 @@
     <section id="tab-share" class="tabpanel">
       <h2 id="share-heading"></h2>
       <p id="share-intro" class="intro"></p>
-      <div class="card preset-card">
+      <div class="card preset-card" id="share-export-card">
         <h3 id="share-export-heading"></h3>
         <p id="share-export-hint" class="hint"></p>
         <div id="share-export-checkboxes"></div>
@@ -210,7 +208,7 @@
           <button id="share-export" class="primary"></button>
         </div>
       </div>
-      <div class="card preset-card">
+      <div class="card preset-card" id="share-backup-card">
         <h3 id="share-backup-heading"></h3>
         <p id="share-backup-hint" class="hint"></p>
         <div class="actions">
