@@ -71,7 +71,8 @@ AlimenCal.i18n.en = {
     about: 'About',
     settingsMenu: 'Settings and information',
     language: 'Language',
-    childrenShort: 'Child', spousalShort: 'Spousal', costsplitShort: 'Costs', shareShort: 'Share'
+    childrenShort: 'Child', spousalShort: 'Spousal', costsplitShort: 'Costs', shareShort: 'Share',
+    backup: 'Backup'
   },
   palette: { placeholder: 'Search or jump to …', empty: 'No results' },
   common: {

@@ -125,10 +125,11 @@ App (PWA) installierbar und danach auch offline nutzbar:
 ## Nutzung
 
 Über die Topbar (Desktop) bzw. die Tab-Leiste unten mit
-«Einstellungen» (Mobile) sind alle Funktionen erreichbar: Kindesunterhalt,
-Ehegattenunterhalt, Kostentrennung, Austausch; Richtwerte, Themes und
-Über über den Knopf «Einstellungen und Informationen» bzw. die
-Befehlspalette (Ctrl+K). Die Sprachwahl (Deutsch,
+«Einstellungen» (Mobile) sind die drei Hauptfunktionen erreichbar:
+Kindesunterhalt, Ehegattenunterhalt, Kostentrennung. Der
+Einstellungsbereich – Austausch, Backup, Richtwerte, Themes und Über –
+ist über den Knopf «Einstellungen und Informationen» bzw. die
+Befehlspalette (Ctrl+K) erreichbar. Die Sprachwahl (Deutsch,
 Français, Italiano, English) liegt in der Topbar.
 
 Schritt-für-Schritt-Anleitung aller Tabs:

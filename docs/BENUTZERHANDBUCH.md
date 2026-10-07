@@ -15,10 +15,10 @@ keine Installation und keine Abhängigkeiten.
 Die App ist responsiv gestaltet und auf Smartphone, Tablet und Desktop nutzbar:
 
 - Karten und Formular-Grids brechen auf schmalen Displays auf eine Spalte um.
-- Die Mobile-Tab-Leiste (4 Hauptfunktionen + «Mehr») nutzt sprachspezifische
-  Kurzlabels («Kind», «Ehegatte», «Kosten», «Export»), damit die Buttons auch auf
-  schmalen Displays (ab 320px) sauber getrennt bleiben; überlange Labels
-  werden mit Auslassungspunkten gekürzt.
+- Die Mobile-Tab-Leiste (3 Hauptfunktionen + «Einstellungen») nutzt
+  sprachspezifische Kurzlabels («Kind», «Ehegatte», «Kosten»), damit die
+  Buttons auch auf schmalen Displays (ab 320px) sauber getrennt bleiben;
+  überlange Labels werden mit Auslassungspunkten gekürzt.
 - Resultat-, Kostentrennungs- und Richtwert-Tabellen sind auf schmalen
   Displays horizontal scrollbar (Wischen), damit alle Spalten lesbar bleiben.
 - Auf Touch-Geräten sind Schaltflächen, Auswahlmenüs und Checkboxen
@@ -130,11 +130,12 @@ und beim nächsten Öffnen wiederhergestellt.
 ## Tabs im Überblick
 
 Die Hauptfunktionen sind auf dem Desktop dauerhaft in der schmalen Kopfzeile
-(Topbar) sichtbar. Der Einstellungs- und Infobereich (Richtwerte, Themes,
+(Topbar) sichtbar: Kindesunterhalt, Ehegattenunterhalt und Kostentrennung.
+Der Einstellungs- und Infobereich (Austausch, Backup, Richtwerte, Themes,
 Über) ist über den deutlich beschrifteten Knopf «Einstellungen und
 Informationen» (Zahnrad-Symbol) neben der Befehlspalette erreichbar; die
 Befehlspalette (Ctrl+K) bleibt als Tastatur-Kürzel erhalten. Auf dem
-Smartphone liegt eine task-orientierte Tab-Leiste mit den vier
+Smartphone liegt eine task-orientierte Tab-Leiste mit den drei
 Hauptfunktionen und «Einstellungen» am unteren Rand.
 
 **Funktionen (Hauptnavigation):**
@@ -144,17 +145,18 @@ Hauptfunktionen und «Einstellungen» am unteren Rand.
 | Kindesunterhalt | Barunterhalt und Betreuungsunterhalt pro Kind berechnen |
 | Ehegattenunterhalt | Bedarf/Leistungsfähigkeit und allfälliger Beitrag (Art. 176 / Art. 125 ZGB) |
 | Kostentrennung | Laufende Kosten ab einem Stichtag separat abrechnen (Bankexport) |
-| Austausch | Eigene Daten exportieren, Datei der anderen Partei importieren |
 
 **Einstellungen & Info (über den Knopf «Einstellungen und Informationen» bzw. Ctrl+K):**
 
-![Navigation (DE)](../screenshots/pc/05-hauptmenue-de.png)
-
-| Tab | Zweck |
+| Eintrag | Zweck |
 |---|---|
+| Austausch | Eigene Daten exportieren, Datei der anderen Partei importieren |
+| Backup | Backup erstellen und wiederherstellen (im Austausch-Tab integriert) |
 | Richtwerte | Richtwerte einsehen, anpassen, speichern, exportieren/importieren, kantionale Presets laden |
 | Themes | Design-Stil wählen, Farben im Theme-Editor anpassen |
 | Über | Informationen zur App, Rechtsgrundlagen und Disclaimer |
+
+![Navigation (DE)](../screenshots/pc/05-hauptmenue-de.png)
 
 ## Tab «Kindesunterhalt»
 

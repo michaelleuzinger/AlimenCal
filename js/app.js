@@ -738,7 +738,6 @@
     document.querySelectorAll('.tab[data-tab="spousal"]').forEach(function (el) { setNavLabel(el, el.classList.contains('mob-item') ? t('nav', 'spousalShort') : t('nav', 'spousal')); });
     document.querySelectorAll('.tab[data-tab="costsplit"]').forEach(function (el) { setNavLabel(el, el.classList.contains('mob-item') ? t('nav', 'costsplitShort') : t('nav', 'costsplit')); });
     document.querySelectorAll('.tab[data-tab="themes"]').forEach(function (el) { setNavLabel(el, t('nav', 'themes')); });
-    document.querySelectorAll('.tab[data-tab="share"]').forEach(function (el) { setNavLabel(el, el.classList.contains('mob-item') ? t('nav', 'shareShort') : t('nav', 'share')); });
     document.querySelectorAll('.tab[data-tab="settings"]').forEach(function (el) { setNavLabel(el, t('nav', 'settings')); });
     document.querySelectorAll('.tab[data-tab="about"]').forEach(function (el) { setNavLabel(el, t('nav', 'about')); });
 
@@ -1999,13 +1998,11 @@
     var items = [];
     function commands() {
       return [
-        { tab: 'children', label: t('nav', 'children'), hint: 'Tab' },
-        { tab: 'spousal', label: t('nav', 'spousal'), hint: 'Tab' },
-        { tab: 'costsplit', label: t('nav', 'costsplit'), hint: 'Tab' },
-        { tab: 'share', label: t('nav', 'share'), hint: 'Tab' },
-        { tab: 'settings', label: t('nav', 'settings'), hint: 'Tab' },
-        { tab: 'themes', label: t('nav', 'themes'), hint: 'Tab' },
-        { tab: 'about', label: t('nav', 'about'), hint: 'Tab' }
+        { tab: 'share', label: t('nav', 'share'), hint: t('nav', 'settingsMenu') },
+        { tab: 'share', label: t('nav', 'backup'), hint: t('nav', 'settingsMenu') },
+        { tab: 'settings', label: t('nav', 'settings'), hint: t('nav', 'settingsMenu') },
+        { tab: 'themes', label: t('nav', 'themes'), hint: t('nav', 'settingsMenu') },
+        { tab: 'about', label: t('nav', 'about'), hint: t('nav', 'settingsMenu') }
       ];
     }
     function render() {
@@ -2144,6 +2141,7 @@
     renderBackupReminder();
     document.getElementById('backup-reminder-action').addEventListener('click', function () {
       doBackup();
+      switchTab('share');
     });
     document.getElementById('backup-reminder-dismiss').addEventListener('click', function () {
       backupReminderDismissed = true;
