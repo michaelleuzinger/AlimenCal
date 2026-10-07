@@ -909,8 +909,11 @@
       state.children[i].childAllowance = parseFloat(row.querySelector('.f-allow').value) || 0;
       state.children[i].kkPremium = parseFloat(row.querySelector('.f-kk').value) || 0;
       state.children[i].externalCareCosts = parseFloat(row.querySelector('.f-care').value) || 0;
-      state.children[i].careShareParentA = (parseFloat(row.querySelector('.f-shareA').value) || 0) / 100;
-      state.children[i].careShareParentB = (parseFloat(row.querySelector('.f-shareB').value) || 0) / 100;
+      var shareA = (parseFloat(row.querySelector('.f-shareA').value) || 0) / 100;
+      if (!isFinite(shareA) || shareA < 0) { shareA = 0; }
+      if (shareA > 1) { shareA = 1; }
+      state.children[i].careShareParentA = shareA;
+      state.children[i].careShareParentB = 1 - shareA;
     }
   }
 
@@ -944,6 +947,13 @@
       saveForm();
     });
     return select;
+  }
+
+  function clampShare(input) {
+    var v = parseFloat(input.value);
+    if (!isFinite(v) || v < 0) { return 0; }
+    if (v > 100) { return 100; }
+    return v;
   }
 
   function inp(cls, val, opts) {
@@ -1000,8 +1010,22 @@
     grid.appendChild(field(t('common', 'externalCareCosts'), inp('f-care', child.externalCareCosts)));
 
     var shareWrap = document.createElement('div');
-    shareWrap.appendChild(field(t('children', 'careShareA'), inp('f-shareA', Math.round(child.careShareParentA * 100))));
-    shareWrap.appendChild(field(t('children', 'careShareB'), inp('f-shareB', Math.round(child.careShareParentB * 100))));
+    var shareA = inp('f-shareA', Math.round(child.careShareParentA * 100));
+    var shareB = inp('f-shareB', Math.round(child.careShareParentB * 100));
+    shareA.max = '100';
+    shareB.max = '100';
+    shareA.addEventListener('input', function () {
+      var a = clampShare(shareA);
+      shareA.value = a;
+      shareB.value = 100 - a;
+    });
+    shareB.addEventListener('input', function () {
+      var b = clampShare(shareB);
+      shareB.value = b;
+      shareA.value = 100 - b;
+    });
+    shareWrap.appendChild(field(t('children', 'careShareA'), shareA));
+    shareWrap.appendChild(field(t('children', 'careShareB'), shareB));
     grid.appendChild(shareWrap);
 
     row.appendChild(grid);

@@ -80,9 +80,11 @@ Ist nur eine Partei leistungsfähig, trägt diese den gesamten Barunterhalt.
   ihre tatsächlichen Betreuungsanteile einen Betreuungsunterhaltsanspruch;
   die Differenz fliesst als Saldo von der einen zur anderen Partei. Bei
   50/50-Betreuung ergibt sich daher kein Saldo.
-- Betreuungsanteile werden normalisiert (Summe ≠ 100 % wird skaliert; leere
-  Angabe gilt als 50/50). Betreuungsunterhalt entfällt ab dem 18. Altersjahr
-  (`careSupportMaxAge`).
+- Betreuungsanteile ergeben in Summe immer 100 %: In der UI wird das
+  Gegenfeld automatisch ergänzt (A + B = 100 %, Werte auf [0, 100] geklemmt);
+  in der Berechnung werden Anteile zusätzlich normalisiert (Summe ≠ 100 %
+  wird skaliert; leere Angabe gilt als 50/50). Betreuungsunterhalt entfällt
+  ab dem 18. Altersjahr (`careSupportMaxAge`).
 
 ### 1.6 Mangellage (Manko)
 
