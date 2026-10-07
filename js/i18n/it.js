@@ -9,6 +9,7 @@ AlimenCal.i18n.it = {
   subtitle: 'Strumento di orientamento per gli alimenti per figli e coniugi (Svizzera)',
   disclaimerShort: 'Nessuna consulenza legale. Il calcolo serve solo come orientamento e non sostituisce un esame individuale da parte di avvocati o dell\u2019APEA.',
   disclaimerToggle: 'Nessuna consulenza legale – mostra/nascondi avviso',
+  disclaimerShortLabel: 'Nessuna consulenza legale',
   binding: {
     heading: 'Impostazioni vincolanti',
     intro: 'I valori confermati da entrambe le parti (A e B) sono fissati in modo vincolante e non possono più essere modificati. Con la modalità di override è possibile inserire valori diversi senza modificare i valori originali vincolanti; il calcolo utilizza quindi i valori di override.',

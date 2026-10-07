@@ -9,6 +9,7 @@ AlimenCal.i18n.en = {
   subtitle: 'Orientation tool for child and spousal maintenance (Switzerland)',
   disclaimerShort: 'This is not legal advice. The calculation is for orientation only and does not replace an individual review by a lawyer or the Child and Adult Protection Authority (CAPA/KESB).',
   disclaimerToggle: 'Not legal advice – show/hide notice',
+  disclaimerShortLabel: 'Not legal advice',
   binding: {
     heading: 'Binding settings',
     intro: 'Values confirmed by both parties (A and B) are fixed bindingly and can no longer be changed. Override mode allows entering different values without changing the binding original values; the calculation then uses the override values.',
