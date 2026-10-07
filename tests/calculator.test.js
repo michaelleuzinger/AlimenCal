@@ -311,6 +311,23 @@ var resAllOn = calc.calculate({
 }, CFG);
 ok('calculate() mit spousal: Beitrag 2000', close(resAllOn.spousalSupport.support, 2000));
 
+/* ---------- Betreuungsanteile: Summe immer 100% ---------- */
+
+var shareCases = [
+  { careShareParentA: 0, careShareParentB: 0 },
+  { careShareParentA: 0.3, careShareParentB: 0.2 },
+  { careShareParentA: 80, careShareParentB: 80 },
+  { careShareParentA: -5, careShareParentB: 130 },
+  { careShareParentA: 0.6, careShareParentB: 0.4 },
+  { careShareParentA: 100, careShareParentB: 100 }
+];
+var allSum100 = true;
+for (var si = 0; si < shareCases.length; si++) {
+  var s = calc.normalizeCareShares(shareCases[si]);
+  if (!close(s.a + s.b, 1) || s.a < 0 || s.b < 0 || s.a > 1 || s.b > 1) { allSum100 = false; }
+}
+ok('Betreuungsanteile ergeben in Summe immer 100%', allSum100);
+
 /* ---------- Zusammenfassung ---------- */
 
 console.log('\n' + passed + ' Tests bestanden' +

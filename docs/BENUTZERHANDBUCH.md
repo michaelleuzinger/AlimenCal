@@ -165,7 +165,9 @@ Hauptfunktionen und «Einstellungen» am unteren Rand.
    erwerbstätig, betreibungsrechtliche Richtwerte als Orientierung).
 2. **Kinder hinzufügen**: Alter (vollendete Altersjahre), allenfalls eigene
    Einkünfte und Kinderzulagen, effektive Krankenkassenprämie,
-   Fremdbetreuungskosten sowie die Betreuungsanteile (z. B. 60/40).
+   Fremdbetreuungskosten sowie die Betreuungsanteile (z. B. 60/40). Die
+   beiden Anteile ergänzen sich automatisch auf insgesamt 100 %: Wird ein
+   Wert geändert, passt sich das Gegenfeld sofort an.
 3. **Aufwandsmodus**: Standardmässig wird der Grundbedarf pauschal aus der
    Richtwerttabelle ermittelt. Mit «Effektive Kosten» kann stattdessen der
    effektive Aufwand des Kindes (Total CHF/Monat) angegeben werden;
