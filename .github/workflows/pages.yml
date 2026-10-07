@@ -3,28 +3,119 @@ name: GitHub Pages
 on:
   push:
     branches: [main]
+  pull_request:
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
-  group: pages
-  cancel-in-progress: true
+  group: github-pages-deploy
+  cancel-in-progress: false
 
 jobs:
-  deploy:
+  deploy-main:
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+      pull-requests: read
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
+      - name: Seite aufbauen (Main-Root + Vorschauen offener PRs)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          rsync -a --exclude='.git' ./ site/
+          for row in $(gh pr list --json number,headRefOid --jq '.[] | "\(.number):\(.headRefOid)"'); do
+            num="${row%%:*}"
+            sha="${row##*:}"
+            echo "Vorschau für PR #$num einbauen (${sha})"
+            if git clone --quiet --depth 1 --no-checkout "https://github.com/${GITHUB_REPOSITORY}.git" tmp-pr; then
+              if (cd tmp-pr && git checkout --quiet --detach "$sha"); then
+                mkdir -p "site/pr-${num}"
+                rsync -a --exclude='.git' tmp-pr/ "site/pr-${num}/"
+              else
+                echo "Checkout von PR #$num fehlgeschlagen, Vorschau übersprungen"
+              fi
+              rm -rf tmp-pr
+            else
+              echo "Clone für PR #$num fehlgeschlagen, Vorschau übersprungen"
+            fi
+          done
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: site
       - id: deployment
         uses: actions/deploy-pages@v4
+
+  deploy-pr-preview:
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          path: main-src
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          path: pr-src
+      - uses: actions/configure-pages@v5
+      - name: Seite aufbauen (Main-Root + Vorschau dieses PRs)
+        run: |
+          set -euo pipefail
+          rsync -a --exclude='.git' main-src/ site/
+          mkdir -p "site/pr-${{ github.event.number }}"
+          rsync -a --exclude='.git' pr-src/ "site/pr-${{ github.event.number }}/"
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - name: Preview deployen
+        id: deploy_preview
+        uses: actions/deploy-pages@v4
+      - name: Preview-URL bestimmen
+        id: preview_url
+        run: |
+          base="${{ steps.deploy_preview.outputs.page_url }}"
+          echo "url=${base}pr-${{ github.event.number }}/" >> "$GITHUB_OUTPUT"
+      - name: Hinweis als PR-Kommentar
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const url = `${{ steps.preview_url.outputs.url }}`;
+            const body = `Live-Vorschau dieses PR-Stands auf GitHub Pages: ${url}`;
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number
+            });
+            const marker = 'Live-Vorschau dieses PR-Stands auf GitHub Pages:';
+            const existing = comments.find(c => c.user.login === 'github-actions[bot]' && c.body.includes(marker));
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body
+              });
+            }
