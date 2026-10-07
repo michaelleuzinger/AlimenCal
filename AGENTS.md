@@ -55,7 +55,10 @@ unvollständig und darf nicht gemergt werden.
   komplette Seite (atomare Kopie): Der `main`-Deploy baut daher den
   Root aus `main` plus Unterordner `pr-<Nr>/` aller offenen PRs, der
   Preview-Deploy den Root aus `main` plus den Unterordner des PRs.
-  Nach Merge wird die Vorschau mit dem nächsten `main`-Deploy entfernt;
+  Wird ein PR geschlossen (gemergt oder abgelehnt), entfernt der Job
+  `cleanup-pr-preview` die Vorschau, indem er die Seite ohne den
+  Unterordner neu deployt (sicherheitshalber baut der `main`-Deploy
+  nur offene PRs ein, ein Merge verschwindet also auch dort);
   Nachfolgenutzung: UI-Änderungen im PR direkt im Browser prüfen, bevor
   sie in `main` committet sind.
 - **Screenshot-Inventar (Regel)**: Die Anzahl und der Inhalt der Screenshots

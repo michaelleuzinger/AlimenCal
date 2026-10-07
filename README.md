@@ -59,8 +59,9 @@ so lassen sich Änderungen im Browser prüfen, bevor sie in `main`
 committet sind. Der Workflow kommentiert die Preview-URL im PR. Da ein
 GitHub-Pages-Deployment immer die komplette Seite atomar ersetzt, baut
 jeder Deploy (main und Preview) den Root aus `main` plus die
-`pr-<Nr>/`-Unterordner der offenen PRs; nach Merge verschwindet die
-Vorschau mit dem nächsten `main`-Deploy.
+`pr-<Nr>/`-Unterordner der offenen PRs. Wird ein PR geschlossen
+(gemergt oder abgelehnt), entfernt der Workflow die Vorschau
+automatisch (`cleanup-pr-preview`).
 
 ### Als App installieren (PWA)
 
