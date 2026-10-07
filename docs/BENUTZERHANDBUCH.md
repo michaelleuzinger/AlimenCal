@@ -130,10 +130,12 @@ und beim nächsten Öffnen wiederhergestellt.
 ## Tabs im Überblick
 
 Die Hauptfunktionen sind auf dem Desktop dauerhaft in der schmalen Kopfzeile
-(Topbar) sichtbar; Richtwerte, Themes und Über sind über die
-Befehlspalette (Ctrl+K) erreichbar. Auf dem Smartphone liegt eine
-task-orientierte Tab-Leiste mit den vier Hauptfunktionen und «Mehr» am
-unteren Rand; «Mehr» öffnet die Befehlspalette.
+(Topbar) sichtbar. Der Einstellungs- und Infobereich (Richtwerte, Themes,
+Über) ist über den deutlich beschrifteten Knopf «Einstellungen und
+Informationen» (Zahnrad-Symbol) neben der Befehlspalette erreichbar; die
+Befehlspalette (Ctrl+K) bleibt als Tastatur-Kürzel erhalten. Auf dem
+Smartphone liegt eine task-orientierte Tab-Leiste mit den vier
+Hauptfunktionen und «Einstellungen» am unteren Rand.
 
 **Funktionen (Hauptnavigation):**
 
@@ -144,14 +146,14 @@ unteren Rand; «Mehr» öffnet die Befehlspalette.
 | Kostentrennung | Laufende Kosten ab einem Stichtag separat abrechnen (Bankexport) |
 | Austausch | Eigene Daten exportieren, Datei der anderen Partei importieren |
 
-**Einstellungen & Info (in der Befehlspalette bzw. über «Mehr»):**
+**Einstellungen & Info (über den Knopf «Einstellungen und Informationen» bzw. Ctrl+K):**
 
 ![Navigation (DE)](../screenshots/pc/05-hauptmenue-de.png)
 
 | Tab | Zweck |
 |---|---|
 | Richtwerte | Richtwerte einsehen, anpassen, speichern, exportieren/importieren, kantionale Presets laden |
-| Themes | Vordefinierte Designs wählen, Farben im Theme-Editor anpassen |
+| Themes | Design-Stil wählen, Farben im Theme-Editor anpassen |
 | Über | Informationen zur App, Rechtsgrundlagen und Disclaimer |
 
 ## Tab «Kindesunterhalt»
@@ -313,21 +315,17 @@ B importiert, rechnet).
 
 ![Design-Auswahl im Themes-Tab, Calm-Stil (DE)](../screenshots/pc/09-themes-designs-de.png)
 
-- **Design-Stile**: Neben den Farb-Themes gibt es im Themes-Tab eine
-  Design-Stil-Auswahl mit anklickbaren Karten. Jeder Stil passt das
+- **Design-Stil**: Im Themes-Tab wird das Erscheinungsbild über die
+  Design-Stil-Auswahl mit anklickbaren Karten gewählt. Jeder Stil passt das
   komplette Erscheinungsbild an (Typografie, Karten, Rahmen, Schatten und
   Farben): **Calm** (Standard, helles Werkzeug-Design), **Klassisch** (ursprüngliches Aussehen), **Calm Dark**, **Editorial/Legal** und **Neo-Brutalismus**. Die Auswahl wirkt sofort.
-- **Vordefinierte Themes**: Classic (Default), Dark, High Contrast
-  (barrierefrei, für Sehbehinderte geeignet), Warm und Blue – Auswahl
-  wirkt sofort.
 - **Theme-Editor**: Alle 17 Design-Farben und der Eckenradius sind manuell
   frei anpassbar; inklusive Hintergrund und Textfarbe des oberen Banners,
-  das auch mit dem gewählten Theme wechselt. Änderungen werden sofort
-  angewendet; die Auswahl springt auf «Benutzerdefiniert»; der gewählte
-  Design-Stil bleibt dabei erhalten.
-- **Zurücksetzen** stellt das Classic-Theme wieder her.
-- Design-Stil, Theme-Auswahl und angepasste Werte werden im Browser
-  gespeichert und nach einem Neustart wiederhergestellt.
+  das auch mit dem gewählten Design-Stil wechselt. Änderungen werden sofort
+  angewendet; der Design-Stil bleibt dabei erhalten.
+- **Zurücksetzen** stellt den Design-Stil Calm wieder her.
+- Design-Stil und angepasste Werte werden im Browser gespeichert und nach
+  einem Neustart wiederhergestellt.
 - Alle Design-Stile sind responsiv und funktionieren auf Smartphones,
   Tablets und Desktop; die Design-Karten ordnen sich auf kleinen
   Bildschirmen zweispaltig an.

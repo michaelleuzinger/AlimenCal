@@ -69,6 +69,15 @@ body {
   margin-left: auto; font-family: ui-monospace, "SF Mono", Menlo, monospace;
   font-size: 0.68rem; border: 1px solid var(--line); border-radius: 4px; padding: 0 0.3rem; color: var(--muted);
 }
+.settings-btn {
+  display: inline-flex; align-items: center; gap: 0.45rem;
+  height: 2rem; padding: 0 0.7rem;
+  border: 1px solid var(--line); border-radius: 6px;
+  background: var(--card); color: var(--ink);
+  font: inherit; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap;
+}
+.settings-btn:hover { border-color: var(--accent); color: var(--accent); }
+.settings-btn .settings-gear { font-size: 0.95rem; line-height: 1; }
 .lang-switch { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.82rem; color: var(--banner-ink); }
 .lang-switch select { padding: 0.25rem 0.4rem; border-radius: 6px; border: 1px solid var(--line); background: var(--card); color: var(--ink); font: inherit; font-size: 0.8rem; }
 
@@ -106,7 +115,7 @@ body {
 /* ---------- Mobile: task-first Tab-Leiste unten (5 Slots) ---------- */
 .mobile-tabs { display: none; }
 @media (max-width: 920px) {
-  .topnav, .cmdk-trigger, .topbar .lang-switch { display: none; }
+  .topnav, .cmdk-trigger, .topbar .lang-switch, .settings-btn { display: none; }
   .mobile-tabs {
     display: flex; gap: 0.25rem; position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
     background: var(--card); border-top: 1px solid var(--line);

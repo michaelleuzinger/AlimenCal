@@ -37,11 +37,11 @@ Installation, kein Server, keine Abhängigkeiten.
 
 3. Einkommen der Eltern erfassen – das Resultat des Kindesunterhalts
    erscheint live im Seitenpanel; Kinder über «Kind hinzufügen» ergänzen,
-   allenfalls unter **Richtwerte** (Befehlspalette Ctrl+K bzw. «Mehr»)
-   das kantonale Preset laden (z. B. Zürcher Kinderkosten-Tabelle
-   1.3.2025); die Navigation läuft über die Topbar (Desktop) bzw. die
-   Tab-Leiste unten mit «Mehr» (Mobile), die Sprachwahl liegt in der
-   Topbar.
+   allenfalls unter **Richtwerte** (Knopf «Einstellungen und
+   Informationen» bzw. Befehlspalette Ctrl+K) das kantonale Preset laden
+   (z. B. Zürcher Kinderkosten-Tabelle 1.3.2025); die Navigation läuft
+   über die Topbar (Desktop) bzw. die Tab-Leiste unten mit
+   «Einstellungen» (Mobile), die Sprachwahl liegt in der Topbar.
 
 Alle Eingaben werden automatisch lokal im Browser (localStorage) gespeichert.
 Optional kann die App statt über `file://` auch über einen lokalen Webserver
@@ -87,13 +87,12 @@ App (PWA) installierbar und danach auch offline nutzbar:
   Trennzeichen, Datums- und Betragsformaten; je Transaktion ignorieren,
   anteilsmässig aufteilen (Anteil konfigurierbar) oder voll einer Partei
   zuordnen; Sammelaktionen für die Erstzuordnung
-- **Design-Stile**: neben den Farb-Themes gibt es im Themes-Tab eine Auswahl
-  ganzer Design-Stile (Calm, Klassisch, Calm Dark, Editorial/Legal,
-  Neo-Brutalismus) – jeder Stil passt Typografie, Karten, Rahmen und
-  Schatten des kompletten Erscheinungsbildes an; alle responsiv
-- **Themes**: vordefinierte Farb-Designs (Classic, Dark, High Contrast, Warm,
-  Blue) und ein Theme-Editor, mit dem alle Farben (inklusive Bannerfarbe) und
-  der Eckenradius frei anpassbar sind; Auswahl wird lokal gespeichert
+- **Design-Stil**: im Themes-Tab wird das komplette Erscheinungsbild über
+  eine Auswahl ganzer Design-Stile (Calm, Klassisch, Calm Dark,
+  Editorial/Legal, Neo-Brutalismus) gewählt – jeder Stil passt Typografie,
+  Karten, Rahmen und Schatten an; alle responsiv
+- **Theme-Editor**: alle Farben (inklusive Bannerfarbe) und der Eckenradius
+  sind frei anpassbar; die Auswahl wird lokal gespeichert
 - **Persistenz**: alle Eingaben (inkl. Kinderliste, Kostentrennung mit
   Bankexport und Zuordnungen) werden automatisch gespeichert und nach einem
   Browser-Neustart wiederhergestellt – keine Daten gehen verloren
@@ -115,10 +114,11 @@ App (PWA) installierbar und danach auch offline nutzbar:
 
 ## Nutzung
 
-Über die Topbar (Desktop) bzw. die Tab-Leiste unten mit «Mehr»
-(Mobile) sind alle Funktionen erreichbar: Kindesunterhalt,
+Über die Topbar (Desktop) bzw. die Tab-Leiste unten mit
+«Einstellungen» (Mobile) sind alle Funktionen erreichbar: Kindesunterhalt,
 Ehegattenunterhalt, Kostentrennung, Austausch; Richtwerte, Themes und
-Über über die Befehlspalette (Ctrl+K). Die Sprachwahl (Deutsch,
+Über über den Knopf «Einstellungen und Informationen» bzw. die
+Befehlspalette (Ctrl+K). Die Sprachwahl (Deutsch,
 Français, Italiano, English) liegt in der Topbar.
 
 Schritt-für-Schritt-Anleitung aller Tabs:

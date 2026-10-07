@@ -811,7 +811,6 @@
     renderShareSectionCheckboxes();
     document.getElementById('themes-heading').textContent = t('themes', 'heading');
     document.getElementById('themes-intro').textContent = t('themes', 'intro');
-    document.getElementById('theme-select-label').textContent = t('themes', 'select');
     document.getElementById('theme-editor-heading').textContent = t('themes', 'editorHeading');
     document.getElementById('theme-editor-hint').textContent = t('themes', 'editorHint');
     document.getElementById('theme-reset').textContent = t('themes', 'reset');
@@ -1489,8 +1488,6 @@
       btn.addEventListener('click', function () {
         saveTheme(preset.id, null);
         applyTheme(preset.id, preset.values);
-        var select = document.getElementById('theme-select');
-        if (select) { select.value = preset.id; }
         document.getElementById('theme-status').textContent = t('themes', 'saved');
         renderDesignGrid();
         renderThemeEditor();
@@ -1499,31 +1496,8 @@
     });
   }
   function initThemeSelect() {
-    var select = document.getElementById('theme-select');
-    select.innerHTML = '';
-    var customOption = document.createElement('option');
-    customOption.value = '__custom__';
-    customOption.textContent = t('themes', 'custom');
-    select.appendChild(customOption);
-    AlimenCal.themes.PRESETS.forEach(function (preset) {
-      var opt = document.createElement('option');
-      opt.value = preset.id;
-      opt.textContent = preset.name;
-      select.appendChild(opt);
-    });
     var valuesRaw = null;
     try { valuesRaw = localStorage.getItem(LS_THEME_VALUES); } catch (e) {}
-    select.value = valuesRaw ? '__custom__' : getThemeId();
-    select.addEventListener('change', function () {
-      var id = select.value;
-      var preset = getPresetById(id);
-      if (preset) {
-        saveTheme(id, null);
-        applyTheme(id, preset.values);
-      }
-      renderThemeEditor();
-      document.getElementById('theme-status').textContent = t('themes', 'saved');
-    });
     applyTheme(getThemeId(), valuesRaw ? JSON.parse(valuesRaw) : null);
     renderThemeEditor();
   }
@@ -1560,8 +1534,6 @@
           v[key] = input.value;
           saveTheme('__custom__', v);
           applyTheme('__custom__', v);
-          var select = document.getElementById('theme-select');
-          if (select) { select.value = '__custom__'; }
         };
       })(token.key));
       label.appendChild(input);
@@ -2139,12 +2111,18 @@
    *  Mobile: «Mehr»-Klappteil in der unteren Tab-Leiste.
    * ------------------------------------------------------------- */
   function initMobileMore() {
-    var btn = document.getElementById('mob-more-btn');
-    if (!btn) { return; }
-    btn.addEventListener('click', function () {
+    var openSettings = function () {
       var trigger = document.getElementById('cmdk-trigger');
       if (trigger) { trigger.click(); }
-    });
+    };
+    var btn = document.getElementById('mob-settings-btn');
+    if (btn) {
+      btn.addEventListener('click', openSettings);
+    }
+    var settingsBtn = document.getElementById('settings-btn');
+    if (settingsBtn) {
+      settingsBtn.addEventListener('click', openSettings);
+    }
   }
 
   function init() {
@@ -2198,7 +2176,6 @@
       var preset = getPresetById(id) || AlimenCal.themes.PRESETS[0];
       saveTheme(id, null);
       applyTheme(id, preset.values);
-      document.getElementById('theme-select').value = id;
       renderThemeEditor();
       document.getElementById('theme-status').textContent = t('themes', 'saved');
     });

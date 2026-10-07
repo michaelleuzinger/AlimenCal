@@ -12,11 +12,14 @@ Farb-Feinjustierung im Theme-Editor funktioniert in jedem Stil weiter.
 
 - **Topbar statt Sidebar**: schmale, nicht-modale Kopfzeile (56px) mit den
   vier Hauptfunktionen; keine Hamburger-Menüs, kein Frosted Glass
-- **Befehlspalette (Ctrl+K bzw. ⌘K)**: Navigation zu allen Tabs inkl.
-  Richtwerte, Themes, Über – auf Mobile über den «Mehr»-Slot der
-  Tab-Leiste erreichbar
-- **Task-first Mobile-Tab-Leiste**: 4 Hauptfunktionen + «Mehr» am unteren
-  Rand (kein iOS-Tab-Bar-Nachbau)
+- **Sichtbarer Einstellungs-Knopf**: Der deutlich beschriftete Knopf
+  «Einstellungen und Informationen» (Zahnrad-Symbol) in der Topbar öffnet
+  die Befehlspalette mit den Einstellungs- und Info-Tabs (Richtwerte,
+  Themes, Über) – die Palette bleibt zusätzlich per Ctrl+K (bzw. ⌘K)
+  erreichbar. Auf Mobile übernimmt der «Einstellungen»-Slot der Tab-Leiste
+  diese Rolle.
+- **Task-first Mobile-Tab-Leiste**: 4 Hauptfunktionen + «Einstellungen» am
+  unteren Rand (kein iOS-Tab-Bar-Nachbau)
 - **Live-Ergebnis-Panel**: das Resultat des Kindesunterhalts aktualisiert
   sich bei jeder Eingabe live im sticky Seitenpanel – kein separates
   «Berechnen», kein Wizard

@@ -88,7 +88,7 @@ Insgesamt 14 Ansichten x 4 Sprachen x 3 Geraete + 4 Hero-Shots
 | `05-hauptmenue-<lang>.png` | Navigation: Topbar mit Hauptfunktionen und Befehlspalette (Desktop; Mobile: Tab-Leiste) |
 | `06-richtwerte-<lang>.png` | Richtwerte mit Preset-Auswahl und Wertetabelle |
 | `07-themes-classic-<lang>.png` | Themes mit Theme-Editor, Classic |
-| `08-themes-dark-<lang>.png` | Themes, Dark-Theme (Duplikat von 07, legitimiert: dokumentiertes Feature) |
+| `08-themes-dark-<lang>.png` | Themes mit Theme-Editor, Dark-Theme (Duplikat von 07, legitimiert: dokumentiertes Feature) |
 | `09-themes-designs-<lang>.png` | Themes-Tab mit Design-Stil-Auswahl (Karten), Calm-Stil aktiv |
 | `10-hero-calm-<lang>.png` | Hero-Shot Design-Stil Calm (Standard): Kindesunterhalt mit Live-Ergebnis-Panel |
 | `11-hero-classic-de.png` (nur `pc/de`) | Hero-Shot Design-Stil Klassisch: Kindesunterhalt |
@@ -112,7 +112,7 @@ devices: ['pc']` in VIEWS).
 ### Struktur
 
 ```
-index.html          UI (Topbar-Navigation mit 4 Hauptfunktionen + Befehlspalette Ctrl+K fuer alle Tabs; auf Mobile task-first Tab-Leiste unten mit 4 Hauptfunktionen + «Mehr» (oeffnet Palette); Tab Kindesunterhalt mit Live-Ergebnis-Panel)
+index.html          UI (Topbar-Navigation mit 4 Hauptfunktionen + sichtbarem Einstellungs-Knopf «Einstellungen und Informationen» (Zahnrad) und Befehlspalette Ctrl+K fuer alle Tabs; auf Mobile task-first Tab-Leiste unten mit 4 Hauptfunktionen + «Einstellungen» (oeffnet Palette); Tab Kindesunterhalt mit Live-Ergebnis-Panel)
 css/style.css       Styles
 js/calculator.js    Berechnungskern (DOM-frei, auch in Node.js lauffähig)
 js/costsplit.js     Kostentrennung: CSV-Import, Zuordnung, Ausgleich (DOM-frei)
