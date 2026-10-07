@@ -1998,7 +1998,7 @@
     var items = [];
     function commands() {
       return [
-        { tab: 'share', label: t('nav', 'share'), hint: t('nav', 'settingsMenu') },
+        { tab: 'share', anchor: 'share-export-card', label: t('nav', 'share'), hint: t('nav', 'settingsMenu') },
         { tab: 'share', anchor: 'share-backup-card', label: t('nav', 'backup'), hint: t('nav', 'settingsMenu') },
         { tab: 'settings', label: t('nav', 'settings'), hint: t('nav', 'settingsMenu') },
         { tab: 'themes', label: t('nav', 'themes'), hint: t('nav', 'settingsMenu') },
