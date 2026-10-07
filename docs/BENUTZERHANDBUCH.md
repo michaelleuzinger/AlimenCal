@@ -95,7 +95,9 @@ Wiederherstellung überschreibt die aktuellen Werte mit denjenigen aus
 der Datei – also nur mit einem Backup des gewünschten Stands durchführen.
 
 Technische Grundlage sind `manifest.json` und der Service Worker `sw.js`
-im Repository-Root, der alle App-Dateien für die Offline-Nutzung cacht.
+im Repository-Root, der alle App-Dateien für die Offline-Nutzung cacht
+(network-first: Aktualisierungen greifen nach einem Reload; der Cache
+dient als Offline-Fallback).
 Die Service-Worker-Registrierung erfolgt automatisch, wenn die App über
 HTTPS aufgerufen wird (nicht bei `file://`). Gespeicherte Daten bleiben
 auch in der installierten App lokal im Browser-Speicher des jeweiligen
