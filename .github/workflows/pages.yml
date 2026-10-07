@@ -56,8 +56,31 @@ jobs:
       - id: deployment
         uses: actions/deploy-pages@v4
 
+  cleanup-pr-preview:
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/configure-pages@v5
+      - name: Seite ohne die Vorschau dieses PRs neu aufbauen und deployen
+        run: |
+          set -euo pipefail
+          echo "Vorschau pr-${{ github.event.number }}/ wird aus der Seitenkopie entfernt"
+          rsync -a --exclude='.git' ./ site/
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - name: Bereinigte Seite deployen
+        uses: actions/deploy-pages@v4
+
   deploy-pr-preview:
-    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+    if: github.event_name == 'pull_request' && github.event.action != 'closed' && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     permissions:
       contents: read
