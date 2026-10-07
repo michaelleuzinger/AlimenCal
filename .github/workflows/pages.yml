@@ -38,8 +38,11 @@ jobs:
             num="${row%%:*}"
             sha="${row##*:}"
             echo "Vorschau für PR #$num einbauen (${sha})"
-            if git clone --quiet --depth 1 --no-checkout "https://github.com/${GITHUB_REPOSITORY}.git" tmp-pr; then
-              if (cd tmp-pr && git checkout --quiet --detach "$sha"); then
+            if git init --quiet tmp-pr; then
+              if (cd tmp-pr \
+                  && git remote add origin "https://github.com/${GITHUB_REPOSITORY}.git" \
+                  && git fetch --quiet --depth 1 origin "refs/pull/${num}/head" \
+                  && git checkout --quiet --detach FETCH_HEAD); then
                 mkdir -p "site/pr-${num}"
                 rsync -a --exclude='.git' tmp-pr/ "site/pr-${num}/"
               else
@@ -47,7 +50,7 @@ jobs:
               fi
               rm -rf tmp-pr
             else
-              echo "Clone für PR #$num fehlgeschlagen, Vorschau übersprungen"
+              echo "Init für PR #$num fehlgeschlagen, Vorschau übersprungen"
             fi
           done
       - uses: actions/upload-pages-artifact@v3
