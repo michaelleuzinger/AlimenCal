@@ -12,7 +12,7 @@ AlimenCal.casedata = (function () {
 
   var SECTIONS = [
     'parentA', 'parentB', 'children', 'spousalApplicant',
-    'spousalRespondent', 'spousalEnabled', 'costsplit'
+    'spousalRespondent', 'spousalEnabled', 'costsplit', 'assetsplit'
   ];
 
   var CASE_APP_ID = 'alimencal';
@@ -123,6 +123,45 @@ AlimenCal.casedata = (function () {
     return { transactions: txs, decisions: decisions };
   }
 
+  /* Gleiche Werteliste wie js/assetsplit.js; hier eigenstaendig, damit
+   * dieses Modul keine Abhaengigkeit zur Laufzeit-Reihenfolge anderer
+   * Module hat (analog normalizeDate in js/storage.js). */
+  var ASSET_CATEGORIES = ['account', 'investment', 'etf', 'cash', 'realestate', 'pension', 'other'];
+  var ASSET_OWNERS = ['A', 'B', 'joint'];
+
+  function sanitizeAsset(asset) {
+    if (!asset || typeof asset !== 'object') { return null; }
+    var label = typeof asset.label === 'string' ? asset.label.trim() : '';
+    if (!label) { return null; }
+    var value = typeof asset.value === 'number' ? asset.value : parseFloat(asset.value);
+    if (!isFinite(value)) { return null; }
+    var shareA = typeof asset.shareA === 'number' ? asset.shareA : parseFloat(asset.shareA);
+    if (!isFinite(shareA) || shareA < 0 || shareA > 1) { shareA = 0.5; }
+    return {
+      id: typeof asset.id === 'string' && asset.id ? asset.id : '',
+      label: label,
+      category: ASSET_CATEGORIES.indexOf(asset.category) >= 0 ? asset.category : 'other',
+      owner: ASSET_OWNERS.indexOf(asset.owner) >= 0 ? asset.owner : 'A',
+      value: value,
+      shareA: shareA,
+      note: typeof asset.note === 'string' ? asset.note : ''
+    };
+  }
+
+  function sanitizeAssetsplit(data) {
+    if (!data || typeof data !== 'object' || !Array.isArray(data.assets)) { return null; }
+    var assets = [];
+    for (var i = 0; i < data.assets.length; i++) {
+      var a = sanitizeAsset(data.assets[i]);
+      if (!a) { return null; }
+      assets.push(a);
+    }
+    return {
+      date: typeof data.date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(data.date) ? data.date : '',
+      assets: assets
+    };
+  }
+
   /**
    * Validiert eine importierte Datei. Rückgabe:
    *   { valid: bool, sections: {…} , invalid: [names] }
@@ -157,6 +196,9 @@ AlimenCal.casedata = (function () {
           break;
         case 'costsplit':
           sanitized = sanitizeCostsplit(data);
+          break;
+        case 'assetsplit':
+          sanitized = sanitizeAssetsplit(data);
           break;
       }
       if (sanitized === null) {
@@ -330,6 +372,8 @@ AlimenCal.casedata = (function () {
     sanitizeChildren: sanitizeChildren,
     sanitizeSpousal: sanitizeSpousal,
     sanitizeCostsplit: sanitizeCostsplit,
+    sanitizeAssetsplit: sanitizeAssetsplit,
+    sanitizeAsset: sanitizeAsset,
     sanitizeTransaction: sanitizeTransaction,
     sanitizeDecision: sanitizeDecision
   };

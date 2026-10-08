@@ -116,6 +116,29 @@ var v3Payload = storage.buildFormPayload({ 'pa-income': '5000', __sectionLocks: 
 ok('v3: buildFormPayload version=3', v3Payload.version === 3);
 var v3Parsed = storage.parseStored(JSON.stringify(v3Payload));
 ok('v3: Roundtrip sectionLocks', v3Parsed.form.__sectionLocks[0] === 'parentB');
+/* ---------- v4-Migration: Vermoegensausgleich ---------- */
+ok('v4: FORM_VERSION = 4', storage.FORM_VERSION === 4);
+var v3PayloadAS = JSON.stringify({ app: 'alimencal', kind: 'form', version: 3, form: { 'pa-income': '5000' } });
+var v3ParsedAS = storage.parseStored(v3PayloadAS);
+ok('v4-Migration: v3-Payload lesbar', v3ParsedAS.status === 'ok');
+ok('v4-Migration: changed gesetzt', v3ParsedAS.changed === true);
+var v4Payload = storage.buildFormPayload({ 'pa-income': '5000', __assetsplit: { date: '2025-05-31', assets: [
+  { id: 'a1', label: 'Konto A', category: 'account', owner: 'A', value: 1200 },
+  { label: 'ungueltig', value: 'abc' }
+] } });
+ok('v4: buildFormPayload version=4', v4Payload.version === 4);
+var v4Parsed = storage.parseStored(JSON.stringify(v4Payload));
+ok('v4: Roundtrip assetsplit.date', v4Parsed.form.__assetsplit.date === '2025-05-31');
+ok('v4: Roundtrip assets[0].value', v4Parsed.form.__assetsplit.assets[0].value === 1200);
+ok('v4: ungueltiger Eintrag verworfen', v4Parsed.form.__assetsplit.assets.length === 1);
+ok('v4: normalizeAssetsplit ohne assets -> null', storage.normalizeAssetsplit({ date: '2025-01-01' }) === null);
+ok('v4: normalizeAssetsplit ungueltiges Datum -> leer', (function () {
+  var n = storage.normalizeAssetsplit({ date: '31.12.2025', assets: [] });
+  return n !== null && n.date === '';
+})());
+ok('v4: normalizeAssetsplit fehlendes Datum -> leer', storage.normalizeAssetsplit({ assets: [] }).date === '');
+ok('v4: v3-Payload ohne assetsplit: kein Schluessel', !('___assetsplit' in v3ParsedAS.form));
+
 ok('v3: Altdaten ohne sectionLocks => kein Lock-Array', (function () {
   var p = storage.parseStored(JSON.stringify({ app: 'alimencal', kind: 'form', version: 2, form: { 'pa-income': '1' } }));
   return p.status === 'ok' && !Array.isArray(p.form.__sectionLocks);

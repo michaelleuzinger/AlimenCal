@@ -25,8 +25,10 @@ AlimenCal.storage = (function () {
    *       Kinder/Kostentrennung unnormalisiert gespeichert
    *   2 - versionierter Payload (app/kind/version), Kinder und
    *       Kostentrennung werden beim Laden normalisiert
+   *   3 - Abschnitt-Locks (importierte Abschnitte read-only)
+   *   4 - Vermögensausgleich (Stichtag, Vermögenswerte je Partei)
    */
-  var FORM_VERSION = 3;
+  var FORM_VERSION = 4;
 
   var CHILD_DEFAULTS = {
     age: 8,
@@ -142,6 +144,53 @@ AlimenCal.storage = (function () {
     return out;
   }
 
+  /* Normalisiert den Vermögensausgleich: Stichtag (optionales ISO-Datum,
+   * '' wenn leer) und Liste der Vermögenswerte. Ungueltige Eintraege
+   * werden verworfen; ein Objekt ohne Array gilt als ungueltig (null). */
+  function normalizeAssetsplit(raw) {
+    if (!raw || typeof raw !== 'object' || !Array.isArray(raw.assets)) { return null; }
+    var out = clone(raw);
+    var assets = [];
+    for (var i = 0; i < raw.assets.length; i++) {
+      var a = normalizeAssetEntry(raw.assets[i]);
+      if (a) { assets.push(a); }
+    }
+    out.assets = assets;
+    if (raw.date != null && !/^\d{4}-\d{2}-\d{2}$/.test(String(raw.date))) {
+      out.date = '';
+    }
+    if (out.date == null) { out.date = ''; }
+    return out;
+  }
+
+  function normalizeAssetEntry(raw) {
+    if (!raw || typeof raw !== 'object') { return null; }
+    var label = typeof raw.label === 'string' ? raw.label.trim() : '';
+    if (!label) { return null; }
+    var value = typeof raw.value === 'number' ? raw.value : parseFloat(raw.value);
+    if (!isFinite(value)) { return null; }
+    return {
+      id: typeof raw.id === 'string' && raw.id ? raw.id : 'as-' + (assetCount++),
+      label: label,
+      category: ASSET_CATEGORIES.indexOf(raw.category) >= 0 ? raw.category : 'other',
+      owner: ASSET_OWNERS.indexOf(raw.owner) >= 0 ? raw.owner : 'A',
+      value: value,
+      shareA: (function (s) {
+        if (!isFinite(s) || s < 0 || s > 1) { return 0.5; }
+        return s;
+      })(typeof raw.shareA === 'number' ? raw.shareA : parseFloat(raw.shareA)),
+      note: typeof raw.note === 'string' ? raw.note : ''
+    };
+  }
+
+  /* Gleiche Werteliste wie js/assetsplit.js; hier eigenstaendig, damit
+   * dieses Modul keine Abhaengigkeit zur Laufzeit-Reihenfolge anderer
+   * Module hat (analog normalizeDate oben). */
+  var ASSET_CATEGORIES = ['account', 'investment', 'etf', 'cash', 'realestate', 'pension', 'other'];
+  var ASSET_OWNERS = ['A', 'B', 'joint'];
+
+  var assetCount = 0;
+
   /* Migration aelterer Formular-Payloads auf die aktuelle Version.
    * form wird in-place migriert; Rueckgabe: Formular oder null, falls
    * der Payload unbrauchbar ist. changed=true, wenn Daten angepasst
@@ -184,13 +233,32 @@ AlimenCal.storage = (function () {
         if (locks) { delete form.__sectionLocks; changed = true; }
       } else {
         var validLockKeys = ['parentA', 'parentB', 'children', 'spousalApplicant',
-          'spousalRespondent', 'spousalEnabled', 'costsplit'];
+          'spousalRespondent', 'spousalEnabled', 'costsplit', 'assetsplit'];
         var cleanLocks = locks.filter(function (k) { return validLockKeys.indexOf(k) >= 0; });
         if (cleanLocks.length !== locks.length) { changed = true; }
         form.__sectionLocks = cleanLocks;
       }
     }
 
+    if (fromVersion < 4) {
+      /* v4: Vermögensausgleich; fehlt -> leerer Default. */
+      var assetsplit = normalizeAssetsplit(form.__assetsplit);
+      if (assetsplit) {
+        if (assetsplit.assets.length !== (form.__assetsplit.assets || []).length) {
+          changed = true;
+        }
+        form.__assetsplit = assetsplit;
+      } else if (form.__assetsplit) {
+        delete form.__assetsplit;
+        changed = true;
+      }
+      var lockKeys4 = form.__sectionLocks;
+      if (Array.isArray(lockKeys4) && lockKeys4.indexOf('assetsplit') >= 0 &&
+          !form.__assetsplit) {
+        form.__sectionLocks = lockKeys4.filter(function (k) { return k !== 'assetsplit'; });
+        changed = true;
+      }
+    }
     return { form: form, changed: changed };
   }
 
@@ -291,6 +359,7 @@ AlimenCal.storage = (function () {
     normalizeChild: normalizeChild,
     normalizeChildren: normalizeChildren,
     normalizeCostsplit: normalizeCostsplit,
+    normalizeAssetsplit: normalizeAssetsplit,
     migrateForm: migrateForm,
     parseStored: parseStored,
     buildFormPayload: buildFormPayload,

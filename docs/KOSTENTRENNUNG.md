@@ -91,6 +91,16 @@ vor-Stichtag-Transaktionen.
 - Details und Grenzfälle: `tests/costsplit.test.js` (Parsing,
   Zuordnungsregeln, Abgrenzung Stichtag, Ausgleichslogik, E2E).
 
+## Abgrenzung zum Vermögensausgleich
+
+Die Kostentrennung erfasst **laufende Kosten** ab dem Stichtag. Die
+güterrechtliche Auseinandersetzung der **Vermögenswerte** (Saldo je
+Partei zum Stichtag, vereinfachter hälftiger Ausgleich) ist ein eigenes
+Modul: `js/assetsplit.js`, Tab «Vermögensausgleich», beschrieben in
+[VERMOEGENSAUSGLEICH.md](VERMOEGENSAUSGLEICH.md). Der dortige Stichtag
+lässt sich per Knopf als «Tag vor dem Kostentrennungs-Stichtag»
+übernehmen.
+
 ## Rechtliche Einordnung
 
 Die Kostentrennung vor der Scheidung ist eine privatrechtliche Vereinbarung
