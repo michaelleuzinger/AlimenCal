@@ -15,6 +15,12 @@ keine Installation und keine Abhängigkeiten.
 Die App ist responsiv gestaltet und auf Smartphone, Tablet und Desktop nutzbar:
 
 - Karten und Formular-Grids brechen auf schmalen Displays auf eine Spalte um.
+- Auf Smartphones sind Titelzeile (H1) und Untertitel ausgeblendet (die
+  Marke steht in der Topbar); der Hinweis «Keine Rechtsberatung» ist
+  standardmässig eingeklappt (eine schlanke Zeile, per Tipp aufklappbar),
+  und Tab-Überschriften/Intros sind verdichtet, damit Eingaben sofort
+  sichtbar sind. Wer den Disclaimer einmal auf- oder zuklappt, dessen
+  Wahl bleibt gespeichert.
 - Die Mobile-Tab-Leiste (3 Hauptfunktionen + «Einstellungen») nutzt
   sprachspezifische Kurzlabels («Kind», «Ehegatte», «Kosten»), damit die
   Buttons auch auf schmalen Displays (ab 320px) sauber getrennt bleiben;

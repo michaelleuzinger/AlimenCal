@@ -8,6 +8,8 @@ AlimenCal.i18n.fr = {
   title: 'AlimenCal – Calculateur de pensions',
   subtitle: 'Outil d\u2019orientation pour la pension alimentaire pour enfants et conjoint (Suisse)',
   disclaimerShort: 'Aucun conseil juridique. Le calcul sert uniquement d\u2019orientation et ne remplace pas un examen individuel par un avocat ou l\u2019APEA.',
+  disclaimerToggle: 'Aucun conseil juridique – afficher/masquer l’avis',
+  disclaimerShortLabel: 'Aucun conseil juridique',
   binding: {
     heading: 'Paramètres contraignants',
     intro: 'Les valeurs confirmées par les deux parties (A et B) sont fixées de manière contraignante et ne peuvent plus être modifiées. Le mode de remplacement permet de saisir des valeurs divergentes sans modifier les valeurs originales contraignantes ; le calcul utilise alors les valeurs de remplacement.',

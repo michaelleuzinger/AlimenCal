@@ -66,6 +66,36 @@
 
   var backupReminderDismissed = false;
   var lastFormSnapshot = null;
+  function isMobileLayout() {
+    return window.matchMedia && window.matchMedia('(max-width: 920px)').matches;
+  }
+  function disclaimerCollapsed() {
+    try {
+      var stored = localStorage.getItem('alimencal.disclaimer');
+      if (stored === 'hidden') { return true; }
+      if (stored === 'visible') { return false; }
+    } catch (e) {}
+    return isMobileLayout();
+  }
+  function renderDisclaimerState() {
+    var box = document.getElementById('disclaimer');
+    var btn = document.getElementById('disclaimer-toggle');
+    if (!box || !btn) { return; }
+    var collapsed = disclaimerCollapsed();
+    box.classList.toggle('collapsed', collapsed);
+    btn.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+  }
+  function initDisclaimerToggle() {
+    var btn = document.getElementById('disclaimer-toggle');
+    if (!btn) { return; }
+    btn.addEventListener('click', function () {
+      try {
+        localStorage.setItem('alimencal.disclaimer', disclaimerCollapsed() ? 'visible' : 'hidden');
+      } catch (e) {}
+      renderDisclaimerState();
+    });
+    renderDisclaimerState();
+  }
 
   function bumpBackupChanges() {
     var snapshot = null;
@@ -732,7 +762,9 @@
     document.title = t('title');
     document.getElementById('app-title').textContent = 'AlimenCal';
     document.getElementById('app-subtitle').textContent = t('subtitle');
-    document.getElementById('disclaimer').textContent = t('disclaimerShort');
+    document.getElementById('disclaimer-text').textContent = t('disclaimerShort');
+    document.getElementById('disclaimer-toggle-label').textContent = t('disclaimerShortLabel');
+    renderDisclaimerState();
 
     document.querySelectorAll('.tab[data-tab="children"]').forEach(function (el) { setNavLabel(el, el.classList.contains('mob-item') ? t('nav', 'childrenShort') : t('nav', 'children')); });
     document.querySelectorAll('.tab[data-tab="spousal"]').forEach(function (el) { setNavLabel(el, el.classList.contains('mob-item') ? t('nav', 'spousalShort') : t('nav', 'spousal')); });
@@ -2237,6 +2269,7 @@
 
     initCmdPalette();
     initLiveResult();
+    initDisclaimerToggle();
     initMobileMore();
     switchTab('children');
 
