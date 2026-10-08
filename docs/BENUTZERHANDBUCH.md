@@ -224,7 +224,8 @@ Kurz:
 2. **Bankexport** hochladen – CSV (Trennzeichen, Datums- und Betragsformate
    werden automatisch erkannt) oder ISO-20022-XML (camt.052/053/054); das
    Format wird automatisch erkannt.
-3. **Kontoinhaber** angeben (Partei A oder B).
+3. **Kontoinhaber** angeben (Partei A oder B; werden im Tab «Richtwerte»
+   Partei-Namen erfasst, erscheinen diese stattdessen).
 4. Je Transaktion entscheiden: **ignorieren**, **anteilsmässig aufteilen**
    (Anteil je Transaktion konfigurierbar) oder **voll von Partei A bzw. B
    übernehmen**. Sammelaktionen erleichtern die Erstzuordnung.

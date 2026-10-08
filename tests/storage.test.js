@@ -113,13 +113,33 @@ ok('v3-Migration: v2-Payload lesbar', v2Parsed.status === 'ok');
 ok('v3-Migration: ungueltige Lock-Keys entfernt', v2Parsed.form.__sectionLocks.indexOf('parentA') >= 0 && v2Parsed.form.__sectionLocks.indexOf('bogus') < 0);
 ok('v3-Migration: changed gesetzt', v2Parsed.changed === true);
 var v3Payload = storage.buildFormPayload({ 'pa-income': '5000', __sectionLocks: ['parentB'] });
-ok('v3: buildFormPayload version=3', v3Payload.version === 3);
+ok('v3: buildFormPayload version=3 (heute v4, Migration getestet)', v3Payload.version === storage.FORM_VERSION);
 var v3Parsed = storage.parseStored(JSON.stringify(v3Payload));
 ok('v3: Roundtrip sectionLocks', v3Parsed.form.__sectionLocks[0] === 'parentB');
 ok('v3: Altdaten ohne sectionLocks => kein Lock-Array', (function () {
   var p = storage.parseStored(JSON.stringify({ app: 'alimencal', kind: 'form', version: 2, form: { 'pa-income': '1' } }));
   return p.status === 'ok' && !Array.isArray(p.form.__sectionLocks);
 })());
+/* ---------- v4-Migration: Partei-Namen ---------- */
+ok('v4: normalizePartyName trimmt/leert', storage.normalizePartyName('  Anna  ') === 'Anna' && storage.normalizePartyName('   ') === '');
+ok('v4: normalizePartyName laengenbeschraenkt', storage.normalizePartyName(new Array(60).join('x')).length === storage.PARTY_NAME_MAX);
+ok('v4: normalizePartyName nicht-string -> leer', storage.normalizePartyName(42) === '' && storage.normalizePartyName(null) === '');
+var v4Payload = storage.buildFormPayload({ 'pa-income': '5000', 'party-name-a': 'Anna', 'party-name-b': '  Ben  ' });
+ok('v4: buildFormPayload version=4', v4Payload.version === 4);
+var v4Parsed = storage.parseStored(JSON.stringify(v4Payload));
+ok('v4: Roundtrip Partei-Namen', v4Parsed.form['party-name-a'] === 'Anna' && v4Parsed.form['party-name-b'] === '  Ben  ');
+ok('v4: kein Re-Save noetig', v4Parsed.changed === false);
+ok('v4-Migration: v3-Payload mit unnormalisierten Namen wird normalisiert', (function () {
+  var p = storage.parseStored(JSON.stringify({ app: 'alimencal', kind: 'form', version: 3, form: { 'party-name-a': '  x'.padEnd(50, 'y') + '  ', 'party-name-b': 5 } }));
+  return p.status === 'ok' && p.changed === true &&
+    p.form['party-name-a'].length === storage.PARTY_NAME_MAX &&
+    p.form['party-name-b'] === '';
+})());
+ok('v4-Migration: v3-Payload ohne Namen bleibt lesbar', (function () {
+  var p = storage.parseStored(JSON.stringify({ app: 'alimencal', kind: 'form', version: 3, form: { 'pa-income': '1' } }));
+  return p.status === 'ok' && !('party-name-a' in p.form);
+})());
+
 /* ---------- Normalisierungs-Einzelne ---------- */
 ok('Kind ohne Alter -> null', storage.normalizeChild({ costMode: 'pauschal' }) === null);
 ok('Kind mit Alter 100 -> null', storage.normalizeChild({ age: 100 }) === null);

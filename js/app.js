@@ -15,7 +15,7 @@
     'pa-income', 'pa-em', 'pa-employed', 'pb-income', 'pb-em', 'pb-employed',
     'spousal-enabled', 'sp-app-income', 'sp-app-em', 'sp-app-standard',
     'sp-app-extra', 'sp-res-income', 'sp-res-em', 'sp-res-childpaid',
-    'costsplit-date', 'costsplit-owner'
+    'costsplit-date', 'costsplit-owner', 'party-name-a', 'party-name-b'
   ];
   var SECTION_FIELDS = {
     parentA: ['pa-income', 'pa-em', 'pa-employed'],
@@ -169,6 +169,26 @@
 
   function saveCfg(cfg) {
     try { localStorage.setItem(LS_CFG, JSON.stringify(cfg)); } catch (e) {}
+  }
+
+  /* Anzeigename einer Partei: frei gewaehlter Name aus den
+   * Einstellungen, sonst i18n-Default ("Partei A"/"Partei B"). */
+  function partyName(party) {
+    var el = document.getElementById(party === 'A' ? 'party-name-a' : 'party-name-b');
+    var raw = el ? el.value : '';
+    var name = (AlimenCal.storage && AlimenCal.storage.normalizePartyName)
+      ? AlimenCal.storage.normalizePartyName(raw) : String(raw || '').trim();
+    return name || t('costsplit', party === 'A' ? 'partyA' : 'partyB');
+  }
+
+  /* Anzeigename eines Elternteils (Kindesunterhalt): gewaehlter Name
+   * mit Parent-Kontext, sonst i18n-Default ("Elternteil A"). */
+  function parentLabel(party) {
+    var fallback = t('common', party === 'A' ? 'parentA' : 'parentB');
+    var name = partyName(party);
+    var def = t('costsplit', party === 'A' ? 'partyA' : 'partyB');
+    if (name === def) { return fallback; }
+    return t('common', 'parentNamed', [name]);
   }
 
   function t() {
@@ -331,24 +351,24 @@
 
       var tdLock = document.createElement('td');
       var lockWrap = document.createElement('span');
-      lockWrap.textContent = setting.lockedA ? 'A ✓' : 'A –';
+      lockWrap.textContent = partyName('A') + (setting.lockedA ? ' ✓' : ' –');
       lockWrap.style.marginRight = '0.75em';
       if (!setting.lockedA) {
         var btnA = document.createElement('button');
         btnA.type = 'button';
         btnA.className = 'secondary';
-        btnA.textContent = t('binding', 'confirmA');
+        btnA.textContent = t('binding', 'confirmA', [partyName('A')]);
         btnA.addEventListener('click', function () { confirmBindingFor(id, 'A'); });
         lockWrap.appendChild(btnA);
       }
       tdLock.appendChild(lockWrap);
       var lockWrapB = document.createElement('span');
-      lockWrapB.textContent = setting.lockedB ? 'B ✓' : 'B –';
+      lockWrapB.textContent = partyName('B') + (setting.lockedB ? ' ✓' : ' –');
       if (!setting.lockedB) {
         var btnB = document.createElement('button');
         btnB.type = 'button';
         btnB.className = 'secondary';
-        btnB.textContent = t('binding', 'confirmB');
+        btnB.textContent = t('binding', 'confirmB', [partyName('B')]);
         btnB.addEventListener('click', function () { confirmBindingFor(id, 'B'); });
         lockWrapB.appendChild(btnB);
       }
@@ -597,8 +617,8 @@
     if (!result.formatOk) { el.textContent = t('crypto', 'lockfileInvalid'); return; }
     var parts = [];
     parts.push(result.valueHashOk ? t('crypto', 'hashOk') : t('crypto', 'hashBroken'));
-    parts.push(result.sigA ? t('crypto', 'sigOkA') : t('crypto', 'sigMissingA'));
-    parts.push(result.sigB ? t('crypto', 'sigOkB') : t('crypto', 'sigMissingB'));
+    parts.push(t('crypto', result.sigA ? 'sigOkA' : 'sigMissingA', [partyName('A')]));
+    parts.push(t('crypto', result.sigB ? 'sigOkB' : 'sigMissingB', [partyName('B')]));
     if (result.matchesCurrent === true) { parts.push(t('crypto', 'matchesCurrent')); }
     if (result.matchesCurrent === false) { parts.push(t('crypto', 'differsCurrent')); }
     el.textContent = parts.join(' | ');
@@ -776,7 +796,7 @@
     var ownerSelect = document.getElementById('costsplit-owner');
     var ownerVal = ownerSelect.value;
     ownerSelect.innerHTML = '';
-    [{ v: 'A', label: t('costsplit', 'partyA') }, { v: 'B', label: t('costsplit', 'partyB') }].forEach(function (o) {
+    [{ v: 'A', label: partyName('A') }, { v: 'B', label: partyName('B') }].forEach(function (o) {
       var opt = document.createElement('option');
       opt.value = o.v;
       opt.textContent = o.label;
@@ -799,8 +819,8 @@
 
     document.getElementById('children-heading').textContent = t('children', 'heading');
     document.getElementById('children-intro').textContent = t('children', 'intro');
-    document.getElementById('pa-legend').textContent = t('common', 'parentA');
-    document.getElementById('pb-legend').textContent = t('common', 'parentB');
+    document.getElementById('pa-legend').textContent = parentLabel('A');
+    document.getElementById('pb-legend').textContent = parentLabel('B');
     document.getElementById('add-child').textContent = '+' + ' ' + t('common', 'addChild');
     document.getElementById('calc-children').textContent = t('common', 'calculate');
     document.getElementById('reset-children').textContent = t('common', 'reset');
@@ -857,6 +877,11 @@
     document.getElementById('cfg-restore').textContent = t('settings', 'restoreDefaults');
     document.getElementById('cfg-export').textContent = t('settings', 'exportJson');
     document.getElementById('cfg-import-label').textContent = t('settings', 'importJson');
+    document.getElementById('party-names-heading').textContent = t('settings', 'partyNamesHeading');
+    document.getElementById('party-names-hint').textContent = t('settings', 'partyNamesHint');
+    document.getElementById('party-name-a-label').textContent = t('settings', 'partyNameA');
+    document.getElementById('party-name-b-label').textContent = t('settings', 'partyNameB');
+
     document.getElementById('crypto-heading').textContent = t('crypto', 'heading');
     document.getElementById('crypto-intro').textContent = t('crypto', 'intro');
     document.getElementById('keys-legend').textContent = t('crypto', 'keysLegend');
@@ -870,8 +895,8 @@
     document.getElementById('keys-import-b-label').textContent = t('crypto', 'importPub');
     document.getElementById('lockfile-legend').textContent = t('crypto', 'lockfileLegend');
     document.getElementById('lockfile-export').textContent = t('crypto', 'lockfileExport');
-    document.getElementById('lockfile-sign-a').textContent = t('crypto', 'lockfileSignA');
-    document.getElementById('lockfile-sign-b').textContent = t('crypto', 'lockfileSignB');
+    document.getElementById('lockfile-sign-a').textContent = t('crypto', 'lockfileSignA', [partyName('A')]);
+    document.getElementById('lockfile-sign-b').textContent = t('crypto', 'lockfileSignB', [partyName('B')]);
     document.getElementById('lockfile-import-label').textContent = t('crypto', 'lockfileImportLabel');
     renderKeyStatus();
     refreshChainStatus();
@@ -900,6 +925,32 @@
     }
 
     renderChildrenList();
+  }
+
+  /* Aktualisiert alle Labels, die einen Partei-Namen enthalten, ohne
+   * den aktiven Tab zu wechseln (Live-Reaktion auf Namensaenderungen). */
+  function renderPartyDependentLabels() {
+    document.getElementById('pa-legend').textContent = parentLabel('A');
+    document.getElementById('pb-legend').textContent = parentLabel('B');
+    var ownerSelect = document.getElementById('costsplit-owner');
+    if (ownerSelect) {
+      var ownerVal = ownerSelect.value;
+      ownerSelect.innerHTML = '';
+      [{ v: 'A', label: partyName('A') }, { v: 'B', label: partyName('B') }].forEach(function (o) {
+        var opt = document.createElement('option');
+        opt.value = o.v;
+        opt.textContent = o.label;
+        ownerSelect.appendChild(opt);
+      });
+      ownerSelect.value = ownerVal || 'A';
+    }
+    renderShareSectionCheckboxes();
+    renderChildrenList();
+    if (state.costsplit.transactions.length) {
+      renderCostsplitTable();
+    }
+    renderBindingTable();
+    renderKeyStatus();
   }
 
   /* ------------------------------------------------------------- */
@@ -1055,8 +1106,8 @@
       shareB.value = b;
       shareA.value = 100 - b;
     });
-    shareWrap.appendChild(field(t('children', 'careShareA'), shareA));
-    shareWrap.appendChild(field(t('children', 'careShareB'), shareB));
+    shareWrap.appendChild(field(t('children', 'careShareA', [parentLabel('A')]), shareA));
+    shareWrap.appendChild(field(t('children', 'careShareB', [parentLabel('B')]), shareB));
     grid.appendChild(shareWrap);
 
     row.appendChild(grid);
@@ -1120,8 +1171,8 @@
         [t('children', 'tableDirect'), fmt(c.directCosts)],
         [t('children', 'tableChildIncome'), fmt(c.childIncome)],
         [t('children', 'tableBarTotal'), fmt(c.barTotal)],
-        [t('children', 'tableBarA'), fmt(c.barFromA)],
-        [t('children', 'tableBarB'), fmt(c.barFromB)],
+        [t('children', 'tableBarA', [parentLabel('A')]), fmt(c.barFromA)],
+        [t('children', 'tableBarB', [parentLabel('B')]), fmt(c.barFromB)],
         [t('children', 'tableManko'), c.barManko > 0 ? fmt(c.barManko) : '–'],
         [t('children', 'tableCareNet'),
           ((c.careNetFromAToB > 0 ? fmt(c.careNetFromAToB) + ' A→B' : '') +
@@ -1129,15 +1180,15 @@
       ].forEach(function (r) {
         block.appendChild(renderBreakdownRow(r[0], r[1]));
       });
-      block.appendChild(renderBreakdownRow(t('children', 'tableTotalA'), fmt(c.totalFromA), true));
-      block.appendChild(renderBreakdownRow(t('children', 'tableTotalB'), fmt(c.totalFromB), true));
+      block.appendChild(renderBreakdownRow(t('children', 'tableTotalA', [parentLabel('A')]), fmt(c.totalFromA), true));
+      block.appendChild(renderBreakdownRow(t('children', 'tableTotalB', [parentLabel('B')]), fmt(c.totalFromB), true));
       breakdown.appendChild(block);
     });
 
     var totals = result.totals;
     document.getElementById('children-totals').textContent =
-      t('children', 'totalA') + ': CHF ' + fmt(totals.totalA) + ' | ' +
-      t('children', 'totalB') + ': CHF ' + fmt(totals.totalB);
+      t('children', 'totalA', [parentLabel('A')]) + ': CHF ' + fmt(totals.totalA) + ' | ' +
+      t('children', 'totalB', [parentLabel('B')]) + ': CHF ' + fmt(totals.totalB);
 
     var mankoEl = document.getElementById('children-manko');
     if (result.mangellage) {
@@ -1338,8 +1389,8 @@
       [
         { value: 'ignore', label: t('costsplit', 'modeIgnore') },
         { value: 'split', label: t('costsplit', 'modeSplit') },
-        { value: 'partyA', label: t('costsplit', 'modePartyA') },
-        { value: 'partyB', label: t('costsplit', 'modePartyB') }
+        { value: 'partyA', label: t('costsplit', 'modePartyA', [partyName('A')]) },
+        { value: 'partyB', label: t('costsplit', 'modePartyB', [partyName('B')]) }
       ].forEach(function (opt) {
         var o = document.createElement('option');
         o.value = opt.value;
@@ -1376,7 +1427,7 @@
         };
       })(tx.id));
       var pct = document.createElement('span');
-      pct.textContent = ' % ' + t('costsplit', 'shareOfA');
+      pct.textContent = ' % ' + t('costsplit', 'shareOfA', [partyName('A')]);
       tdShare.appendChild(share);
       tdShare.appendChild(pct);
       tr.appendChild(tdShare);
@@ -1396,8 +1447,8 @@
     );
 
     document.getElementById('costsplit-totals').textContent =
-      t('costsplit', 'partyA') + ': CHF ' + fmt(totals.sumA) + ' | ' +
-      t('costsplit', 'partyB') + ': CHF ' + fmt(totals.sumB) + ' | ' +
+      partyName('A') + ': CHF ' + fmt(totals.sumA) + ' | ' +
+      partyName('B') + ': CHF ' + fmt(totals.sumB) + ' | ' +
       t('costsplit', 'totalConsidered') + ': CHF ' + fmt(totals.total);
 
     var ownerIsA = document.getElementById('costsplit-owner').value !== 'B';
@@ -1405,8 +1456,8 @@
     document.getElementById('costsplit-balance').textContent =
       settlement.amount > 0 && settlement.from && settlement.to
         ? t('costsplit', 'owes', [
-            settlement.from === 'A' ? t('costsplit', 'partyA') : t('costsplit', 'partyB'),
-            settlement.to === 'A' ? t('costsplit', 'partyA') : t('costsplit', 'partyB'),
+            partyName(settlement.from),
+            partyName(settlement.to),
             fmt(settlement.amount)
           ])
         : t('costsplit', 'balanced');
@@ -1651,7 +1702,9 @@
       cb.value = section.key;
       cb.checked = section.key === 'parentA' || section.key === 'parentB';
       var span = document.createElement('span');
-      span.textContent = t('share', section.labelKey);
+      span.textContent = (section.key === 'parentA' || section.key === 'parentB')
+        ? t('share', section.labelKey, [partyName(section.key === 'parentA' ? 'A' : 'B')])
+        : t('share', section.labelKey);
       wrap.appendChild(cb);
       wrap.appendChild(span);
       host.appendChild(wrap);
@@ -1728,7 +1781,11 @@
       theme: { id: getThemeId(), values: themeValues },
       config: state.cfg,
       binding: binding,
-      keys: loadKeys()
+      keys: loadKeys(),
+      partyNames: {
+        partyA: document.getElementById('party-name-a').value,
+        partyB: document.getElementById('party-name-b').value
+      }
     });
     var status = document.getElementById('share-backup-status');
     var blob = new Blob([JSON.stringify(file, null, 2)], { type: 'application/json' });
@@ -1795,6 +1852,11 @@
         state.keys = result.settings.keys;
         saveKeys();
         restored.push(t('share', 'restorePartKeys'));
+      }
+      if (result.settings.partyNames) {
+        document.getElementById('party-name-a').value = result.settings.partyNames.partyA;
+        document.getElementById('party-name-b').value = result.settings.partyNames.partyB;
+        restored.push(t('share', 'restorePartPartyNames'));
       }
       applyI18n();
       var parts = restored.length ? ' ' + t('share', 'restoreSettingsOk', [restored.join(', ')]) : '';
@@ -2024,6 +2086,7 @@
       document.getElementById('costsplit-section').hidden = false;
       renderCostsplitTable();
     }
+    renderPartyDependentLabels();
     if (parsed.changed) { saveForm(); }
   }
 
@@ -2346,6 +2409,11 @@
       a.download = 'alimencal-config.json';
       a.click();
       URL.revokeObjectURL(a.href);
+    });
+    ['party-name-a', 'party-name-b'].forEach(function (id) {
+      document.getElementById(id).addEventListener('input', function () {
+        renderPartyDependentLabels();
+      });
     });
     document.getElementById('costsplit-file').addEventListener('change', function () {
       var file = this.files && this.files[0];
