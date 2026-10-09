@@ -43,6 +43,7 @@ Das Modul ist bewusst DOM-frei gehalten (gleiche Konvention wie
 - **Bestätigung:** Pro Wert existieren Buttons «Partei A» / «Partei B»;
   nach beidseitiger Bestätigung sind die Formularfelder `disabled`
   (read-only) und jede Änderung wird vom Service verweigert.
+- **Rollenwahl (Meine Rolle):** Über das Dropdown «Meine Rolle» wird  festgelegt, als welche Partei diese App-Instanz betrieben wird  (localStorage-Schlüssel `alimencal.bindingrole`; «Gemeinsam / keine  Rolle» erhält das bisherige Verhalten, z. B. für Mediation). Mit  gewählter Rolle (A oder B) sind nur die eigenen Bestätigungs-Buttons  sowie die Schlüssel-Aktionen (erzeugen/exportieren/importieren) und  das Signieren der Lock-Datei für die eigene Partei bedienbar; bei der  Gegenpartei erscheint der Hinweis «Nur durch {Partei} möglich». Deren  Bestätigung muss aus deren Instanz oder über den Import der  (signierten) Lock-Datei stammen.
 - **Override-Modus:** Die Checkbox «Override-Modus aktivieren» schaltet die
   Override-Spalte der Tabelle frei; Eingaben erzeugen Overrides im Szenario
   `ui_override`. `effectiveCfg()` liefert der Berechnung Base ⊕ Override;

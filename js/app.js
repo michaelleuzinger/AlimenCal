@@ -9,6 +9,7 @@
   var LS_THEME = 'alimencal.theme';
   var LS_THEME_VALUES = 'alimencal.themevalues';
   var LS_BINDING = 'alimencal.binding';
+  var LS_BINDING_ROLE = 'alimencal.bindingrole';
   var LS_KEYS = 'alimencal.keys';
   var LS_BACKUP_META = 'alimencal.backupmeta';
   var FORM_FIELD_IDS = [
@@ -354,23 +355,37 @@
       lockWrap.textContent = partyName('A') + (setting.lockedA ? ' ✓' : ' –');
       lockWrap.style.marginRight = '0.75em';
       if (!setting.lockedA) {
-        var btnA = document.createElement('button');
-        btnA.type = 'button';
-        btnA.className = 'secondary';
-        btnA.textContent = t('binding', 'confirmA', [partyName('A')]);
-        btnA.addEventListener('click', function () { confirmBindingFor(id, 'A'); });
-        lockWrap.appendChild(btnA);
+        if (mayConfirm('A')) {
+          var btnA = document.createElement('button');
+          btnA.type = 'button';
+          btnA.className = 'secondary';
+          btnA.textContent = t('binding', 'confirmA', [partyName('A')]);
+          btnA.addEventListener('click', function () { confirmBindingFor(id, 'A'); });
+          lockWrap.appendChild(btnA);
+        } else {
+          var hintA = document.createElement('span');
+          hintA.className = 'hint';
+          hintA.textContent = t('binding', 'roleOtherParty', [partyName('A')]);
+          lockWrap.appendChild(hintA);
+        }
       }
       tdLock.appendChild(lockWrap);
       var lockWrapB = document.createElement('span');
       lockWrapB.textContent = partyName('B') + (setting.lockedB ? ' ✓' : ' –');
       if (!setting.lockedB) {
-        var btnB = document.createElement('button');
-        btnB.type = 'button';
-        btnB.className = 'secondary';
-        btnB.textContent = t('binding', 'confirmB', [partyName('B')]);
-        btnB.addEventListener('click', function () { confirmBindingFor(id, 'B'); });
-        lockWrapB.appendChild(btnB);
+        if (mayConfirm('B')) {
+          var btnB = document.createElement('button');
+          btnB.type = 'button';
+          btnB.className = 'secondary';
+          btnB.textContent = t('binding', 'confirmB', [partyName('B')]);
+          btnB.addEventListener('click', function () { confirmBindingFor(id, 'B'); });
+          lockWrapB.appendChild(btnB);
+        } else {
+          var hintB = document.createElement('span');
+          hintB.className = 'hint';
+          hintB.textContent = t('binding', 'roleOtherParty', [partyName('B')]);
+          lockWrapB.appendChild(hintB);
+        }
       }
       tdLock.appendChild(lockWrapB);
       tr.appendChild(tdLock);
@@ -419,8 +434,48 @@
     });
   }
 
+  /* ---- Eigene Rolle (Partei A / B / gemeinsam) ------------------------------ */
+  function bindingRole() {
+    var el = document.getElementById('binding-role');
+    var v = el ? el.value : 'none';
+    return v === 'A' || v === 'B' ? v : 'none';
+  }
+  function loadBindingRole() {
+    var v;
+    try { v = localStorage.getItem(LS_BINDING_ROLE); } catch (e) {}
+    var el = document.getElementById('binding-role');
+    if (el) { el.value = (v === 'A' || v === 'B') ? v : 'none'; }
+  }
+  function saveBindingRole() {
+    try { localStorage.setItem(LS_BINDING_ROLE, bindingRole()); } catch (e) {}
+  }
+  function mayConfirm(party) {
+    var role = bindingRole();
+    return role === 'none' || role === party;
+  }
+  function applyBindingRole() {
+    var role = bindingRole();
+    ['A', 'B'].forEach(function (p) {
+      var other = role !== 'none' && role !== p;
+      ['keys-generate-', 'keys-export-', 'keys-import-'].forEach(function (prefix) {
+        var el = document.getElementById(prefix + p.toLowerCase());
+        if (el) { el.disabled = other; }
+      });
+      var el = document.getElementById('lockfile-sign-' + p.toLowerCase());
+      if (el) { el.disabled = other; }
+    });
+    var hint = document.getElementById('binding-role-hint');
+    if (hint) {
+      hint.textContent = t('binding', role === 'none' ? 'roleHintNone' : 'roleHintParty',
+        role === 'B' ? [partyName('A')] : [partyName('B')]);
+    }
+  }
   function confirmBindingFor(settingId, party) {
     var svc = settingsService();
+    if (!mayConfirm(party)) {
+      setBindingStatus(t('binding', 'roleForbidden', [partyName(party)]));
+      return;
+    }
     try {
       svc.confirmBinding(settingId, party);
       saveBindingState(svc);
@@ -902,6 +957,11 @@
     refreshChainStatus();
     document.getElementById('binding-heading').textContent = t('binding', 'heading');
     document.getElementById('binding-intro').textContent = t('binding', 'intro');
+    document.getElementById('binding-role-label').textContent = t('binding', 'roleLabel');
+    document.getElementById('binding-role-none').textContent = t('binding', 'roleNone');
+    document.getElementById('binding-role-a').textContent = t('binding', 'rolePartyA', [partyName('A')]);
+    document.getElementById('binding-role-b').textContent = t('binding', 'rolePartyB', [partyName('B')]);
+    applyBindingRole();
     document.getElementById('binding-override-label').textContent = t('binding', 'overrideMode');
     document.getElementById('bind-col-setting').textContent = t('binding', 'colSetting');
     document.getElementById('bind-col-base').textContent = t('binding', 'colBase');
@@ -2258,6 +2318,7 @@
     state.lang = getLang();
     state.cfg = getCfg();
     settingsService();
+    loadBindingRole();
     document.getElementById('lang-select').value = state.lang;
 
     var storedThemeValues = null;
@@ -2358,6 +2419,11 @@
     document.getElementById('binding-override-mode').addEventListener('change', function () {
       renderBindingTable();
       setBindingStatus(this.checked ? t('binding', 'overrideActive') : '');
+    });
+    document.getElementById('binding-role').addEventListener('change', function () {
+      saveBindingRole();
+      applyBindingRole();
+      renderBindingTable();
     });
     document.getElementById('add-child').addEventListener('click', addChildRow);
     document.getElementById('calc-children').addEventListener('click', calculateChildren);

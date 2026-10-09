@@ -244,6 +244,16 @@ Kurz:
   das mitgelieferte Preset ist ein Platzhalter mit Verifikations-Checkliste
   und **muss** vor Verwendung mit den effektiven Ansätzen von KESB/Kantonsgericht
   Schaffhausen ausgefüllt werden.
+- **Rollenwahl («Meine Rolle»):** Im Bereich «Verbindliche Einstellungen»
+  kann gewählt werden, als welche Partei diese App-Instanz betrieben wird
+  («Ich bin {Partei A/B}») oder «Gemeinsam / keine Rolle» (Default,
+  z. B. für Mediation oder gemeinsame Nutzung). Mit gewählter Rolle
+  können nur die **eigenen** Bestätigungen gesetzt sowie die eigenen
+  Schlüssel erzeugt/exportiert/importiert und die Lock-Datei nur für die
+  eigene Partei signiert werden; für die Gegenpartei erscheint der
+  Hinweis «Nur durch {Partei} möglich». Deren Bestätigung muss aus deren
+  App-Instanz stammen (Fall- bzw. Lock-Datei-Import). Die Wahl wird lokal
+  gespeichert und lässt sich jederzeit ändern.
 - **Verbindliche Einstellungen (Two-Party-Lock):** Die vier Basiswerte
   (Existenzminima erwerbstätig/nichterwerbstätig, Standard Lebensstandard,
   Fallback Grundbedarf) können von beiden Parteien separat bestätigt werden
