@@ -12,6 +12,7 @@ Rechtsberatung**.
 | Ehegattenunterhalt bei Getrenntleben | Art. 176 ZGB |
 | Nachehelicher Unterhalt | Art. 125 ZGB |
 | Indexierung der Unterhaltsbeiträge | Art. 129 ZGB |
+| Güterrecht (Errungenschaftsbeteiligung) | Art. 196–208 ZGB, Art. 198 ZGB (Eigengut), Art. 2 FZG (Vorsorge) |
 | Existenzminimum (betreibungsrechtlich) | Art. 93 SchKG, Richtlinien K Konferenz der Betreibungs- und Konkursbeamten (KK-BSV) |
 
 ## 2. Methodische Grundsätze der Rechtsprechung
@@ -78,7 +79,33 @@ Orientierungsrechnung auf Basis der getroffenen Zuordnungen. Für die
 Zuordnung einzelner Posten zum Commonut/Eigengut sowie für steuerliche
 Folgen sind die konkreten Umstände massgebend.
 
-## 6. Disclaimer
+## 6. Vermögensausgleich (vereinfachter Stichtags-Modus)
+
+Der Tab «Vermögensausgleich» teilt das erfasste Nettovermögen beider
+Parteien zum Stichtag hälftig. Das ist bewusst **einfach** und
+güterrechtlich **nicht abschließend**:
+
+- Bei der Errungenschaftsbeteiligung (Art. 196 f., 207 f. ZGB) werden nur
+  die **Errungenschaften** hälftig geteilt, nicht das Totalvermögen.
+  **Eigengut** (Art. 198 ZGB, insbesondere Erbschaften und Schenkungen,
+  sowie Eigengutserklärungen nach Art. 199/200 ZGB) bleibt bei der
+  Teilung unberücksichtigt und gehört der begünstigten Partei.
+- Ersatzforderungen zwischen Errungenschaft und Eigengut (Art. 209 ZGB)
+  und der Vorschusszins (Art. 208 ZGB) sind nicht abgebildet.
+- **Vorsorgeguthaben** im Sinne von Art. 2 FZG werden nicht über den
+  güterrechtlichen Ausgleich geteilt, sondern nach FZG durch direkte
+  Übertragung zwischen den Vorsorgeeinrichtungen geregelt; die Kategorie
+  dient einzig der vollständigen Vermögensaufnahme.
+- Stichtage: Für die Auseinandersetzung nach Art. 207 ZGB sind die
+  Tageswerte per Eintritt des Scheidegrunds (regelmässig Rechtskraft der
+  Scheidung) massgebend – nicht zwingend der gewählte Erfassungsstichtag
+  (z. B. Tag vor der Kostentrennung).
+
+Das Resultat ist ein **Orientierungswert** für eine einvernehmliche
+Lösung, kein güterrechtliches Berechnungsblatt. Details:
+[VERMOEGENSAUSGLEICH.md](VERMOEGENSAUSGLEICH.md).
+
+## 7. Disclaimer
 
 AlimenCal ist ein Orientierungswerkzeug und **keine Rechtsberatung**. Es
 liefert keine verbindlichen Resultate und ersetzt nicht die Beurteilung

@@ -4,6 +4,9 @@
  * Ausführung: node tests/casedata.test.js
  */
 var casedata = require('../js/casedata.js');
+var assetsplit = require('../js/assetsplit.js');
+global.AlimenCal = global.AlimenCal || {};
+global.AlimenCal.assetsplit = assetsplit;
 var assert = require('assert');
 
 var passed = 0;
@@ -22,7 +25,8 @@ ok('APP-ID und Version gesetzt', typeof casedata.buildFile({}) === 'object');
 ok('buildFile setzt app=alimencal', casedata.buildFile({}).app === 'alimencal');
 ok('buildFile setzt version=1', casedata.buildFile({}).version === 1);
 ok('buildFile enthält exportedAt (ISO)', /^\d{4}-\d{2}-\d{2}T/.test(casedata.buildFile({}).exportedAt));
-ok('Alle 7 Abschnitte definiert', casedata.SECTIONS.length === 7);
+ok('Alle 8 Abschnitte definiert', casedata.SECTIONS.length === 8);
+ok('assetsplit in SECTIONS', casedata.SECTIONS.indexOf('assetsplit') >= 0);
 
 /* ---------- Validierung: Datei-Ebene ---------- */
 ok('sanitizeCase: null => invalid', casedata.sanitizeCase(null).valid === false);
@@ -46,13 +50,21 @@ var validFile = {
     costsplit: {
       transactions: [{ id: 't1', date: '2025-02-05', description: 'Miete', amount: -1500 }],
       decisions: { t1: { mode: 'split', shareA: 0.5 } }
+    },
+    assetsplit: {
+      date: '2025-02-04',
+      assets: [
+        { label: 'Konto A', category: 'account', owner: 'A', value: 12000 },
+        { label: 'Depot B', category: 'etf', owner: 'B', value: 8000 },
+        { label: 'Haus', category: 'realestate', owner: 'joint', value: 400000, shareA: 0.6 }
+      ]
     }
   }
 };
 
 var res = casedata.sanitizeCase(validFile);
 ok('Gültige Datei: valid', res.valid === true);
-ok('Gültige Datei: 7 Abschnitte', Object.keys(res.sections).length === 7);
+ok('Gültige Datei: 8 Abschnitte', Object.keys(res.sections).length === 8);
 ok('Gültige Datei: keine invalid', res.invalid.length === 0);
 ok('parentA.income = 7800', res.sections.parentA.income === 7800);
 ok('parentB.employed: "false" => false', res.sections.parentB.employed === false);
@@ -71,6 +83,10 @@ ok('children: unbekannter costMode => pauschal',
 ok('spousalEnabled: true', res.sections.spousalEnabled === true);
 ok('costsplit.transactions[0].amount = -1500', res.sections.costsplit.transactions[0].amount === -1500);
 ok('costsplit.decisions.t1.mode = split', res.sections.costsplit.decisions.t1.mode === 'split');
+ok('assetsplit.date = 2025-02-04', res.sections.assetsplit.date === '2025-02-04');
+ok('assetsplit.assets.length = 3', res.sections.assetsplit.assets.length === 3);
+ok('assetsplit.assets[0].value = 12000', res.sections.assetsplit.assets[0].value === 12000);
+ok('assetsplit.assets[2].shareA = 0.6', res.sections.assetsplit.assets[2].shareA === 0.6);
 
 /* ---------- Validierung: ungültige Abschnitte werden verworfen ---------- */
 var partiallyValid = {
@@ -79,7 +95,8 @@ var partiallyValid = {
   sections: {
     parentA: { income: 5000 },
     children: 'kein array',
-    costsplit: { transactions: [{ id: 'x', date: '2025-02-05', description: 'x', amount: 'abc' }] }
+    costsplit: { transactions: [{ id: 'x', date: '2025-02-05', description: 'x', amount: 'abc' }] },
+    assetsplit: { assets: [{ label: 'ohne Betrag', value: 'abc' }] }
   }
 };
 var res2 = casedata.sanitizeCase(partiallyValid);
@@ -87,6 +104,7 @@ ok('Teilweise gültig: valid (parentA ok)', res2.valid === true);
 ok('Teilweise gültig: nur parentA übernommen', Object.keys(res2.sections).length === 1 && 'parentA' in res2.sections);
 ok('Ungültiges children verworfen', res2.invalid.indexOf('children') >= 0);
 ok('Ungültiges costsplit verworfen', res2.invalid.indexOf('costsplit') >= 0);
+ok('Ungültiges assetsplit verworfen', res2.invalid.indexOf('assetsplit') >= 0);
 
 /* ---------- Transaction/Decision-Details ---------- */
 ok('Transaction: fehlende id => null', casedata.sanitizeTransaction({ date: '2025-02-05', amount: 10 }) === null);

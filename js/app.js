@@ -15,7 +15,8 @@
     'pa-income', 'pa-em', 'pa-employed', 'pb-income', 'pb-em', 'pb-employed',
     'spousal-enabled', 'sp-app-income', 'sp-app-em', 'sp-app-standard',
     'sp-app-extra', 'sp-res-income', 'sp-res-em', 'sp-res-childpaid',
-    'costsplit-date', 'costsplit-owner', 'party-name-a', 'party-name-b'
+    'costsplit-date', 'costsplit-owner',
+    'assetsplit-date', 'party-name-a', 'party-name-b'
   ];
   var SECTION_FIELDS = {
     parentA: ['pa-income', 'pa-em', 'pa-employed'],
@@ -24,7 +25,8 @@
     spousalApplicant: ['sp-app-income', 'sp-app-em', 'sp-app-standard', 'sp-app-extra'],
     spousalRespondent: ['sp-res-income', 'sp-res-em', 'sp-res-childpaid'],
     spousalEnabled: ['spousal-enabled'],
-    costsplit: ['costsplit-date', 'costsplit-owner']
+    costsplit: ['costsplit-date', 'costsplit-owner'],
+    assetsplit: ['assetsplit-date']
   };
   var DEFAULT_LANG = 'de';
   var LANGS = ['de', 'fr', 'it', 'en'];
@@ -38,6 +40,10 @@
     costsplit: {
       transactions: [],
       decisions: {}
+    },
+    assetsplit: {
+      date: '',
+      assets: []
     }
   };
 
@@ -789,6 +795,7 @@
     document.querySelectorAll('.tab[data-tab="children"]').forEach(function (el) { setNavLabel(el, el.classList.contains('mob-item') ? t('nav', 'childrenShort') : t('nav', 'children')); });
     document.querySelectorAll('.tab[data-tab="spousal"]').forEach(function (el) { setNavLabel(el, el.classList.contains('mob-item') ? t('nav', 'spousalShort') : t('nav', 'spousal')); });
     document.querySelectorAll('.tab[data-tab="costsplit"]').forEach(function (el) { setNavLabel(el, el.classList.contains('mob-item') ? t('nav', 'costsplitShort') : t('nav', 'costsplit')); });
+    document.querySelectorAll('.tab[data-tab="assetsplit"]').forEach(function (el) { setNavLabel(el, el.classList.contains('mob-item') ? t('nav', 'assetsplitShort') : t('nav', 'assetsplit')); });
     document.querySelectorAll('.tab[data-tab="themes"]').forEach(function (el) { setNavLabel(el, t('nav', 'themes')); });
     document.querySelectorAll('.tab[data-tab="settings"]').forEach(function (el) { setNavLabel(el, t('nav', 'settings')); });
     document.querySelectorAll('.tab[data-tab="about"]').forEach(function (el) { setNavLabel(el, t('nav', 'about')); });
@@ -813,6 +820,15 @@
     document.getElementById('costsplit-set-all-split').textContent = t('costsplit', 'setAllSplit');
     document.getElementById('costsplit-set-all-ignore').textContent = t('costsplit', 'setAllIgnore');
     document.getElementById('costsplit-result-heading').textContent = t('costsplit', 'resultHeading');
+    document.getElementById('assetsplit-heading').textContent = t('assetsplit', 'heading');
+    document.getElementById('assetsplit-intro').textContent = t('assetsplit', 'intro');
+    document.getElementById('assetsplit-date-label').textContent = t('assetsplit', 'dateLabel');
+    document.getElementById('assetsplit-date-from-costsplit').textContent = t('assetsplit', 'dateFromCostsplit');
+    document.getElementById('assetsplit-hint').textContent = t('assetsplit', 'hint');
+    document.getElementById('assetsplit-legal-hint').textContent = t('assetsplit', 'legalHint');
+    document.getElementById('assetsplit-add').textContent = t('assetsplit', 'addAsset');
+    document.getElementById('assetsplit-result-heading').textContent = t('assetsplit', 'resultHeading');
+    renderAssetsplitTable();
     if (state.costsplit.transactions.length) {
       renderCostsplitTable();
     }
@@ -949,6 +965,7 @@
     if (state.costsplit.transactions.length) {
       renderCostsplitTable();
     }
+    renderAssetsplitTable();
     renderBindingTable();
     renderKeyStatus();
   }
@@ -1466,6 +1483,181 @@
       t('costsplit', 'counts', [String(totals.countConsidered), String(totals.countIgnored), String(totals.countBeforeDate)]);
   }
 
+  /* -------------------------------------------------------------   *   *  Vermögensausgleich (vereinfachter Stichtags-Modus):   *  Salden pro Vermögenswert und Partei zum Stichtag erfassen,   *  Nettovermögen wird hälftig ausgeglichen.   * ------------------------------------------------------------- */
+  function assetTemplate() {
+    return {
+      id: 'as-' + Date.now() + '-' + Math.floor(Math.random() * 1e6),
+      label: '',
+      category: 'account',
+      owner: 'A',
+      value: 0,
+      shareA: 0.5,
+      note: ''
+    };
+  }
+
+  function addAssetRow() {
+    state.assetsplit.assets.push(assetTemplate());
+    renderAssetsplitTable();
+  }
+
+  function removeAssetRow(idx) {
+    state.assetsplit.assets.splice(idx, 1);
+    renderAssetsplitTable();
+  }
+
+  function assetCategoryOptions(select, value) {
+    AlimenCal.assetsplit.CATEGORIES.forEach(function (cat) {
+      var opt = document.createElement('option');
+      opt.value = cat;
+      opt.textContent = t('assetsplit', 'cat_' + cat);
+      select.appendChild(opt);
+    });
+    select.value = value;
+  }
+
+  function renderAssetsplitTable() {
+    var thead = document.getElementById('assetsplit-thead');
+    var tbody = document.getElementById('assetsplit-tbody');
+    if (!thead || !tbody) { return; }
+    thead.innerHTML = '';
+    var tr = document.createElement('tr');
+    [
+      t('assetsplit', 'colLabel'),
+      t('assetsplit', 'colCategory'),
+      t('assetsplit', 'colOwner'),
+      t('assetsplit', 'colValue'),
+      t('assetsplit', 'colShare'),
+      ''
+    ].forEach(function (label) {
+      var th = document.createElement('th');
+      th.textContent = label;
+      tr.appendChild(th);
+    });
+    thead.appendChild(tr);
+
+    tbody.innerHTML = '';
+    var locked = state.sectionLocks.indexOf('assetsplit') >= 0;
+    state.assetsplit.assets.forEach(function (asset, idx) {
+      var row = document.createElement('tr');
+
+      var tdLabel = document.createElement('td');
+      var inpLabel = document.createElement('input');
+      inpLabel.type = 'text';
+      inpLabel.className = 'f-asset-label';
+      inpLabel.value = asset.label || '';
+      inpLabel.disabled = locked;
+      tdLabel.appendChild(inpLabel);
+      row.appendChild(tdLabel);
+
+      var tdCat = document.createElement('td');
+      var selCat = document.createElement('select');
+      selCat.className = 'f-asset-category';
+      assetCategoryOptions(selCat, asset.category);
+      selCat.disabled = locked;
+      tdCat.appendChild(selCat);
+      row.appendChild(tdCat);
+
+      var tdOwner = document.createElement('td');
+      var selOwner = document.createElement('select');
+      selOwner.className = 'f-asset-owner';
+      [
+        { value: 'A', label: partyName('A') },
+        { value: 'B', label: partyName('B') },
+        { value: 'joint', label: t('assetsplit', 'ownerJoint') }
+      ].forEach(function (o) {
+        var opt = document.createElement('option');
+        opt.value = o.value;
+        opt.textContent = o.label;
+        selOwner.appendChild(opt);
+      });
+      selOwner.value = asset.owner;
+      selOwner.disabled = locked;
+      tdOwner.appendChild(selOwner);
+      row.appendChild(tdOwner);
+
+      var tdValue = document.createElement('td');
+      var inpValue = document.createElement('input');
+      inpValue.type = 'number';
+      inpValue.step = '0.01';
+      inpValue.className = 'f-asset-value';
+      inpValue.value = asset.value || 0;
+      inpValue.disabled = locked;
+      tdValue.appendChild(inpValue);
+      row.appendChild(tdValue);
+
+      var tdShare = document.createElement('td');
+      var inpShare = document.createElement('input');
+      inpShare.type = 'number';
+      inpShare.step = '1';
+      inpShare.min = '0';
+      inpShare.max = '100';
+      inpShare.className = 'f-asset-share';
+      inpShare.value = Math.round((asset.shareA || 0.5) * 100);
+      inpShare.disabled = locked || asset.owner !== 'joint';
+      tdShare.appendChild(inpShare);
+      row.appendChild(tdShare);
+
+      var tdRemove = document.createElement('td');
+      var btnRemove = document.createElement('button');
+      btnRemove.type = 'button';
+      btnRemove.className = 'secondary';
+      btnRemove.textContent = t('assetsplit', 'removeAsset');
+      btnRemove.disabled = locked;
+      tdRemove.appendChild(btnRemove);
+      row.appendChild(tdRemove);
+
+      inpLabel.addEventListener('change', function () {
+        state.assetsplit.assets[idx].label = inpLabel.value;
+        renderAssetsplitResult();
+      });
+      selCat.addEventListener('change', function () {
+        state.assetsplit.assets[idx].category = selCat.value;
+      });
+      selOwner.addEventListener('change', function () {
+        state.assetsplit.assets[idx].owner = selOwner.value;
+        renderAssetsplitTable();
+      });
+      inpValue.addEventListener('input', function () {
+        state.assetsplit.assets[idx].value = parseFloat(inpValue.value) || 0;
+        renderAssetsplitResult();
+      });
+      inpShare.addEventListener('input', function () {
+        var shareA = (parseFloat(inpShare.value) || 0) / 100;
+        if (shareA < 0) { shareA = 0; }
+        if (shareA > 1) { shareA = 1; }
+        state.assetsplit.assets[idx].shareA = shareA;
+        renderAssetsplitResult();
+      });
+      btnRemove.addEventListener('click', function () {
+        removeAssetRow(idx);
+      });
+
+      tbody.appendChild(row);
+    });
+    renderAssetsplitResult();
+  }
+
+  function renderAssetsplitResult() {
+    var split = AlimenCal.assetsplit.computeSplit(state.assetsplit.assets);
+    var totalsEl = document.getElementById('assetsplit-totals');
+    var balanceEl = document.getElementById('assetsplit-balance');
+    if (!totalsEl || !balanceEl) { return; }
+    totalsEl.textContent =
+      partyName('A') + ': CHF ' + fmt(split.sumA) + ' | ' +
+      partyName('B') + ': CHF ' + fmt(split.sumB) + ' | ' +
+      t('assetsplit', 'total') + ': CHF ' + fmt(split.total) + ' | ' +
+      t('assetsplit', 'half') + ': CHF ' + fmt(split.half);
+    balanceEl.textContent =
+      split.amount > 0 && split.from && split.to
+        ? t('assetsplit', 'owes', [
+            split.from === 'A' ? partyName('A') : partyName('B'),
+            split.to === 'A' ? partyName('A') : partyName('B'),
+            fmt(split.amount)
+          ])
+        : t('assetsplit', 'balanced');
+  }
+
   function handleCostsplitFile(file) {
     var reader = new FileReader();
     reader.onload = function () {
@@ -1657,7 +1849,8 @@
     { key: 'spousalApplicant', labelKey: 'sectionSpousalApplicant' },
     { key: 'spousalRespondent', labelKey: 'sectionSpousalRespondent' },
     { key: 'spousalEnabled', labelKey: 'sectionSpousalEnabled' },
-    { key: 'costsplit', labelKey: 'sectionCostsplit' }
+    { key: 'costsplit', labelKey: 'sectionCostsplit' },
+    { key: 'assetsplit', labelKey: 'sectionAssetsplit' }
   ];
 
   function collectCurrentSections() {
@@ -1686,7 +1879,11 @@
         childSupportPaid: parseFloat(document.getElementById('sp-res-childpaid').value) || 0
       },
       spousalEnabled: document.getElementById('spousal-enabled').checked,
-      costsplit: state.costsplit
+      costsplit: state.costsplit,
+      assetsplit: {
+        date: document.getElementById('assetsplit-date').value || '',
+        assets: state.assetsplit.assets
+      }
     };
   }
 
@@ -1954,6 +2151,11 @@
       document.getElementById('costsplit-section').hidden = !sections.costsplit.transactions.length;
       renderCostsplitTable();
     }
+    if (sections.assetsplit) {
+      state.assetsplit = sections.assetsplit;
+      document.getElementById('assetsplit-date').value = sections.assetsplit.date || '';
+      renderAssetsplitTable();
+    }
     saveForm();
   }
 
@@ -2023,6 +2225,10 @@
     });
     form.__children = state.children;
     form.__costsplit = state.costsplit;
+    form.__assetsplit = {
+      date: document.getElementById('assetsplit-date').value || '',
+      assets: state.assetsplit.assets
+    };
     form.__sectionLocks = state.sectionLocks;
     return form;
   }
@@ -2085,6 +2291,11 @@
       state.costsplit = form.__costsplit;
       document.getElementById('costsplit-section').hidden = false;
       renderCostsplitTable();
+    }
+    if (form.__assetsplit && Array.isArray(form.__assetsplit.assets)) {
+      state.assetsplit = form.__assetsplit;
+      document.getElementById('assetsplit-date').value = form.__assetsplit.date || '';
+      renderAssetsplitTable();
     }
     renderPartyDependentLabels();
     if (parsed.changed) { saveForm(); }
@@ -2435,6 +2646,23 @@
         state.costsplit.decisions[tx.id] = { mode: 'split', shareA: 0.5 };
       });
       renderCostsplitTable();
+    });
+    document.getElementById('assetsplit-add').addEventListener('click', function () {
+      addAssetRow();
+    });
+    document.getElementById('assetsplit-date').addEventListener('change', function () {
+      saveForm();
+    });
+    document.getElementById('assetsplit-date-from-costsplit').addEventListener('click', function () {
+      var csDate = document.getElementById('costsplit-date').value;
+      if (!csDate) { return; }
+      var d = new Date(csDate + 'T00:00:00');
+      d.setDate(d.getDate() - 1);
+      var iso = d.getFullYear() + '-' +
+        ('0' + (d.getMonth() + 1)).slice(-2) + '-' +
+        ('0' + d.getDate()).slice(-2);
+      document.getElementById('assetsplit-date').value = iso;
+      saveForm();
     });
     document.getElementById('costsplit-set-all-ignore').addEventListener('click', function () {
       state.costsplit.transactions.forEach(function (tx) {
