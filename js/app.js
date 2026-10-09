@@ -9,6 +9,7 @@
   var LS_THEME = 'alimencal.theme';
   var LS_THEME_VALUES = 'alimencal.themevalues';
   var LS_BINDING = 'alimencal.binding';
+  var LS_BINDING_ROLE = 'alimencal.bindingrole';
   var LS_KEYS = 'alimencal.keys';
   var LS_BACKUP_META = 'alimencal.backupmeta';
   var FORM_FIELD_IDS = [
@@ -360,23 +361,37 @@
       lockWrap.textContent = partyName('A') + (setting.lockedA ? ' ✓' : ' –');
       lockWrap.style.marginRight = '0.75em';
       if (!setting.lockedA) {
-        var btnA = document.createElement('button');
-        btnA.type = 'button';
-        btnA.className = 'secondary';
-        btnA.textContent = t('binding', 'confirmA', [partyName('A')]);
-        btnA.addEventListener('click', function () { confirmBindingFor(id, 'A'); });
-        lockWrap.appendChild(btnA);
+        if (mayConfirm('A')) {
+          var btnA = document.createElement('button');
+          btnA.type = 'button';
+          btnA.className = 'secondary';
+          btnA.textContent = t('binding', 'confirmA', [partyName('A')]);
+          btnA.addEventListener('click', function () { confirmBindingFor(id, 'A'); });
+          lockWrap.appendChild(btnA);
+        } else {
+          var hintA = document.createElement('span');
+          hintA.className = 'hint';
+          hintA.textContent = t('binding', 'roleOtherParty', [partyName('A')]);
+          lockWrap.appendChild(hintA);
+        }
       }
       tdLock.appendChild(lockWrap);
       var lockWrapB = document.createElement('span');
       lockWrapB.textContent = partyName('B') + (setting.lockedB ? ' ✓' : ' –');
       if (!setting.lockedB) {
-        var btnB = document.createElement('button');
-        btnB.type = 'button';
-        btnB.className = 'secondary';
-        btnB.textContent = t('binding', 'confirmB', [partyName('B')]);
-        btnB.addEventListener('click', function () { confirmBindingFor(id, 'B'); });
-        lockWrapB.appendChild(btnB);
+        if (mayConfirm('B')) {
+          var btnB = document.createElement('button');
+          btnB.type = 'button';
+          btnB.className = 'secondary';
+          btnB.textContent = t('binding', 'confirmB', [partyName('B')]);
+          btnB.addEventListener('click', function () { confirmBindingFor(id, 'B'); });
+          lockWrapB.appendChild(btnB);
+        } else {
+          var hintB = document.createElement('span');
+          hintB.className = 'hint';
+          hintB.textContent = t('binding', 'roleOtherParty', [partyName('B')]);
+          lockWrapB.appendChild(hintB);
+        }
       }
       tdLock.appendChild(lockWrapB);
       tr.appendChild(tdLock);
@@ -425,8 +440,48 @@
     });
   }
 
+  /* ---- Eigene Rolle (Partei A / B / gemeinsam) ------------------------------ */
+  function bindingRole() {
+    var el = document.getElementById('binding-role');
+    var v = el ? el.value : 'none';
+    return v === 'A' || v === 'B' ? v : 'none';
+  }
+  function loadBindingRole() {
+    var v;
+    try { v = localStorage.getItem(LS_BINDING_ROLE); } catch (e) {}
+    var el = document.getElementById('binding-role');
+    if (el) { el.value = (v === 'A' || v === 'B') ? v : 'none'; }
+  }
+  function saveBindingRole() {
+    try { localStorage.setItem(LS_BINDING_ROLE, bindingRole()); } catch (e) {}
+  }
+  function mayConfirm(party) {
+    var role = bindingRole();
+    return role === 'none' || role === party;
+  }
+  function applyBindingRole() {
+    var role = bindingRole();
+    ['A', 'B'].forEach(function (p) {
+      var other = role !== 'none' && role !== p;
+      ['keys-generate-', 'keys-export-', 'keys-import-'].forEach(function (prefix) {
+        var el = document.getElementById(prefix + p.toLowerCase());
+        if (el) { el.disabled = other; }
+      });
+      var el = document.getElementById('lockfile-sign-' + p.toLowerCase());
+      if (el) { el.disabled = other; }
+    });
+    var hint = document.getElementById('binding-role-hint');
+    if (hint) {
+      hint.textContent = t('binding', role === 'none' ? 'roleHintNone' : 'roleHintParty',
+        role === 'B' ? [partyName('A')] : [partyName('B')]);
+    }
+  }
   function confirmBindingFor(settingId, party) {
     var svc = settingsService();
+    if (!mayConfirm(party)) {
+      setBindingStatus(t('binding', 'roleForbidden', [partyName(party)]));
+      return;
+    }
     try {
       svc.confirmBinding(settingId, party);
       saveBindingState(svc);
@@ -554,10 +609,10 @@
     var elB = document.getElementById('keys-party-b-status');
     if (!elA) { return; }
     var k = loadKeys();
-    elA.textContent = (k.partyA && k.partyA.publicKey) ?
-      t('crypto', 'keyPresent') : t('crypto', 'keyMissing');
-    elB.textContent = (k.partyB && k.partyB.publicKey) ?
-      t('crypto', 'keyPresent') : t('crypto', 'keyMissing');
+    elA.textContent = partyName('A') + ': ' +
+      ((k.partyA && k.partyA.publicKey) ? t('crypto', 'keyPresent') : t('crypto', 'keyMissing'));
+    elB.textContent = partyName('B') + ': ' +
+      ((k.partyB && k.partyB.publicKey) ? t('crypto', 'keyPresent') : t('crypto', 'keyMissing'));
   }
 
   /* Gibt das eigene publicKey-JWK für Signaturprüfung zurück: Partei A
@@ -798,6 +853,7 @@
     document.querySelectorAll('.tab[data-tab="assetsplit"]').forEach(function (el) { setNavLabel(el, el.classList.contains('mob-item') ? t('nav', 'assetsplitShort') : t('nav', 'assetsplit')); });
     document.querySelectorAll('.tab[data-tab="themes"]').forEach(function (el) { setNavLabel(el, t('nav', 'themes')); });
     document.querySelectorAll('.tab[data-tab="settings"]').forEach(function (el) { setNavLabel(el, t('nav', 'settings')); });
+    document.querySelectorAll('.tab[data-tab="party"]').forEach(function (el) { setNavLabel(el, t('nav', 'party')); });
     document.querySelectorAll('.tab[data-tab="about"]').forEach(function (el) { setNavLabel(el, t('nav', 'about')); });
 
     var ownerSelect = document.getElementById('costsplit-owner');
@@ -903,16 +959,19 @@
     document.getElementById('party-names-hint').textContent = t('settings', 'partyNamesHint');
     document.getElementById('party-name-a-label').textContent = t('settings', 'partyNameA');
     document.getElementById('party-name-b-label').textContent = t('settings', 'partyNameB');
+    document.getElementById('party-heading').textContent = t('party', 'heading');
+    document.getElementById('party-intro').textContent = t('party', 'intro');
+    applyWizardI18n();
 
     document.getElementById('crypto-heading').textContent = t('crypto', 'heading');
     document.getElementById('crypto-intro').textContent = t('crypto', 'intro');
     document.getElementById('keys-legend').textContent = t('crypto', 'keysLegend');
     document.getElementById('keys-party-a-status').textContent = t('crypto', 'keyMissing');
-    document.getElementById('keys-generate-a').textContent = t('crypto', 'generate');
+    document.getElementById('keys-generate-a').textContent = t('crypto', 'generateFor', [partyName('A')]);
     document.getElementById('keys-export-a').textContent = t('crypto', 'exportPub');
     document.getElementById('keys-import-a-label').textContent = t('crypto', 'importPub');
     document.getElementById('keys-party-b-status').textContent = t('crypto', 'keyMissing');
-    document.getElementById('keys-generate-b').textContent = t('crypto', 'generate');
+    document.getElementById('keys-generate-b').textContent = t('crypto', 'generateFor', [partyName('B')]);
     document.getElementById('keys-export-b').textContent = t('crypto', 'exportPub');
     document.getElementById('keys-import-b-label').textContent = t('crypto', 'importPub');
     document.getElementById('lockfile-legend').textContent = t('crypto', 'lockfileLegend');
@@ -924,6 +983,11 @@
     refreshChainStatus();
     document.getElementById('binding-heading').textContent = t('binding', 'heading');
     document.getElementById('binding-intro').textContent = t('binding', 'intro');
+    document.getElementById('binding-role-label').textContent = t('binding', 'roleLabel');
+    document.getElementById('binding-role-none').textContent = t('binding', 'roleNone');
+    document.getElementById('binding-role-a').textContent = t('binding', 'rolePartyA', [partyName('A')]);
+    document.getElementById('binding-role-b').textContent = t('binding', 'rolePartyB', [partyName('B')]);
+    applyBindingRole();
     document.getElementById('binding-override-label').textContent = t('binding', 'overrideMode');
     document.getElementById('bind-col-setting').textContent = t('binding', 'colSetting');
     document.getElementById('bind-col-base').textContent = t('binding', 'colBase');
@@ -2370,8 +2434,15 @@
   }
 
   function scheduleSaveForm() {
+    if (document.activeElement && (document.activeElement.id === 'party-name-a' ||
+        document.activeElement.id === 'party-name-b')) {
+      refreshPartyLabels();
+    }
     saveForm();
     bumpBackupChanges();
+  }
+  function refreshPartyLabels() {
+    applyI18n();
   }
 
   /* Selbsttest beim Start: der aktuelle Zustand wird einmal gespeichert,
@@ -2461,6 +2532,8 @@
         { tab: 'share', anchor: 'share-backup-card', label: t('nav', 'backup'), hint: t('nav', 'settingsMenu') },
         { tab: 'settings', label: t('nav', 'settings'), hint: t('nav', 'settingsMenu') },
         { tab: 'themes', label: t('nav', 'themes'), hint: t('nav', 'settingsMenu') },
+        { tab: 'party', label: t('nav', 'party'), hint: t('nav', 'settingsMenu') },
+        { action: 'wizard', label: t('wizard', 'paletteReopen'), hint: t('nav', 'settingsMenu') },
         { tab: 'about', label: t('nav', 'about'), hint: t('nav', 'settingsMenu') }
       ];
     }
@@ -2497,6 +2570,12 @@
             if (target) { target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
           }
         });
+        if (c.action === 'wizard') {
+          btn.addEventListener('click', function () {
+            close();
+            openWizard(true);
+          });
+        }
         list.appendChild(btn);
       });
     }
@@ -2594,10 +2673,198 @@
     }
   }
 
+  /* -------------------------------------------------------------
+   * Willkommens-Assistent (Erststart): Namen, Rolle, Schluessel,
+   * Public-Key-Export. Erneut aufrufbar via Befehlspalette.
+   * ------------------------------------------------------------- */
+  var LS_WIZARD_DONE = 'alimencal.wizard.done';
+  var wizardStep = 1;
+  var WIZARD_STEPS = 4;
+
+  function wizardSeen() {
+    try {
+      if (localStorage.getItem(LS_WIZARD_DONE) === 'done') { return true; }
+      /* Bestandsnutzer haben bereits Formulardaten: Wizard nicht aufdraengen. */
+      return !!localStorage.getItem(LS_FORM);
+    } catch (e) { return true; }
+  }
+  function markWizardDone() {
+    try { localStorage.setItem(LS_WIZARD_DONE, 'done'); } catch (e) {}
+  }
+  function applyWizardI18n() {
+    var set = function (id, key, subs) {
+      var el = document.getElementById(id);
+      if (el) { el.textContent = t('wizard', key, subs || []); }
+    };
+    set('wizard-title', 'title');
+    set('wizard-intro', 'intro');
+    set('wizard-name-label', 'nameLabel');
+    set('wizard-name-a-label', 'nameA');
+    set('wizard-name-b-label', 'nameB');
+    set('wizard-name-hint', 'nameHint');
+    set('wizard-role-label', 'roleLabel');
+    set('wizard-role-a-label', 'roleA', [partyName('A')]);
+    set('wizard-role-b-label', 'roleB', [partyName('B')]);
+    set('wizard-role-none-label', 'roleNone');
+    set('wizard-role-hint', 'roleHint');
+    set('wizard-key-text', 'keyText');
+    set('wizard-key-generate', 'keyGenerate');
+    set('wizard-export-text', 'exportText');
+    set('wizard-key-export', 'keyExport');
+    set('wizard-export-hint', 'exportHint');
+    var back = document.getElementById('wizard-back');
+    var next = document.getElementById('wizard-next');
+    var skip = document.getElementById('wizard-skip');
+    if (back) { back.textContent = t('wizard', 'back'); }
+    if (skip) { skip.textContent = t('wizard', 'skip'); }
+    if (next) { next.textContent = wizardStep >= WIZARD_STEPS ? t('wizard', 'finish') : t('wizard', 'next'); }
+  }
+  function renderWizardStep() {
+    document.querySelectorAll('#wizard .wizard-step').forEach(function (el) {
+      el.hidden = el.getAttribute('data-step') !== String(wizardStep);
+    });
+    var back = document.getElementById('wizard-back');
+    if (back) { back.disabled = wizardStep <= 1; }
+    var next = document.getElementById('wizard-next');
+    if (next) { next.textContent = wizardStep >= WIZARD_STEPS ? t('wizard', 'finish') : t('wizard', 'next'); }
+    var gen = document.getElementById('wizard-key-generate');
+    if (gen) {
+      var role = wizardRole();
+      var has = role === 'none' ? (hasKey('A') || hasKey('B')) : hasKey(role);
+      gen.disabled = role !== 'none' && has;
+    }
+    var exp = document.getElementById('wizard-key-export');
+    if (exp) {
+      var r = wizardRole();
+      exp.disabled = !(r === 'none' ? (hasKey('A') || hasKey('B')) : hasKey(r));
+    }
+  }
+  function wizardRole() {
+    var checked = document.querySelector('input[name="wizard-role"]:checked');
+    return checked ? checked.value : 'none';
+  }
+  function openWizard(force) {
+    var dlg = document.getElementById('wizard');
+    var backdrop = document.getElementById('wizard-backdrop');
+    if (!dlg || (!force && wizardSeen())) { return; }
+    wizardStep = 1;
+    var a = document.getElementById('party-name-a');
+    var b = document.getElementById('party-name-b');
+    var wa = document.getElementById('wizard-name-a');
+    var wb = document.getElementById('wizard-name-b');
+    if (wa && a) { wa.value = a.value; }
+    if (wb && b) { wb.value = b.value; }
+    var sel = document.getElementById('binding-role');
+    var role = bindingRole();
+    ['a', 'b', 'none'].forEach(function (k) {
+      var el = document.getElementById('wizard-role-' + k);
+      if (el) { el.checked = role === k.toUpperCase(); }
+    });
+    if (sel) { sel.value = role; }
+    applyWizardI18n();
+    renderWizardStep();
+    dlg.hidden = false;
+    if (backdrop) { backdrop.classList.add('open'); }
+  }
+  function closeWizard() {
+    var dlg = document.getElementById('wizard');
+    var backdrop = document.getElementById('wizard-backdrop');
+    if (dlg) { dlg.hidden = true; }
+    if (backdrop) { backdrop.classList.remove('open'); }
+    markWizardDone();
+  }
+  function wizardFinishStep(step) {
+    if (step === 1) {
+      var a = document.getElementById('wizard-name-a');
+      var b = document.getElementById('wizard-name-b');
+      var ta = document.getElementById('party-name-a');
+      var tb = document.getElementById('party-name-b');
+      if (ta && a) { ta.value = a.value; }
+      if (tb && b) { tb.value = b.value; }
+      saveForm();
+      applyI18n();
+    } else if (step === 2) {
+      var sel = document.getElementById('binding-role');
+      if (sel) { sel.value = wizardRole(); }
+      saveBindingRole();
+      applyBindingRole();
+      renderBindingTable();
+    }
+  }
+  function initWizard() {
+    var dlg = document.getElementById('wizard');
+    if (!dlg) { return; }
+    var next = document.getElementById('wizard-next');
+    var back = document.getElementById('wizard-back');
+    var skip = document.getElementById('wizard-skip');
+    var gen = document.getElementById('wizard-key-generate');
+    var exp = document.getElementById('wizard-key-export');
+    var backdrop = document.getElementById('wizard-backdrop');
+    if (next) {
+      next.addEventListener('click', function () {
+        wizardFinishStep(wizardStep);
+        if (wizardStep >= WIZARD_STEPS) { closeWizard(); return; }
+        wizardStep++;
+        renderWizardStep();
+      });
+    }
+    if (back) {
+      back.addEventListener('click', function () {
+        if (wizardStep > 1) { wizardStep--; renderWizardStep(); }
+      });
+    }
+    if (skip) { skip.addEventListener('click', closeWizard); }
+    if (backdrop) { backdrop.addEventListener('click', closeWizard); }
+    if (gen) {
+      gen.addEventListener('click', function () {
+        var role = wizardRole();
+        gen.disabled = true;
+        wizardGenerateKey(role, function () {
+          renderWizardStep();
+          renderKeyStatus();
+        });
+      });
+    }
+    if (exp) {
+      exp.addEventListener('click', function () {
+        var role = wizardRole();
+        if (role === 'none') {
+          if (hasKey('A')) { exportKeyFor('A'); }
+          if (hasKey('B')) { exportKeyFor('B'); }
+        } else {
+          exportKeyFor(role);
+        }
+      });
+    }
+  }
+  function wizardGenerateKey(role, done) {
+    var status = document.getElementById('wizard-key-status');
+    var parties = role === 'none' ? ['A', 'B'] : [role];
+    var pending = parties.length;
+    parties.forEach(function (party) {
+      if (hasKey(party)) {
+        if (--pending === 0 && done) { done(); }
+        return;
+      }
+      AlimenCal.settings.generateKeyPair(function (res, err) {
+        if (!err && res) {
+          loadKeys();
+          state.keys['party' + party] = {
+            publicKey: res.jwk.publicKey,
+            privateKey: res.jwk.privateKey
+          };
+          saveKeys();
+        }
+        if (status) { status.textContent = err ? t('crypto', 'keyGenError') : t('wizard', 'keyDone', [partyName(party)]); }
+        if (--pending === 0 && done) { done(); }
+      });
+    });
+  }
   function init() {
     state.lang = getLang();
     state.cfg = getCfg();
     settingsService();
+    loadBindingRole();
     document.getElementById('lang-select').value = state.lang;
 
     var storedThemeValues = null;
@@ -2609,6 +2876,7 @@
     fillCfgForm();
     addChildRow();
     restoreForm();
+    applyI18n();
     try { lastFormSnapshot = localStorage.getItem(LS_FORM); } catch (e) {}
     renderBackupReminder();
     document.getElementById('backup-reminder-action').addEventListener('click', function () {
@@ -2691,6 +2959,8 @@
     initLiveResult();
     initDisclaimerToggle();
     initMobileMore();
+    initWizard();
+    openWizard();
     switchTab('children');
 
     document.getElementById('keys-generate-a').addEventListener('click', function () { generateKeyFor('A'); });
@@ -2715,6 +2985,11 @@
     document.getElementById('binding-override-mode').addEventListener('change', function () {
       renderBindingTable();
       setBindingStatus(this.checked ? t('binding', 'overrideActive') : '');
+    });
+    document.getElementById('binding-role').addEventListener('change', function () {
+      saveBindingRole();
+      applyBindingRole();
+      renderBindingTable();
     });
     document.getElementById('add-child').addEventListener('click', addChildRow);
     document.getElementById('calc-children').addEventListener('click', calculateChildren);

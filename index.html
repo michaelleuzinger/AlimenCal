@@ -307,21 +307,6 @@
       <h2 id="settings-heading"></h2>
       <p id="settings-intro" class="intro"></p>
 
-      <div class="card preset-card" id="party-names-card">
-        <h3 id="party-names-heading"></h3>
-        <p id="party-names-hint" class="hint"></p>
-        <div class="grid">
-          <label>
-            <span id="party-name-a-label"></span>
-            <input type="text" id="party-name-a" maxlength="40" autocomplete="off" placeholder="">
-          </label>
-          <label>
-            <span id="party-name-b-label"></span>
-            <input type="text" id="party-name-b" maxlength="40" autocomplete="off" placeholder="">
-          </label>
-        </div>
-      </div>
-
       <div class="card preset-card">
         <label>
           <span id="preset-label"></span>
@@ -363,9 +348,50 @@
         </fieldset>
       </div>
 
+      <div class="actions">
+        <button id="cfg-save" class="primary"></button>
+        <button id="cfg-restore" class="ghost"></button>
+        <button id="cfg-export" class="secondary"></button>
+        <label class="file-label">
+          <span id="cfg-import-label"></span>
+          <input type="file" id="cfg-import" accept="application/json,.json">
+        </label>
+      </div>
+      <p id="cfg-status" class="hint"></p>
+    </section>
+
+    <section id="tab-party" class="tabpanel">
+      <h2 id="party-heading"></h2>
+      <p id="party-intro" class="intro"></p>
+<div class="card preset-card" id="party-names-card">
+        <h3 id="party-names-heading"></h3>
+        <p id="party-names-hint" class="hint"></p>
+        <div class="grid">
+          <label>
+            <span id="party-name-a-label"></span>
+            <input type="text" id="party-name-a" maxlength="40" autocomplete="off" placeholder="">
+          </label>
+          <label>
+            <span id="party-name-b-label"></span>
+            <input type="text" id="party-name-b" maxlength="40" autocomplete="off" placeholder="">
+          </label>
+        </div>
+      </div>
+
       <div class="card" id="binding-card">
         <h3 id="binding-heading"></h3>
         <p id="binding-intro" class="hint"></p>
+        <p>
+          <label>
+            <span id="binding-role-label"></span>
+            <select id="binding-role">
+              <option value="none" id="binding-role-none"></option>
+              <option value="A" id="binding-role-a"></option>
+              <option value="B" id="binding-role-b"></option>
+            </select>
+          </label>
+          <span id="binding-role-hint" class="hint"></span>
+        </p>
         <p>
           <label>
             <input type="checkbox" id="binding-override-mode">
@@ -426,18 +452,7 @@
         </div>
         <p id="chain-status" class="hint"></p>
       </div>
-      <div class="actions">
-        <button id="cfg-save" class="primary"></button>
-        <button id="cfg-restore" class="ghost"></button>
-        <button id="cfg-export" class="secondary"></button>
-        <label class="file-label">
-          <span id="cfg-import-label"></span>
-          <input type="file" id="cfg-import" accept="application/json,.json">
-        </label>
-      </div>
-      <p id="cfg-status" class="hint"></p>
-    </section>
-
+          </section>
     <section id="tab-about" class="tabpanel">
       <h2 id="about-heading"></h2>
       <p id="about-body1" class="intro"></p>
@@ -446,6 +461,49 @@
     </section>
   </main>
 
+  <div id="wizard-backdrop" class="cmdk-backdrop" aria-hidden="true"></div>
+  <div id="wizard" class="wizard" role="dialog" aria-modal="true" aria-labelledby="wizard-title" hidden>
+    <div class="wizard-card">
+      <h2 id="wizard-title"></h2>
+      <p id="wizard-intro" class="hint"></p>
+      <div class="wizard-steps">
+        <div class="wizard-step" data-step="1">
+          <p id="wizard-name-label"></p>
+          <label>
+            <span id="wizard-name-a-label"></span>
+            <input type="text" id="wizard-name-a" maxlength="40" autocomplete="off">
+          </label>
+          <label>
+            <span id="wizard-name-b-label"></span>
+            <input type="text" id="wizard-name-b" maxlength="40" autocomplete="off">
+          </label>
+          <p id="wizard-name-hint" class="hint"></p>
+        </div>
+        <div class="wizard-step" data-step="2" hidden>
+          <p id="wizard-role-label"></p>
+          <label><input type="radio" name="wizard-role" value="A" id="wizard-role-a"><span id="wizard-role-a-label"></span></label>
+          <label><input type="radio" name="wizard-role" value="B" id="wizard-role-b"><span id="wizard-role-b-label"></span></label>
+          <label><input type="radio" name="wizard-role" value="none" id="wizard-role-none" checked><span id="wizard-role-none-label"></span></label>
+          <p id="wizard-role-hint" class="hint"></p>
+        </div>
+        <div class="wizard-step" data-step="3" hidden>
+          <p id="wizard-key-text"></p>
+          <button type="button" id="wizard-key-generate" class="primary"></button>
+          <span id="wizard-key-status" class="hint"></span>
+        </div>
+        <div class="wizard-step" data-step="4" hidden>
+          <p id="wizard-export-text"></p>
+          <button type="button" id="wizard-key-export" class="primary"></button>
+          <p id="wizard-export-hint" class="hint"></p>
+        </div>
+      </div>
+      <div class="wizard-nav">
+        <button type="button" id="wizard-back" class="ghost"></button>
+        <button type="button" id="wizard-skip" class="ghost"></button>
+        <button type="button" id="wizard-next" class="primary"></button>
+      </div>
+    </div>
+  </div>
   <footer class="wrap">
     <p class="footer-note">AlimenCal © 2025 – Orientation tool, no legal advice.</p>
   </footer>

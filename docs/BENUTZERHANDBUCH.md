@@ -176,6 +176,7 @@ Hauptfunktionen und «Einstellungen» am unteren Rand.
 | Backup | Backup erstellen und wiederherstellen (im Austausch-Tab integriert) |
 | Richtwerte | Richtwerte einsehen, anpassen, speichern, exportieren/importieren, kantionale Presets laden |
 | Themes | Design-Stil wählen, Farben im Theme-Editor anpassen |
+| Personen & Sicherheit | Namen der Parteien, Rollenwahl, verbindliche Einstellungen, Schlüssel und Lock-Datei |
 | Über | Informationen zur App, Rechtsgrundlagen und Disclaimer |
 
 ![Navigation (DE)](../screenshots/pc/05-hauptmenue-de.png)
@@ -238,7 +239,7 @@ Kurz:
 2. **Bankexport** hochladen – CSV (Trennzeichen, Datums- und Betragsformate
    werden automatisch erkannt) oder ISO-20022-XML (camt.052/053/054); das
    Format wird automatisch erkannt.
-3. **Kontoinhaber** angeben (Partei A oder B; werden im Tab «Richtwerte»
+3. **Kontoinhaber** angeben (Partei A oder B; werden im Tab «Personen & Sicherheit»
    Partei-Namen erfasst, erscheinen diese stattdessen).
 4. Je Transaktion entscheiden: **ignorieren**, **anteilsmässig aufteilen**
    (Anteil je Transaktion konfigurierbar) oder **voll von Partei A bzw. B
@@ -282,6 +283,16 @@ güterrechtliches Resultat. Details und Rechtshinweise:
   das mitgelieferte Preset ist ein Platzhalter mit Verifikations-Checkliste
   und **muss** vor Verwendung mit den effektiven Ansätzen von KESB/Kantonsgericht
   Schaffhausen ausgefüllt werden.
+- **Rollenwahl («Meine Rolle»):** Im Bereich «Verbindliche Einstellungen»
+  kann gewählt werden, als welche Partei diese App-Instanz betrieben wird
+  («Ich bin {Partei A/B}») oder «Gemeinsam / keine Rolle» (Default,
+  z. B. für Mediation oder gemeinsame Nutzung). Mit gewählter Rolle
+  können nur die **eigenen** Bestätigungen gesetzt sowie die eigenen
+  Schlüssel erzeugt/exportiert/importiert und die Lock-Datei nur für die
+  eigene Partei signiert werden; für die Gegenpartei erscheint der
+  Hinweis «Nur durch {Partei} möglich». Deren Bestätigung muss aus deren
+  App-Instanz stammen (Fall- bzw. Lock-Datei-Import). Die Wahl wird lokal
+  gespeichert und lässt sich jederzeit ändern.
 - **Verbindliche Einstellungen (Two-Party-Lock):** Die vier Basiswerte
   (Existenzminima erwerbstätig/nichterwerbstätig, Standard Lebensstandard,
   Fallback Grundbedarf) können von beiden Parteien separat bestätigt werden
@@ -307,6 +318,40 @@ güterrechtliches Resultat. Details und Rechtshinweise:
   Abweichungen nachweisbar. Eine erzwungene Schreibsperre auf gemeinsamer
   Ablage bleibt ohne Server ausgeschlossen (vgl.
   docs/settings-binding-override.md).
+
+## Tab «Personen & Sicherheit»
+
+Hier sind alle personen- und sicherheitsbezogenen Funktionen gebündelt
+(Namen der Parteien, Rollenwahl, verbindliche Einstellungen, Kryptografie).
+Diese Karten waren früher im Tab «Richtwerte» zu finden.
+
+- **Namen der Parteien:** Zwei Namensfelder; die Namen ersetzen «Partei A / B»
+  in der gesamten App (Bestätigungs-Buttons, Schlüssel-Status, Kostentrennung,
+  Export/Import).
+- **Verbindliche Einstellungen (Two-Party-Lock):** Rollenwahl
+  «Meine Rolle» und beidseitige Bestätigung der Basiswerte (Details siehe
+  Abschnitt «Verbindliche Einstellungen» unten).
+- **Serverlose Verbindlichkeit (Kryptografie):** Schlüssel je Partei erzeugen,
+  öffentliche Schlüssel austauschen, Lock-Datei beidseitig signieren und
+  importieren/prüfen.
+
+### Willkommens-Assistent (Erststart)
+
+Beim allerersten Start öffnet sich ein Assistent in vier Schritten:
+
+1. **Namen:** Namen der Parteien A und B (optional).
+2. **Rolle:** Als welche Partei diese App-Instanz betrieben wird
+   («Ich bin {Partei A/B}» oder «Gemeinsam / keine Rolle»).
+3. **Schlüssel:** ECDSA-Schlüssel für die eigene (oder bei gemeinsamer
+   Nutzung beider) Partei erzeugen – nur nötig, wer Lock-Dateien signieren
+   will.
+4. **Export:** Öffentlichen Schlüssel als Datei exportieren und der
+   Gegenseite zustellen.
+
+Jeder Schritt ist überspringbar («Überspringen»); der Assistent lässt sich
+später über die Befehlspalette (Ctrl+K, «Willkommens-Assistent öffnen»)
+erneut starten. Bestandsnutzer mit vorhandenen Formulardaten sehen den
+Assistenten nicht automatisch.
 
 ## Tab «Austausch» (zwei Parteien, zwei PCs)
 

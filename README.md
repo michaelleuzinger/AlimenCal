@@ -143,7 +143,7 @@ App (PWA) installierbar und danach auch offline nutzbar:
 Über die Topbar (Desktop) bzw. die Tab-Leiste unten mit
 «Einstellungen» (Mobile) sind die vier Hauptfunktionen erreichbar:
 Kindesunterhalt, Ehegattenunterhalt, Kostentrennung, Vermögensausgleich. Der
-Einstellungsbereich – Austausch, Backup, Richtwerte, Themes und Über –
+Einstellungsbereich – Austausch, Backup, Richtwerte, Personen & Sicherheit, Themes und Über –
 ist über den Knopf «Einstellungen und Informationen» bzw. die
 Befehlspalette (Ctrl+K) erreichbar. Die Sprachwahl (Deutsch,
 Français, Italiano, English) liegt in der Topbar.

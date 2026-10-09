@@ -27,7 +27,7 @@ Berechnung = f(Base ⊕ Overrides)
 | Komponente | Datei | Aufgabe |
 |---|---|---|
 | Modul (DOM-frei, Browser + Node) | `js/settings.js` | Two-Party-Lock, Override-Layer, `resolve()`, Import-Preview/Commit |
-| UI-Integration | `index.html` (Tab Richtwerte) + `js/app.js` | Bestätigungs-Buttons, Override-Modus, effektive Werte in der Berechnung |
+| UI-Integration | `index.html` (Tab Personen & Sicherheit) + `js/app.js` | Bestätigungs-Buttons, Rollenwahl, Override-Modus, effektive Werte in der Berechnung |
 | SQL-Referenz (optional) | `schema/calc_settings.sql` | Tabellen + Immutability-Trigger für eine spätere Persistenz-Schicht |
 | Tests | `tests/settings.test.js`, `tests/crypto.test.js` | Unit-Tests (Node): 21 + 15 Tests |
 
@@ -35,7 +35,7 @@ Das Modul ist bewusst DOM-frei gehalten (gleiche Konvention wie
 `js/calculator.js`, `js/costsplit.js`, `js/casedata.js`): Die UI-Schicht
 (`js/app.js`) bedient es, die Regeln gelten unabhängig vom DOM.
 
-### UI-Integration (Tab «Richtwerte»)
+### UI-Integration (Tab «Personen & Sicherheit»)
 
 - Die vier Basiswerte (Existenzminima erwerbstätig/nichterwerbstätig,
   Standard Lebensstandard, Fallback Grundbedarf) sind im Service
@@ -43,6 +43,7 @@ Das Modul ist bewusst DOM-frei gehalten (gleiche Konvention wie
 - **Bestätigung:** Pro Wert existieren Buttons «Partei A» / «Partei B»;
   nach beidseitiger Bestätigung sind die Formularfelder `disabled`
   (read-only) und jede Änderung wird vom Service verweigert.
+- **Rollenwahl (Meine Rolle):** Über das Dropdown «Meine Rolle» wird  festgelegt, als welche Partei diese App-Instanz betrieben wird  (localStorage-Schlüssel `alimencal.bindingrole`; «Gemeinsam / keine  Rolle» erhält das bisherige Verhalten, z. B. für Mediation). Mit  gewählter Rolle (A oder B) sind nur die eigenen Bestätigungs-Buttons  sowie die Schlüssel-Aktionen (erzeugen/exportieren/importieren) und  das Signieren der Lock-Datei für die eigene Partei bedienbar; bei der  Gegenpartei erscheint der Hinweis «Nur durch {Partei} möglich». Deren  Bestätigung muss aus deren Instanz oder über den Import der  (signierten) Lock-Datei stammen.
 - **Override-Modus:** Die Checkbox «Override-Modus aktivieren» schaltet die
   Override-Spalte der Tabelle frei; Eingaben erzeugen Overrides im Szenario
   `ui_override`. `effectiveCfg()` liefert der Berechnung Base ⊕ Override;
@@ -56,7 +57,7 @@ Das Modul ist bewusst DOM-frei gehalten (gleiche Konvention wie
 
 Manipulationen lassen sich ohne Server **nachweisbar** machen – nicht
 verhindern, aber erkennbar. Zwei Mechanismen (beide in `js/settings.js`,
-UI im Tab Richtwerte):
+UI im Tab Personen & Sicherheit):
 
 **1. Hash-Kette (Manipulationserkennung der Historie)**
 
@@ -186,3 +187,13 @@ Abgedeckt: Editierbarkeit vor Lock, Lock nach beiden Bestätigungen,
 Mutationssperre nach Lock, Rebase, Rollen-Rechte, Override ohne
 Base-Änderung, Side-by-Side-Kontext, Override-Löschen, Import-Preview,
 Commit-Freeze, Supersede-Kette.
+
+## Willkommens-Assistent (Erststart)
+
+Beim ersten Start (keine Formulardaten, Wizard nicht als erledigt
+markiert: `alimencal.wizard.done`) öffnet sich ein vierstufiger Assistent:
+1. Namen der Parteien erfassen (`party-name-a/b`), 2. Rollenwahl
+(`alimencal.bindingrole`), 3. Schlüssel erzeugen (`alimencal.keys`),
+4. Public-Key-Export. Jeder Schritt ist freiwillig («Überspringen»);
+erneut startbar via Befehlspalette. Bestandsnutzer (mit vorhandenen
+Formulardaten) sehen den Assistenten nicht automatisch.
