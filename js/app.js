@@ -16,7 +16,8 @@
     'pa-income', 'pa-em', 'pa-employed', 'pb-income', 'pb-em', 'pb-employed',
     'spousal-enabled', 'sp-app-income', 'sp-app-em', 'sp-app-standard',
     'sp-app-extra', 'sp-res-income', 'sp-res-em', 'sp-res-childpaid',
-    'costsplit-date', 'costsplit-owner', 'party-name-a', 'party-name-b'
+    'costsplit-date', 'costsplit-owner',
+    'assetsplit-date', 'party-name-a', 'party-name-b'
   ];
   var SECTION_FIELDS = {
     parentA: ['pa-income', 'pa-em', 'pa-employed'],
@@ -25,7 +26,8 @@
     spousalApplicant: ['sp-app-income', 'sp-app-em', 'sp-app-standard', 'sp-app-extra'],
     spousalRespondent: ['sp-res-income', 'sp-res-em', 'sp-res-childpaid'],
     spousalEnabled: ['spousal-enabled'],
-    costsplit: ['costsplit-date', 'costsplit-owner']
+    costsplit: ['costsplit-date', 'costsplit-owner'],
+    assetsplit: ['assetsplit-date']
   };
   var DEFAULT_LANG = 'de';
   var LANGS = ['de', 'fr', 'it', 'en'];
@@ -39,6 +41,10 @@
     costsplit: {
       transactions: [],
       decisions: {}
+    },
+    assetsplit: {
+      date: '',
+      assets: []
     }
   };
 
@@ -844,6 +850,7 @@
     document.querySelectorAll('.tab[data-tab="children"]').forEach(function (el) { setNavLabel(el, el.classList.contains('mob-item') ? t('nav', 'childrenShort') : t('nav', 'children')); });
     document.querySelectorAll('.tab[data-tab="spousal"]').forEach(function (el) { setNavLabel(el, el.classList.contains('mob-item') ? t('nav', 'spousalShort') : t('nav', 'spousal')); });
     document.querySelectorAll('.tab[data-tab="costsplit"]').forEach(function (el) { setNavLabel(el, el.classList.contains('mob-item') ? t('nav', 'costsplitShort') : t('nav', 'costsplit')); });
+    document.querySelectorAll('.tab[data-tab="assetsplit"]').forEach(function (el) { setNavLabel(el, el.classList.contains('mob-item') ? t('nav', 'assetsplitShort') : t('nav', 'assetsplit')); });
     document.querySelectorAll('.tab[data-tab="themes"]').forEach(function (el) { setNavLabel(el, t('nav', 'themes')); });
     document.querySelectorAll('.tab[data-tab="settings"]').forEach(function (el) { setNavLabel(el, t('nav', 'settings')); });
     document.querySelectorAll('.tab[data-tab="party"]').forEach(function (el) { setNavLabel(el, t('nav', 'party')); });
@@ -869,6 +876,15 @@
     document.getElementById('costsplit-set-all-split').textContent = t('costsplit', 'setAllSplit');
     document.getElementById('costsplit-set-all-ignore').textContent = t('costsplit', 'setAllIgnore');
     document.getElementById('costsplit-result-heading').textContent = t('costsplit', 'resultHeading');
+    document.getElementById('assetsplit-heading').textContent = t('assetsplit', 'heading');
+    document.getElementById('assetsplit-intro').textContent = t('assetsplit', 'intro');
+    document.getElementById('assetsplit-date-label').textContent = t('assetsplit', 'dateLabel');
+    document.getElementById('assetsplit-date-from-costsplit').textContent = t('assetsplit', 'dateFromCostsplit');
+    document.getElementById('assetsplit-hint').textContent = t('assetsplit', 'hint');
+    document.getElementById('assetsplit-legal-hint').textContent = t('assetsplit', 'legalHint');
+    document.getElementById('assetsplit-add').textContent = t('assetsplit', 'addAsset');
+    document.getElementById('assetsplit-result-heading').textContent = t('assetsplit', 'resultHeading');
+    renderAssetsplitTable();
     if (state.costsplit.transactions.length) {
       renderCostsplitTable();
     }
@@ -900,6 +916,12 @@
     document.getElementById('share-backup-heading').textContent = t('share', 'backupHeading');
     document.getElementById('share-backup-hint').textContent = t('share', 'backupHint');
     document.getElementById('share-backup').textContent = t('share', 'backupButton');
+    var backupLocBtn = document.getElementById('share-backup-location');
+    if (backupLocBtn) {
+      backupLocBtn.textContent = t('share', 'chooseLocation');
+      backupLocBtn.hidden = !fsAvailable();
+    }
+    renderBackupLocationHint();
     document.getElementById('share-restore-heading').textContent = t('share', 'restoreHeading');
     document.getElementById('share-restore-hint').textContent = t('share', 'restoreHint');
     document.getElementById('share-restore-label').textContent = t('share', 'restoreLabel');
@@ -1013,6 +1035,7 @@
     if (state.costsplit.transactions.length) {
       renderCostsplitTable();
     }
+    renderAssetsplitTable();
     renderBindingTable();
     renderKeyStatus();
   }
@@ -1530,6 +1553,181 @@
       t('costsplit', 'counts', [String(totals.countConsidered), String(totals.countIgnored), String(totals.countBeforeDate)]);
   }
 
+  /* -------------------------------------------------------------   *   *  Vermögensausgleich (vereinfachter Stichtags-Modus):   *  Salden pro Vermögenswert und Partei zum Stichtag erfassen,   *  Nettovermögen wird hälftig ausgeglichen.   * ------------------------------------------------------------- */
+  function assetTemplate() {
+    return {
+      id: 'as-' + Date.now() + '-' + Math.floor(Math.random() * 1e6),
+      label: '',
+      category: 'account',
+      owner: 'A',
+      value: 0,
+      shareA: 0.5,
+      note: ''
+    };
+  }
+
+  function addAssetRow() {
+    state.assetsplit.assets.push(assetTemplate());
+    renderAssetsplitTable();
+  }
+
+  function removeAssetRow(idx) {
+    state.assetsplit.assets.splice(idx, 1);
+    renderAssetsplitTable();
+  }
+
+  function assetCategoryOptions(select, value) {
+    AlimenCal.assetsplit.CATEGORIES.forEach(function (cat) {
+      var opt = document.createElement('option');
+      opt.value = cat;
+      opt.textContent = t('assetsplit', 'cat_' + cat);
+      select.appendChild(opt);
+    });
+    select.value = value;
+  }
+
+  function renderAssetsplitTable() {
+    var thead = document.getElementById('assetsplit-thead');
+    var tbody = document.getElementById('assetsplit-tbody');
+    if (!thead || !tbody) { return; }
+    thead.innerHTML = '';
+    var tr = document.createElement('tr');
+    [
+      t('assetsplit', 'colLabel'),
+      t('assetsplit', 'colCategory'),
+      t('assetsplit', 'colOwner'),
+      t('assetsplit', 'colValue'),
+      t('assetsplit', 'colShare'),
+      ''
+    ].forEach(function (label) {
+      var th = document.createElement('th');
+      th.textContent = label;
+      tr.appendChild(th);
+    });
+    thead.appendChild(tr);
+
+    tbody.innerHTML = '';
+    var locked = state.sectionLocks.indexOf('assetsplit') >= 0;
+    state.assetsplit.assets.forEach(function (asset, idx) {
+      var row = document.createElement('tr');
+
+      var tdLabel = document.createElement('td');
+      var inpLabel = document.createElement('input');
+      inpLabel.type = 'text';
+      inpLabel.className = 'f-asset-label';
+      inpLabel.value = asset.label || '';
+      inpLabel.disabled = locked;
+      tdLabel.appendChild(inpLabel);
+      row.appendChild(tdLabel);
+
+      var tdCat = document.createElement('td');
+      var selCat = document.createElement('select');
+      selCat.className = 'f-asset-category';
+      assetCategoryOptions(selCat, asset.category);
+      selCat.disabled = locked;
+      tdCat.appendChild(selCat);
+      row.appendChild(tdCat);
+
+      var tdOwner = document.createElement('td');
+      var selOwner = document.createElement('select');
+      selOwner.className = 'f-asset-owner';
+      [
+        { value: 'A', label: partyName('A') },
+        { value: 'B', label: partyName('B') },
+        { value: 'joint', label: t('assetsplit', 'ownerJoint') }
+      ].forEach(function (o) {
+        var opt = document.createElement('option');
+        opt.value = o.value;
+        opt.textContent = o.label;
+        selOwner.appendChild(opt);
+      });
+      selOwner.value = asset.owner;
+      selOwner.disabled = locked;
+      tdOwner.appendChild(selOwner);
+      row.appendChild(tdOwner);
+
+      var tdValue = document.createElement('td');
+      var inpValue = document.createElement('input');
+      inpValue.type = 'number';
+      inpValue.step = '0.01';
+      inpValue.className = 'f-asset-value';
+      inpValue.value = asset.value || 0;
+      inpValue.disabled = locked;
+      tdValue.appendChild(inpValue);
+      row.appendChild(tdValue);
+
+      var tdShare = document.createElement('td');
+      var inpShare = document.createElement('input');
+      inpShare.type = 'number';
+      inpShare.step = '1';
+      inpShare.min = '0';
+      inpShare.max = '100';
+      inpShare.className = 'f-asset-share';
+      inpShare.value = Math.round((asset.shareA || 0.5) * 100);
+      inpShare.disabled = locked || asset.owner !== 'joint';
+      tdShare.appendChild(inpShare);
+      row.appendChild(tdShare);
+
+      var tdRemove = document.createElement('td');
+      var btnRemove = document.createElement('button');
+      btnRemove.type = 'button';
+      btnRemove.className = 'secondary';
+      btnRemove.textContent = t('assetsplit', 'removeAsset');
+      btnRemove.disabled = locked;
+      tdRemove.appendChild(btnRemove);
+      row.appendChild(tdRemove);
+
+      inpLabel.addEventListener('change', function () {
+        state.assetsplit.assets[idx].label = inpLabel.value;
+        renderAssetsplitResult();
+      });
+      selCat.addEventListener('change', function () {
+        state.assetsplit.assets[idx].category = selCat.value;
+      });
+      selOwner.addEventListener('change', function () {
+        state.assetsplit.assets[idx].owner = selOwner.value;
+        renderAssetsplitTable();
+      });
+      inpValue.addEventListener('input', function () {
+        state.assetsplit.assets[idx].value = parseFloat(inpValue.value) || 0;
+        renderAssetsplitResult();
+      });
+      inpShare.addEventListener('input', function () {
+        var shareA = (parseFloat(inpShare.value) || 0) / 100;
+        if (shareA < 0) { shareA = 0; }
+        if (shareA > 1) { shareA = 1; }
+        state.assetsplit.assets[idx].shareA = shareA;
+        renderAssetsplitResult();
+      });
+      btnRemove.addEventListener('click', function () {
+        removeAssetRow(idx);
+      });
+
+      tbody.appendChild(row);
+    });
+    renderAssetsplitResult();
+  }
+
+  function renderAssetsplitResult() {
+    var split = AlimenCal.assetsplit.computeSplit(state.assetsplit.assets);
+    var totalsEl = document.getElementById('assetsplit-totals');
+    var balanceEl = document.getElementById('assetsplit-balance');
+    if (!totalsEl || !balanceEl) { return; }
+    totalsEl.textContent =
+      partyName('A') + ': CHF ' + fmt(split.sumA) + ' | ' +
+      partyName('B') + ': CHF ' + fmt(split.sumB) + ' | ' +
+      t('assetsplit', 'total') + ': CHF ' + fmt(split.total) + ' | ' +
+      t('assetsplit', 'half') + ': CHF ' + fmt(split.half);
+    balanceEl.textContent =
+      split.amount > 0 && split.from && split.to
+        ? t('assetsplit', 'owes', [
+            split.from === 'A' ? partyName('A') : partyName('B'),
+            split.to === 'A' ? partyName('A') : partyName('B'),
+            fmt(split.amount)
+          ])
+        : t('assetsplit', 'balanced');
+  }
+
   function handleCostsplitFile(file) {
     var reader = new FileReader();
     reader.onload = function () {
@@ -1721,7 +1919,8 @@
     { key: 'spousalApplicant', labelKey: 'sectionSpousalApplicant' },
     { key: 'spousalRespondent', labelKey: 'sectionSpousalRespondent' },
     { key: 'spousalEnabled', labelKey: 'sectionSpousalEnabled' },
-    { key: 'costsplit', labelKey: 'sectionCostsplit' }
+    { key: 'costsplit', labelKey: 'sectionCostsplit' },
+    { key: 'assetsplit', labelKey: 'sectionAssetsplit' }
   ];
 
   function collectCurrentSections() {
@@ -1750,7 +1949,11 @@
         childSupportPaid: parseFloat(document.getElementById('sp-res-childpaid').value) || 0
       },
       spousalEnabled: document.getElementById('spousal-enabled').checked,
-      costsplit: state.costsplit
+      costsplit: state.costsplit,
+      assetsplit: {
+        date: document.getElementById('assetsplit-date').value || '',
+        assets: state.assetsplit.assets
+      }
     };
   }
 
@@ -1802,11 +2005,7 @@
     var file = AlimenCal.casedata.buildFile(sections);
     function download(obj, name) {
       var blob = new Blob([JSON.stringify(obj, null, 2)], { type: 'application/json' });
-      var a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = name;
-      a.click();
-      URL.revokeObjectURL(a.href);
+      saveBlobWithRememberedLocation(name, blob, function () {});
     }
     if (encrypt) {
       var recipient = recipientPublicKey();
@@ -1825,6 +2024,142 @@
     }
     download(file, 'alimencal-case.json');
   }
+  /* -------------------------------------------------------------   *   *  Gemerkte Speicherorte (File System Access API, js/filestore.js):   *  Der beim Backup/Export gewaehlte Ordner bzw. die beim Restore/   *  Import gewaehlte Datei wird in IndexedDB gemerkt. Wiederholtes   *  Speichern schreibt direkt (nach einmaliger Berechtigungs-   *  erneuerung), ohne erneuten Dialog; Restore/Import bieten die   *  zuletzt verwendete Datei an. Ohne API (Safari/iOS) gilt das   *  bisherige Verhalten (Download-Dialog / Dateiauswahl).   * ------------------------------------------------------------- */
+  var FS_KEY_BACKUP_DIR = 'backup-dir';
+  var FS_KEY_LAST_FILE = 'last-file';
+
+  function fsAvailable() {
+    return !!(window.showDirectoryPicker && AlimenCal.filestore &&
+      AlimenCal.filestore.indexedDBAvailable());
+  }
+
+  /* Ordner neu waehlen oder gemerkten verwenden; Rueckgabe Promise auf
+   * DirectoryHandle oder null (abgebrochen/nicht verfuegbar). */
+  function pickBackupDir(useStored) {
+    if (!fsAvailable()) { return Promise.resolve(null); }
+    var pick = useStored
+      ? AlimenCal.filestore.get(FS_KEY_BACKUP_DIR).then(function (dir) {
+          if (!dir) { return null; }
+          return AlimenCal.filestore.permissionState(dir).catch(function () { return 'prompt'; })
+            .then(function (perm) {
+              if (perm === 'granted') { return dir; }
+              return AlimenCal.filestore.requestPermission(dir).catch(function () { return 'denied'; })
+                .then(function (granted) { return granted === 'granted' ? dir : null; });
+            });
+        })
+      : Promise.resolve(null);
+    return pick.then(function (dir) {
+      if (dir) { return dir; }
+      return window.showDirectoryPicker({ id: 'alimencal-backup', mode: 'readwrite' })
+        .then(function (newDir) {
+          return AlimenCal.filestore.put(FS_KEY_BACKUP_DIR, newDir).then(function () { return newDir; });
+        })
+        .catch(function () { return null; });
+    });
+  }
+
+  /* Schreibt blob als name in den gemerkten Ordner; Rueckgabe Promise
+   * auf true (geschrieben) oder false (nicht moeglich -> Fallback). */
+  function writeToBackupDir(dir, name, blob) {
+    if (!dir || typeof dir.getFileHandle !== 'function') { return Promise.resolve(false); }
+    return dir.getFileHandle(name, { create: true }).then(function (fh) {
+      return fh.createWritable().then(function (w) {
+        return w.write(blob).then(function () { return w.close(); });
+      });
+    }).then(function () { return true; }).catch(function () { return false; });
+  }
+
+  function renderBackupLocationHint() {
+    var hint = document.getElementById('share-backup-location-hint');
+    if (!hint) { return; }
+    if (!fsAvailable()) { hint.textContent = ''; return; }
+    AlimenCal.filestore.get(FS_KEY_BACKUP_DIR).then(function (dir) {
+      hint.textContent = dir
+        ? t('share', 'locationRemembered', [AlimenCal.filestore.locationName(dir) || ''])
+        : '';
+    }).catch(function () { hint.textContent = ''; });
+  }
+
+  function renderRestoreLocationHint() {
+    var hint = document.getElementById('share-restore-location-hint');
+    var openBtn = document.getElementById('share-restore-open');
+    var openBtnImport = document.getElementById('share-import-open');
+    if (!fsAvailable()) {
+      if (hint) { hint.textContent = ''; }
+      if (openBtn) { openBtn.hidden = true; }
+      if (openBtnImport) { openBtnImport.hidden = true; }
+      return;
+    }
+    AlimenCal.filestore.get(FS_KEY_LAST_FILE).then(function (fh) {
+      var name = fh ? (AlimenCal.filestore.locationName(fh) || '') : '';
+      if (hint) { hint.textContent = name ? t('share', 'lastFileHint', [name]) : ''; }
+      if (openBtn) {
+        openBtn.hidden = !fh;
+        openBtn.textContent = t('share', 'openLastFile', [name]);
+      }
+      if (openBtnImport) {
+        openBtnImport.hidden = !fh;
+        openBtnImport.textContent = t('share', 'openLastFile', [name]);
+      }
+    }).catch(function () {
+      if (hint) { hint.textContent = ''; }
+    });
+  }
+
+  /* Backup: schreibt direkt in den gemerkten Ordner (wenn verfuegbar
+   * und berechtigt); sonst Fallback auf Web Share bzw. Download. */
+  function saveBlobWithRememberedLocation(name, blob, done) {
+    pickBackupDir(true).then(function (dir) {
+      if (dir) {
+        return writeToBackupDir(dir, name, blob).then(function (written) {
+          if (written) { done(true); return; }
+          fallbackSave(name, blob, done);
+        });
+      }
+      fallbackSave(name, blob, done);
+    });
+  }
+
+  function fallbackSave(name, blob, done) {
+    if (navigator.canShare && navigator.canShare({ files: [new File([], name)] })) {
+      var f = new File([blob], name, { type: 'application/json' });
+      navigator.share({ files: [f], title: 'AlimenCal' }).then(function () { done(false); }, function () {});
+      return;
+    }
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    a.click();
+    URL.revokeObjectURL(a.href);
+    done(false);
+  }
+
+  function rememberFileHandle(file) {
+    if (!fsAvailable() || !file || typeof file.getFile !== 'function') { return; }
+    AlimenCal.filestore.put(FS_KEY_LAST_FILE, file).catch(function () {});
+  }
+
+  /* Oeffnet die zuletzt verwendete Backup-/Export-Datei direkt (ohne
+   * Dateidialog), wenn Berechtigung erteilt wird; Rueckgabe Promise auf
+   * File oder null. */
+  function openLastFile() {
+    if (!fsAvailable()) { return Promise.resolve(null); }
+    return AlimenCal.filestore.get(FS_KEY_LAST_FILE).then(function (fh) {
+      if (!fh) { return null; }
+      return AlimenCal.filestore.permissionState(fh, 'read').catch(function () { return 'prompt'; })
+        .then(function (perm) {
+          if (perm === 'granted') { return fh; }
+          return AlimenCal.filestore.requestPermission(fh, 'read').catch(function () { return 'denied'; })
+            .then(function (granted) { return granted === 'granted' ? fh : null; });
+        })
+        .then(function (fh2) {
+          if (!fh2) { return null; }
+          return fh2.getFile().then(function (file) { return file; })
+            .catch(function () { return null; });
+        });
+    });
+  }
+
   function backupFileName() {
     var d = new Date();
     function pad(n) { return (n < 10 ? '0' : '') + n; }
@@ -1856,18 +2191,9 @@
     function done() {
       if (status) { status.textContent = t('share', 'backupOk'); }
       markBackupDone();
+      renderBackupLocationHint();
     }
-    if (navigator.canShare && navigator.canShare({ files: [new File([], backupFileName())] })) {
-      var f = new File([blob], backupFileName(), { type: 'application/json' });
-      navigator.share({ files: [f], title: 'AlimenCal' }).then(done, function () {});
-      return;
-    }
-    var a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = backupFileName();
-    a.click();
-    URL.revokeObjectURL(a.href);
-    done();
+    saveBlobWithRememberedLocation(backupFileName(), blob, function () { done(); });
   }
 
   function handleBackupRestore(file) {
@@ -2018,6 +2344,11 @@
       document.getElementById('costsplit-section').hidden = !sections.costsplit.transactions.length;
       renderCostsplitTable();
     }
+    if (sections.assetsplit) {
+      state.assetsplit = sections.assetsplit;
+      document.getElementById('assetsplit-date').value = sections.assetsplit.date || '';
+      renderAssetsplitTable();
+    }
     saveForm();
   }
 
@@ -2087,6 +2418,10 @@
     });
     form.__children = state.children;
     form.__costsplit = state.costsplit;
+    form.__assetsplit = {
+      date: document.getElementById('assetsplit-date').value || '',
+      assets: state.assetsplit.assets
+    };
     form.__sectionLocks = state.sectionLocks;
     return form;
   }
@@ -2149,6 +2484,11 @@
       state.costsplit = form.__costsplit;
       document.getElementById('costsplit-section').hidden = false;
       renderCostsplitTable();
+    }
+    if (form.__assetsplit && Array.isArray(form.__assetsplit.assets)) {
+      state.assetsplit = form.__assetsplit;
+      document.getElementById('assetsplit-date').value = form.__assetsplit.date || '';
+      renderAssetsplitTable();
     }
     renderPartyDependentLabels();
     if (parsed.changed) { saveForm(); }
@@ -2551,14 +2891,31 @@
 
     document.getElementById('share-export').addEventListener('click', doShareExport);
     document.getElementById('share-backup').addEventListener('click', doBackup);
+    document.getElementById('share-backup-location').addEventListener('click', function () {
+      if (!fsAvailable()) { return; }
+      pickBackupDir(false).then(function (dir) {
+        if (dir) { renderBackupLocationHint(); }
+      });
+    });
     document.getElementById('share-restore').addEventListener('change', function () {
       var file = this.files && this.files[0];
       this.value = '';
-      if (file) { handleBackupRestore(file); }
+      if (file) { rememberFileHandle(file); handleBackupRestore(file); }
     });
+    document.getElementById('share-restore-open').addEventListener('click', function () {
+      openLastFile().then(function (file) {
+        if (file) { handleBackupRestore(file); }
+      });
+    });
+    document.getElementById('share-import-open').addEventListener('click', function () {
+      openLastFile().then(function (file) {
+        if (file) { handleShareImport(file); }
+      });
+    });
+    renderRestoreLocationHint();
     document.getElementById('share-import').addEventListener('change', function () {
       var file = this.files && this.files[0];
-      if (file) { handleShareImport(file); }
+      if (file) { rememberFileHandle(file); handleShareImport(file); }
       this.value = '';
     });
     document.getElementById('theme-reset').addEventListener('click', function () {
@@ -2702,6 +3059,23 @@
         state.costsplit.decisions[tx.id] = { mode: 'split', shareA: 0.5 };
       });
       renderCostsplitTable();
+    });
+    document.getElementById('assetsplit-add').addEventListener('click', function () {
+      addAssetRow();
+    });
+    document.getElementById('assetsplit-date').addEventListener('change', function () {
+      saveForm();
+    });
+    document.getElementById('assetsplit-date-from-costsplit').addEventListener('click', function () {
+      var csDate = document.getElementById('costsplit-date').value;
+      if (!csDate) { return; }
+      var d = new Date(csDate + 'T00:00:00');
+      d.setDate(d.getDate() - 1);
+      var iso = d.getFullYear() + '-' +
+        ('0' + (d.getMonth() + 1)).slice(-2) + '-' +
+        ('0' + d.getDate()).slice(-2);
+      document.getElementById('assetsplit-date').value = iso;
+      saveForm();
     });
     document.getElementById('costsplit-set-all-ignore').addEventListener('click', function () {
       state.costsplit.transactions.forEach(function (tx) {

@@ -85,11 +85,24 @@ Schritt wiederhergestellt.
 
 ![Backup wiederherstellen (DE)](../screenshots/pc/16-restore-de.png)
 
+**Speicherort merken (Desktop-Browser):** Unterstützt der Browser die
+File System Access API (Chrome/Edge am Desktop), merkt sich AlimenCal
+den beim Backup gewählten Ordner (Knopf «Speicherort wählen …» beim
+Backup). Jedes weitere Backup wird **automatisch in denselben Ordner**
+geschrieben – ohne erneuten Dialog; der aktuelle Ordner wird unter dem
+Knopf angezeigt. Nach einem Browser-Neustart fragt der Browser einmalig
+die Berechtigung erneut ab (Klick auf «Backup erstellen» genügt).
+Beim Restore/Import zeigt die App die **zuletzt verwendete Datei** an
+und bietet sie per Knopf direkt zum Öffnen an – der Dateidialog entfällt.
+Die Handles werden lokal in IndexedDB gespeichert und niemals übertragen.
+Auf Browsern ohne diese API (z. B. Safari/iOS) gilt das bisherige
+Verhalten: Download- bzw. Web-Share-Dialog und freie Dateiauswahl.
+
 **Gesperrte Abschnitte (unveränderbar):** Nach dem Import einer
 Parteien-Datei oder dem Restore werden die übernommenen Abschnitte als
 unveränderbar gekennzeichnet – ihre Felder sind gesperrt und mit einem
 Hinweis versehen. Die Sperre gilt pro Abschnitt und wird im localStorage
-persistiert (FORM_VERSION 3); sie übersteht also einen Browser-Neustart.
+persistiert (FORM_VERSION 5); sie übersteht also einen Browser-Neustart.
 Im Austausch-Tab listet die Karte «Gesperrte Abschnitte (unveränderbar)»
 alle gesperrten Abschnitte; mit «Bearbeitung erlauben» wird die Sperre
 eines Abschnitts aufgehoben (bewusstes Freigeben, danach normal
@@ -138,12 +151,12 @@ und beim nächsten Öffnen wiederhergestellt.
 ## Tabs im Überblick
 
 Die Hauptfunktionen sind auf dem Desktop dauerhaft in der schmalen Kopfzeile
-(Topbar) sichtbar: Kindesunterhalt, Ehegattenunterhalt und Kostentrennung.
+(Topbar) sichtbar: Kindesunterhalt, Ehegattenunterhalt, Kostentrennung und Vermögensausgleich.
 Der Einstellungs- und Infobereich (Austausch, Backup, Richtwerte, Themes,
 Über) ist über den deutlich beschrifteten Knopf «Einstellungen und
 Informationen» (Zahnrad-Symbol) neben der Befehlspalette erreichbar; die
 Befehlspalette (Ctrl+K) bleibt als Tastatur-Kürzel erhalten. Auf dem
-Smartphone liegt eine task-orientierte Tab-Leiste mit den drei
+Smartphone liegt eine task-orientierte Tab-Leiste mit den vier
 Hauptfunktionen und «Einstellungen» am unteren Rand.
 
 **Funktionen (Hauptnavigation):**
@@ -153,6 +166,7 @@ Hauptfunktionen und «Einstellungen» am unteren Rand.
 | Kindesunterhalt | Barunterhalt und Betreuungsunterhalt pro Kind berechnen |
 | Ehegattenunterhalt | Bedarf/Leistungsfähigkeit und allfälliger Beitrag (Art. 176 / Art. 125 ZGB) |
 | Kostentrennung | Laufende Kosten ab einem Stichtag separat abrechnen (Bankexport) |
+| Vermögensausgleich | Vermögenswerte beider Parteien zum Stichtag erfassen und hälftig ausgleichen (vereinfacht, ohne Güterrecht) |
 
 **Einstellungen & Info (über den Knopf «Einstellungen und Informationen» bzw. Ctrl+K):**
 
@@ -231,6 +245,30 @@ Kurz:
    (Anteil je Transaktion konfigurierbar) oder **voll von Partei A bzw. B
    übernehmen**. Sammelaktionen erleichtern die Erstzuordnung.
 5. **Ausgleich**: Die App zeigt, welche Partei der anderen einen Ausgleichsbetrag bezahlt.
+
+## Tab «Vermögensausgleich»
+
+Vermögenswerte (Konten, Anlagen, ETF, Bargeld, Immobilien, Vorsorge,
+Schulden) beider Parteien als **Saldo zu einem Stichtag** erfassen und
+einfach ausgleichen – ausführlich beschrieben in
+[VERMOEGENSAUSGLEICH.md](VERMOEGENSAUSGLEICH.md).
+
+Kurz:
+
+1. **Stichtag** wählen; per Knopf «Tag vor Kostentrennung übernehmen»
+   vom Stichtag der Kostentrennung ableitbar.
+2. **Vermögenswerte hinzufügen**: Bezeichnung, Kategorie, Partei
+   (A, B oder gemeinsam mit Anteil; sind Partei-Namen erfasst,
+   erscheinen diese statt Partei A/B), Saldo per Stichtag. Schulden als
+   negative Werte erfassen.
+3. **Ausgleich**: Die App zeigt Nettovermögen je Partei, Total,
+   hälftigen Soll und wer wie viel ausgleicht.
+
+Hinweis: Der Modus ist bewusst einfach (hälftige Teilung des
+Nettovermögens, ohne Eigengut-Prüfung und ohne Herleitung der
+Errungenschaften) und liefert einen Orientierungswert – kein
+güterrechtliches Resultat. Details und Rechtshinweise:
+[VERMOEGENSAUSGLEICH.md](VERMOEGENSAUSGLEICH.md).
 
 ## Tab «Richtwerte»
 

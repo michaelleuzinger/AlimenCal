@@ -113,9 +113,33 @@ ok('v3-Migration: v2-Payload lesbar', v2Parsed.status === 'ok');
 ok('v3-Migration: ungueltige Lock-Keys entfernt', v2Parsed.form.__sectionLocks.indexOf('parentA') >= 0 && v2Parsed.form.__sectionLocks.indexOf('bogus') < 0);
 ok('v3-Migration: changed gesetzt', v2Parsed.changed === true);
 var v3Payload = storage.buildFormPayload({ 'pa-income': '5000', __sectionLocks: ['parentB'] });
-ok('v3: buildFormPayload version=3 (heute v4, Migration getestet)', v3Payload.version === storage.FORM_VERSION);
+ok('v3: buildFormPayload version=aktuell (Migration getestet)', v3Payload.version === storage.FORM_VERSION);
 var v3Parsed = storage.parseStored(JSON.stringify(v3Payload));
 ok('v3: Roundtrip sectionLocks', v3Parsed.form.__sectionLocks[0] === 'parentB');
+/* ---------- v5-Migration: Vermoegensausgleich ---------- */
+ok('v5: FORM_VERSION = 5', storage.FORM_VERSION === 5);
+var v4PayloadAS = JSON.stringify({ app: 'alimencal', kind: 'form', version: 4, form: { 'pa-income': '5000', 'party-name-a': 'Anna' } });
+var v4ParsedAS = storage.parseStored(v4PayloadAS);
+ok('v5-Migration: v4-Payload lesbar', v4ParsedAS.status === 'ok');
+ok('v5-Migration: changed gesetzt', v4ParsedAS.changed === true);
+ok('v5-Migration: Partei-Name erhalten', v4ParsedAS.form['party-name-a'] === 'Anna');
+var v5Payload = storage.buildFormPayload({ 'pa-income': '5000', __assetsplit: { date: '2025-05-31', assets: [
+  { id: 'a1', label: 'Konto A', category: 'account', owner: 'A', value: 1200 },
+  { label: 'ungueltig', value: 'abc' }
+] } });
+ok('v5: buildFormPayload version=5', v5Payload.version === 5);
+var v5Parsed = storage.parseStored(JSON.stringify(v5Payload));
+ok('v5: Roundtrip assetsplit.date', v5Parsed.form.__assetsplit.date === '2025-05-31');
+ok('v5: Roundtrip assets[0].value', v5Parsed.form.__assetsplit.assets[0].value === 1200);
+ok('v5: ungueltiger Eintrag verworfen', (function () { var n = storage.normalizeAssetsplit(v5Parsed.form.__assetsplit); return n !== null && n.assets.length === 1; })());
+ok('v5: normalizeAssetsplit ohne assets -> null', storage.normalizeAssetsplit({ date: '2025-01-01' }) === null);
+ok('v5: normalizeAssetsplit ungueltiges Datum -> leer', (function () {
+  var n = storage.normalizeAssetsplit({ date: '31.12.2025', assets: [] });
+  return n !== null && n.date === '';
+})());
+ok('v5: normalizeAssetsplit fehlendes Datum -> leer', storage.normalizeAssetsplit({ assets: [] }).date === '');
+ok('v5: v4-Payload ohne assetsplit: kein Schluessel', !('___assetsplit' in v4ParsedAS.form));
+
 ok('v3: Altdaten ohne sectionLocks => kein Lock-Array', (function () {
   var p = storage.parseStored(JSON.stringify({ app: 'alimencal', kind: 'form', version: 2, form: { 'pa-income': '1' } }));
   return p.status === 'ok' && !Array.isArray(p.form.__sectionLocks);
@@ -125,7 +149,7 @@ ok('v4: normalizePartyName trimmt/leert', storage.normalizePartyName('  Anna  ')
 ok('v4: normalizePartyName laengenbeschraenkt', storage.normalizePartyName(new Array(60).join('x')).length === storage.PARTY_NAME_MAX);
 ok('v4: normalizePartyName nicht-string -> leer', storage.normalizePartyName(42) === '' && storage.normalizePartyName(null) === '');
 var v4Payload = storage.buildFormPayload({ 'pa-income': '5000', 'party-name-a': 'Anna', 'party-name-b': '  Ben  ' });
-ok('v4: buildFormPayload version=4', v4Payload.version === 4);
+ok('v4: buildFormPayload version=aktuell', v4Payload.version === storage.FORM_VERSION);
 var v4Parsed = storage.parseStored(JSON.stringify(v4Payload));
 ok('v4: Roundtrip Partei-Namen', v4Parsed.form['party-name-a'] === 'Anna' && v4Parsed.form['party-name-b'] === '  Ben  ');
 ok('v4: kein Re-Save noetig', v4Parsed.changed === false);

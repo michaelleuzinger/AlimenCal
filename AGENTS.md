@@ -16,6 +16,7 @@ unvollständig und darf nicht gemergt werden.
 |---|---|
 | Berechnungslogik (`js/calculator.js`) | `docs/KALKULATION.md`, README-Abschnitt «Tests»/«Richtwerte» |
 | Kostentrennung (`js/costsplit.js`, zugehörige UI) | `docs/KOSTENTRENNUNG.md` |
+| Vermögensausgleich (`js/assetsplit.js`, zugehörige UI) | `docs/VERMOEGENSAUSGLEICH.md` |
 | UI/Bedienung, neue Tabs oder Felder | `docs/BENUTZERHANDBUCH.md`, README-Abschnitt «Nutzung» |
 | Richtwerte / Defaults (`js/config.js`) | `docs/KALKULATION.md` (Wertetabelle), README-Abschnitt «Richtwerte», Quellenangaben inkl. Datum «Stand: …» |
 | Presets (`presets/*.json`, `js/presets.js`) | README-Abschnitt «Richtwerte», Preset-`meta` (Quelle, URL, Hinweise) |
@@ -134,6 +135,8 @@ index.html          UI (Topbar-Navigation mit 3 Hauptfunktionen (Kind, Ehegatten
 css/style.css       Styles
 js/calculator.js    Berechnungskern (DOM-frei, auch in Node.js lauffähig)
 js/costsplit.js     Kostentrennung: CSV-Import, Zuordnung, Ausgleich (DOM-frei)
+js/assetsplit.js    Vermögensausgleich: Salden je Partei zum Stichtag, hälftiger Ausgleich (DOM-frei)
+js/filestore.js     Gemerkte Speicherorte für Backup/Export/Restore/Import (File System Access API, IndexedDB; DOM-frei)
 js/themes.js       Theme-Definitionen und -Validierung (DOM-frei, auch in Node.js lauffähig)
 js/casedata.js     Falldaten-Austausch und Backup/Restore: Validierung und Merge (DOM-frei)
 js/settings.js     Verbindliche Einstellungen: Two-Party-Lock, Override-Modus, Read-Only-Imports (DOM-frei)
@@ -148,7 +151,7 @@ sw.js               Service Worker: Cache der App-Dateien für Offline-Nutzung (
 icons/*.png         App-Icons für PWA-Installation und Home-Bildschirm (192/512 px, maskierbar, apple-touch)
 js/i18n/{de,fr,it,en}.js  Sprachdateien
 AGENTS.md           Verbindliche Arbeitsregeln (Doku-in-Sync-Regel, Checklisten)
-docs/               Benutzerhandbuch, Berechnungslogik, Kostentrennung, Rechtliches, Verbindliche Einstellungen, Design (inkl. Design-Historie), Tests, Presets, Roadmap
+docs/               Benutzerhandbuch, Berechnungslogik, Kostentrennung, Vermögensausgleich, Rechtliches, Verbindliche Einstellungen, Design (inkl. Design-Historie), Tests, Presets, Roadmap
 schema/             Optionales SQL-Referenzschema (Immutability-Trigger) für spätere Persistenz
 screenshots/        Screenshots der App (Inventar-Regel: s. AGENTS.md; Erzeugung tools/make-screenshots.js)
 tools/              make-screenshots.js: Screenshot-Generator (Puppeteer, s. AGENTS.md)

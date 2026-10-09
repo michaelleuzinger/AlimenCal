@@ -102,6 +102,16 @@ App (PWA) installierbar und danach auch offline nutzbar:
   Trennzeichen, Datums- und Betragsformaten; je Transaktion ignorieren,
   anteilsmässig aufteilen (Anteil konfigurierbar) oder voll einer Partei
   zuordnen; Sammelaktionen für die Erstzuordnung
+- **Vermögensausgleich (vereinfacht)**: Salden je Vermögenswert und Partei
+  zum Stichtag erfassen (Kategorien inkl. Bargeld, Immobilien, Vorsorge,
+  Schulden als negative Werte, gemeinsame Werte mit Anteil); hälftiger
+  Ausgleich des Nettovermögens mit Rechtshinweisen zu Eigengut (Art. 198
+  ZGB) und FZG-Vorsorge
+- **Gemerkte Speicherorte**: Backup/Export-Ordner und zuletzt verwendete
+  Backup-/Export-Datei werden lokal gemerkt (File System Access API,
+  IndexedDB); wiederholtes Speichern erfolgt automatisch am letzten Ort,
+  Restore/Import bietet die letzte Datei direkt zum Öffnen an (Desktop
+  Chrome/Edge; andere Browser nutzen den gewohnten Download-/Dialog-Flow)
 - **Design-Stil**: im Themes-Tab wird das komplette Erscheinungsbild über
   eine Auswahl ganzer Design-Stile (Calm, Klassisch, Calm Dark,
   Editorial/Legal, Neo-Brutalismus) gewählt – jeder Stil passt Typografie,
@@ -109,8 +119,9 @@ App (PWA) installierbar und danach auch offline nutzbar:
 - **Theme-Editor**: alle Farben (inklusive Bannerfarbe) und der Eckenradius
   sind frei anpassbar; die Auswahl wird lokal gespeichert
 - **Persistenz**: alle Eingaben (inkl. Kinderliste, Kostentrennung mit
-  Bankexport und Zuordnungen) werden automatisch gespeichert und nach einem
-  Browser-Neustart wiederhergestellt – keine Daten gehen verloren
+  Bankexport und Zuordnungen, Vermögensausgleich) werden automatisch
+  gespeichert und nach einem Browser-Neustart wiederhergestellt – keine
+  Daten gehen verloren
 - **Nach Updates lesbar**: versioniertes Speicherformat (`js/storage.js`) mit
   Migration und Sanitizing – nach einem App-Update werden vorhandene
   Eingaben in jedem Fall wieder gelesen; Altbestände werden beim Start
@@ -130,8 +141,8 @@ App (PWA) installierbar und danach auch offline nutzbar:
 ## Nutzung
 
 Über die Topbar (Desktop) bzw. die Tab-Leiste unten mit
-«Einstellungen» (Mobile) sind die drei Hauptfunktionen erreichbar:
-Kindesunterhalt, Ehegattenunterhalt, Kostentrennung. Der
+«Einstellungen» (Mobile) sind die vier Hauptfunktionen erreichbar:
+Kindesunterhalt, Ehegattenunterhalt, Kostentrennung, Vermögensausgleich. Der
 Einstellungsbereich – Austausch, Backup, Richtwerte, Personen & Sicherheit, Themes und Über –
 ist über den Knopf «Einstellungen und Informationen» bzw. die
 Befehlspalette (Ctrl+K) erreichbar. Die Sprachwahl (Deutsch,
@@ -147,6 +158,7 @@ Schritt-für-Schritt-Anleitung aller Tabs:
 | [docs/BENUTZERHANDBUCH.md](docs/BENUTZERHANDBUCH.md) | Schritt-für-Schritt-Anleitung aller Tabs |
 | [docs/KALKULATION.md](docs/KALKULATION.md) | Berechnungslogik Kindes- und Ehegattenunterhalt |
 | [docs/KOSTENTRENNUNG.md](docs/KOSTENTRENNUNG.md) | Modul Kostentrennung: CSV- und camt-XML-Import, Zuordnung, Ausgleich |
+| [docs/VERMOEGENSAUSGLEICH.md](docs/VERMOEGENSAUSGLEICH.md) | Modul Vermögensausgleich: Salden je Partei zum Stichtag, hälftiger Ausgleich, Rechtshinweise |
 | [docs/RECHTLICHE-GRUNDLAGEN.md](docs/RECHTLICHE-GRUNDLAGEN.md) | Rechtsquellen, Rechtsprechung, kantonale Praxis, Disclaimer |
 | [docs/PRESETS.md](docs/PRESETS.md) | Kantonale Presets: Aufbau, Verifikation, eigene Presets |
 | [docs/ROADMAP.md](docs/ROADMAP.md) | Erledigte und geplante Funktionen |
@@ -194,7 +206,7 @@ Grundgerüst, Stile und Design-Historie:
 
 ### Tests
 
-Über 500 Tests (Berechnungskern, Presets, Kostentrennung, Themes,
+Über 600 Tests (Berechnungskern, Presets, Kostentrennung, Vermögensausgleich, Speicherorte, Themes,
 Austausch, Verschlüsselung, Persistenz) laufen ohne Abhängigkeiten mit
 Node.js – Übersicht und Ausführung: [docs/TESTS.md](docs/TESTS.md).
 
