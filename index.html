@@ -480,18 +480,26 @@
           <p id="wizard-name-hint" class="hint"></p>
         </div>
         <div class="wizard-step" data-step="2" hidden>
+          <p id="wizard-children-label"></p>
+          <label>
+            <span id="wizard-children-count-label"></span>
+            <input type="number" id="wizard-children-count" min="0" max="20" step="1" value="1" inputmode="numeric">
+          </label>
+          <p id="wizard-children-hint" class="hint"></p>
+        </div>
+        <div class="wizard-step" data-step="3" hidden>
           <p id="wizard-role-label"></p>
           <label><input type="radio" name="wizard-role" value="A" id="wizard-role-a"><span id="wizard-role-a-label"></span></label>
           <label><input type="radio" name="wizard-role" value="B" id="wizard-role-b"><span id="wizard-role-b-label"></span></label>
           <label><input type="radio" name="wizard-role" value="none" id="wizard-role-none" checked><span id="wizard-role-none-label"></span></label>
           <p id="wizard-role-hint" class="hint"></p>
         </div>
-        <div class="wizard-step" data-step="3" hidden>
+        <div class="wizard-step" data-step="4" hidden>
           <p id="wizard-key-text"></p>
           <button type="button" id="wizard-key-generate" class="primary"></button>
           <span id="wizard-key-status" class="hint"></span>
         </div>
-        <div class="wizard-step" data-step="4" hidden>
+        <div class="wizard-step" data-step="5" hidden>
           <p id="wizard-export-text"></p>
           <button type="button" id="wizard-key-export" class="primary"></button>
           <p id="wizard-export-hint" class="hint"></p>

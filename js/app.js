@@ -2679,7 +2679,7 @@
    * ------------------------------------------------------------- */
   var LS_WIZARD_DONE = 'alimencal.wizard.done';
   var wizardStep = 1;
-  var WIZARD_STEPS = 4;
+  var WIZARD_STEPS = 5;
 
   function wizardSeen() {
     try {
@@ -2702,6 +2702,9 @@
     set('wizard-name-a-label', 'nameA');
     set('wizard-name-b-label', 'nameB');
     set('wizard-name-hint', 'nameHint');
+    set('wizard-children-label', 'childrenLabel');
+    set('wizard-children-count-label', 'childrenCount');
+    set('wizard-children-hint', 'childrenHint');
     set('wizard-role-label', 'roleLabel');
     set('wizard-role-a-label', 'roleA', [partyName('A')]);
     set('wizard-role-b-label', 'roleB', [partyName('B')]);
@@ -2748,6 +2751,8 @@
     var backdrop = document.getElementById('wizard-backdrop');
     if (!dlg || (!force && wizardSeen())) { return; }
     wizardStep = 1;
+    var cnt = document.getElementById('wizard-children-count');
+    if (cnt) { cnt.value = state.children.length > 0 ? state.children.length : 1; }
     var a = document.getElementById('party-name-a');
     var b = document.getElementById('party-name-b');
     var wa = document.getElementById('wizard-name-a');
@@ -2784,6 +2789,15 @@
       saveForm();
       applyI18n();
     } else if (step === 2) {
+      var cnt = document.getElementById('wizard-children-count');
+      var n = parseInt(cnt && cnt.value, 10);
+      if (!isFinite(n) || n < 0) { n = 0; }
+      if (n > 20) { n = 20; }
+      while (state.children.length > n) { state.children.pop(); }
+      while (state.children.length < n) { state.children.push(childTemplate()); }
+      renderChildrenList();
+      saveForm();
+    } else if (step === 3) {
       var sel = document.getElementById('binding-role');
       if (sel) { sel.value = wizardRole(); }
       saveBindingRole();
