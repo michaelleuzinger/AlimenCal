@@ -136,6 +136,7 @@ css/style.css       Styles
 js/calculator.js    Berechnungskern (DOM-frei, auch in Node.js lauffähig)
 js/costsplit.js     Kostentrennung: CSV-Import, Zuordnung, Ausgleich (DOM-frei)
 js/assetsplit.js    Vermögensausgleich: Salden je Partei zum Stichtag, hälftiger Ausgleich (DOM-frei)
+js/filestore.js     Gemerkte Speicherorte für Backup/Export/Restore/Import (File System Access API, IndexedDB; DOM-frei)
 js/themes.js       Theme-Definitionen und -Validierung (DOM-frei, auch in Node.js lauffähig)
 js/casedata.js     Falldaten-Austausch und Backup/Restore: Validierung und Merge (DOM-frei)
 js/settings.js     Verbindliche Einstellungen: Two-Party-Lock, Override-Modus, Read-Only-Imports (DOM-frei)

@@ -107,6 +107,11 @@ App (PWA) installierbar und danach auch offline nutzbar:
   Schulden als negative Werte, gemeinsame Werte mit Anteil); hälftiger
   Ausgleich des Nettovermögens mit Rechtshinweisen zu Eigengut (Art. 198
   ZGB) und FZG-Vorsorge
+- **Gemerkte Speicherorte**: Backup/Export-Ordner und zuletzt verwendete
+  Backup-/Export-Datei werden lokal gemerkt (File System Access API,
+  IndexedDB); wiederholtes Speichern erfolgt automatisch am letzten Ort,
+  Restore/Import bietet die letzte Datei direkt zum Öffnen an (Desktop
+  Chrome/Edge; andere Browser nutzen den gewohnten Download-/Dialog-Flow)
 - **Design-Stil**: im Themes-Tab wird das komplette Erscheinungsbild über
   eine Auswahl ganzer Design-Stile (Calm, Klassisch, Calm Dark,
   Editorial/Legal, Neo-Brutalismus) gewählt – jeder Stil passt Typografie,
@@ -201,7 +206,7 @@ Grundgerüst, Stile und Design-Historie:
 
 ### Tests
 
-Über 600 Tests (Berechnungskern, Presets, Kostentrennung, Vermögensausgleich, Themes,
+Über 600 Tests (Berechnungskern, Presets, Kostentrennung, Vermögensausgleich, Speicherorte, Themes,
 Austausch, Verschlüsselung, Persistenz) laufen ohne Abhängigkeiten mit
 Node.js – Übersicht und Ausführung: [docs/TESTS.md](docs/TESTS.md).
 

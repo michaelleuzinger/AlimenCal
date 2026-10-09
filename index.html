@@ -250,7 +250,9 @@
         <p id="share-backup-hint" class="hint"></p>
         <div class="actions">
           <button id="share-backup" class="primary"></button>
+          <button id="share-backup-location" class="secondary"></button>
         </div>
+        <p id="share-backup-location-hint" class="hint"></p>
         <p id="share-backup-status" class="hint"></p>
         <h3 id="share-restore-heading"></h3>
         <p id="share-restore-hint" class="hint"></p>
@@ -258,6 +260,10 @@
           <span id="share-restore-label"></span>
           <input type="file" id="share-restore" accept="application/json,.json">
         </label>
+        <div class="actions">
+          <button id="share-restore-open" class="secondary" hidden></button>
+        </div>
+        <p id="share-restore-location-hint" class="hint"></p>
         <p id="share-restore-status" class="hint"></p>
       </div>
       <div class="card preset-card">
@@ -267,6 +273,9 @@
           <span id="share-import-label"></span>
           <input type="file" id="share-import" accept="application/json,.json">
         </label>
+        <div class="actions">
+          <button id="share-import-open" class="secondary" hidden></button>
+        </div>
         <p id="share-import-status" class="hint"></p>
       </div>
       <div class="card preset-card">
@@ -455,6 +464,7 @@
   <script src="js/assetsplit.js"></script>
   <script src="js/storage.js"></script>
   <script src="js/casecrypto.js"></script>
+  <script src="js/filestore.js"></script>
   <script src="js/app.js"></script>
 </div><!-- /app-shell -->  </body>
 </html>
