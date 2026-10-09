@@ -26,8 +26,8 @@ AlimenCal.i18n.fr = {
     colBase: 'Valeur contraignante',
     colApproval: 'Confirmation',
     colOverride: 'Remplacement',
-    confirmA: 'Partie {0}',
-    confirmB: 'Partie {0}',
+    confirmA: '{0}',
+    confirmB: '{0}',
     locked: 'Valeur fixée de manière contraignante (lecture seule).',
     pendingApproval: 'En attente de la confirmation de l’autre partie.',
     notLocked: 'Remplacement possible seulement après confirmation des deux parties.',
@@ -43,6 +43,7 @@ AlimenCal.i18n.fr = {
     keysLegend: 'Clés',
     keyPresent: 'Clé présente',
     keyMissing: 'Pas de clé',
+    generateFor: 'G\u00e9n\u00e9rer la cl\u00e9 de {0}',
     generate: 'Générer la clé',
     exportPub: 'Exporter la clé publique',
     importPub: 'Importer la clé publique de l\'autre partie',
@@ -74,7 +75,7 @@ AlimenCal.i18n.fr = {
   nav: {
     children: 'Pension pour enfants',
     spousal: 'Pension conjugale',
-    settings: 'Valeurs de référence',
+    settings: 'Valeurs de référence',    party: 'Personnes et sécurité',
     costsplit: 'Séparation des coûts',
     themes: 'Thèmes',
     share: 'Échange',
@@ -83,6 +84,34 @@ AlimenCal.i18n.fr = {
     language: 'Langue',
     childrenShort: 'Enfants', spousalShort: 'Époux', costsplitShort: 'Coûts', shareShort: 'Échange',
     backup: 'Sauvegarde'
+  },
+  party: {
+    heading: 'Personnes et sécurité',
+    intro: 'Noms des parties, param\u00e8tres contraignants (verrou bipartite) et protection cryptographique (clés, fichier de verrouillage signé) sont regroupés ici.'
+  },
+  wizard: {
+    title: 'Bienvenue sur AlimenCal',
+    intro: 'Configuration rapide en quatre étapes : noms, r\u00f4le, clés, export. Tout est facultatif et modifiable ultérieurement sous \u00ab Personnes et sécurité \u00bb.',
+    nameLabel: 'Quels sont les noms des parties ? (facultatif)',
+    nameA: 'Nom de {0}',
+    nameB: 'Nom de {0}',
+    nameHint: 'Au lieu de \u00ab Partie A / B \u00bb, ces noms sont affichés dans toute l\u2019application.',
+    roleLabel: 'Quelle partie \u00eates-vous dans cette instance ?',
+    roleA: 'Je suis {0}',
+    roleB: 'Je suis {0}',
+    roleNone: 'Commun / sans r\u00f4le (p. ex. médiation)',
+    roleHint: 'Avec un r\u00f4le sélectionné, seules vos propres confirmations et clés peuvent \u00eatre utilisées dans cette instance.',
+    keyText: 'Générer des clés (ECDSA P-256, restent locales dans votre navigateur). Nécessaire uniquement pour signer des fichiers de verrouillage.',
+    keyGenerate: 'Générer la clé',
+    keyDone: 'Clé générée pour {0}.',
+    exportText: 'Exportez votre clé publique et transmettez-la \u00e0 l\u2019autre partie (p. ex. par e-mail). Elle pourra ainsi vérifier vos signatures.',
+    keyExport: 'Exporter la clé publique',
+    exportHint: 'La clé privée ne quitte jamais votre navigateur.',
+    back: 'Retour',
+    next: 'Suivant',
+    finish: 'Terminer',
+    skip: 'Passer',
+    paletteReopen: 'Ouvrir l\u2019assistant de bienvenue'
   },
   palette: { placeholder: 'Rechercher ou aller à …', empty: 'Aucun résultat' },
   common: {
@@ -209,7 +238,6 @@ AlimenCal.i18n.fr = {
     designIntro: 'Choisissez un style de design : il adapte l’apparence complète (typographie, cartes, ombres, couleurs). Les détails peuvent ensuite être ajustés dans l’éditeur de thème.',
     designCurrent: 'Actuel'
   },
-  wizard: { title: 'Demarrage rapide', step1: 'Parents', step2: 'Enfants', step3: 'Revenus', question: 'Combien d enfants avez-vous ?', one: '1 enfant', oneHint: 'Saisir age, couts et revenus', two: '2 enfants', twoHint: 'Majoration familiale prise en compte', next: 'Continuer', skip: 'Passer' },
   share: {
     heading: 'Échange entre les parties',
     intro: 'Si les parties travaillent sur des PC distincts, chacune peut saisir uniquement ses propres données, les exporter dans un fichier et le transmettre à l’autre partie (par ex. par e-mail ou via l’avocat). L’autre partie importe le fichier ; seules les sections contenues sont reprises, tout le reste reste inchangé.',

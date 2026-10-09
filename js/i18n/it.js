@@ -26,8 +26,8 @@ AlimenCal.i18n.it = {
     colBase: 'Valore vincolante',
     colApproval: 'Conferma',
     colOverride: 'Override',
-    confirmA: 'Parte {0}',
-    confirmB: 'Parte {0}',
+    confirmA: '{0}',
+    confirmB: '{0}',
     locked: 'Valore fissato in modo vincolante (sola lettura).',
     pendingApproval: 'In attesa della conferma dell’altra parte.',
     notLocked: 'Override possibile solo dopo la conferma di entrambe le parti.',
@@ -43,6 +43,7 @@ AlimenCal.i18n.it = {
     keysLegend: 'Chiavi',
     keyPresent: 'Chiave presente',
     keyMissing: 'Nessuna chiave',
+    generateFor: 'Genera chiave per {0}',
     generate: 'Genera chiave',
     exportPub: 'Esporta chiave pubblica',
     importPub: 'Importa chiave pubblica dell\'altra parte',
@@ -74,7 +75,7 @@ AlimenCal.i18n.it = {
   nav: {
     children: 'Alimenti per figli',
     spousal: 'Alimenti per il coniuge',
-    settings: 'Valori di riferimento',
+    settings: 'Valori di riferimento',    party: 'Persone e sicurezza',
     costsplit: 'Separazione dei costi',
     themes: 'Temi',
     share: 'Scambio',
@@ -83,6 +84,34 @@ AlimenCal.i18n.it = {
     language: 'Lingua',
     childrenShort: 'Figli', spousalShort: 'Coniuge', costsplitShort: 'Costi', shareShort: 'Scambio',
     backup: 'Backup'
+  },
+  party: {
+    heading: 'Persone e sicurezza',
+    intro: 'Nomi delle parti, impostazioni vincolanti (blocco bipartitico) e protezione crittografica (chiavi, file di blocco firmato) sono raggruppate qui.'
+  },
+  wizard: {
+    title: 'Benvenuti su AlimenCal',
+    intro: 'Configurazione rapida in quattro passaggi: nomi, ruolo, chiavi, esportazione. Tutto \u00e8 facoltativo e modificabile in seguito sotto \u00ab Persone e sicurezza \u00bb.',
+    nameLabel: 'Come si chiamano le parti? (facoltativo)',
+    nameA: 'Nome di {0}',
+    nameB: 'Nome di {0}',
+    nameHint: 'Invece di \u00ab Parte A / B \u00bb questi nomi vengono mostrati in tutta l\u2019app.',
+    roleLabel: 'Quale parte sei in questa istanza dell\u2019app?',
+    roleA: 'Io sono {0}',
+    roleB: 'Io sono {0}',
+    roleNone: 'Condiviso / nessun ruolo (es. mediazione)',
+    roleHint: 'Con un ruolo selezionato, in questa istanza si possono utilizzare solo le proprie conferme e chiavi.',
+    keyText: 'Generare chiavi (ECDSA P-256, restano locali nel browser). Necessario solo per firmare file di blocco.',
+    keyGenerate: 'Genera chiave',
+    keyDone: 'Chiave generata per {0}.',
+    exportText: 'Esporta la tua chiave pubblica e trasmettila all\u2019altra parte (es. via e-mail). Potr\u00e0 cos\u00ec verificare le tue firme.',
+    keyExport: 'Esporta chiave pubblica',
+    exportHint: 'La chiave privata non lascia mai il browser.',
+    back: 'Indietro',
+    next: 'Avanti',
+    finish: 'Concludi',
+    skip: 'Salta',
+    paletteReopen: 'Apri assistente di benvenuto'
   },
   palette: { placeholder: 'Cercare o passare a …', empty: 'Nessun risultato' },
   common: {
@@ -209,7 +238,6 @@ AlimenCal.i18n.it = {
     designIntro: 'Scegli uno stile di design: adatta l’aspetto completo (tipografia, schede, ombre, colori). I dettagli possono poi essere affinati nell’editor dei temi.',
     designCurrent: 'Attuale'
   },
-  wizard: { title: 'Avvio rapido', step1: 'Genitori', step2: 'Figli', step3: 'Redditi', question: 'Quanti figli hai?', one: '1 figlio', oneHint: 'Inserisci eta, costi e reddito', two: '2 figli', twoHint: 'Aggiunta per figli considerata', next: 'Avanti', skip: 'Salta' },
   share: {
     heading: 'Scambio tra le parti',
     intro: 'Se le parti lavorano su PC diversi, ciascuna può inserire solo i propri dati, esportarli in un file e trasmetterlo all’altra parte (ad es. via e-mail o tramite l’avvocato). L’altra parte importa il file; solo le sezioni contenute vengono recepite, tutto il resto rimane invariato.',
