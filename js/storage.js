@@ -26,9 +26,21 @@ AlimenCal.storage = (function () {
    *   2 - versionierter Payload (app/kind/version), Kinder und
    *       Kostentrennung werden beim Laden normalisiert
    *   3 - Abschnitt-Locks (importierte Abschnitte read-only)
-   *   4 - Vermögensausgleich (Stichtag, Vermögenswerte je Partei)
+   *   4 - frei waehlbare Partei-Namen (party-name-a/b)
+   *   5 - Vermögensausgleich (Stichtag, Vermögenswerte je Partei)
    */
-  var FORM_VERSION = 4;
+  var FORM_VERSION = 5;
+
+  var PARTY_NAME_MAX = 40;
+
+  /* Normalisiert einen Partei-Namen: string, getrimmt, laengenbeschraenkt;
+   * leer/ungueltig -> '' (App faellt auf i18n-Default zurueck). */
+  function normalizePartyName(raw) {
+    if (typeof raw !== 'string') { return ''; }
+    var s = raw.trim();
+    if (!s) { return ''; }
+    return s.slice(0, PARTY_NAME_MAX);
+  }
 
   var CHILD_DEFAULTS = {
     age: 8,
@@ -241,7 +253,16 @@ AlimenCal.storage = (function () {
     }
 
     if (fromVersion < 4) {
-      /* v4: Vermögensausgleich; fehlt -> leerer Default. */
+      /* v4: Partei-Namen (frei waehlbar statt Partei A/B). */
+      ['party-name-a', 'party-name-b'].forEach(function (id) {
+        if (!Object.prototype.hasOwnProperty.call(form, id)) { return; }
+        var name = normalizePartyName(form[id]);
+        if (form[id] !== name) { form[id] = name; changed = true; }
+      });
+    }
+
+    if (fromVersion < 5) {
+      /* v5: Vermögensausgleich; fehlt -> leerer Default. */
       var assetsplit = normalizeAssetsplit(form.__assetsplit);
       if (assetsplit) {
         if (assetsplit.assets.length !== (form.__assetsplit.assets || []).length) {
@@ -252,10 +273,10 @@ AlimenCal.storage = (function () {
         delete form.__assetsplit;
         changed = true;
       }
-      var lockKeys4 = form.__sectionLocks;
-      if (Array.isArray(lockKeys4) && lockKeys4.indexOf('assetsplit') >= 0 &&
+      var lockKeys5 = form.__sectionLocks;
+      if (Array.isArray(lockKeys5) && lockKeys5.indexOf('assetsplit') >= 0 &&
           !form.__assetsplit) {
-        form.__sectionLocks = lockKeys4.filter(function (k) { return k !== 'assetsplit'; });
+        form.__sectionLocks = lockKeys5.filter(function (k) { return k !== 'assetsplit'; });
         changed = true;
       }
     }
@@ -355,6 +376,8 @@ AlimenCal.storage = (function () {
   return {
     FORM_VERSION: FORM_VERSION,
     CHILD_DEFAULTS: CHILD_DEFAULTS,
+    PARTY_NAME_MAX: PARTY_NAME_MAX,
+    normalizePartyName: normalizePartyName,
     normalizeDate: normalizeDate,
     normalizeChild: normalizeChild,
     normalizeChildren: normalizeChildren,

@@ -89,7 +89,7 @@ Schritt wiederhergestellt.
 Parteien-Datei oder dem Restore werden die übernommenen Abschnitte als
 unveränderbar gekennzeichnet – ihre Felder sind gesperrt und mit einem
 Hinweis versehen. Die Sperre gilt pro Abschnitt und wird im localStorage
-persistiert (FORM_VERSION 3); sie übersteht also einen Browser-Neustart.
+persistiert (FORM_VERSION 5); sie übersteht also einen Browser-Neustart.
 Im Austausch-Tab listet die Karte «Gesperrte Abschnitte (unveränderbar)»
 alle gesperrten Abschnitte; mit «Bearbeitung erlauben» wird die Sperre
 eines Abschnitts aufgehoben (bewusstes Freigeben, danach normal
@@ -225,7 +225,8 @@ Kurz:
 2. **Bankexport** hochladen – CSV (Trennzeichen, Datums- und Betragsformate
    werden automatisch erkannt) oder ISO-20022-XML (camt.052/053/054); das
    Format wird automatisch erkannt.
-3. **Kontoinhaber** angeben (Partei A oder B).
+3. **Kontoinhaber** angeben (Partei A oder B; werden im Tab «Richtwerte»
+   Partei-Namen erfasst, erscheinen diese stattdessen).
 4. Je Transaktion entscheiden: **ignorieren**, **anteilsmässig aufteilen**
    (Anteil je Transaktion konfigurierbar) oder **voll von Partei A bzw. B
    übernehmen**. Sammelaktionen erleichtern die Erstzuordnung.
@@ -243,7 +244,8 @@ Kurz:
 1. **Stichtag** wählen; per Knopf «Tag vor Kostentrennung übernehmen»
    vom Stichtag der Kostentrennung ableitbar.
 2. **Vermögenswerte hinzufügen**: Bezeichnung, Kategorie, Partei
-   (A, B oder gemeinsam mit Anteil), Saldo per Stichtag. Schulden als
+   (A, B oder gemeinsam mit Anteil; sind Partei-Namen erfasst,
+   erscheinen diese statt Partei A/B), Saldo per Stichtag. Schulden als
    negative Werte erfassen.
 3. **Ausgleich**: Die App zeigt Nettovermögen je Partei, Total,
    hälftigen Soll und wer wie viel ausgleicht.

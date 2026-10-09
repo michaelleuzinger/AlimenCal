@@ -153,6 +153,16 @@ ok('Restore: sections uebernommen', restored.sections.parentA.income === 7800);
 ok('Restore: lang', restored.settings.lang === 'fr');
 ok('Restore: theme.id', restored.settings.theme.id === 'dark');
 ok('Restore: config ohne AlimenCal.config verworfen (Node-Kontext)', !restored.settings.config || typeof restored.settings.config === 'object');
+ok('Backup/Restore: Partei-Namen uebernommen', (function () {
+  var b = casedata.buildBackupFile({ spousalEnabled: true }, { partyNames: { partyA: '  Anna ', partyB: 'Ben' } });
+  var r = casedata.sanitizeBackup(b);
+  return r.valid === true && r.settings.partyNames.partyA === 'Anna' && r.settings.partyNames.partyB === 'Ben';
+})());
+ok('Restore: Partei-Namen nur mit leeren/ungueltigen Werten verworfen', (function () {
+  var b = casedata.buildBackupFile({ spousalEnabled: true }, { partyNames: { partyA: '   ', partyB: 5 } });
+  var r = casedata.sanitizeBackup(b);
+  return r.valid === true && !r.settings.partyNames;
+})());
 ok('Restore: Falldatei ohne Extras => settings leer aber valid', (function () {
   var b = casedata.sanitizeBackup(casedata.buildBackupFile({ spousalEnabled: true }, {}));
   return b.valid === true && b.settings.lang === undefined;

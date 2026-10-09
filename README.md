@@ -94,6 +94,10 @@ App (PWA) installierbar und danach auch offline nutzbar:
   (localStorage), exportier- und importierbar als JSON
 - **Kantonale Presets**: JSON-Dateien unter `presets/`, in der App auswählbar
   (z. B. Zürcher Kinderkosten-Tabelle 1.3.2025)
+- **Namen der Parteien**: statt «Partei A / B» können je Partei eigene Namen
+  (z. B. Vornamen) erfasst werden; die App verwendet sie überall
+  (Kindesunterhalt, Kostentrennung, verbindliche Einstellungen, Kryptografie),
+  damit Einträge einfacher der richtigen Partei zugewiesen werden können
 - **Kostentrennung**: Bankexport-Upload mit automatischer Erkennung von
   Trennzeichen, Datums- und Betragsformaten; je Transaktion ignorieren,
   anteilsmässig aufteilen (Anteil konfigurierbar) oder voll einer Partei

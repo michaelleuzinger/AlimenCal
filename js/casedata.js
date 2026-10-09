@@ -242,6 +242,22 @@ AlimenCal.casedata = (function () {
   var BACKUP_VERSION = 1;
   var BACKUP_LANGS = ['de', 'fr', 'it', 'en'];
 
+  var PARTY_NAME_MAX = 40;
+
+  function sanitizeBackupPartyNames(data) {
+    if (!data || typeof data !== 'object') { return null; }
+    var out = { partyA: '', partyB: '' };
+    var seen = false;
+    ['partyA', 'partyB'].forEach(function (key) {
+      if (typeof data[key] === 'string') {
+        var name = data[key].trim().slice(0, PARTY_NAME_MAX);
+        out[key] = name;
+        if (name) { seen = true; }
+      }
+    });
+    return seen ? out : null;
+  }
+
   function sanitizeBackupLang(data) {
     return BACKUP_LANGS.indexOf(data) >= 0 ? data : null;
   }
@@ -330,7 +346,8 @@ AlimenCal.casedata = (function () {
         theme: extra.theme || null,
         config: extra.config || null,
         binding: extra.binding || null,
-        keys: extra.keys || null
+        keys: extra.keys || null,
+        partyNames: extra.partyNames || null
       }
     };
   }
@@ -355,6 +372,8 @@ AlimenCal.casedata = (function () {
     if (binding) { result.settings.binding = binding; }
     var keys = sanitizeBackupKeys(settings.keys);
     if (keys) { result.settings.keys = keys; }
+    var partyNames = sanitizeBackupPartyNames(settings.partyNames);
+    if (partyNames) { result.settings.partyNames = partyNames; }
     result.valid = true;
     return result;
   }
