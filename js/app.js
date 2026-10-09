@@ -2434,8 +2434,15 @@
   }
 
   function scheduleSaveForm() {
+    if (document.activeElement && (document.activeElement.id === 'party-name-a' ||
+        document.activeElement.id === 'party-name-b')) {
+      refreshPartyLabels();
+    }
     saveForm();
     bumpBackupChanges();
+  }
+  function refreshPartyLabels() {
+    applyI18n();
   }
 
   /* Selbsttest beim Start: der aktuelle Zustand wird einmal gespeichert,
@@ -2692,8 +2699,8 @@
     set('wizard-title', 'title');
     set('wizard-intro', 'intro');
     set('wizard-name-label', 'nameLabel');
-    set('wizard-name-a-label', 'nameA', [partyName('A')]);
-    set('wizard-name-b-label', 'nameB', [partyName('B')]);
+    set('wizard-name-a-label', 'nameA');
+    set('wizard-name-b-label', 'nameB');
     set('wizard-name-hint', 'nameHint');
     set('wizard-role-label', 'roleLabel');
     set('wizard-role-a-label', 'roleA', [partyName('A')]);
@@ -2869,6 +2876,7 @@
     fillCfgForm();
     addChildRow();
     restoreForm();
+    applyI18n();
     try { lastFormSnapshot = localStorage.getItem(LS_FORM); } catch (e) {}
     renderBackupReminder();
     document.getElementById('backup-reminder-action').addEventListener('click', function () {
