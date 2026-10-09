@@ -85,6 +85,19 @@ Schritt wiederhergestellt.
 
 ![Backup wiederherstellen (DE)](../screenshots/pc/16-restore-de.png)
 
+**Speicherort merken (Desktop-Browser):** Unterstützt der Browser die
+File System Access API (Chrome/Edge am Desktop), merkt sich AlimenCal
+den beim Backup gewählten Ordner (Knopf «Speicherort wählen …» beim
+Backup). Jedes weitere Backup wird **automatisch in denselben Ordner**
+geschrieben – ohne erneuten Dialog; der aktuelle Ordner wird unter dem
+Knopf angezeigt. Nach einem Browser-Neustart fragt der Browser einmalig
+die Berechtigung erneut ab (Klick auf «Backup erstellen» genügt).
+Beim Restore/Import zeigt die App die **zuletzt verwendete Datei** an
+und bietet sie per Knopf direkt zum Öffnen an – der Dateidialog entfällt.
+Die Handles werden lokal in IndexedDB gespeichert und niemals übertragen.
+Auf Browsern ohne diese API (z. B. Safari/iOS) gilt das bisherige
+Verhalten: Download- bzw. Web-Share-Dialog und freie Dateiauswahl.
+
 **Gesperrte Abschnitte (unveränderbar):** Nach dem Import einer
 Parteien-Datei oder dem Restore werden die übernommenen Abschnitte als
 unveränderbar gekennzeichnet – ihre Felder sind gesperrt und mit einem
