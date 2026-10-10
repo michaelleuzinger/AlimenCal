@@ -352,6 +352,26 @@ AlimenCal.casedata = (function () {
     };
   }
 
+  /* Validiert nur den settings-Teil einer Backup-/Sync-Datei (ohne case);
+   * verwendet von js/syncdata.js. Rueckgabe: validiertes settings-Objekt. */
+  function sanitizeBackupSettings(settings) {
+    var out = {};
+    settings = settings || {};
+    var lang = sanitizeBackupLang(settings.lang);
+    if (lang) { out.lang = lang; }
+    var theme = sanitizeBackupTheme(settings.theme);
+    if (theme) { out.theme = theme; }
+    var config = sanitizeBackupConfig(settings.config);
+    if (config) { out.config = config; }
+    var binding = sanitizeBackupBinding(settings.binding);
+    if (binding) { out.binding = binding; }
+    var keys = sanitizeBackupKeys(settings.keys);
+    if (keys) { out.keys = keys; }
+    var partyNames = sanitizeBackupPartyNames(settings.partyNames);
+    if (partyNames) { out.partyNames = partyNames; }
+    return out;
+  }
+
   function sanitizeBackup(raw) {
     var result = { valid: false, sections: {}, invalid: [], settings: {} };
     if (!raw || typeof raw !== 'object') { return result; }
@@ -361,19 +381,7 @@ AlimenCal.casedata = (function () {
     if (!inner || !inner.valid) { return result; }
     result.sections = inner.sections;
     result.invalid = inner.invalid;
-    var settings = raw.settings || {};
-    var lang = sanitizeBackupLang(settings.lang);
-    if (lang) { result.settings.lang = lang; }
-    var theme = sanitizeBackupTheme(settings.theme);
-    if (theme) { result.settings.theme = theme; }
-    var config = sanitizeBackupConfig(settings.config);
-    if (config) { result.settings.config = config; }
-    var binding = sanitizeBackupBinding(settings.binding);
-    if (binding) { result.settings.binding = binding; }
-    var keys = sanitizeBackupKeys(settings.keys);
-    if (keys) { result.settings.keys = keys; }
-    var partyNames = sanitizeBackupPartyNames(settings.partyNames);
-    if (partyNames) { result.settings.partyNames = partyNames; }
+    result.settings = sanitizeBackupSettings(raw.settings || {});
     result.valid = true;
     return result;
   }
@@ -385,6 +393,7 @@ AlimenCal.casedata = (function () {
     sanitizeBackup: sanitizeBackup,
     SECTIONS: SECTIONS,
     sanitizeCase: sanitizeCase,
+    sanitizeBackupSettings: sanitizeBackupSettings,
     mergeCase: mergeCase,
     buildFile: buildFile,
     sanitizeParent: sanitizeParent,

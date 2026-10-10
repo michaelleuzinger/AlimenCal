@@ -403,6 +403,58 @@ Verbindlichkeit siehe Tab «Einstellungen», signierte Lock-Dateien. Ein gemeins
 Bearbeiten gibt es nicht; der Austausch ist sequenziell (A exportiert,
 B importiert, rechnet).
 
+## Geräte-Sync (eigene Daten auf eigenen Geräten)
+
+Der **Geräte-Sync** (Same-User) synchronisiert die eigenen Falldaten auf
+mehreren eigenen Geräten (PC, Tablet, Smartphone) – ohne Server. Die App
+schreibt dazu eine Datei `alimencal-sync.json` in einen vom Nutzer
+gewählten Ordner, den ein Datei-Dienst der Wahl synchronisiert (iCloud
+Drive, Dropbox, Syncthing auf eigenem NAS …). Der Anbieter sieht dabei nur
+Chiffre: Die Sync-Datei ist **standardmässig passwortverschlüsselt**
+(PBKDF2-HMAC-SHA256 mit ≥ 600 000 Iterationen + AES-GCM, Web Crypto).
+Klartext ist nur ausdrücklich wählbar und mit klarer Warnung möglich.
+
+Der Geräte-Sync ist klar vom **Austausch** (Two-Party) zu unterscheiden: Er
+synchronisiert die eigenen Daten auf eigenen Geräten, nicht die Daten der
+Gegenpartei. Der Sync-Abschnitt befindet sich im Austausch-Tab.
+
+### Einrichtung (Desktop)
+
+1. Sync-Ordner wählen («Sync-Ordner wählen …»). Der Ordner wird gemerkt
+   (File System Access API, analog gemerkte Backup-Speicherorte).
+2. Sync-Passwort setzen (mind. 4 Zeichen). Das Passwort wird lokal im
+   Browser gespeichert; die Sync-Datei wird damit verschlüsselt.
+3. «Geräte-Sync aktivieren» einschalten (Standard: aus).
+
+Danach schreibt die App nach Änderungen debounced (ca. 5 s nach letzter
+Eingabe) sowie beim Schliessen der Seite automatisch in die Sync-Datei.
+Der Status zeigt die letzte Sync-Datei (Zeitpunkt + Änderungsstand).
+
+### Merge beim App-Start
+
+Ist die Sync-Datei neuer als der lokale Stand (`syncMeta.updatedAt` /
+`changeCount`), erscheint vor der Übernahme ein Dialog mit Zusammenfassung
+der betroffenen Abschnitte. Der Merge erfolgt abschnittsweise analog dem
+Austausch-Import: eigene, nicht enthaltene Abschnitte bleiben
+unverändert. Im Konflikt (lokal und Datei geändert) gewinnt abschnittsweise
+der neuere Stand, mit klarem Hinweis – niemals werden Daten still
+verworfen. Verbindliche Einstellungen (Two-Party-Lock) werden nicht
+umgangen; gesperrte (Read-Only-)Abschnitte werden nicht überschrieben.
+
+### Berechtigungsverlust
+
+Nach einem Browser-Neustart verlangt der gemerkte Ordner erneut eine
+Freigabe; die App bietet die erneute Ordnerfreigabe an. Schreibfehler
+werden still tolerieren und beim erstmaligen Scheitern kurz informiert.
+
+### iOS/Mobile
+
+Ohne File System Access API (iPhone/iPad) bleibt der bestehende manuelle
+Backup-/Restore-Flow: Sync-Datei in die Dateien-App/iCloud Drive legen und
+per Restore importieren. Ein Hintergrund-Sync ist auf iOS als PWA nicht
+möglich (Browser-Limitierung); der Sync-Abschnitt zeigt eine kurze
+Anleitung.
+
 ## Tab «Themes»
 
 ![Themes Classic (DE)](../screenshots/pc/07-themes-classic-de.png)

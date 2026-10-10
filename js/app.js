@@ -922,6 +922,18 @@
       backupLocBtn.hidden = !fsAvailable();
     }
     renderBackupLocationHint();
+    document.getElementById('share-sync-heading').textContent = t('sync', 'heading');
+    document.getElementById('share-sync-hint').textContent = t('sync', 'hint');
+    var syncIosHint = document.getElementById('share-sync-ios-hint');
+    if (syncIosHint) { syncIosHint.textContent = t('sync', 'iosHint'); }
+    document.getElementById('share-sync-enabled-label').textContent = t('sync', 'enabledLabel');
+    document.getElementById('share-sync-choose-dir').textContent = t('sync', 'chooseDir');
+    document.getElementById('share-sync-password-label').textContent = t('sync', 'passwordLabel');
+    document.getElementById('share-sync-set-password').textContent = t('sync', 'setPassword');
+    document.getElementById('share-sync-plaintext').textContent = t('sync', 'plaintextToggle');
+    var syncWarning = document.getElementById('share-sync-warning');
+    if (syncWarning) { syncWarning.textContent = t('sync', 'warning'); }
+    renderSyncSettings();
     document.getElementById('share-restore-heading').textContent = t('share', 'restoreHeading');
     document.getElementById('share-restore-hint').textContent = t('share', 'restoreHint');
     document.getElementById('share-restore-label').textContent = t('share', 'restoreLabel');
@@ -2254,6 +2266,304 @@
     };
     reader.readAsText(file);
   }
+  /* -------------------------------------------------------------   *
+   *  Geraete-Sync (Same-User, Issue #29): Sync-Datei alimencal-sync.json
+   *  in einem gemerkten Ordner (eigener Datei-Sync: iCloud Drive,
+   *  Dropbox, Syncthing ...). Standardmaessig passwortverschluesselt
+   *  (PBKDF2 + AES-GCM, js/casecrypto.js). Auto-Export debounced ca.
+   *  5 s nach letzter Aenderung sowie bei pagehide; Merge beim App-
+   *  Start analog Austausch-Import (js/syncdata.js). Ohne File System
+   *  Access API (iOS) bleibt der manuelle Backup-/Restore-Flow.
+   * ------------------------------------------------------------- */
+  var LS_SYNC = 'alimencal.sync';
+  var FS_KEY_SYNC_DIR = 'sync-dir';
+  var SYNC_DEBOUNCE_MS = 5000;
+  var syncTimer = null;
+  var syncWriteFailedNotified = false;
+  var syncChangeCount = 0;
+  function loadSyncSettings() {
+    var def = { enabled: false, encrypted: true, password: null, dirName: null, meta: null };
+    try {
+      var raw = localStorage.getItem(LS_SYNC);
+      if (!raw) { return def; }
+      var parsed = JSON.parse(raw);
+      return {
+        enabled: parsed.enabled === true,
+        encrypted: parsed.encrypted !== false,
+        password: typeof parsed.password === 'string' ? parsed.password : null,
+        dirName: typeof parsed.dirName === 'string' ? parsed.dirName : null,
+        meta: parsed.meta || null
+      };
+    } catch (e) { return def; }
+  }
+  function saveSyncSettings(s) {
+    try { localStorage.setItem(LS_SYNC, JSON.stringify(s)); } catch (e) {}
+  }
+  function syncStatus(msg) {
+    var el = document.getElementById('share-sync-status');
+    if (el && msg != null) { el.textContent = msg; }
+  }
+  function buildSyncPayload(cb) {
+    var current = collectCurrentSections();
+    var themeValues = null;
+    try {
+      var rawValues = localStorage.getItem(LS_THEME_VALUES);
+      if (rawValues) { themeValues = JSON.parse(rawValues); }
+    } catch (e) {}
+    var binding = null;
+    try { binding = JSON.parse(localStorage.getItem(LS_BINDING)); } catch (e) {}
+    var backup = AlimenCal.casedata.buildBackupFile(current, {
+      lang: state.lang,
+      theme: { id: getThemeId(), values: themeValues },
+      config: state.cfg,
+      binding: binding,
+      keys: loadKeys(),
+      partyNames: {
+        partyA: document.getElementById('party-name-a').value,
+        partyB: document.getElementById('party-name-b').value
+      }
+    });
+    syncChangeCount++;
+    var syncFile = AlimenCal.syncdata.buildSyncFile(backup, {
+      updatedAt: new Date().toISOString(),
+      changeCount: syncChangeCount,
+      formatVersion: AlimenCal.syncdata.FORMAT_VERSION
+    });
+    if (!syncFile) { cb(null); return; }
+    var s = loadSyncSettings();
+    s.meta = syncFile.syncMeta;
+    saveSyncSettings(s);
+    if (!s.encrypted || !s.password) { cb(JSON.stringify(syncFile, null, 2)); return; }
+    AlimenCal.casecrypto.encryptWithPassword(syncFile, s.password, function (env, err) {
+      cb(err || !env ? null : JSON.stringify(env, null, 2));
+    });
+  }
+  function writeSyncFile() {
+    var s = loadSyncSettings();
+    if (!s.enabled) { return; }
+    AlimenCal.filestore.get(FS_KEY_SYNC_DIR).then(function (dir) {
+      if (!dir) { return; }
+      return AlimenCal.filestore.permissionState(dir).catch(function () { return 'prompt'; }).
+        then(function (perm) {
+          if (perm === 'granted') { return dir; }
+          if (perm === 'prompt') {
+            return AlimenCal.filestore.requestPermission(dir).catch(function () { return 'denied'; }).
+              then(function (g) { return g === 'granted' ? dir : null; });
+          }
+          return null;
+        }).
+        then(function (dir2) {
+          if (!dir2) { syncStatus(t('sync', 'permissionLost')); return; }
+          buildSyncPayload(function (text) {
+            if (text === null) { syncStatus(t('sync', 'writeError')); return; }
+            writeToBackupDir(dir2, AlimenCal.syncdata.SYNC_FILE_NAME,
+              new Blob([text], { type: 'application/json' })).
+              then(function (written) {
+                if (written) {
+                  syncWriteFailedNotified = false;
+                  renderSyncStatusLine();
+                } else {
+                  if (!syncWriteFailedNotified) {
+                    syncWriteFailedNotified = true;
+                    syncStatus(t('sync', 'writeError'));
+                  }
+                }
+              });
+          });
+        });
+    }).catch(function () {});
+  }
+  function scheduleSyncExport() {
+    if (!loadSyncSettings().enabled) { return; }
+    if (syncTimer) { clearTimeout(syncTimer); }
+    syncTimer = setTimeout(writeSyncFile, SYNC_DEBOUNCE_MS);
+  }
+  function readSyncFile() {
+    return AlimenCal.filestore.get(FS_KEY_SYNC_DIR).then(function (dir) {
+      if (!dir) { return null; }
+      return AlimenCal.filestore.permissionState(dir).catch(function () { return 'prompt'; }).
+        then(function (perm) {
+          if (perm === 'granted') { return dir; }
+          return AlimenCal.filestore.requestPermission(dir).catch(function () { return 'denied'; }).
+            then(function (g) { return g === 'granted' ? dir : null; });
+        }).
+        then(function (dir2) {
+          if (!dir2) { return null; }
+          return dir2.getFileHandle(AlimenCal.syncdata.SYNC_FILE_NAME).
+            then(function (fh) { return fh.getFile(); }).
+            catch(function () { return null; });
+        });
+    }).catch(function () { return null; });
+  }
+  function parseSyncFileText(text, cb) {
+    var raw;
+    try { raw = JSON.parse(text); } catch (e) { cb(null, 'invalid'); return; }
+    if (AlimenCal.casecrypto.isSyncEnvelope(raw)) {
+      var s = loadSyncSettings();
+      if (!s.password) { cb(null, 'noPassword'); return; }
+      AlimenCal.casecrypto.decryptWithPassword(raw, s.password, function (obj, err) {
+        if (err || !obj) { cb(null, 'decrypt'); return; }
+        cb(AlimenCal.syncdata.sanitizeSyncFile(obj));
+      });
+      return;
+    }
+    cb(AlimenCal.syncdata.sanitizeSyncFile(raw));
+  }
+  /* Merge beim App-Start: nur wenn Sync aktiv und Datei neuer ist;
+   * vor Uebernahme Dialog mit Zusammenfassung; Gegenseite-Locks und
+   * Read-Only-Abschnitte werden nicht ueberschrieben (applySectionsToForm
+   * laeuft ueber applySectionLocks geschuetzte Felder; gesperrte
+   * Abschnitte werden vom Merge ausgenommen). */
+  function syncOnStart() {
+    var s = loadSyncSettings();
+    if (!s.enabled) { return; }
+    if (!fsAvailable()) { renderSyncIosHint(); return; }
+    readSyncFile().then(function (file) {
+      if (!file) { return; }
+      var reader = new FileReader();
+      reader.onload = function () {
+        parseSyncFileText(reader.result, function (result, errKind) {
+          if (!result || !result.valid) {
+            if (errKind) { syncStatus(t('sync', 'error_' + errKind)); }
+            return;
+          }
+          var stand = AlimenCal.syncdata.compareStands(s.meta, result.syncMeta);
+          if (stand !== 'file') { return; }
+          var local = collectCurrentSections();
+          var mergedResult = AlimenCal.syncdata.mergeSync(
+            { meta: s.meta, sections: local },
+            { meta: result.syncMeta, sections: result.sections }
+          );
+          var names = Object.keys(result.sections);
+          if (!names.length) { return; }
+          var apply = {};
+          names.forEach(function (name) {
+            if (mergedResult.source[name] === 'incoming') { apply[name] = result.sections[name]; }
+          });
+          if (!Object.keys(apply).length) { return; }
+          if (!window.confirm(t('sync', 'mergeConfirm',
+            [names.map(function (n) { return t('share', 'section' +
+              n.charAt(0).toUpperCase() + n.slice(1)); }).join(', '),
+              result.syncMeta.updatedAt]))) {
+            syncStatus(t('sync', 'mergeDeclined'));
+            return;
+          }
+          applySectionsToForm(apply);
+          var st = loadSyncSettings();
+          st.meta = result.syncMeta;
+          saveSyncSettings(st);
+          syncStatus(t('sync', 'mergeOk', [String(Object.keys(apply).length)]));
+        });
+      };
+      reader.readAsText(file);
+    });
+  }
+  function renderSyncIosHint() {
+    var hint = document.getElementById('share-sync-ios-hint');
+    if (hint) { hint.hidden = false; }
+  }
+  function renderSyncStatusLine() {
+    var s = loadSyncSettings();
+    var el = document.getElementById('share-sync-status');
+    if (!el) { return; }
+    if (!s.meta || !s.meta.updatedAt) { el.textContent = ''; return; }
+    var stands = s.meta && s.meta.changeCount != null
+      ? t('sync', 'statusLine', [s.meta.updatedAt, String(s.meta.changeCount)])
+      : '';
+    el.textContent = stands;
+  }
+  function renderSyncSettings() {
+    var s = loadSyncSettings();
+    var box = document.getElementById('share-sync-enabled');
+    if (box) { box.checked = s.enabled; }
+    var pw = document.getElementById('share-sync-password');
+    if (pw) { pw.value = ''; }
+    var dirBtn = document.getElementById('share-sync-choose-dir');
+    if (dirBtn) { dirBtn.hidden = !fsAvailable(); }
+    var plainBtn = document.getElementById('share-sync-plaintext');
+    if (plainBtn) { plainBtn.hidden = !s.encrypted || !s.enabled; }
+    if (!fsAvailable()) { renderSyncIosHint(); }
+    renderSyncDirHint();
+    renderSyncStatusLine();
+  }
+  function renderSyncDirHint() {
+    var hint = document.getElementById('share-sync-dir-hint');
+    if (!hint) { return; }
+    if (!fsAvailable()) { hint.textContent = ''; return; }
+    AlimenCal.filestore.get(FS_KEY_SYNC_DIR).then(function (dir) {
+      hint.textContent = dir
+        ? t('sync', 'dirRemembered', [AlimenCal.filestore.locationName(dir) || ''])
+        : '';
+    }).catch(function () { hint.textContent = ''; });
+  }
+  function initSyncUi() {
+    document.getElementById('share-sync-enabled').addEventListener('change', function () {
+      var s = loadSyncSettings();
+      s.enabled = this.checked;
+      saveSyncSettings(s);
+      renderSyncSettings();
+      if (s.enabled && fsAvailable()) {
+        if (!s.password && s.encrypted) {
+          syncStatus(t('sync', 'setPasswordFirst'));
+          return;
+        }
+        writeSyncFile();
+      }
+    });
+    document.getElementById('share-sync-choose-dir').addEventListener('click', function () {
+      if (!fsAvailable()) { return; }
+      window.showDirectoryPicker({ id: 'alimencal-sync', mode: 'readwrite' }).
+        then(function (dir) {
+          return AlimenCal.filestore.put(FS_KEY_SYNC_DIR, dir).then(function () { return dir; });
+        }).
+        then(function (dir) {
+          var s = loadSyncSettings();
+          s.dirName = AlimenCal.filestore.locationName(dir);
+          saveSyncSettings(s);
+          renderSyncDirHint();
+          if (s.enabled) { writeSyncFile(); }
+        }).
+        catch(function () {});
+    });
+    document.getElementById('share-sync-set-password').addEventListener('click', function () {
+      var pw = document.getElementById('share-sync-password').value;
+      if (!pw) {
+        var s0 = loadSyncSettings();
+        s0.password = null;
+        s0.encrypted = true;
+        saveSyncSettings(s0);
+        syncStatus(t('sync', 'passwordCleared'));
+        return;
+      }
+      if (pw.length < 4) { syncStatus(t('sync', 'passwordTooShort')); return; }
+      var s = loadSyncSettings();
+      s.password = pw;
+      s.encrypted = true;
+      saveSyncSettings(s);
+      document.getElementById('share-sync-password').value = '';
+      syncStatus(t('sync', 'passwordSet'));
+      var plainBtn = document.getElementById('share-sync-plaintext');
+      if (plainBtn) { plainBtn.hidden = false; }
+      if (s.enabled) { writeSyncFile(); }
+    });
+    document.getElementById('share-sync-plaintext').addEventListener('click', function () {
+      var s = loadSyncSettings();
+      if (!s.enabled) { return; }
+      if (!window.confirm(t('sync', 'plaintextConfirm'))) {
+        return;
+      }
+      s.encrypted = false;
+      s.password = null;
+      saveSyncSettings(s);
+      syncStatus(t('sync', 'plaintextOn'));
+      this.hidden = true;
+      writeSyncFile();
+    });
+    renderSyncSettings();
+  }
+  function syncOnUserInput() {
+    scheduleSyncExport();
+  }
   function applySectionLocks() {
     Object.keys(SECTION_FIELDS).forEach(function (key) {
       var locked = state.sectionLocks.indexOf(key) >= 0;
@@ -2904,9 +3214,11 @@
     document.addEventListener('input', scheduleSaveForm);
     document.addEventListener('change', scheduleSaveForm);
     document.addEventListener('click', scheduleSaveForm);
+    document.addEventListener('input', syncOnUserInput);
+    document.addEventListener('change', syncOnUserInput);
     restoreFormSelfTest();
     window.addEventListener('beforeunload', saveForm);
-    window.addEventListener('pagehide', saveForm);
+    window.addEventListener('pagehide', function () { saveForm(); writeSyncFile(); });
     document.addEventListener('visibilitychange', function () {
       if (document.visibilityState === 'hidden') { saveForm(); }
     });
@@ -2935,6 +3247,8 @@
       });
     });
     renderRestoreLocationHint();
+    initSyncUi();
+    syncOnStart();
     document.getElementById('share-import').addEventListener('change', function () {
       var file = this.files && this.files[0];
       if (file) { rememberFileHandle(file); handleShareImport(file); }

@@ -357,4 +357,32 @@ assetsplit: {
     half: 'hälftiger Soll',
     owes: '{0} gleicht CHF {2} an {1} aus',
     balanced: 'ausgeglichen'
-  }};
+  },
+  sync: {
+    heading: 'Geräte-Sync (eigene Daten auf eigenen Geräten)',
+    hint: 'Synchronisiert Ihre Falldaten über eine Datei in einem Ordner Ihrer Wahl, den ein Datei-Dienst Ihrer Wahl synchronisiert (z. B. iCloud Drive, Dropbox, Syncthing). Kein Server speichert Daten; die Datei wird standardmässig passwortverschlüsselt gespeichert.',
+    iosHint: 'Auf iPhone/iPad steht keine Ordner-Freigabe zur Verfügung (Browser-Limitierung). Nutzen Sie hier den bestehenden Backup-/Restore-Flow: Datei in der Dateien-App/iCloud Drive speichern und auf dem anderen Gerät wiederherstellen.',
+    enabledLabel: 'Geräte-Sync aktivieren (Standard: aus)',
+    chooseDir: 'Sync-Ordner wählen …',
+    dirRemembered: 'Sync-Ordner: «{0}» – die Sync-Datei alimencal-sync.json wird automatisch dorthin geschrieben.',
+    passwordLabel: 'Sync-Passwort',
+    setPassword: 'Passwort setzen / ändern',
+    passwordSet: 'Passwort gesetzt. Die Sync-Datei wird damit verschlüsselt.',
+    passwordCleared: 'Passwort entfernt – bitte ein neues Passwort setzen, bevor der Sync wieder schreibt.',
+    passwordTooShort: 'Passwort zu kurz (mindestens 4 Zeichen).',
+    setPasswordFirst: 'Bitte zuerst ein Sync-Passwort setzen (Verschlüsselung ist Standard).',
+    plaintextToggle: 'Klartext (ohne Passwort) verwenden',
+    plaintextConfirm: 'Die Sync-Datei unverschlüsselt speichern? Sie enthält Einkommen, Bankexporte und andere sensible Daten im Klartext. Der Sync-Dienst-Anbieter kann den Inhalt lesen.',
+    plaintextOn: 'Sync-Datei wird ab nun im Klartext gespeichert. Warnung: sensible Daten nicht verschlüsselt.',
+    warning: 'Achtung: Die Sync-Datei enthält alle Falldaten (Einkommen, Bankexporte etc.). Standard ist Passwort-Verschlüsselung (PBKDF2 + AES-GCM).',
+    statusLine: 'Letzte Sync-Datei: {0} ({1} Änderungen)',
+    writeError: 'Sync-Datei konnte nicht geschrieben werden. Ordner-Berechtigung prüfen oder Ordner neu wählen.',
+    permissionLost: 'Ordner-Berechtigung abgelaufen (z. B. nach Browser-Neustart). Bitte den Sync-Ordner erneut freigeben.',
+    error_invalid: 'Sync-Datei ist ungültig (keine gültige AlimenCal-Sync-Datei).',
+    error_noPassword: 'Sync-Datei ist verschlüsselt, aber es ist kein Sync-Passwort gesetzt.',
+    error_decrypt: 'Sync-Datei konnte nicht entschlüsselt werden (falsches Passwort oder Datei manipuliert).',
+    mergeConfirm: 'Die Sync-Datei ist neuer ({1}). Folgende Abschnitte werden übernommen: {0}. Übernehmen?',
+    mergeOk: 'Merge abgeschlossen: {0} Abschnitt(e) übernommen.',
+    mergeDeclined: 'Merge abgelehnt – lokale Daten bleiben unverändert.',
+  }
+};

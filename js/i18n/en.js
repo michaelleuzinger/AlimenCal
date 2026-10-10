@@ -357,4 +357,32 @@ assetsplit: {
     half: 'Equal share',
     owes: '{0} pays CHF {2} to {1} as equalisation',
     balanced: 'balanced'
-  }};
+  },
+  sync: {
+    heading: 'Device sync (your data on your devices)',
+    hint: 'Syncs your data via a file in a folder of your choice, synced by a service of your choice (iCloud Drive, Dropbox, Syncthing). No server stores data; the file is password-encrypted by default.',
+    iosHint: 'On iPhone/iPad folder sharing is unavailable (browser limitation). Use the existing backup/restore flow: save the file in the Files app/iCloud Drive and restore it on the other device.',
+    enabledLabel: 'Enable device sync (default: off)',
+    chooseDir: 'Choose sync folder …',
+    dirRemembered: 'Sync folder: “{0}” – the alimencal-sync.json file is written there automatically.',
+    passwordLabel: 'Sync password',
+    setPassword: 'Set / change password',
+    passwordSet: 'Password set. The sync file is encrypted with it.',
+    passwordCleared: 'Password removed – please set a new one before the sync writes again.',
+    passwordTooShort: 'Password too short (at least 4 characters).',
+    setPasswordFirst: 'Please set a sync password first (encryption is the default).',
+    plaintextToggle: 'Use plaintext (no password)',
+    plaintextConfirm: 'Store the sync file unencrypted? It contains income, bank exports and other sensitive data in plain text. The sync provider can read the content.',
+    plaintextOn: 'The sync file is now stored in plaintext. Warning: sensitive data unencrypted.',
+    warning: 'Note: the sync file contains all case data (income, bank exports etc.). Password encryption (PBKDF2 + AES-GCM) is the default.',
+    statusLine: 'Last sync file: {0} ({1} changes)',
+    writeError: 'Could not write the sync file. Check folder permission or choose the folder again.',
+    permissionLost: 'Folder permission lost (e.g. after browser restart). Please re-grant the sync folder.',
+    error_invalid: 'Invalid sync file.',
+    error_noPassword: 'The file is encrypted, but no sync password is set.',
+    error_decrypt: 'Decryption failed (wrong password or tampered file).',
+    mergeConfirm: 'The sync file is newer ({1}). Sections to apply: {0}. Apply?',
+    mergeOk: 'Merge complete: {0} section(s) applied.',
+    mergeDeclined: 'Merge declined – local data remains unchanged.',
+  }
+};

@@ -357,4 +357,32 @@ assetsplit: {
     half: 'Metà pari',
     owes: '{0} versa CHF {2} a {1} a titolo di compensazione',
     balanced: 'in equilibrio'
-  }};
+  },
+  sync: {
+    heading: 'Sincronizzazione dei dispositivi (propri dati su propri dispositivi)',
+    hint: 'Sincronizza i dati tramite un file in una cartella a scelta, sincronizzata dal servizio preferito (iCloud Drive, Dropbox, Syncthing). Nessun server memorizza dati; il file è cifrato con password per impostazione predefinita.',
+    iosHint: 'Su iPhone/iPad la condivisione di cartelle non è disponibile (limite del browser). Utilizzare il flusso backup/ripristino esistente: salvare il file in File/iCloud Drive e ripristinarlo sull\'altro dispositivo.',
+    enabledLabel: 'Attiva la sincronizzazione (predefinito: disattivata)',
+    chooseDir: 'Scegli cartella di sincronizzazione …',
+    dirRemembered: 'Cartella di sincronizzazione: «{0}» – il file alimencal-sync.json viene scritto lì automaticamente.',
+    passwordLabel: 'Password di sincronizzazione',
+    setPassword: 'Imposta / modifica password',
+    passwordSet: 'Password impostata. Il file di sincronizzazione viene cifrato.',
+    passwordCleared: 'Password rimossa – impostarne una nuova prima della prossima scrittura.',
+    passwordTooShort: 'Password troppo corta (almeno 4 caratteri).',
+    setPasswordFirst: 'Impostare prima una password di sincronizzazione (la cifratura è lo standard).',
+    plaintextToggle: 'Usare testo in chiaro (senza password)',
+    plaintextConfirm: 'Salvare il file non cifrato? Contiene redditi, estratti bancari e altri dati sensibili in chiaro. Il fornitore del servizio può leggerne il contenuto.',
+    plaintextOn: 'Il file di sincronizzazione è ora in testo in chiaro. Attenzione: dati sensibili non cifrati.',
+    warning: 'Attenzione: il file contiene tutti i dati (redditi, estratti bancari, ecc.). Lo standard è la cifratura con password (PBKDF2 + AES-GCM).',
+    statusLine: 'Ultimo file di sincronizzazione: {0} ({1} modifiche)',
+    writeError: 'Scrittura del file non riuscita. Verificare l\'autorizzazione della cartella o sceglierla di nuovo.',
+    permissionLost: 'Autorizzazione della cartella scaduta (p. es. dopo il riavvio del browser). Condividere di nuovo la cartella.',
+    error_invalid: 'File di sincronizzazione non valido.',
+    error_noPassword: 'Il file è cifrato, ma nessuna password è impostata.',
+    error_decrypt: 'Decifratura non riuscita (password errata o file manomesso).',
+    mergeConfirm: 'Il file è più recente ({1}). Sezioni da riprendere: {0}. Riprendere?',
+    mergeOk: 'Unione completata: {0} sezione/i ripresa/e.',
+    mergeDeclined: 'Unione rifiutata – i dati locali restano invariati.',
+  }
+};

@@ -357,4 +357,32 @@ assetsplit: {
     half: 'Quote-part égale',
     owes: '{0} verse CHF {2} à {1} à titre de compensation',
     balanced: 'équilibré'
-  }};
+  },
+  sync: {
+    heading: 'Synchronisation des appareils (vos données sur vos appareils)',
+    hint: 'Synchronise vos données via un fichier dans un dossier de votre choix, synchronisé par le service de votre choix (iCloud Drive, Dropbox, Syncthing). Aucun serveur ne stocke de données ; le fichier est chiffré par mot de passe par défaut.',
+    iosHint: 'Sur iPhone/iPad, le partage de dossier n\'est pas disponible (limite du navigateur). Utilisez le flux sauvegarde/restauration existant : enregistrer le fichier dans Fichiers/iCloud Drive et le restaurer sur l\'autre appareil.',
+    enabledLabel: 'Activer la synchronisation (défaut : désactivée)',
+    chooseDir: 'Choisir le dossier de synchronisation …',
+    dirRemembered: 'Dossier de synchronisation : « {0} » – le fichier alimencal-sync.json y est écrit automatiquement.',
+    passwordLabel: 'Mot de passe de synchronisation',
+    setPassword: 'Définir / modifier le mot de passe',
+    passwordSet: 'Mot de passe défini. Le fichier de synchronisation est chiffré avec.',
+    passwordCleared: 'Mot de passe supprimé – définir un nouveau mot de passe avant la prochaine écriture.',
+    passwordTooShort: 'Mot de passe trop court (4 caractères minimum).',
+    setPasswordFirst: 'Définir d\'abord un mot de passe de synchronisation (le chiffrement est la norme).',
+    plaintextToggle: 'Utiliser le texte en clair (sans mot de passe)',
+    plaintextConfirm: 'Enregistrer le fichier de synchronisation non chiffré ? Il contient revenus, exports bancaires et autres données sensibles en clair. Le fournisseur du service peut lire le contenu.',
+    plaintextOn: 'Le fichier de synchronisation est désormais en texte clair. Attention : données sensibles non chiffrées.',
+    warning: 'Attention : le fichier contient toutes les données (revenus, exports bancaires, etc.). La norme est le chiffrement par mot de passe (PBKDF2 + AES-GCM).',
+    statusLine: 'Dernier fichier de synchronisation : {0} ({1} modifications)',
+    writeError: 'Écriture du fichier impossible. Vérifier l\'autorisation du dossier ou le choisir à nouveau.',
+    permissionLost: 'Autorisation du dossier expirée (p. ex. après redémarrage du navigateur). Veuillez partager à nouveau le dossier.',
+    error_invalid: 'Fichier de synchronisation invalide.',
+    error_noPassword: 'Le fichier est chiffré, mais aucun mot de passe n\'est défini.',
+    error_decrypt: 'Déchiffrement impossible (mot de passe incorrect ou fichier altéré).',
+    mergeConfirm: 'Le fichier est plus récent ({1}). Sections reprises : {0}. Reprendre ?',
+    mergeOk: 'Fusion terminée : {0} section(s) reprise(s).',
+    mergeDeclined: 'Fusion refusée – les données locales restent inchangées.',
+  }
+};

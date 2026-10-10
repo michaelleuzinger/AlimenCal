@@ -14,6 +14,8 @@
 - [x] Public-Key-verschlüsselter Austausch (ECDH P-256 + AES-GCM)
 - [x] Apple-Redesign: Sidebar-Navigation, Schnellstart-Assistent, Apple-Design als Standard
 
+- [x] Geräte-Sync (Same-User): passwortverschlüsselte Sync-Datei in gemerktem Ordner, automatischer Merge beim App-Start (Issue #29)
+
 ## Geplant
 
 - [ ] PDF-Export des Berechnungsblatts
