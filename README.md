@@ -135,6 +135,13 @@ App (PWA) installierbar und danach auch offline nutzbar:
   AES-GCM, Web Crypto) – nur die Gegenseite kann die Datei öffnen
 - **Mangellagen-Erkennung**: Unterdeckung (Manko) wird ausgewiesen, inklusive
   Hinweis auf die Nachforderungspraxis
+- **Geräte-Sync (Same-User)**: Falldaten auf mehreren eigenen Geräten
+  ohne Server nutzen – die App schreibt eine Sync-Datei
+  `alimencal-sync.json` in einen gemerkten Ordner, den ein Datei-Dienst
+  der Wahl synchronisiert (iCloud Drive, Dropbox, Syncthing …).
+  Standardmässig passwortverschlüsselt (PBKDF2 + AES-GCM); Merge beim
+  App-Start abschnittsweise analog Austausch-Import, nichts wird still
+  verworfen
 - **Kein Server, keine Abhängigkeiten**: reine statische Web-App
   (HTML/CSS/Vanilla JS), alle Daten bleiben lokal im Browser
 
@@ -206,8 +213,8 @@ Grundgerüst, Stile und Design-Historie:
 
 ### Tests
 
-Über 600 Tests (Berechnungskern, Presets, Kostentrennung, Vermögensausgleich, Speicherorte, Themes,
-Austausch, Verschlüsselung, Persistenz) laufen ohne Abhängigkeiten mit
+Über 650 Tests (Berechnungskern, Presets, Kostentrennung, Vermögensausgleich, Speicherorte, Themes,
+Austausch, Verschlüsselung, Persistenz, Geräte-Sync) laufen ohne Abhängigkeiten mit
 Node.js – Übersicht und Ausführung: [docs/TESTS.md](docs/TESTS.md).
 
 ### Mitmachen
@@ -250,7 +257,9 @@ Richtigkeit oder Vollständigkeit der Ergebnisse.
 Alle Eingaben (Einkommen, Ausgaben, Bankexporte) werden ausschliesslich
 **lokal im Browser** verarbeitet und gespeichert (localStorage bzw.
 verschlüsselter Export). Es gibt keinen Server, kein Tracking und keine
-Analyse-Funktionen.
+Analyse-Funktionen. Der Geräte-Sync läuft über eine Datei im
+Nutzer-Ordner (Datei-Dienst der Wahl) und ist standardmässig
+passwortverschlüsselt – der Sync-Anbieter sieht nur Chiffre.
 
 ## Lizenz
 

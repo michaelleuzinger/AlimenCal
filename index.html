@@ -266,6 +266,29 @@
         <p id="share-restore-location-hint" class="hint"></p>
         <p id="share-restore-status" class="hint"></p>
       </div>
+      <div class="card preset-card" id="share-sync-card">
+        <h3 id="share-sync-heading"></h3>
+        <p id="share-sync-hint" class="hint"></p>
+        <p id="share-sync-ios-hint" class="hint" hidden></p>
+        <label class="checkbox">
+          <input type="checkbox" id="share-sync-enabled">
+          <span id="share-sync-enabled-label"></span>
+        </label>
+        <div class="actions">
+          <button id="share-sync-choose-dir" class="secondary"></button>
+        </div>
+        <p id="share-sync-dir-hint" class="hint"></p>
+        <label class="file-label">
+          <span id="share-sync-password-label"></span>
+          <input type="password" id="share-sync-password" autocomplete="off">
+        </label>
+        <div class="actions">
+          <button id="share-sync-set-password" class="secondary"></button>
+          <button id="share-sync-plaintext" class="ghost"></button>
+        </div>
+        <p id="share-sync-warning" class="hint"></p>
+        <p id="share-sync-status" class="hint"></p>
+      </div>
       <div class="card preset-card">
         <h3 id="share-import-heading"></h3>
         <p id="share-import-hint" class="hint"></p>
@@ -531,6 +554,7 @@
   <script src="js/storage.js"></script>
   <script src="js/casecrypto.js"></script>
   <script src="js/filestore.js"></script>
+  <script src="js/syncdata.js"></script>
   <script src="js/app.js"></script>
 </div><!-- /app-shell -->  </body>
 </html>

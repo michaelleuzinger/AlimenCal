@@ -14,6 +14,7 @@ node tests/settings.test.js     # Verbindliche Einstellungen: Two-Party-Lock, Ov
 node tests/crypto.test.js       # Serverlose Verbindlichkeit: Hash-Kette, signierte Lock-Dateien (17 Tests)
 node tests/casecrypto.test.js   # Verschlüsselter Austausch: ECDH/AES-GCM-Export (14 Tests)
 node tests/storage.test.js      # localStorage-Persistenz: Versionierung, Migration v3–v5 (Abschnitt-Locks, Partei-Namen, Vermögensausgleich), Sanitizing, Backup-Erinnerung inkl. Erst-Erinnerung (76 Tests)
+node tests/syncdata.test.js    # Geräte-Sync: syncMeta-Validierung, Stand-Vergleich, abschnittsweiser Merge (neuere Datei, Konflikt, fehlende Abschnitte), Passwort-Krypto-Roundtrip PBKDF2 + AES-GCM (37 Tests)
 ```
 
 Oder alle auf einmal:

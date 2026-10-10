@@ -21,7 +21,11 @@ AlimenCal.casecrypto = (function () {
 
   var ENC_APP_ID = 'alimencal-enc';
   var ENC_VERSION = 1;
-  var ENC_KIND = 'case';
+  var ENC_KIND_CASE = 'case';
+  var ENC_KIND_SYNC = 'sync';
+  var PWD_KDF_ID = 'PBKDF2-SHA256-AES256GCM';
+  var PBKDF2_ITERATIONS = 600000;
+  var PBKDF2_ALGO = { name: 'PBKDF2', hash: 'SHA-256' };
   var KDF_ID = 'ECDH-P256-AES256GCM';
   var DH_ALGO = { name: 'ECDH', namedCurve: 'P-256' };
   var AES_ALGO = { name: 'AES-GCM', length: 256 };
@@ -50,9 +54,104 @@ AlimenCal.casecrypto = (function () {
 
   function isEnvelope(parsed) {
     return !!parsed && typeof parsed === 'object' &&
-      parsed.app === ENC_APP_ID && parsed.kind === ENC_KIND &&
-      parsed.version === ENC_VERSION && parsed.kdf === KDF_ID &&
-      parsed.epk && parsed.iv && parsed.ciphertext;
+      parsed.app === ENC_APP_ID &&
+      parsed.version === ENC_VERSION &&
+      ((parsed.kdf === KDF_ID && parsed.kind === ENC_KIND_CASE && parsed.epk && parsed.iv && parsed.ciphertext) ||
+       (parsed.kdf === PWD_KDF_ID && parsed.kind === ENC_KIND_SYNC && parsed.salt && parsed.iv && parsed.ciphertext));
+  }
+
+  function isSyncEnvelope(parsed) {
+    return isEnvelope(parsed) && parsed.kind === ENC_KIND_SYNC && parsed.kdf === PWD_KDF_ID;
+  }
+
+  /**
+   * Passwort-basierte Verschluesselung (Geraete-Sync):
+   * PBKDF2-HMAC-SHA256 (>= 600 000 Iterationen) + AES-GCM-256.
+   * callback(envelope | null, err?).
+   */
+  function encryptWithPassword(obj, password, callback) {
+    var api = subtle();
+    if (!api) { callback(null, new Error('Web Crypto nicht verfuegbar')); return; }
+    if (!password || typeof password !== 'string' || password.length < 4) {
+      callback(null, new Error('Passwort zu kurz (mindestens 4 Zeichen)'));
+      return;
+    }
+    var salt = new Uint8Array(16);
+    var iv = new Uint8Array(12);
+    crypto.getRandomValues(salt);
+    crypto.getRandomValues(iv);
+    var enc = new TextEncoder();
+    api.importKey('raw', enc.encode(password), PBKDF2_ALGO, false, ['deriveKey']).
+      then(function (pwKey) {
+        return api.deriveKey(
+          { name: 'PBKDF2', salt: salt, iterations: PBKDF2_ITERATIONS, hash: 'SHA-256' },
+          pwKey, AES_ALGO, false, ['encrypt']
+        );
+      }).
+      then(function (aesKey) {
+        return api.encrypt(
+          { name: 'AES-GCM', iv: iv },
+          aesKey,
+          enc.encode(JSON.stringify(obj))
+        );
+      }).
+      then(function (ct) {
+        callback({
+          app: ENC_APP_ID,
+          kind: ENC_KIND_SYNC,
+          version: ENC_VERSION,
+          kdf: PWD_KDF_ID,
+          exportedAt: new Date().toISOString(),
+          iterations: PBKDF2_ITERATIONS,
+          salt: bytesToBase64(salt),
+          iv: bytesToBase64(iv),
+          ciphertext: bytesToBase64(new Uint8Array(ct))
+        });
+      })
+      .catch(function (e) { callback(null, e || new Error('Verschluesselung fehlgeschlagen')); });
+  }
+
+  /**
+   * Passwort-basierte Entschluesselung (Geraete-Sync).
+   * callback(obj | null, err?).
+   */
+  function decryptWithPassword(envelope, password, callback) {
+    var api = subtle();
+    if (!api) { callback(null, new Error('Web Crypto nicht verfuegbar')); return; }
+    if (!isSyncEnvelope(envelope)) {
+      callback(null, new Error('Kein gueltiger Passwort-Verschluesselungs-Envelope'));
+      return;
+    }
+    var enc = new TextEncoder();
+    api.importKey('raw', enc.encode(password || ''), PBKDF2_ALGO, false, ['deriveKey']).
+      then(function (pwKey) {
+        return api.deriveKey(
+          {
+            name: 'PBKDF2',
+            salt: base64ToBytes(envelope.salt),
+            iterations: typeof envelope.iterations === 'number' && envelope.iterations >= PBKDF2_ITERATIONS
+              ? envelope.iterations : PBKDF2_ITERATIONS,
+            hash: 'SHA-256'
+          },
+          pwKey, AES_ALGO, false, ['decrypt']
+        );
+      }).
+      then(function (aesKey) {
+        return api.decrypt(
+          { name: 'AES-GCM', iv: base64ToBytes(envelope.iv) },
+          aesKey,
+          base64ToBytes(envelope.ciphertext)
+        );
+      }).
+      then(function (plain) {
+        var parsed;
+        try { parsed = JSON.parse(new TextDecoder().decode(plain)); }
+        catch (e) { callback(null, new Error('Entschluesselter Inhalt ist kein gueltiges JSON')); return; }
+        callback(parsed);
+      })
+      .catch(function () {
+        callback(null, new Error('Entschluesselung fehlgeschlagen (falsches Passwort oder Datei manipuliert)'));
+      });
   }
 
   /**
@@ -92,7 +191,7 @@ AlimenCal.casecrypto = (function () {
       then(function (res) {
         callback({
           app: ENC_APP_ID,
-          kind: ENC_KIND,
+          kind: ENC_KIND_CASE,
           version: ENC_VERSION,
           kdf: KDF_ID,
           exportedAt: new Date().toISOString(),
@@ -147,7 +246,12 @@ AlimenCal.casecrypto = (function () {
     ENC_APP_ID: ENC_APP_ID,
     ENC_VERSION: ENC_VERSION,
     KDF_ID: KDF_ID,
+    PWD_KDF_ID: PWD_KDF_ID,
+    PBKDF2_ITERATIONS: PBKDF2_ITERATIONS,
     isEnvelope: isEnvelope,
+    isSyncEnvelope: isSyncEnvelope,
+    encryptWithPassword: encryptWithPassword,
+    decryptWithPassword: decryptWithPassword,
     encryptCase: encryptCase,
     decryptCase: decryptCase
   };
